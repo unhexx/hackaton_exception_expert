@@ -1,0 +1,37 @@
+# Agentix Skills Registry
+
+First-class reusable skills for the agentic loop. Skills are progressive knowledge packages that agents load on-demand (via `tools/select.py` or explicit reference) to improve quality, reduce context waste, and compound institutional knowledge.
+
+## Available Skills
+
+| Skill | Purpose | When to load |
+|-------|---------|--------------|
+| [experience-accumulation](experience-accumulation/SKILL.md) | Dry-run then apply `experience_harvester cycle` into workspace memory | `--intent harvest`; parent-folder / empty memory; Reviewer DONE on multi-repo session |
+| [loop-self-improve](loop-self-improve/SKILL.md) | Query accumulated memory, then propose/apply-safe harness changes | `--intent reflect`; Reviewer DONE after harvest; “self-improve the loop” |
+| [reflective-improvement](reflective-improvement/SKILL.md) | 6-step reflection write-up (sub-skill of loop-self-improve) | After memory query, when a structured ritual is needed |
+| [local-knowledge-ingestion](local-knowledge-ingestion/SKILL.md) | Templates for crawlers, SQLite local knowledge store, sovereign mirroring of docs/code into structured memory | Orchestrator bootstrap; when external docs or multi-repo knowledge needed |
+| [git-commit-to-jira-tasks](git-commit-to-jira-tasks/SKILL.md) | Cluster git commits into INVEST Jira Stories/Tasks with Fibonacci Story Points (hours optional) | **Explicit user request only** or `Follow skills/git-commit-to-jira-tasks/SKILL.md`. Never `--intent git` |
+
+## Usage
+
+```bash
+# Progressive load example
+python tools/select.py --intent reflect
+python tools/select.py --intent knowledge
+python tools/select.py --intent compress
+python tools/select.py --intent harvest
+# or reference in handoff / prompt:
+# "Follow skills/experience-accumulation/SKILL.md then skills/loop-self-improve/SKILL.md"
+python -m memory.context_budget check --files .agent/PLAN.md --budget 12000 --compress
+python -m memory.knowledge query --q "git sync" --top 5
+# Init default: ingest-if-empty + cold-start --compress (no HTTP hop; proxy is a separate path)
+python -m memory.knowledge ingest-if-empty --root docs --budget 800
+```
+
+Skills integrate with:
+- `memory/playbooks.py` (curate bullets from lessons)
+- `memory/meta_harvester.py` (golden trajectories)
+- `memory/store.py` / workspace memory
+- `PROMPT_COMPRESSION_GUIDE.md` (distillation)
+
+Keep skill bodies short; heavy examples live in playbooks or trajectories.

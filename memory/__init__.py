@@ -1,0 +1,140 @@
+"""
+Agentic Loop Memory System
+
+Workspace-scoped, structured, deduplicating memory for the self-improving
+agentic development loop.
+
+Inspired by:
+- memory.py from the /implement skill
+- Generative Agents (memory stream + reflection)
+- Reflexion (verbal self-reflection)
+
+Usage from the agent (via powershell tool):
+
+    # Get workspace info
+    python -m agentic_loop_template.memory info
+
+    # Record distilled patterns (usually called by Reviewer)
+    python -m agentic_loop_template.memory update --patterns '[{"category": "Testing", "description": "Missing edge case for empty input"}]'
+
+    # Get current memory snapshot (JSON)
+    python -m agentic_loop_template.memory snapshot
+
+    # Simple query (future)
+    python -m agentic_loop_template.memory query --category "Common Failure Patterns"
+
+    # Clarification Questions Pool (collect user clarifications without blocking the loop)
+    python -m agentic_loop_template.memory.questions_collector append --question "Need exact demo platforms?" --cycle 7
+    python -m agentic_loop_template.memory.questions_collector resolve --ids Q-003 --notes "PO decision: Win10 + Arch"
+
+    # Meta-Optimizer / Trajectory Harvesting (v3.x self-improvement of the harness itself)
+    python -m agentic_loop_template.memory.meta_harvester harvest --handoff .agent/last_handoff.json --cycle 17 --outcome DONE
+    python -m agentic_loop_template.memory.meta_harvester analyze --recent 5
+    python -m agentic_loop_template.memory.meta_harvester propose --limit 2
+    python -m agentic_loop_template.memory.meta_harvester apply-safe --dry-run
+"""
+
+import logging
+
+# Guarded imports — the full workspace/store/schema may be in separate files or installed package.
+# Core working modules (questions, meta, new performance_ledger) are self-contained.
+try:
+    from .workspace import get_workspace_id, memory_paths
+    from .store import read_memory, update_memory, snapshot, query_memory
+    from .schema import MemoryState, Pattern
+except Exception as exc:
+    logging.getLogger("memory").warning(
+        "guarded import of workspace/store/schema failed: %s", exc
+    )
+    # Provide minimal fallbacks so submodule imports (performance_ledger, meta_harvester) still work
+    def get_workspace_id(): return "agentix-local"
+    def memory_paths(): return {"file": "~/.grok/agentic-loop-memory/agentix.md"}
+    def read_memory(*a, **k): return {}
+    def update_memory(*a, **k): return {}
+    def snapshot(*a, **k): return {"patterns": {}, "recent_distillations": []}
+    def query_memory(*a, **k): return []
+    MemoryState = dict
+    Pattern = dict
+
+from .questions_collector import (
+    append_question,
+    get_open_questions,
+    get_all_questions,
+    should_escalate,
+    mark_reviewed,
+    sync_from_handoff,
+    escalate_if_needed,
+    load_config,
+)
+
+# Meta-имена — лениво через __getattr__ (тела не грузятся при import memory).
+
+# Playbooks & Knowledge Objects (full cycle guidance - P4 complete)
+try:
+    from . import playbooks as playbooks_mod
+except Exception as exc:
+    logging.getLogger("memory").warning(
+        "guarded import of playbooks failed: %s", exc
+    )
+    playbooks_mod = None
+
+__all__ = [
+    "get_workspace_id",
+    "memory_paths",
+    "read_memory",
+    "update_memory",
+    "snapshot",
+    "query_memory",
+    "MemoryState",
+    "Pattern",
+    # Clarification Questions Pool (non-blocking user clarification collection)
+    "append_question",
+    "get_open_questions",
+    "get_all_questions",
+    "should_escalate",
+    "mark_reviewed",
+    "sync_from_handoff",
+    "escalate_if_needed",
+    "load_config",
+    # Meta-Optimizer & Trajectory Harvesting (self-improvement of the loop harness)
+    "harvest_from_handoff",
+    "get_recent_trajectories",
+    "analyze_for_proposals",
+    "generate_proposals",
+    "apply_safe_proposals",
+    "seed_example_trajectory",
+    "update_performance_ledger",
+    "load_meta_config",
+    # Performance Ledger (P1 metrics/ROI)
+    "performance_ledger",
+    # Playbooks & Knowledge Objects (full continuous dev cycle support, P4)
+    "playbooks",
+]
+
+# Lazy exposure so we don't break when full workspace/store modules are not present in all envs
+_META_EXPORTS = {
+    "harvest_from_handoff",
+    "get_recent_trajectories",
+    "analyze_for_proposals",
+    "generate_proposals",
+    "apply_safe_proposals",
+    "seed_example_trajectory",
+    "update_performance_ledger",
+    "load_meta_config",
+}
+
+
+def __getattr__(name):
+    if name in _META_EXPORTS:
+        from . import meta_harvester as mh
+        attr = "load_config" if name == "load_meta_config" else name
+        return getattr(mh, attr)
+    if name == "performance_ledger":
+        import importlib
+        return importlib.import_module("memory.performance_ledger")
+    if name == "playbooks":
+        if playbooks_mod is not None:
+            return playbooks_mod
+        import importlib
+        return importlib.import_module("memory.playbooks")
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

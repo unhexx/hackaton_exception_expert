@@ -1,0 +1,79 @@
+# -*- coding: utf-8 -*-
+"""
+Простой тест/валидация для meta_harvester.
+
+Запуск (из корня шаблона):
+  python memory/test_meta_harvester.py
+
+Проверяет основные пути: конфиг, harvest с mock, analyze, apply dry-run.
+Не зависит от отсутствующих в этом snapshot модулей workspace/store/schema.
+Не трогает реальный .agent при тесте.
+"""
+
+import json
+import tempfile
+from pathlib import Path
+
+import memory.meta_harvester as mh
+
+
+def test_basic():
+    print("=== Тест meta_harvester ===")
+
+    cfg = mh.load_config()
+    assert cfg.get("enabled") is True
+    print("✓ load_config OK, enabled=", cfg["enabled"])
+
+    # Создаём временный handoff для теста harvest
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        agent = tmp_path / ".agent"
+        handoff = tmp_path / "test_handoff.json"
+        handoff.write_text(json.dumps({
+            "role": "Reviewer",
+            "summary": "Успешно завершил задачу по sync",
+            "confidence": 0.91,
+            "metrics": {"tests_total": 12, "tests_failed": 0, "coverage": 88.0, "tool_calls": 7, "elapsed_minutes": 9.5},
+            "process_tags": [],
+            "lessons_learned": ["Всегда использовать явный маркер завершения"],
+            "git_branch": "feature/sync-verify",
+            "last_commit": "Улучшил верификацию с маркером SYNC_DONE"
+        }, ensure_ascii=False), encoding="utf-8")
+
+        tid = mh.harvest_from_handoff(handoff, cycle=42, outcome="DONE", agent_dir=agent)
+        print("✓ harvest вернул id:", tid)
+        assert tid is not None
+
+        recent = mh.get_recent_trajectories(1, agent_dir=agent)
+        assert len(recent) == 1
+        print("✓ get_recent_trajectories OK")
+
+        props = mh.analyze_for_proposals(recent=1, min_confidence=0.8, agent_dir=agent)
+        print("✓ analyze_for_proposals сгенерировал", len(props), "предложений")
+
+        n = mh.apply_safe_proposals(dry_run=True, agent_dir=agent)
+        print("✓ apply_safe_proposals (dry) обработал", n)
+
+        sft = tmp_path / "train.jsonl"
+        report = mh.export_sft(out=sft, min_confidence=0.85, agent_dir=agent)
+        assert report["written"] >= 1
+        line = sft.read_text(encoding="utf-8").splitlines()[0]
+        rec = json.loads(line)
+        assert rec["messages"][0]["role"] == "user"
+        assert rec["messages"][1]["role"] == "assistant"
+        print("✓ export_sft wrote", report["written"])
+
+        # Тест новых функций (seed + ledger)
+        seeded = mh.seed_example_trajectory(agent_dir=agent)
+        print("✓ seed_example_trajectory создал", seeded)
+
+        mh.update_performance_ledger("P-DEMO-001", "demo impact on compression", agent_dir=agent)
+        ledger = agent / "LOOP_PERFORMANCE.md"
+        assert ledger.exists()
+        print("✓ update_performance_ledger записал метрику")
+
+    print("=== Все базовые тесты пройдены ===")
+
+
+if __name__ == "__main__":
+    test_basic()

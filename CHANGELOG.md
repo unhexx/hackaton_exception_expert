@@ -1,0 +1,367 @@
+# Changelog
+
+## [Unreleased]
+
+### Added
+- Root `Jenkinsfile` mirroring GitHub Actions harness + stdlib-collect (Bitbucket Jenkins Test configuration). Contract: `memory/test_ci_parity.py`.
+
+### Fixed
+- Performance ledger counts `total_cycles` after the 50-row window, omits null `proxy_stats`/`details`, and no longer inserts `cycle=0` META_APPLIED rows that compact away real cycles. `update_performance_ledger` writes `LOOP_PERFORMANCE.md` and the JSON ledger in one `"ledger"` section.
+- Playbooks skip `updated_at` / overview rewrite when bullet bodies did not change; human views use tmp+replace.
+- Gitignore hub lock files `.agent/stream_leases.json` and `.agent/streams_state.json` (root + consumer starter).
+
+## [3.13.0] - 2026-09-08
+
+### Added
+- Operator Compose stack (`deploy/compose.yaml`): always-on SearXNG JSON on `127.0.0.1:8080` (no profile), optional `research` (Local Deep Research / LangGraph on `127.0.0.1:5000`), optional `ollama` (unpublished). LDR talks to the host gateway `host.docker.internal:8110` so live calls still hit **pxpipe**.
+- `python -m memory.stack` contract/check/search, `scripts/agentix-stack.sh`.
+- Docs: [`docs/stack.md`](docs/stack.md), spec [`docs/superpowers/specs/2026-09-08-p9-operator-stack-design.md`](docs/superpowers/specs/2026-09-08-p9-operator-stack-design.md).
+- Tests: `memory/test_stack.py`, `memory/test_search.py` (hermetic; no Docker daemon in CI).
+- Loop 5: Init.ps1 `memory.stack` tip, demo-loop stack check, SearXNG `limiter.toml`, consumer-starter `AGENTIX_SEARXNG_URL`.
+
+### Changed
+- `VERSION` → 3.13.0
+- ROADMAP: P9 complete; milestone v3.13.0
+- Gateway / dashboard / pxpipe remain host processes (loopback SR-04).
+
+## [3.12.0] - 2026-08-27
+
+### Added
+- Optional playbook embeddings ranking: empty extra `embeddings`, config `playbooks.relevance=embed`, HTTP OpenAI-compatible `POST {base}/v1/embeddings` via stdlib urllib, cosine for the 0.2 ACE term, cache `.agent/PLAYBOOKS.embeddings.json` under `agent_lock(name="playbooks")`. Fail-open to substring. Helpers in `memory/playbooks_embed.py`.
+- Design spec: [`docs/superpowers/specs/2026-08-27-p8-10-playbook-embeddings-design.md`](docs/superpowers/specs/2026-08-27-p8-10-playbook-embeddings-design.md)
+
+### Changed
+- `VERSION` → 3.12.0
+- ROADMAP: P8-10 Future bullet removed; milestone v3.12.0
+
+Minor, not a 3.11.5 patch: new extra + config keys. Default omit/`substring` scores match 3.11.4. `select_bullets` signature unchanged. Env: `AGENTIX_EMBED_BASE`, `AGENTIX_EMBED_API_KEY` (then `OPENAI_API_KEY`). Config keys `embedding_base_url` / `embedding_model` / `embedding_api_key` are not secrets in `project_config.example.json`.
+
+## [3.11.4] - 2026-08-27
+
+### Added
+- Split `meta_harvester` / `experience_harvester` into ACE job packages (`memory/meta/{store,generator,reflector,curator}`, `memory/experience/{seeds,extract,scan,audit}`) behind the same public modules. Init.ps1 dotsources `scripts/windows/Init-Python.ps1` and `scripts/windows/Init-Prompt.ps1`.
+- Design spec: [`docs/superpowers/specs/2026-08-27-p8-12-module-split-design.md`](docs/superpowers/specs/2026-08-27-p8-12-module-split-design.md)
+
+### Changed
+- `VERSION` → 3.11.4
+- Deleted unused `_save_index` from the meta tree; curator imports `append_cycle` as a normal submodule.
+- ROADMAP: P8-12 Future bullet removed; milestone v3.11.4
+
+Patch, not 3.12.0: public `python -m memory.meta_harvester` / `python -m memory.experience_harvester` / `.\Agent-Init.ps1` unchanged.
+
+## [3.11.3] - 2026-08-27
+
+### Added
+- Extracted MultiLLM ontology into `memory/llm_ontology.py` (types + CRUD). `agent_lock(name="llm_ontology")`, optional `base_dir=` for tests. Tests in `memory/test_llm_ontology.py`.
+- Design spec: [`docs/superpowers/specs/2026-08-27-p8-13-multillm-extract-design.md`](docs/superpowers/specs/2026-08-27-p8-13-multillm-extract-design.md)
+
+### Changed
+- `VERSION` → 3.11.3
+- `memory.schema` / `memory.store` re-export the extracted types and CRUD (import compatibility).
+- ROADMAP: P8-13 Future bullet removed; milestone v3.11.3
+
+Patch, not 3.12.0: no new CLI, supervisor/dashboard/wizard unchanged. MultiLLM is not wired into the loop.
+
+## [3.11.2] - 2026-08-27
+
+### Added
+- Path 1 Russian siblings: `README.ru.md`, `docs/ru/getting-started.md`, `docs/ru/README.md`. Language header on each pair. Existence test `memory/test_docs_i18n.py`.
+- Design spec: [`docs/superpowers/specs/2026-08-27-p8-09-docs-i18n-design.md`](docs/superpowers/specs/2026-08-27-p8-09-docs-i18n-design.md)
+
+### Changed
+- `VERSION` → 3.11.2
+- ROADMAP: P8-09 Future bullet removed; milestone v3.11.2
+
+Patch, not 3.12.0: no new CLI, wizard/dashboard strings unchanged, English remains canonical.
+
+## [3.11.1] - 2026-08-27
+
+### Added
+- Additive `agent_dir=` on `memory.meta_harvester`, `memory.eval_harness`, `memory.resume`. Named `agent_lock` on harvester writers: `trajectories` (`TRAJECTORIES.json` + `META_PROPOSALS.md`), `sft` (default `sft/train.jsonl`), `ledger` (`LOOP_PERFORMANCE.md`). tmp+replace for the JSON/MD indexes. `update_performance_ledger` passes `agent_dir` into `append_cycle` after releasing the md lock.
+- Design spec: [`docs/superpowers/specs/2026-08-27-ng11-agent-dir-harvester-di-design.md`](docs/superpowers/specs/2026-08-27-ng11-agent-dir-harvester-di-design.md)
+
+### Changed
+- `VERSION` → 3.11.1
+- ROADMAP: NG11 Future bullet removed; milestone v3.11.1
+
+Patch, not 3.12.0: no `--agent-dir`, wizard/proxy/`--concurrent` default unchanged, dashboard and supervisor not wired.
+
+## [3.11.0] - 2026-08-27
+
+### Added
+- Exclusive `owned_paths` leases for operator parallel sessions: `python -m memory.stream_lease claim|renew|release|status`. Registry hub `.agent/stream_leases.json` under `agent_lock(name="leases")`. Live PID is never stolen; TTL (`supervisor.parallel.lease_ttl_s`, default 7200) is display-only. `run_parallel` claims after validate, renews on hub `streams_state` ticks, releases in `finally`.
+- Opt-in `run-parallel --push` (or `supervisor.parallel.push`): pushes stream + integration branches to `origin` after `STREAM_READY`; refuses `main` / `master`. When `create_pr` and `push` are both on, push is a hard precondition of `gh pr create`.
+- STOP fan-out: `python -m memory.supervisor stop` and Control Plane `POST /actions/stop` write hub `.agent/STOP` and each worktree listed in `streams_state.json` / leases. Current adapter turn still finishes (up to `role_timeout_s`); no ThreadPool cancel.
+- Control Plane Streams page (`GET /streams` on `:8112`): per-stream status, worktree, heartbeat age, STOP.
+- Live CLI identity + persist stamp: `apply_stream_env` writes `AGENTIX_STREAM` / `AGENTIX_OWNED_PATHS` / `AGENTIX_WORKTREE` on the child env dict once per spawn (concurrent path still does not patch process-global `os.environ`). `persist_role_handoff` stamps `stream` / `owned_paths` / `worktree` from ContextVar. Role prompts under `use_stream` include an English stream fence (kept after compress).
+- Remaining `.agent/` writers (`audit`, `playbooks`, `questions`, `ledger`) take `agent_lock` on the parent of the file being written. Playbooks and ledger accept `agent_dir=`.
+- Hub-safe integration merge in a dedicated integration worktree (steady-state never `git checkout` of hub `HEAD`). `gh pr create` runs with `cwd` = integration worktree (`--base main`). Supervisor still never merges `main`.
+- Design spec: [`docs/superpowers/specs/2026-08-26-conflict-free-parallel-sessions-design.md`](docs/superpowers/specs/2026-08-26-conflict-free-parallel-sessions-design.md)
+
+### Changed
+- `VERSION` → 3.11.0
+- ROADMAP: milestone v3.11.0; Future leftovers unchanged (Hub SaaS, MCP, i18n, embeddings, P8-12, P8-13, messenger, NG11 harvester DI)
+
+Minor 3.11: wizard default and `proxy.mode=required` unchanged; serial remains default; streams still never merge `main`.
+
+## [3.10.1] - 2026-08-26
+
+### Added
+- P8-14 configurable supervisor caps: `context_budget.prompt_body_chars` / `snap_json_chars` / `knowledge_budget_tokens` / `prompt_token_cap` (defaults 8000 / 4000 / 800 / 8000). Env overrides: `AGENTIX_PROMPT_BODY_CHARS`, `AGENTIX_SNAP_JSON_CHARS`, `AGENTIX_KNOWLEDGE_BUDGET_TOKENS`, `AGENTIX_PROMPT_TOKEN_CAP`. Invalid values fall back per key. `_maybe_compress_prompt` passes `model=` / `encoding=` from `context_budget` into `estimate_tokens`.
+- Design spec: [`docs/superpowers/specs/2026-08-26-p8-14-context-budgets-design.md`](docs/superpowers/specs/2026-08-26-p8-14-context-budgets-design.md)
+
+### Changed
+- `VERSION` → 3.10.1
+- ROADMAP: P8-14 configurable context budgets removed from Future
+
+Patch, not 3.11.0: no wizard default change, no new CLI/product surface; operators already had `compress_when_over`. Module constants remain the defaults.
+
+## [3.10.0] - 2026-08-26
+
+### Added
+- P8-11 opt-in concurrent fan-out: `python -m memory.supervisor run-parallel --concurrent` (or `supervisor.parallel.concurrent` in project config). Disjoint streams overlap in time via `ThreadPoolExecutor`; provision and integration merge stay serial; default remains serial. Context identity is `memory/stream_context.py` (ContextVar, then `AGENTIX_*` env). Concurrent path does not patch process-global `os.environ`. Wait-all: any non-ready stream skips the integration merge.
+- Shared `.agent/` lock (`memory/agent_lock.py`): stdlib `O_EXCL` + PID, stale-PID recovery, used by `save_state`, `save_handoff`, and hub `streams_state.json` (tmp+replace).
+- Design spec: [`docs/superpowers/specs/2026-08-26-p8-11-concurrent-fanout-design.md`](docs/superpowers/specs/2026-08-26-p8-11-concurrent-fanout-design.md)
+
+### Changed
+- `VERSION` → 3.10.0
+- ROADMAP: P8-11 concurrent fan-out removed from Future
+- `PARALLEL_PROTOCOL.md`: serial default; `--concurrent` documented
+
+Minor, not 3.11: wizard default unchanged; concurrent is opt-in; streams still never merge `main`.
+
+## [3.9.4] - 2026-08-25
+
+### Added
+- P8-08 token estimate: per-model encoding (`gpt-4o`/`o1`/`o3` → `o200k_base`, default `cl100k_base`), `describe_estimate` / CLI `--model` `--encoding`, extras `tokens` and tiktoken pin on `dev`. Fallback remains `max(1, len//4)` when tiktoken is missing.
+- Optional host recipe for Antigravity CLI (`agy`) + second pxpipe: `scripts/pxpipe-agy/` shim and `agy-pxpipe` wrapper, systemd examples `pxpipe-agy*.service.example`. Images `gemini-3.7-flash-high` / `-medium` without touching the Grok imager on `:8100`. README + `docs/proxy.md` Foreign CLIs. (Landed on main in `103976c`; changelog catch-up.)
+
+### Changed
+- `VERSION` → 3.9.4
+- ROADMAP: P8-08 token estimate removed from Future
+
+Patch, not 3.10.0: no wizard default change, no new product surface, estimator + extra only.
+
+## [3.9.3] - 2026-08-25
+
+### Added
+- First-class skills `skills/experience-accumulation` (`--intent harvest`) and `skills/loop-self-improve` (`--intent reflect`)
+- `memory/test_select.py` locks harvest/reflect/git loader paths
+- Design spec: [`docs/superpowers/specs/2026-08-25-harvest-reflect-skill-split-design.md`](docs/superpowers/specs/2026-08-25-harvest-reflect-skill-split-design.md)
+
+### Changed
+- `tools/select.py` `SKILL_INTENTS`: harvest and reflect no longer share `reflective-improvement`
+- `reflective-improvement` is the 6-step write-up sub-skill only (no `experience_harvester cycle`)
+- Reviewer DONE / SYSTEM_PROMPT / experience docs point at the split
+- `VERSION` → 3.9.3
+
+Patch, not 3.10.0: no wizard default change, no new product surface, skill routing only.
+
+## [3.9.2] - 2026-08-25
+
+### Added
+- Blackbox AI CLI adapter hardening: PATH/search_paths resolve, reject X11 WM (`/usr/bin/blackbox` 0.77) and non-AI binaries, hermetic fake-CLI tests, Unix `scripts/probe_blackbox.sh`
+- Shared `memory/adapters/proc.py` (`run_cli` process-group timeout kill; POSIX killpg, win32 best-effort child kill)
+- `BLACKBOX_*=` log redaction; `_CHILD_LOGGERS` includes `memory.adapters`
+- Design spec: [`docs/superpowers/specs/2026-08-25-blackbox-cli-adapter-design.md`](docs/superpowers/specs/2026-08-25-blackbox-cli-adapter-design.md)
+
+### Changed
+- `VERSION` → 3.9.2
+- Example config: `blackbox.command` `"blackbox"` with `prompt_mode` / `extra_args`; `search_paths` omitted (defaults `~/.local/bin` first). Wizard default remains grok.
+
+Patch, not 3.10.0: no wizard default change, no new product surface, existing adapter hardened.
+
+## [3.9.1] - 2026-08-24
+
+### Added
+- Opt-in skill `skills/git-commit-to-jira-tasks`: cluster git commits into INVEST Jira Stories (Fibonacci Story Points; Original Estimate only if `JIRA_HOURS_PER_SP` / `--hours-per-sp` and timetracking is on the create screen). Disabled by default (`disable-model-invocation: true`; never `--intent git`)
+
+### Changed
+- `VERSION` → 3.9.1
+
+## [3.9.0] - 2026-08-24
+
+### Added (P8 Harness Hardening)
+- Packaging: `pyproject.toml` (dist name `agentix`, import package `memory`), extras `dev` / `dashboard`, console scripts `agentix` / `agentix-supervisor` / `agentix-dashboard` / `agentix-proxy`. `pip install -e ".[dev]"` — `python -m memory` without PYTHONPATH
+- Observability: `logging.getLogger("memory.*")` + `AGENTIX_LOG_LEVEL`; WARNING on critical supervisor / proxy / playbooks swallows (no `except Exception: pass` on those paths)
+- Handoff extract/persist: `extract_handoff` picks the last persistable candidate; adapters `validate_handoff` + atomic `save_handoff`; structural checks from `schemas/handoff.schema.json` via `jsonschema`
+- Init parity: `Agent-Init.sh` and `Agent-Init.ps1` share the cold-start ritual (editable install, `state init`, knowledge ingest, playbooks seed, proxy); wizard on both; default frontend **grok**
+- State DI: state helpers take `agent_dir=`; supervisor no longer mutates module globals or `os.chdir` for correctness
+- CI: GitHub Actions `pull_request` + `pytest memory/` including the full mock O→C→T→R cycle; G1 import from `/tmp` with PYTHONPATH unset
+- Design spec: [`docs/superpowers/specs/2026-08-24-p8-harness-hardening-design.md`](docs/superpowers/specs/2026-08-24-p8-harness-hardening-design.md)
+
+### Changed
+- `VERSION` → 3.9.0
+- ROADMAP P8 complete; next = Future
+- Living docs: install without PYTHONPATH; consumer-starter editable-installs the sibling SSOT
+
+## [3.8.1] - 2026-08-23
+
+### Added
+- Supervisor `run-parallel`: disjoint `owned_paths` streams (serial), git worktree provision, integration branch, one PR — never merges `main`
+- Mock adapter fills `stream` / `owned_paths` / `worktree` from `AGENTIX_*` env
+- Tests: `memory/test_streams.py`, `memory/test_supervisor_parallel.py`
+
+### Changed
+- Live Grok remains **pxpipe-default** (`proxy.mode=required`); README badges (version, CI, pxpipe) and Quick Start call this out
+- Handoff `stream` is a free-form name (named parallel streams), not a closed `product|meta|cross` enum
+- `VERSION` → 3.8.1
+
+## [3.8.0] - 2026-08-22
+
+### Added (Agents Dashboard / Control Plane)
+- Operator HTMX Control Plane sidecar: `python -m memory.dashboard serve --workdir PATH` / `scripts/agentix-dashboard`
+- Loopback **`:8112`** only (gateway owns `:8110`, pxpipe `:8100`). Does **not** call `run_loop` or spawn adapters — observes `.agent/*` SSOT, is not the runner
+- Screens: Loop, Handoff, Ledger, Playbooks, Audit, Questions, Plan, Memory. Server-rendered HTMX partials, Tailwind/HTMX CDN, no-Jinja string substitution, `/ws/ui` + polling fallback
+- Security: loopback peer + Host (`ipaddress` 127/8; `Host: 127.0.0.1.nip.io` is 403), same-origin POST, CSRF, optional `DASHBOARD_TOKEN`. Empty token = local trust. **Set a token before SSH `-L` / funnel**
+- Gated writes: cooperative `.agent/STOP`, clear-stop, resolve questions; PR link is read-only `gh pr view`. Writes are confirmed and audited (`role=operator`)
+- Supervisor liveness file `.agent/supervisor.heartbeat` (20 s daemon tick; dashboard freshness 45 s). `LOOP_STATE` remains SSOT
+- Design spec: [`docs/superpowers/specs/2026-08-21-agents-dashboard-design.md`](docs/superpowers/specs/2026-08-21-agents-dashboard-design.md)
+- Tests: `memory/test_dashboard_*.py` (`pytest.importorskip("fastapi")` so the stdlib `memory/` suite stays green)
+
+### Changed
+- `VERSION` → 3.8.0
+- README CLI table + Dashboard security (`:8112`, token before tunnel)
+- `docs/architecture.md` Control Plane row; `memory/README.md` pointer
+
+## [3.7.0] - 2026-08-21
+
+### Added (request proxy policy — wrap host pxpipe)
+- `memory/proxy`: config + policy + health (stdlib). `python -m memory.proxy health|install-venv|install-host`
+- Fail-closed `proxy.mode=required` for live adapters (`grok` / HTTP). Mock and CI stay proxy-free.
+- Explicit opt-out: `AGENTIX_PROXY=0` or `proxy.mode=off`. `preferred` is an escape hatch, not the example-config default.
+- `GrokAdapter` probes pxpipe (`127.0.0.1:8100`) before `grok -p`; unhealthy + required → BLOCKED, no silent public upstream.
+- Init writes `GROK_CLI_CHAT_PROXY_BASE_URL` into `.venv/bin/activate` (marker `# agentix-proxy`). Does **not** rewrite `~/.grok/config.toml` (opt-in `install-host`).
+- Example config `proxy` section; systemd unit template `scripts/systemd/pxpipe.service.example`.
+- Tests: `python -m memory.test_proxy` (mode matrix, mock skip, fake TCP). No live pxpipe required.
+
+### Changed
+- Existing clones without a `proxy` key are treated as `mode=required` once this code ships; mock adapter still skips the probe. Set `AGENTIX_PROXY=0` if a Grok clone has no pxpipe yet.
+
+### Added (default distillation / knowledge rituals)
+- Supervisor `build_role_prompt` injects a bounded knowledge block (top 3, ≤800 tokens) when the SQLite store is seeded; over-budget prompts run the rule compressor (`compress_when_over`).
+- Init: `knowledge ingest-if-empty` + `context_budget cold-start --compress`. Reviewer DONE harvest when parent looks like `_PROJECT` is the documented default path.
+- Tests: knowledge block when DB seeded; `ingest_if_empty` helper.
+
+### Added (Agentix gateway fronts pxpipe)
+- stdlib reverse proxy `python -m memory.proxy serve` on `127.0.0.1:8110` → pxpipe `:8100`. Streaming copy, JSONL audit, exact-hash cache when `AGENTIX_PROJECT_ROOT` / `X-Agentix-Root` is set.
+- Fail-closed if pxpipe is down and `mode=required` — no silent public upstream.
+- Init venv export now `GROK_CLI_CHAT_PROXY_BASE_URL=http://127.0.0.1:8110/v1`.
+- `scripts/agentix-proxy.sh`, `scripts/systemd/agentix-gateway.service.example`.
+- Tests: chunked SSE fake upstream, `/v1/responses` round-trip, `/healthz`, header redaction.
+
+### Added (identifier fidelity + knowledge FTS5)
+- Gateway extracts SHA/UUID/workspace ids into a native-text `FIDELITY` sidecar before pxpipe imaging. Compressor still does not rewrite source files.
+- `memory.knowledge query` uses FTS5 MATCH with LIKE fallback. `sqlite-vec` remains disabled.
+- Tests: golden SHA/UUID survive distill.
+
+### Added (token stats, SLOs, consumer path)
+- `python -m memory.proxy stats` merges pxpipe `stats --json`, project JSONL, last compressor report.
+- CI runs `python -m memory.test_proxy`. Docs: `docs/proxy.md`. VERSION **3.7.0**.
+- Optional handoff `proxy_stats`. Raw-token % remains **unslod** until pxpipe `count_tokens` probes > 0 (`measured_saved_pct` is null on this host).
+
+### Changed
+- `VERSION` → 3.7.0
+- README / ROADMAP / consumer-starter: default live path is gateway `:8110` → pxpipe `:8100`.
+- CI: `test_grok_adapter_calls_assert_ready` stubs `shutil.which` / `subprocess.run` so GitHub runners without `grok` on PATH stay green.
+
+### Added (continual-learning export)
+- `python -m memory.meta_harvester export-sft` writes `.agent/sft/train.jsonl` (gitignored, no GPU).
+- `experience_harvester.maybe_cycle_on_done` runs a dry-run parent harvest after Reviewer DONE when `../` looks like `_PROJECT`.
+
+## [3.6.0] - 2026-08-20
+
+### Added (cross-project experience harvest — 2026-08-20 self-improve)
+- Harvester v3.6: scan `AGENTS.md`, Agent-Playbook, CONTRIBUTING, living plans, LOOP_STATE drift, broken README agent-doc links (old scan of LESSONS-only returned **0** on current `_PROJECT/*`)
+- CLI: `python -m memory.experience_harvester audit|cycle --parent …`
+- Seeds from live tree: docs_gap (signet/nesttunnel), classifier Windows-only Init + stale LOOP_STATE, telegrok incomplete Init, two-tier adoption
+- Lite consumer: `examples/consumer-starter/AGENTS.md.example`, `Agent-Init.consumer.sh` (sibling SSOT symlink + PYTHONPATH)
+- `tools/select.py --intent harvest`; `tools/blocks/common/experience.md`
+- Tests: `memory/test_experience_harvester.py` (`python -m` + CI verify step)
+- Docs: `docs/ANALYSIS_FROM_PROJECTS.md` 2026-08-20 section; Linux/Grok-first `SYSTEM_PROMPT.md`
+
+### Added (skills + rule-based context compressor)
+- Skills registry: `skills/README.md`
+  - `skills/reflective-improvement/SKILL.md` — 6-step reflection ritual (Reviewer MUST on DONE)
+  - `skills/local-knowledge-ingestion/SKILL.md` — SQLite knowledge template, crawlers, sovereign mirroring
+- Rule-based compressor: `memory/compressor.py`
+  - CLI: `python -m memory.compressor files --budget 12000 …` / `distill --text-file`
+  - Priority drop (history/trajectories first), markdown distill, head+tail truncate
+  - Inspired by Acon (arXiv:2510.00615, 26–54% peak reduction), PAACE / rate-distortion — rules only, no network
+- `context_budget` `--compress`: when over budget, run compressor (sources not rewritten)
+- Tests: `memory/test_compressor.py`, `memory/test_knowledge.py`
+- Config: `context_budget.compress_when_over` in `.agent/project_config.example.json`
+- Local knowledge store: `memory/knowledge.py`
+  - CLI: `python -m memory.knowledge query|upsert|ingest-docs|stats`
+  - SQLite schema from `skills/local-knowledge-ingestion` (unique source+title, category cap)
+  - `ingest-docs` distills markdown via the rule compressor before upsert
+
+### Changed
+- `VERSION` → 3.6.0
+- README features/CLI + ROADMAP milestone
+- Reviewer short prompt: mandatory reflective-improvement + compress-when-over
+- `PROMPT_COMPRESSION_GUIDE.md`: 2026 research mapped to the rule compressor
+- `python -m memory compressor` / `python -m memory context-budget` dispatch
+
+## [3.5.0] - 2026-07-29
+
+### Added (Agentix Supervisor — multi-frontend autonomy)
+- Supervisor CLI: `python -m memory.supervisor` / `python -m memory supervisor` / `scripts/agentix-supervisor`
+  - subcommands: `run`, `resume`, `status`, `stop`
+- FSM role transitions: Orchestrator → Coder → Tester → (Debugger) → Reviewer → `PR_READY`
+- Mock adapter full cycle path for CI (`--adapter mock`, ≥3 cycles without network)
+- Multi-frontend adapters: `mock`, `grok`, `cursor`, `blackbox` under `memory/adapters/`
+- PR gate: `gh pr create` only (never merge to main); fallback `PR_READY_LOCAL`
+- Config: `supervisor` section in `.agent/project_config.example.json`
+
+### Changed
+- `VERSION` → 3.5.0
+- README CLI table: supervisor entry
+
+## [3.4.1] - 2026-07-29
+
+### Added (top-10 harness hardening, multi-project analysis)
+- Bounded LOOP_STATE: `memory/state.py` (JSON working set + history archive + compact)
+- Progressive tools: `tools/select.py` + `tools/blocks/{common,linux,windows}/`
+- Memory core reunified on Linux path: `schema.py`, `store.py`, `workspace.py` (with existing playbooks/ledger/meta)
+- Handoff schema + validator: `schemas/handoff.schema.json`, `memory/validate_handoff.py`
+- Context budget: `memory/context_budget.py`
+- Experience harvester: `memory/experience_harvester.py` (+ seed defaults)
+- Parallel protocol: `PARALLEL_PROTOCOL.md`, `scripts/agentic_loop.sh`
+- Git helpers: `scripts/preflight_git.sh`, `scripts/sync-worktree.sh`, `scripts/sync_template_from_ssot.sh`
+- Docs: `docs/ANALYSIS_FROM_PROJECTS.md`, `docs/TOP10_IMPROVEMENTS.md`, metrics baseline/after
+- `VERSION` file
+
+### Changed
+- `Agent-Init.sh` merges wizard (P6) + cold-start state/tools/experience seed
+- `TOOLS_REGISTRY.md` / `TOOLS_INSTRUCTIONS.md` progressive entrypoints
+- `EXPERIENCE_EXTRACTION_TOOLS.md` implemented
+- Orchestrator short prompt: bounded state + progressive tools + playbooks
+- `project_config.example.json`: git/context_budget/state/profiles + playbooks
+- DEVELOPMENT_STANDARDS §5.1 bounded `.agent` state
+
+### Why
+Evidence from eegent (12MB LOOP_STATE, 115KB TOOLS), classifier stale state, Windows-only bootstrap friction, split memory packages. Goal: cut context waste, reduce process errors, enable Linux/Grok autonomous cycles on top of 3.4.0.
+
+## [3.4.0] - 2026-07-03
+
+### Added
+- **P5 Enterprise:** `memory/audit_log.py`, `examples/policy/sample-policy.toml`, `docs/enterprise-governance.md`, `docs/integrations.md`, `.github/workflows/agentix-loop.yml`
+- **P6 DX:** `Agent-Init.sh --wizard`, `scripts/demo-loop.sh`, `docs/onboarding-wizard.md`, stack templates, `.vscode/extensions.json`
+- **P7 Sustain:** `memory/resume.py`, `memory/eval_harness.py`, selective memory in compression guide, `docs/case-study.md`, `examples/case-study/`
+- Tests: `memory/test_p5_p7.py`
+
+### Changed
+- Generalized legacy project paths in `AGENT_ROLES.md` and `DEVELOPMENT_STANDARDS.md`
+- Business Efficiency Initiative marked **COMPLETE** (P0–P7)
+
+## [3.3.0] - 2026-07-03
+
+### Added
+- `docs/` site, `examples/consumer-starter/`, Agentix Hub CLI, Pro tier hooks
+- Platform-adaptive prompts, cross-platform quickstart, proof-driven README
+
+## 2026-07-03 — Business Efficiency Initiative
+
+- 50+ dogfood cycles; measurable gains (ledger ~1.6 min avg, 0.94 confidence)
+- P1–P7 delivered across iterations 1–6

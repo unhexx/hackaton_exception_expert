@@ -1,0 +1,242 @@
+# -*- coding: utf-8 -*-
+"""
+Performance Ledger — Cycle metrics, trends and ROI tracking for the agentic loop.
+
+Follows exactly the same patterns as questions_collector.py and meta_harvester.py:
+- stdlib only + UTF-8
+- CLI entry point
+- .agent/ storage (PERFORMANCE_LEDGER.json + .md view)
+- Integration with meta_harvester and Reviewer handoffs
+- Atomic writes, compaction
+
+Usage (inside proper .venv):
+  python -m agentic_loop_template.memory.performance_ledger append --cycle 1 --elapsed 12.5 --tokens 4500 --outcome DONE ...
+  python -m agentic_loop_template.memory.performance_ledger report --recent 5
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Optional
+
+from memory.agent_lock import agent_lock
+
+AGENT_DIR = Path(".agent")
+LEDGER_JSON = AGENT_DIR / "PERFORMANCE_LEDGER.json"
+LEDGER_MD = AGENT_DIR / "PERFORMANCE_LEDGER.md"
+LOOP_PERFORMANCE_MD = AGENT_DIR / "LOOP_PERFORMANCE.md"
+MAX_CYCLES = 50
+
+
+def _ledger_json(agent_dir: Optional[Path] = None) -> Path:
+    """Явный каталог .agent или модульный путь — иначе параллельные сессии пишут в cwd хаба."""
+    return Path(agent_dir) / "PERFORMANCE_LEDGER.json" if agent_dir is not None else LEDGER_JSON
+
+
+def _ledger_md(agent_dir: Optional[Path] = None) -> Path:
+    return Path(agent_dir) / "PERFORMANCE_LEDGER.md" if agent_dir is not None else LEDGER_MD
+
+
+def _loop_performance_md(agent_dir: Optional[Path] = None) -> Path:
+    return Path(agent_dir) / "LOOP_PERFORMANCE.md" if agent_dir is not None else LOOP_PERFORMANCE_MD
+
+
+def _ensure_agent_dir(agent_dir: Optional[Path] = None) -> None:
+    _ledger_json(agent_dir).parent.mkdir(parents=True, exist_ok=True)
+
+
+def _atomic_write_json(path: Path, data: dict) -> None:
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    tmp.replace(path)
+
+
+def _atomic_write_text(path: Path, text: str) -> None:
+    """Пишет текст через *.tmp + replace, без усечения цели."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    tmp.replace(path)
+
+
+def _load_ledger(agent_dir: Optional[Path] = None) -> dict:
+    _ensure_agent_dir(agent_dir)
+    path = _ledger_json(agent_dir)
+    if path.exists():
+        try:
+            with open(path, encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {"cycles": [], "summary": {"total_cycles": 0, "last_updated": None}}
+
+
+def _save_ledger(data: dict, agent_dir: Optional[Path] = None) -> None:
+    data["summary"]["last_updated"] = datetime.now(timezone.utc).isoformat()
+    _atomic_write_json(_ledger_json(agent_dir), data)
+    _render_md_view(data, agent_dir=agent_dir)
+
+
+def _render_md_view(data: dict, agent_dir: Optional[Path] = None) -> None:
+    lines = [
+        "# .agent/PERFORMANCE_LEDGER.md — Cycle Performance & ROI Tracking",
+        "",
+        "Auto-updated by performance_ledger module.",
+        "",
+        "## Recent Cycles",
+    ]
+    for c in reversed(data.get("cycles", [])[-10:]):
+        lines.append(
+            f"- Cycle {c.get('cycle')}: outcome={c.get('outcome')} elapsed={c.get('elapsed_minutes')}m "
+            f"tools={c.get('tool_calls')} conf={c.get('confidence')} meta_applied={c.get('meta_applied', 0)}"
+        )
+    lines.append("")
+    lines.append("## Summary")
+    s = data.get("summary", {})
+    lines.append(f"- Total tracked: {s.get('total_cycles', 0)}")
+    lines.append(f"- Last updated: {s.get('last_updated')}")
+    lines.append("")
+    lines.append("See memory/performance_ledger.py and integration in meta_harvester / AGENT_ROLES.")
+    _atomic_write_text(_ledger_md(agent_dir), "\n".join(lines))
+
+
+def _append_proposal_line(
+    proposal_id: str, impact: str, *, agent_dir: Optional[Path] = None
+) -> None:
+    """Дописать строку apply в LOOP_PERFORMANCE.md. Вызывать уже под локом ledger."""
+    path = _loop_performance_md(agent_dir)
+    lines: list[str] = []
+    if path.exists():
+        lines = path.read_text(encoding="utf-8").splitlines()
+    lines.append(
+        f"- {datetime.now(timezone.utc).isoformat()} | proposal {proposal_id} | {impact or 'applied'}"
+    )
+    _atomic_write_text(path, "\n".join(lines[-MAX_CYCLES:]) + "\n")
+
+
+def append_cycle(
+    *,
+    agent_dir: Optional[Path] = None,
+    proposal_id: Optional[str] = None,
+    proposal_impact: str = "",
+    persist_cycle: bool = True,
+    **kwargs: Any,
+) -> dict:
+    """Дописать цикл в ledger. Вызывается из Reviewer / meta на DONE.
+
+    agent_dir=None — модульные LEDGER_JSON/LEDGER_MD (CLI и meta_harvester без kwargs).
+    Явный путь нужен параллельным сессиям, чтобы не писать в cwd хаба.
+    persist_cycle=False — только лог apply (LOOP_PERFORMANCE.md), без фейкового cycle=0
+    в окне 50. JSON создаётся пустым, если файла ещё нет.
+    """
+    # Лок на родителе реального JSON, не cwd/.agent: иначе патч LEDGER_JSON уезжает мимо.
+    with agent_lock(_ledger_json(agent_dir).parent, name="ledger"):
+        record: dict = {}
+        if persist_cycle:
+            record = {
+                "cycle": kwargs.get("cycle"),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "outcome": kwargs.get("outcome", "DONE"),
+                "elapsed_minutes": kwargs.get("elapsed_minutes", 0.0),
+                "tool_calls": kwargs.get("tool_calls", 0),
+                "tokens_est": kwargs.get("tokens_est", 0),
+                "confidence": kwargs.get("confidence", 0.0),
+                "tests_total": kwargs.get("tests_total", 0),
+                "tests_failed": kwargs.get("tests_failed", 0),
+                "violations": kwargs.get("violations", 0),
+                "meta_generated": kwargs.get("meta_generated", 0),
+                "meta_applied": kwargs.get("meta_applied", 0),
+                "success_patterns": kwargs.get("success_patterns", []),
+                "notes": kwargs.get("notes", ""),
+            }
+            if kwargs.get("proxy_stats") is not None:
+                record["proxy_stats"] = kwargs["proxy_stats"]
+            if kwargs.get("details") is not None:
+                record["details"] = kwargs["details"]
+            ledger = _load_ledger(agent_dir=agent_dir)
+            ledger["cycles"].append(record)
+            if len(ledger["cycles"]) > MAX_CYCLES:
+                ledger["cycles"] = ledger["cycles"][-MAX_CYCLES:]
+            ledger["summary"]["total_cycles"] = len(ledger["cycles"])
+            _save_ledger(ledger, agent_dir=agent_dir)
+        elif not _ledger_json(agent_dir).exists():
+            _save_ledger(_load_ledger(agent_dir=agent_dir), agent_dir=agent_dir)
+        if proposal_id:
+            _append_proposal_line(proposal_id, proposal_impact, agent_dir=agent_dir)
+        return record
+
+
+def get_recent(n: int = 5, *, agent_dir: Optional[Path] = None) -> list:
+    ledger = _load_ledger(agent_dir=agent_dir)
+    return list(reversed(ledger.get("cycles", [])))[:n]
+
+
+def generate_report(recent: int = 5, *, agent_dir: Optional[Path] = None):
+    cycles = get_recent(recent, agent_dir=agent_dir)
+    if not cycles:
+        return "No cycles recorded yet."
+    total_elapsed = sum(c.get("elapsed_minutes", 0) for c in cycles)
+    avg_conf = sum(c.get("confidence", 0) for c in cycles) / len(cycles)
+    total_meta = sum(c.get("meta_applied", 0) for c in cycles)
+    return {
+        "recent_cycles": len(cycles),
+        "avg_elapsed_min": round(total_elapsed / len(cycles), 1),
+        "avg_confidence": round(avg_conf, 2),
+        "total_meta_applied": total_meta,
+        "trend_note": "Improving meta application and efficiency expected after P1+P4 work.",
+    }
+
+
+def main():
+    import argparse
+    p = argparse.ArgumentParser(description="Performance Ledger for Agentix loop")
+    sub = p.add_subparsers(dest="cmd")
+
+    ap = sub.add_parser("append", help="Append cycle stats")
+    ap.add_argument("--cycle", type=int, required=True)
+    ap.add_argument("--outcome", default="DONE")
+    ap.add_argument("--elapsed", type=float, default=0.0, dest="elapsed_minutes")
+    ap.add_argument("--tools", type=int, default=0, dest="tool_calls")
+    ap.add_argument("--tokens", type=int, default=0, dest="tokens_est")
+    ap.add_argument("--conf", type=float, default=0.8, dest="confidence")
+    ap.add_argument("--tests_total", type=int, default=0)
+    ap.add_argument("--tests_failed", type=int, default=0)
+    ap.add_argument("--violations", type=int, default=0)
+    ap.add_argument("--meta_gen", type=int, default=0, dest="meta_generated")
+    ap.add_argument("--meta_app", type=int, default=0, dest="meta_applied")
+    ap.add_argument("--notes", default="")
+
+    rp = sub.add_parser("report", help="Show recent report")
+    rp.add_argument("--recent", type=int, default=5)
+
+    args = p.parse_args()
+    if args.cmd == "append":
+        rec = append_cycle(
+            cycle=args.cycle,
+            outcome=args.outcome,
+            elapsed_minutes=args.elapsed_minutes,
+            tool_calls=args.tool_calls,
+            tokens_est=args.tokens_est,
+            confidence=args.confidence,
+            tests_total=args.tests_total,
+            tests_failed=args.tests_failed,
+            violations=args.violations,
+            meta_generated=args.meta_generated,
+            meta_applied=args.meta_applied,
+            notes=args.notes,
+        )
+        print(json.dumps(rec, indent=2, ensure_ascii=False))
+    elif args.cmd == "report":
+        print(json.dumps(generate_report(args.recent), indent=2, ensure_ascii=False))
+    else:
+        p.print_help()
+
+
+if __name__ == "__main__":
+    main()

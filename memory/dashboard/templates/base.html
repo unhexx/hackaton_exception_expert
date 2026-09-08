@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="same-origin">
+  <title>{{title}} — Agentix</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.14.3"></script>
+  <style>
+    .nav-active { background: #27272a; color: #fff; }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100"
+      x-data="{ toast: '' }"
+      hx-headers='{"X-CSRF-Token": "{{csrf}}"}'>
+  <div class="flex min-h-screen">
+    <aside class="w-56 bg-zinc-900 border-r border-zinc-800 p-4 flex flex-col">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-8 h-8 bg-emerald-600 rounded flex items-center justify-center text-sm font-bold">Ax</div>
+        <div>
+          <div class="font-semibold">Agentix Control</div>
+          <div class="text-xs text-zinc-500 truncate" title="{{workdir_path}}">{{workdir_name}}</div>
+        </div>
+      </div>
+      <div id="conn-dot" class="text-xs px-2 py-0.5 rounded bg-amber-900 text-amber-300 mb-6">{{conn_dot}}</div>
+      <nav class="space-y-1 text-sm">
+        <a href="/" class="block px-3 py-2 rounded {{nav_loop_class}}">Loop</a>
+        <a href="/streams" class="block px-3 py-2 rounded {{nav_streams_class}}">Streams</a>
+        <a href="/handoff" class="block px-3 py-2 rounded {{nav_handoff_class}}">Handoff</a>
+        <a href="/ledger" class="block px-3 py-2 rounded {{nav_ledger_class}}">Ledger</a>
+        <a href="/playbooks" class="block px-3 py-2 rounded {{nav_playbooks_class}}">Playbooks</a>
+        <a href="/audit" class="block px-3 py-2 rounded {{nav_audit_class}}">Audit</a>
+        <a href="/questions" class="block px-3 py-2 rounded {{nav_questions_class}}">Questions</a>
+        <a href="/plan" class="block px-3 py-2 rounded {{nav_plan_class}}">Plan</a>
+        <a href="/memory" class="block px-3 py-2 rounded {{nav_memory_class}}">Memory</a>
+      </nav>
+      <div class="mt-auto pt-8 text-[10px] text-zinc-500">{{year}}</div>
+    </aside>
+    <main class="flex-1 p-8">
+      <div class="max-w-5xl mx-auto">
+        {{body_html}}
+      </div>
+    </main>
+  </div>
+  <script>
+  (function () {
+    var MAX = 15;
+    var attempt = 0;
+    var gen = 0;
+    var timer = null;
+    var sock = null;
+    var dot = document.getElementById('conn-dot');
+
+    function setDot(live) {
+      if (!dot) return;
+      if (live) {
+        dot.textContent = 'WS: live';
+        dot.className = 'text-xs px-2 py-0.5 rounded bg-emerald-900 text-emerald-300 mb-6';
+      } else {
+        dot.textContent = 'WS: polling';
+        dot.className = 'text-xs px-2 py-0.5 rounded bg-amber-900 text-amber-300 mb-6';
+      }
+    }
+
+    function wsUrl() {
+      var proto = location.protocol === 'https:' ? 'wss' : 'ws';
+      var url = proto + '://' + location.host + '/ws/ui';
+      var q = new URLSearchParams(location.search).get('token');
+      if (q) url += '?token=' + encodeURIComponent(q);
+      return url;
+    }
+
+    function schedule() {
+      setDot(false);
+      if (timer) return;
+      var base = Math.min(MAX, Math.pow(2, attempt));
+      attempt += 1;
+      var wait = Math.random() * base;
+      timer = setTimeout(function () {
+        timer = null;
+        connect();
+      }, wait * 1000);
+    }
+
+    function connect() {
+      gen += 1;
+      var my = gen;
+      try { if (sock) sock.close(); } catch (e) {}
+      var s;
+      try {
+        s = new WebSocket(wsUrl());
+      } catch (e) {
+        schedule();
+        return;
+      }
+      sock = s;
+      s.onopen = function () {
+        if (my !== gen) return;
+        attempt = 0;
+        setDot(true);
+      };
+      s.onmessage = function (ev) {
+        if (my !== gen) return;
+        try {
+          var d = JSON.parse(ev.data);
+          if (d && d.type === 'heartbeat') return;
+        } catch (e) {}
+        try {
+          if (window.htmx) htmx.trigger(document.body, 'ws-refresh');
+        } catch (e) {}
+      };
+      s.onclose = function () {
+        if (my === gen) schedule();
+      };
+      s.onerror = function () {
+        try { s.close(); } catch (e) {}
+      };
+    }
+
+    setDot(false);
+    connect();
+  })();
+  </script>
+</body>
+</html>

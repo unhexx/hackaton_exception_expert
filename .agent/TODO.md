@@ -1,17 +1,23 @@
-# .agent/TODO.md — Task Backlog
+# .agent/TODO.md
 
-**P9:** COMPLETE (v3.13.0) on `feature/p9-operator-stack`
-**Loop 5:** post-P9 DX/hardening
+Активны только пункты FSP. Детали среза: `track/lct-fsp-vacancies/04-plan.md`.
 
-## Loop 5
+## До 04.10.2026
 
-- [x] L5-01 Living PLAN/TODO for 3.13.0
-- [x] L5-02 Init.ps1 stack tip + init parity token `memory.stack`
-- [x] L5-03 demo-loop.sh non-fatal stack check
-- [x] L5-04 `deploy/searxng/limiter.toml` + contract test
-- [x] L5-05 consumer-starter stack pointer + SearXNG env
+- [x] FSP-0 Зафиксировать постановку, вопросы и роли
+- [ ] FSP-0b Выбрать хост демо-стенда (Q9) и записать в `03-open-questions.md`
 
-## Parked (not this loop)
+## Окно 05–11.10.2026
 
-- Merge/tag 3.13.0 on `main` after evaluation
-- Hosted Hub SaaS / messenger / mobile (ROADMAP Future)
+- [ ] FSP-1 Каркас двух кабинетов
+- [ ] FSP-2 Мок ФСП и карточка достижений
+- [ ] FSP-3 Категория v1 и отчёт прогона
+- [ ] FSP-4 Разбор резюме, `source=resume`
+- [ ] FSP-5 Предложение с вакансией и вилкой
+- [ ] FSP-6 Инструкция развёртывания, API, демо-скрипт
+
+## Не в этом цикле
+
+- Парсинг внешних досок вакансий
+- Экзамен соискателя
+- Доработка шаблона Agentix

@@ -1,5 +1,7 @@
 # AGENT ROLES — Detailed Role Instructions (Blackbox + MiniMax M2.5)
 
+Компетенции текущего продукта (product, backend, frontend, matching, design) описаны в `track/lct-fsp-vacancies/roles/`. Здесь их не дублировать. Поле handoff `track_role` и стык с enum цикла — в `track/lct-fsp-vacancies/roles/CONTRACT.md`.
+
 Insert the appropriate block at the end of the SYSTEM_PROMPT when handing off to a specific role.
 
 ---

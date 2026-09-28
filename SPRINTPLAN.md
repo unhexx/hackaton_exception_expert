@@ -1,26 +1,22 @@
 # SPRINTPLAN.md
 
-**Sprint:** P9 Operator Compose Stack
-**Status:** COMPLETE (v3.13.0) on `feature/p9-operator-stack`
-**Goal:** Containerize article-matching research tools (SearXNG, LDR/LangGraph, optional Ollama) without moving pxpipe/gateway off the host.
+**Спринт:** подготовка и разработка MVP трека ФСП  
+**Окно кода:** 05.10.2026–11.10.2026  
+**Цель:** развёрнутый прототип обратного подбора, см. приёмку в `track/lct-fsp-vacancies/01-requirements.md`.
 
-## Completed This Sprint
+## Срезы
 
-- `deploy/compose.yaml` profiles `search` / `research` / `ollama`
-- SearXNG JSON (`deploy/searxng/settings.yml`)
-- LDR default LLM endpoint = host gateway `:8110` → pxpipe `:8100`
-- `memory.stack` contract CLI, `memory.search` JSON client
-- `scripts/agentix-stack.sh`, `docs/stack.md`
-- Hermetic tests `memory/test_stack.py`, `memory/test_search.py`
+Порядок и владельцы: `track/lct-fsp-vacancies/04-plan.md`.
 
-## Loop 5 (post-P9, same branch)
+- FSP-1 каркас двух кабинетов
+- FSP-2 мок ФСП и карточка достижений
+- FSP-3 категория v1 и прогон качества
+- FSP-4 разбор резюме без метки верификации
+- FSP-5 предложение с вакансией и вилкой
+- FSP-6 стенд, API, инструкция
 
-- Living PLAN/TODO for 3.13.0
-- Init.ps1 / Init.sh `memory.stack` parity
-- demo-loop.sh non-fatal stack check
-- SearXNG `limiter.toml`
-- consumer-starter stack pointer + `AGENTIX_SEARXNG_URL`
+## После окна
 
-## Next
+12–18.10.2026 экспертиза. 19–21.10.2026 только замечания экспертов. Новые срезы после 11.10 не открывать.
 
-Evaluate `feature/p9-operator-stack`, then merge/tag 3.13.0. Do not merge `main` from the loop.
+Шаблон Agentix (P9 и контур 5) в этот спринт не входит.

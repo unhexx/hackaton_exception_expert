@@ -1,31 +1,34 @@
 # PROJECT_CONTEXT.md
 
-> **Source of Truth:** `TASK_SPECIFICATION.md`
+> **Source of Truth:** `track/lct-fsp-vacancies/01-requirements.md`  
+> Указатель: `TASK_SPECIFICATION.md`
 
-## Project Identification
+## Проект
 
-| Parameter | Value |
-|-----------|-------|
-| **Project** | Agentix (agentic_loop_template) |
-| **Goal** | Self-improving agentic dev loop template |
-| **Version** | 3.13.0 |
-| **Initiative** | P9 Operator Compose Stack — **COMPLETE** (branch `feature/p9-operator-stack`) |
+| Параметр | Значение |
+|----------|----------|
+| Продукт | Веб-сервис обратного подбора в ИТ с профилем достижений ФСП |
+| Площадка | ЛЦТ, специальный трек, кластер «Ломоносов» |
+| Модератор | Telegram `@elizaveta_lct` |
+| Окно разработки | 05.10.2026–11.10.2026 |
+| Обвязка цикла | Agentix 3.13.0, уже в репозитории |
 
-## Current Status
+## Статус
 
-| Field | Value |
-|-------|-------|
-| **Cycle** | P9 release |
-| **Phase** | P9 done |
-| **Status** | DONE on feature branch |
-| **Confidence** | 0.9 |
+| Поле | Значение |
+|------|----------|
+| Фаза | Подготовка контракта до старта разработки |
+| Статус | IN_PROGRESS |
+| Следующий срез | FSP-1 и FSP-2 по `track/lct-fsp-vacancies/04-plan.md` |
 
-## Final Deliverables
+## Что уже решено для кода
 
-- Compose stack: SearXNG JSON, optional LDR (LangGraph), optional unpublished Ollama
-- Live model path unchanged: gateway → host pxpipe
-- `memory.stack` / `memory.search` / `scripts/agentix-stack.sh` / `docs/stack.md`
+- Вакансия живёт в предложении работодателя, внешние доски не парсим (Q1).
+- Зарплата — обязательная вилка в RUB (Q2).
+- Категория объясняется правилами. Резюме не подтверждает квалификацию.
+- Разряд хранится строкой источника, не вычисляется.
+- Боевого API ФСП в репозитории нет: до спецификации работает мок.
 
-## Reviewer Notes
+## Что не решено
 
-Control plane stays on host loopback. Ollama is not the default LLM (pxpipe/Grok is). Branch is for evaluation before merge to main.
+Список и временные решения: `track/lct-fsp-vacancies/03-open-questions.md`.

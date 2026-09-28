@@ -1,31 +1,24 @@
-# .agent/PLAN.md — Living Project Plan
+# .agent/PLAN.md
 
-**Initiative:** P9 Operator Compose Stack — **COMPLETE** on `feature/p9-operator-stack`
-**Template Version:** 3.13.0
-**Last Update:** 2026-09-08
-**Loop:** 5 (post-P9 hardening, still not merging `main`)
+**Инициатива:** трек ЛЦТ, агрегатор ИТ-вакансий с профилем ФСП  
+**Обвязка:** Agentix 3.13.0 остаётся в репозитории, срезы по ней не ведём  
+**Обновлено:** 2026-09-28
 
-## Phase Status
+## Фаза
 
-| Phase | Status |
-|-------|--------|
-| P0–P8 | COMPLETE (see ROADMAP) |
-| P9 Operator stack | COMPLETE (v3.13.0) |
-| Loop 5 follow-up | IN PROGRESS |
+Подготовка контракта до 04.10.2026. Разработка 05–11.10.2026.
 
-## P9 delivered
+Требования и роли: `track/lct-fsp-vacancies/`.
 
-- `deploy/compose.yaml` profiles `search` / `research` / `ollama`
-- SearXNG JSON on `127.0.0.1:8080`; LDR via host gateway → pxpipe
-- `memory.stack` / `memory.search` / `scripts/agentix-stack.sh` / `docs/stack.md`
-- Live pxpipe path unchanged (`proxy.mode=required`)
+## Срезы
 
-## Loop 5 INVEST (this cycle)
+| ID | Статус |
+|----|--------|
+| FSP-1 Каркас кабинетов | PENDING |
+| FSP-2 Мок достижений | PENDING |
+| FSP-3 Категория v1 | PENDING |
+| FSP-4 Разбор резюме | PENDING |
+| FSP-5 Предложение | PENDING |
+| FSP-6 Стенд и документы | PENDING |
 
-1. Living PLAN/TODO match 3.13.0
-2. Init.ps1 stack tip (parity with Init.sh)
-3. demo-loop.sh: non-fatal `memory.stack check`
-4. SearXNG `limiter.toml` so 2026 image does not warn
-5. consumer-starter pointer to stack + `AGENTIX_SEARXNG_URL`
-
-Do **not** merge to `main` until operator review of the feature branch.
+P9 шаблона закрыт раньше и в этот план не возвращается.

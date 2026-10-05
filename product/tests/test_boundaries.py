@@ -64,12 +64,51 @@ def test_pages_and_docs_do_not_need_network(client):
     assert "htmx" in script.text
     fonts = client.get("/fonts/README")
     assert fonts.status_code == 200
+    login = client.get("/auth/login")
+    assert login.status_code == 200
+    assert '/static/logo_02w.svg' in login.text
+    logo = client.get("/static/logo_02w.svg")
+    assert logo.status_code == 200
+    assert b"<svg" in logo.content[:300]
     docs = client.get("/docs")
-    assert docs.status_code == 503
-    assert docs.json()["error"] == "docs_assets"
+    assert docs.status_code == 200
+    assert docs.headers["content-type"].startswith("text/html")
+    for host in ("cdn.jsdelivr.net", "unpkg.com", "fastapi.tiangolo.com"):
+        assert host not in docs.text
+    assert "/static/docs/swagger-ui-bundle.js" in docs.text
+    assert "/static/docs/swagger-ui.css" in docs.text
     redoc = client.get("/redoc")
-    assert redoc.status_code == 503
-    assert redoc.json()["error"] == "docs_assets"
+    assert redoc.status_code == 200
+    assert redoc.headers["content-type"].startswith("text/html")
+    for host in ("cdn.jsdelivr.net", "unpkg.com", "fastapi.tiangolo.com", "fonts.googleapis.com"):
+        assert host not in redoc.text
+    assert "/static/docs/redoc.standalone.js" in redoc.text
+    assert client.get("/static/docs/swagger-ui-bundle.js").status_code == 200
+    assert client.get("/static/docs/swagger-ui.css").status_code == 200
+    assert client.get("/static/docs/redoc.standalone.js").status_code == 200
+
+
+def test_handover_note_quotes_stand_run():
+    root = Path(product.__file__).resolve().parent
+    note = (root / "docs" / "zapiska.md").read_text(encoding="utf-8")
+    readme = (root / "README.md").read_text(encoding="utf-8")
+    report = (
+        "category_match 38 38\n"
+        "outcome_match 32 32\n"
+        "template_stable 4 4\n"
+        "relevant_in_top 23 24\n"
+        "resume_ok 4 4\n"
+    )
+    assert report in note
+    for title in ("Архитектура", "Механика теста", "Подбор и категоризация", "Валидация", "API", "Библиотеки", "Сборка и запуск"):
+        assert title in note
+    assert "Keycloak" in note
+    assert "ATS" in note
+    assert "96.2" not in note
+    assert "95.8" not in note
+    assert "docker compose -f deploy/fsp/compose.yaml up --build" in readme
+    assert (root / "requirements.lock").is_file()
+    assert (root / "docs" / "zapiska.docx").is_file()
 
 
 def test_product_does_not_import_memory():

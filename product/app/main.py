@@ -75,6 +75,9 @@ def create_app() -> FastAPI:
             title="ФСП",
             swagger_js_url="/static/docs/swagger-ui-bundle.js",
             swagger_css_url="/static/docs/swagger-ui.css",
+            swagger_favicon_url="/static/logo_02w.svg",
+            # null отключает онлайн-валидатор swagger.io: страница не зависит от сети.
+            swagger_ui_parameters={"validatorUrl": None},
         )
 
     @application.get("/redoc", include_in_schema=False)
@@ -88,6 +91,8 @@ def create_app() -> FastAPI:
             openapi_url="/openapi.json",
             title="ФСП",
             redoc_js_url="/static/docs/redoc.standalone.js",
+            redoc_favicon_url="/static/logo_02w.svg",
+            with_google_fonts=False,
         )
 
     def custom_openapi():

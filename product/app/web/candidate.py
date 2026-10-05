@@ -13,6 +13,7 @@ from product.app.api.deps import db_session
 from product.app.db.models import Consent, Offer, Profile, TestAttempt
 from product.app.services.errors import ApiError
 from product.app.services.profiles import latest_assignment, save_profile
+from product.app.services.resumes import apply_resume
 from product.app.web.guards import page_user
 from product.app.web.render import assert_csrf, ensure_csrf, page_error, render
 from product.fsp_mock.read import achievements_for
@@ -112,6 +113,25 @@ def save_cabinet(
     try:
         assert_csrf(request, csrf)
         save_profile(db, user, payload)
+    except ApiError as exc:
+        return page_error(request, "candidate/cabinet.html", _cabinet_context(request, db, user), exc)
+    return RedirectResponse("/candidate", status_code=303)
+
+
+@router.post("/candidate/resume")
+async def upload_resume_page(request: Request, db: Session = Depends(db_session)):
+    user, denial = page_user(request, db, "candidate")
+    if denial is not None:
+        return denial
+    form = await request.form()
+    uploaded = form.get("file")
+    try:
+        assert_csrf(request, str(form.get("csrf") or ""))
+        if uploaded is None or isinstance(uploaded, str):
+            payload = b""
+        else:
+            payload = await uploaded.read()
+        apply_resume(db, user, payload)
     except ApiError as exc:
         return page_error(request, "candidate/cabinet.html", _cabinet_context(request, db, user), exc)
     return RedirectResponse("/candidate", status_code=303)

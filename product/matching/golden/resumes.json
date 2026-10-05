@@ -1,0 +1,8 @@
+{
+  "items": [
+    {"file": "full.pdf"},
+    {"file": "partial.pdf"},
+    {"file": "empty.pdf", "expect": "resume_no_text"},
+    {"file": "notes.pdf", "expect": "resume_not_pdf"}
+  ]
+}

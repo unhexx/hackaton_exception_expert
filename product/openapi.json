@@ -1134,6 +1134,161 @@
         ]
       }
     },
+    "/api/candidate/resume": {
+      "post": {
+        "tags": [
+          "resume"
+        ],
+        "summary": "Upload Resume",
+        "operationId": "upload_resume_api_candidate_resume_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "profile_id": 1,
+                  "full_name": "Анна Синтетикова",
+                  "industry": "it",
+                  "specialization": "backend",
+                  "grade": "senior",
+                  "category_id": "backend:middle",
+                  "field_sources": {
+                    "full_name": "resume",
+                    "grade": "resume"
+                  },
+                  "grade_skipped": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Анкета ещё не заполнена"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request Entity Too Large",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "resume_too_large",
+                  "message": "Файл больше 2 МиБ"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "resume_no_text",
+                  "message": "В PDF нет текстового слоя. Скан без текста не читается, заполните поля вручную."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/profile.pdf": {
+      "get": {
+        "tags": [
+          "resume"
+        ],
+        "summary": "Download Profile",
+        "operationId": "download_profile_api_candidate_profile_pdf_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Анкета ещё не заполнена"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
     "/validation": {
       "get": {
         "tags": [

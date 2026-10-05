@@ -3,7 +3,7 @@
 .agent
 memory
 brandbook-fsp
-**/*.pdf
+/ТЗ.pdf
 **/*.pptx
 tz_extracted.txt
 **/__pycache__

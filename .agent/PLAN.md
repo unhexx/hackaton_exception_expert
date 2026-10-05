@@ -18,7 +18,7 @@
 | FSP-2 Мок достижений | DONE |
 | FSP-3 Категория v1 | DONE |
 | FSP-7 Тест грейда | DONE |
-| FSP-4 Разбор резюме | PENDING |
+| FSP-4 Разбор резюме | DONE |
 | FSP-5 Предложение | PENDING |
 | FSP-6 Стенд и записка | PENDING |
 | FSP-8 Дополнительный функционал | OPTIONAL |

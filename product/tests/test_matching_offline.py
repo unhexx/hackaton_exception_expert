@@ -29,7 +29,9 @@ def test_golden_report_prints_this_run_only():
     stable_hit, stable_total = counts["template_stable"]
     assert stable_total > 0
     assert stable_hit == stable_total
-    assert counts["resume_ok"] == (0, 0)
+    resume_hit, resume_total = counts["resume_ok"]
+    assert resume_total > 0
+    assert resume_hit == resume_total
     hit, slots = counts["relevant_in_top"]
     assert hit > 0
     assert slots > hit

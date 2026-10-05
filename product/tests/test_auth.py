@@ -185,7 +185,9 @@ def test_roles_profile_and_company(client):
     assert saved.status_code == 200
     body = saved.json()
     assert body["industry"] == "it"
-    assert body["category_id"] is None
+    assert body["category_id"] == "backend:middle"
+    assert "/" not in body["category_id"]
+    assert body["explanation"].startswith("Опрос:")
     assert body["email"] == "seeker@example.com"
     assert "candidate_email" not in body
     assert body["field_sources"]["grade"] == "form"

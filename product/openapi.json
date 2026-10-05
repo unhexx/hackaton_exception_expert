@@ -635,6 +635,254 @@
           }
         ]
       }
+    },
+    "/api/candidate/category": {
+      "get": {
+        "tags": [
+          "category"
+        ],
+        "summary": "Read Category",
+        "operationId": "read_category_api_candidate_category_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "profile_id": 1,
+                  "category_id": "backend:middle",
+                  "rule_version": "v1",
+                  "explanation": "Опрос: специализация backend, грейд middle. Тест ещё не сдан. Правила v1.",
+                  "industry": "it"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Опроса ещё не было"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/employer/candidates": {
+      "get": {
+        "tags": [
+          "category"
+        ],
+        "summary": "Read Candidates",
+        "operationId": "read_candidates_api_employer_candidates_get",
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category Id"
+            }
+          },
+          {
+            "name": "stack",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [],
+              "title": "Stack"
+            }
+          },
+          {
+            "name": "team_role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Team Role"
+            }
+          },
+          {
+            "name": "work_format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Work Format"
+            }
+          },
+          {
+            "name": "has_fsp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Has Fsp"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Q"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "profile_id": 1,
+                    "full_name": "Иван Синтетиков",
+                    "industry": "it",
+                    "category_id": "backend:middle",
+                    "explanation": "Опрос: специализация backend, грейд middle. Тест ещё не сдан. Правила v1.",
+                    "list_reason": "Категория backend:middle.",
+                    "rank_key": "067-0000-00000001",
+                    "test_score": 67,
+                    "stack": [
+                      "python"
+                    ],
+                    "team_role": "разработчик",
+                    "work_format": "удалённо"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет работодателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "category_id",
+                  "message": "Нужна категория"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/validation": {
+      "get": {
+        "tags": [
+          "validation"
+        ],
+        "summary": "Validation Report",
+        "operationId": "validation_report_validation_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "category_match 0 0\noutcome_match 0 0\ntemplate_stable 0 0\nrelevant_in_top 0 0\nresume_ok 0 0\n"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

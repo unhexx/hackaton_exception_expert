@@ -9,6 +9,7 @@
 | [02-domain.md](02-domain.md) | Открытые факты о ФСП и ЛЦТ. Не путать с постановкой |
 | [03-open-questions.md](03-open-questions.md) | Вопросы модератору и экспертам. Не закрывать молча |
 | [04-plan.md](04-plan.md) | Срезы работ на окно 05–11.10.2026 |
+| [05-reshenie.md](05-reshenie.md) | Стек и устройство прототипа. Требования не копирует |
 | [roles/CONTRACT.md](roles/CONTRACT.md) | Как компетенция садится на handoff цикла |
 
 Роли: [product](roles/product.md), [backend](roles/backend.md), [frontend](roles/frontend.md), [matching](roles/matching.md), [design](roles/design.md).

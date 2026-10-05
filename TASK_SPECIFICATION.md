@@ -9,6 +9,7 @@
 | Оглавление | `track/lct-fsp-vacancies/README.md` |
 | Требования, включая ТЗ.pdf и бренд | `track/lct-fsp-vacancies/01-requirements.md` |
 | План срезов | `track/lct-fsp-vacancies/04-plan.md` |
+| Стек и решение | `track/lct-fsp-vacancies/05-reshenie.md` |
 | Роли компетенций | `track/lct-fsp-vacancies/roles/` |
 
 `ТЗ.pdf` и каталог `brandbook-fsp/` лежат в корне. В промпт их не копировать: нормы уже сведены в требованиях.

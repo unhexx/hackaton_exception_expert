@@ -1134,6 +1134,524 @@
         ]
       }
     },
+    "/api/employer/offers": {
+      "post": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Send Offer",
+        "operationId": "send_offer_api_employer_offers_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "offer": {
+                    "value": {
+                      "profile_id": 12,
+                      "category_id": "backend:middle",
+                      "company_name": "Синтетика",
+                      "message": "Ищем backend middle в команду платежей",
+                      "salary_min": 180000,
+                      "salary_max": 250000,
+                      "salary_currency": "RUB",
+                      "contact_channel": "telegram: @sintetika"
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "profile_id": 12,
+                  "category_id": "backend:middle",
+                  "company_name": "Синтетика",
+                  "message": "Ищем backend middle в команду платежей",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "contact_channel": "telegram: @sintetika",
+                  "status": "sent",
+                  "created_at": "2026-10-05T12:00:00Z",
+                  "updated_at": "2026-10-05T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет работодателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "profile_not_in_category",
+                  "message": "Профиля нет в этой категории"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "offer_open",
+                  "message": "Открытое приглашение уже есть"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "salary_range",
+                  "message": "Верхняя граница больше нижней"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Employer Offers",
+        "operationId": "employer_offers_api_employer_offers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "id": 1,
+                    "profile_id": 12,
+                    "category_id": "backend:middle",
+                    "company_name": "Синтетика",
+                    "message": "Ищем backend middle в команду платежей",
+                    "salary_min": 180000,
+                    "salary_max": 250000,
+                    "salary_currency": "RUB",
+                    "contact_channel": "telegram: @sintetika",
+                    "status": "accepted",
+                    "created_at": "2026-10-05T12:00:00Z",
+                    "updated_at": "2026-10-05T12:00:00Z",
+                    "candidate_email": "seeker@example.com"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет работодателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/offers": {
+      "get": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Candidate Offers",
+        "operationId": "candidate_offers_api_candidate_offers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "id": 1,
+                    "profile_id": 12,
+                    "category_id": "backend:middle",
+                    "company_name": "Синтетика",
+                    "message": "Ищем backend middle в команду платежей",
+                    "salary_min": 180000,
+                    "salary_max": 250000,
+                    "salary_currency": "RUB",
+                    "contact_channel": "telegram: @sintetika",
+                    "status": "sent",
+                    "created_at": "2026-10-05T12:00:00Z",
+                    "updated_at": "2026-10-05T12:00:00Z"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/offers/{offer_id}": {
+      "get": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Read Offer",
+        "operationId": "read_offer_api_candidate_offers__offer_id__get",
+        "parameters": [
+          {
+            "name": "offer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Offer Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "profile_id": 12,
+                  "category_id": "backend:middle",
+                  "company_name": "Синтетика",
+                  "message": "Ищем backend middle в команду платежей",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "contact_channel": "telegram: @sintetika",
+                  "status": "seen",
+                  "created_at": "2026-10-05T12:00:00Z",
+                  "updated_at": "2026-10-05T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Приглашение не найдено"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/offers/{offer_id}/accept": {
+      "post": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Accept Offer",
+        "operationId": "accept_offer_api_candidate_offers__offer_id__accept_post",
+        "parameters": [
+          {
+            "name": "offer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Offer Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "profile_id": 12,
+                  "category_id": "backend:middle",
+                  "company_name": "Синтетика",
+                  "message": "Ищем backend middle в команду платежей",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "contact_channel": "telegram: @sintetika",
+                  "status": "accepted",
+                  "created_at": "2026-10-05T12:00:00Z",
+                  "updated_at": "2026-10-05T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Приглашение не найдено"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "offer_closed",
+                  "message": "Приглашение уже закрыто"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/offers/{offer_id}/decline": {
+      "post": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Decline Offer",
+        "operationId": "decline_offer_api_candidate_offers__offer_id__decline_post",
+        "parameters": [
+          {
+            "name": "offer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Offer Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "profile_id": 12,
+                  "category_id": "backend:middle",
+                  "company_name": "Синтетика",
+                  "message": "Ищем backend middle в команду платежей",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "contact_channel": "telegram: @sintetika",
+                  "status": "declined",
+                  "created_at": "2026-10-05T12:00:00Z",
+                  "updated_at": "2026-10-05T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Приглашение не найдено"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "offer_closed",
+                  "message": "Приглашение уже закрыто"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
     "/api/candidate/resume": {
       "post": {
         "tags": [

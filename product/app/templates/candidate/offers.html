@@ -2,6 +2,31 @@
 {% block title %}Приглашения{% endblock %}
 {% block body %}
 <h1>Приглашения</h1>
-<p>Приглашений нет.</p>
 <p><a href="/candidate">В кабинет</a></p>
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
+{% if offers %}
+<ul>
+  {% for row in offers %}
+  <li>
+    <a href="/candidate/offers/{{ row.id }}">{{ row.company_name }}</a>
+    <p>Статус: {{ row.status }}. Категория: {{ row.category_id }}.</p>
+    <p>Способ связи компании: {{ row.contact_channel }}</p>
+    <p>Вилка: {{ row.salary_min }}–{{ row.salary_max }} {{ row.salary_currency }}</p>
+    <p>{{ row.message }}</p>
+    {% if row.status == 'sent' or row.status == 'seen' %}
+    <form method="post" action="/candidate/offers/{{ row.id }}/accept">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button type="submit">Принять</button>
+    </form>
+    <form method="post" action="/candidate/offers/{{ row.id }}/decline">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button type="submit">Отклонить</button>
+    </form>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Приглашений нет.</p>
+{% endif %}
 {% endblock %}

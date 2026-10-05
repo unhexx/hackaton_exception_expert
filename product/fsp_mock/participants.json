@@ -1,0 +1,72 @@
+{
+  "participants": [
+    {
+      "external_id": "fsp-synth-1",
+      "display_name": "Иван Синтетиков",
+      "rank": "I",
+      "results": [
+        {
+          "competition_id": "synth-algo-2025",
+          "competition_name": "Синтетический кубок алгоритмов",
+          "discipline": "алгоритмика",
+          "role_in_team": "капитан",
+          "place": "2",
+          "held_on": "2025-04-12"
+        },
+        {
+          "competition_id": "synth-product-2025",
+          "competition_name": "Синтетический хакатон продукта",
+          "discipline": "продуктовое",
+          "role_in_team": "участник хакатона",
+          "place": "финал",
+          "held_on": "2025-05-18"
+        },
+        {
+          "competition_id": "synth-sec-2025",
+          "competition_name": "Синтетический полигон ИБ",
+          "discipline": "Программирование систем информационной безопасности",
+          "role_in_team": "разработчик задачи",
+          "place": "3",
+          "held_on": "2025-06-02"
+        },
+        {
+          "competition_id": "synth-robo-2025",
+          "competition_name": "Синтетический полигон роботов",
+          "discipline": "Программирование робототехники",
+          "role_in_team": "капитан",
+          "place": "1",
+          "held_on": "2025-07-09"
+        },
+        {
+          "competition_id": "synth-bas-2025",
+          "competition_name": "Синтетический полигон БАС",
+          "discipline": "Программирование БАС",
+          "role_in_team": "участник хакатона",
+          "place": "4",
+          "held_on": "2025-08-21"
+        }
+      ]
+    },
+    {
+      "external_id": "fsp-synth-2",
+      "display_name": "Мария Черновикова",
+      "rank": "КМС",
+      "results": []
+    },
+    {
+      "external_id": "fsp-synth-3",
+      "display_name": "Пётр Черновой",
+      "rank": "вне списка",
+      "results": [
+        {
+          "competition_id": "synth-odd-2025",
+          "competition_name": "Синтетический старт без разряда",
+          "discipline": "Квест выходного дня",
+          "role_in_team": "участник хакатона",
+          "place": "1",
+          "held_on": "2025-09-01"
+        }
+      ]
+    }
+  ]
+}

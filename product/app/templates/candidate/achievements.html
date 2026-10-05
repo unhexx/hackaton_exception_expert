@@ -9,7 +9,7 @@
   {% if fsp.results %}
   <ul>
     {% for row in fsp.results %}
-    <li>{{ row.discipline }} — {{ row.place }}</li>
+    <li>{{ row.discipline }}, роль на старте: {{ row.role_in_team }}, результат: {{ row.place }}</li>
     {% endfor %}
   </ul>
   {% else %}

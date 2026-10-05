@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 import product
+from product.fsp_mock.client import JsonFspClient
 from product.matching.rules import load_rules
 
 
@@ -29,6 +30,7 @@ def test_schema_matches_rules_and_wal(client):
             "select sql from sqlite_master where name = 'offers'"
         ).fetchone()[0]
         participants = db.execute("select count(*) from fsp_participants").fetchone()[0]
+        achievements = db.execute("select count(*) from fsp_achievements").fetchone()[0]
     assert mode.lower() == "wal"
     assert {
         "users",
@@ -46,7 +48,10 @@ def test_schema_matches_rules_and_wal(client):
         assert item in profile_sql
     assert "salary_currency = 'RUB'" in offer_sql
     assert "salary_max > salary_min" in offer_sql
-    assert participants == 0
+    people = JsonFspClient().list_participants()
+    assert participants == len(people)
+    assert participants >= 3
+    assert achievements == sum(len(person["results"]) for person in people)
 
 
 def test_pages_and_docs_do_not_need_network(client):

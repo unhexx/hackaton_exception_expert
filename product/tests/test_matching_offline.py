@@ -23,8 +23,12 @@ def test_golden_report_prints_this_run_only():
     assert lines[0] == f"category_match {counts['category_match'][0]} {counts['category_match'][1]}"
     assert counts["category_match"][0] == counts["category_match"][1]
     assert counts["category_match"][1] >= 30
-    assert counts["outcome_match"] == (0, 0)
-    assert counts["template_stable"] == (0, 0)
+    outcome_hit, outcome_total = counts["outcome_match"]
+    assert outcome_total > 0
+    assert outcome_hit == outcome_total
+    stable_hit, stable_total = counts["template_stable"]
+    assert stable_total > 0
+    assert stable_hit == stable_total
     assert counts["resume_ok"] == (0, 0)
     hit, slots = counts["relevant_in_top"]
     assert hit > 0

@@ -2,6 +2,64 @@
 {% block title %}Тест{% endblock %}
 {% block body %}
 <h1>Тест грейда</h1>
-<p>Тест ещё не сдан.</p>
 <p><a href="/candidate">В кабинет</a></p>
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
+{% if not profile %}
+<p>Сначала заполните анкету: без неё испытание не стартует.</p>
+{% else %}
+<p>Записанный грейд: {{ profile.grade }}. Специализация: {{ profile.specialization }}.</p>
+{% if not draft %}
+<form method="post" action="/candidate/test/start">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <button type="submit">Начать тест записанного грейда</button>
+</form>
+{% if offer %}
+<form method="post" action="/candidate/test/start">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <input type="hidden" name="grade" value="{{ offer }}">
+  <p>Последний итог записанной пары предлагает соседний грейд {{ offer }}.</p>
+  <button type="submit">Начать тест грейда {{ offer }}</button>
+</form>
+{% endif %}
+{% else %}
+<p>Открыт шаблон {{ draft.template_id }} на грейд {{ draft.declared_grade }}.</p>
+<form method="post" action="/candidate/test/submit">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <input type="hidden" name="attempt_id" value="{{ draft.id }}">
+  {% for question in questions %}
+  {% set question_index = loop.index0 %}
+  <fieldset>
+    <legend>{{ question.text }}</legend>
+    {% for choice in question.choices %}
+    <label><input type="radio" name="answer_{{ question_index }}" value="{{ choice.id }}"> {{ choice.text }}</label>
+    {% endfor %}
+  </fieldset>
+  {% endfor %}
+  <p><button type="submit">Сдать тест</button></p>
+</form>
+{% endif %}
+{% endif %}
+<section>
+  <h2>История</h2>
+  {% if history %}
+  <ul>
+    {% for row in history %}
+    <li>
+      {{ row.declared_grade }}, {{ row.template_id }}, {{ row.status }}
+      {% if row.status == 'submitted' %}: балл {{ row.score }}, {{ row.outcome_label }}{% if row.proposed_grade %}, предложен {{ row.proposed_grade }}{% endif %}{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Тест ещё не сдан.</p>
+  {% endif %}
+</section>
+<section>
+  <h2>Какой шаблон показывает описание вакансии</h2>
+  <ul>
+    {% for item in samples %}
+    <li>{{ item.title }} показывает шаблон {{ item.shows_template }}</li>
+    {% endfor %}
+  </ul>
+</section>
 {% endblock %}

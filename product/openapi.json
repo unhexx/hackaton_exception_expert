@@ -851,6 +851,289 @@
         ]
       }
     },
+    "/api/candidate/tests/start": {
+      "post": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Start Route",
+        "operationId": "start_route_api_candidate_tests_start_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "examples": {
+                  "recorded": {
+                    "value": {}
+                  },
+                  "adjacent": {
+                    "value": {
+                      "grade": "senior"
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "attempt_id": 1,
+                  "template_id": "backend-middle-a",
+                  "specialization": "backend",
+                  "declared_grade": "middle",
+                  "questions": [
+                    {
+                      "id": "q1",
+                      "text": "Синтетический вопрос",
+                      "choices": [
+                        {
+                          "id": "a",
+                          "text": "первый"
+                        },
+                        {
+                          "id": "b",
+                          "text": "второй"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "survey_required",
+                  "message": "Сначала заполните анкету"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/tests/{attempt_id}/submit": {
+      "post": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Submit Route",
+        "operationId": "submit_route_api_candidate_tests__attempt_id__submit_post",
+        "parameters": [
+          {
+            "name": "attempt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Attempt Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "answers": {
+                    "value": {
+                      "answers": [
+                        "a",
+                        "b",
+                        "c"
+                      ]
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "attempt_id": 1,
+                  "score": 67,
+                  "outcome": "confirm",
+                  "proposed_grade": "middle",
+                  "category_id": "backend:middle",
+                  "grade": "middle"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Попытка не найдена"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "attempt_closed",
+                  "message": "Попытка уже сдана"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "answer_unknown",
+                  "message": "Ответ не из вариантов"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/tests": {
+      "get": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "History Route",
+        "operationId": "history_route_api_candidate_tests_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "attempt_id": 1,
+                    "score": 67,
+                    "outcome": "confirm",
+                    "proposed_grade": "middle",
+                    "category_id": "backend:middle",
+                    "grade": "middle"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
     "/validation": {
       "get": {
         "tags": [

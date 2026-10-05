@@ -7,9 +7,11 @@
 | Что читать | Путь |
 |------------|------|
 | Оглавление | `track/lct-fsp-vacancies/README.md` |
-| Требования | `track/lct-fsp-vacancies/01-requirements.md` |
+| Требования, включая ТЗ.pdf и бренд | `track/lct-fsp-vacancies/01-requirements.md` |
 | План срезов | `track/lct-fsp-vacancies/04-plan.md` |
 | Роли компетенций | `track/lct-fsp-vacancies/roles/` |
+
+`ТЗ.pdf` и каталог `brandbook-fsp/` лежат в корне. В промпт их не копировать: нормы уже сведены в требованиях.
 
 Прежняя спецификация шаблона Agentix 3.13.0: `docs/archive/TASK_SPECIFICATION-agentix-3.13.md`. Шаблон в репозитории остаётся обвязкой цикла. Новые срезы по нему не открывать, пока не закрыт демо-скрипт трека.
 

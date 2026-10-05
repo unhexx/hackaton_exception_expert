@@ -68,8 +68,9 @@ def apply_resume(db: Session, user: User, data: bytes) -> dict:
         sources["soft_skills"] = "resume"
     skipped = False
     if "grade" in parsed:
-        if _grade_fixed(db, profile.id) and parsed["grade"] != profile.grade:
-            skipped = True
+        if _grade_fixed(db, profile.id):
+            if parsed["grade"] != profile.grade:
+                skipped = True
         else:
             profile.grade = parsed["grade"]
             sources["grade"] = "resume"

@@ -226,6 +226,44 @@ def test_pdf_grade_stops_after_the_test_and_profile_pdf_stays_separate(client):
     assert client.get("/api/candidate/profile.pdf").status_code == 403
 
 
+def test_same_grade_pdf_does_not_rewrite_source(client):
+    from product.matching.grade import load_template
+
+    profile_id = _seeker(client, "same-grade@example.com")
+    started = client.post("/api/candidate/tests/start", json={})
+    template = load_template(started.json()["template_id"])
+    submitted = client.post(
+        f"/api/candidate/tests/{started.json()['attempt_id']}/submit",
+        json={"answers": _answers(template, 2)},
+    )
+    assert submitted.status_code == 200, submitted.text
+    assert submitted.json()["grade"] == "middle"
+    stamp = _stamp(client, profile_id)
+    sheet = render_profile_pdf(
+        {
+            "full_name": "Иван Синтетиков",
+            "industry": "it",
+            "specialization": "backend",
+            "grade": "middle",
+            "experience": "стаж после совпавшего грейда",
+        }
+    )
+    stored = client.post(
+        "/api/candidate/resume",
+        files={"file": ("same.pdf", sheet, "application/pdf")},
+    )
+    assert stored.status_code == 200, stored.text
+    body = stored.json()
+    assert body["grade"] == "middle"
+    assert body["grade_skipped"] is False
+    assert "error" not in body
+    assert body["field_sources"]["grade"] == "form"
+    assert body["experience"] == "стаж после совпавшего грейда"
+    assert body["field_sources"]["experience"] == "resume"
+    assert body["category_id"] == "backend:middle"
+    assert _stamp(client, profile_id) == stamp
+
+
 def test_cabinet_form_shows_resume_source(client):
     anon = client.get("/candidate", follow_redirects=False)
     assert anon.status_code == 303

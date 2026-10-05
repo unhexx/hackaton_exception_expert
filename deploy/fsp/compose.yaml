@@ -1,0 +1,34 @@
+# Стенд прототипа ФСП. Это не операторский deploy/compose.yaml.
+name: fsp-vacancies
+
+services:
+  app:
+    image: fsp-vacancies:local
+    build:
+      context: ../..
+      dockerfile: deploy/fsp/Dockerfile
+    env_file:
+      - path: compose.env
+        required: false
+    environment:
+      PRODUCT_SQLITE: /data/app.sqlite
+      PRODUCT_COOKIE_SECURE: "0"
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - fsp-sqlite:/data
+    restart: unless-stopped
+
+  tests:
+    image: fsp-vacancies:local
+    profiles: ["test"]
+    build:
+      context: ../..
+      dockerfile: deploy/fsp/Dockerfile
+    environment:
+      PRODUCT_SECRET: "test-secret-32-characters-minimum!!"
+      PRODUCT_COOKIE_SECURE: "0"
+    entrypoint: ["pytest", "product/tests", "-q", "--tb=short"]
+
+volumes:
+  fsp-sqlite:

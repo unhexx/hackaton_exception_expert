@@ -1,0 +1,11 @@
+{
+  "rule_version": "v1",
+  "grade_change_interval_days": 90,
+  "industries": ["it"],
+  "specializations": ["backend", "frontend", "mobile", "data", "security", "devops"],
+  "grades": ["junior", "middle", "senior", "lead"],
+  "work_formats": ["офис", "удалённо", "гибрид"],
+  "stack": ["python", "java", "go", "javascript", "typescript", "kotlin", "swift", "sql", "linux", "docker"],
+  "soft_skills": ["коммуникация", "менторство", "письменный текст", "приоритизация"],
+  "team_roles": ["разработчик", "тимлид", "аналитик"]
+}

@@ -235,3 +235,8 @@ __marimo__/
 .venv/
 deploy/compose.env
 deploy/searxng/.cache/
+
+# Прототип ФСП: запасная база рядом с пакетом и секрет стенда
+product/var/
+deploy/fsp/compose.env
+deploy/fsp/wheels/*.whl

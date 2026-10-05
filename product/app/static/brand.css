@@ -1,0 +1,77 @@
+:root {
+  --fsp-blue: #402FFF;
+  --fsp-red: #EC1D35;
+  --fsp-light: #EDEDED;
+  --fsp-gray: #C8C9CA;
+  --fsp-ink: #1B1C21;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Regular.ttf") format("truetype");
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--fsp-ink);
+  background: var(--fsp-light);
+}
+
+.top {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1rem 1.5rem;
+  background: var(--fsp-ink);
+  color: var(--fsp-light);
+}
+
+.mark { color: var(--fsp-blue); font-weight: 700; }
+
+.sub { color: var(--fsp-gray); }
+
+main { max-width: 52rem; margin: 0 auto; padding: 1.5rem; }
+
+h1, h2 { font-size: 1.1rem; }
+
+a { color: var(--fsp-blue); }
+
+form, section {
+  background: #fff;
+  border: 1px solid var(--fsp-gray);
+  padding: 1rem;
+  margin: 0 0 1rem;
+}
+
+label { display: block; margin: 0.6rem 0 0.2rem; }
+
+input[type="text"], input[type="email"], input[type="password"], select, textarea {
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--fsp-gray);
+  background: #fff;
+  color: var(--fsp-ink);
+  font: inherit;
+}
+
+button, .button {
+  background: var(--fsp-blue);
+  color: var(--fsp-light);
+  border: 0;
+  padding: 0.5rem 0.9rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.quiet { color: var(--fsp-gray); }
+
+.error { color: var(--fsp-red); }
+
+.row { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+
+.row label { display: flex; gap: 0.3rem; align-items: center; }
+
+nav { display: flex; gap: 1rem; margin: 0 0 1rem; }

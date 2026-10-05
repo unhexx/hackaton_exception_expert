@@ -1,0 +1,18 @@
+<section id="achievements">
+  <h2>Достижения ФСП</h2>
+  {% if fsp.display_name %}
+  <p>{{ fsp.display_name }}</p>
+  {% endif %}
+  {% if fsp.rank %}
+  <p>Разряд источника: {{ fsp.rank }}</p>
+  {% endif %}
+  {% if fsp.results %}
+  <ul>
+    {% for row in fsp.results %}
+    <li>{{ row.discipline }} — {{ row.place }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Достижений ФСП нет.</p>
+  {% endif %}
+</section>

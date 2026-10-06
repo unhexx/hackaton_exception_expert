@@ -1,5 +1,16 @@
 # Agentix
 
+> **Спецтрек ЛЦТ / ФСП.** Прототип агрегатора ИТ-вакансий — каталог [`product/`](product/README.md).
+>
+> [![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?style=flat-square&logo=python&logoColor=white)](product/pyproject.toml)
+> [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)](product/pyproject.toml)
+> [![Docker Compose](https://img.shields.io/badge/stand-Docker_Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](deploy/fsp/compose.yaml)
+> [![Тесты](https://img.shields.io/badge/tests-compose_profile_test-0A3069?style=flat-square)](deploy/fsp/compose.yaml)
+> [![Шрифт OFL](https://img.shields.io/badge/font-OFL_1.1-lightgrey?style=flat-square)](product/static/fonts/OFL.txt)
+>
+> Стенд: `docker compose -f deploy/fsp/compose.yaml up --build` → <http://127.0.0.1:8000>.  
+> Тесты: `docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests`.
+
 [![Version](https://img.shields.io/badge/version-3.13.0-blue?style=flat-square)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](docs/getting-started.md)

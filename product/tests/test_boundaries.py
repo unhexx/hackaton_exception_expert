@@ -1,4 +1,4 @@
-"""Границы каркаса: схема, секрет, мок и отсутствие обвязки."""
+"""Границы каркаса: схема, секрет, мок и состав пакета."""
 
 from __future__ import annotations
 
@@ -122,7 +122,7 @@ def test_handover_note_quotes_stand_run():
     assert (root / "docs" / "zapiska.docx").is_file()
 
 
-def test_product_does_not_import_memory():
+def test_product_imports_stay_inside_package():
     root = Path(product.__file__).resolve().parent
     offenders: list[str] = []
     for path in root.rglob("*.py"):

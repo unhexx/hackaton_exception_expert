@@ -1,4 +1,4 @@
-# Стенд прототипа ФСП. Это не операторский deploy/compose.yaml.
+# Стенд прототипа ФСП.
 name: fsp-vacancies
 
 services:

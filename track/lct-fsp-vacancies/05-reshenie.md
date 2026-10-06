@@ -12,7 +12,7 @@
 
 Полный перечень требований ТЗ без исключений — в `track/lct-fsp-vacancies/00-postanovka.md`. Как они садятся на прототип — в `track/lct-fsp-vacancies/01-requirements.md`. Этот документ не пересказывает постановку: он фиксирует стек, каталоги, схему, контракт API и границы срезов из `track/lct-fsp-vacancies/04-plan.md`, чтобы по нему писать код. Календарь и закрытые ответы организатора здесь не копируются.
 
-Соседний пакет `memory/` (имя дистрибутива `agentix` в корневом `pyproject.toml`) — обвязка цикла, не продукт. Продукт его не импортирует и не расширяет. FastAPI в optional-extra `dashboard` корневого `pyproject.toml` — зависимость дашборда обвязки (`memory/dashboard`), не выбор стека продукта и не повод импортировать дашборд.
+Прототип живёт в каталоге `product/`. Пакет называется `fsp-vacancies`. Кабинеты, API и хранилище собираются из этого дерева. FastAPI в зависимостях продукта — слой JSON `/api`, не чужой дашборд.
 
 ## Обзор
 
@@ -22,7 +22,7 @@
 
 ## Зачем фиксируем это сейчас
 
-Репозиторий уже собирается как пакет `agentix`. Прикладного сервиса в нём нет. Если начать писать кабинеты внутрь `memory/` или «просто включить» extra дашборда, продукт смешается с обвязкой, а обязательный файл OpenAPI окажется побочным эффектом чужого приложения.
+Кабинеты пишем в `product/app`, правила подбора — в `product/matching`. OpenAPI снимается с этого приложения и лежит в `product/openapi.json`. Чужой сервис в этот каталог не подмешиваем.
 
 Приёмка требует один запуск: чистая машина с Docker Engine и плагином Compose, команда из `deploy/fsp/compose.yaml`, OpenAPI рядом с кодом и разделение на веб, API и хранилище. Язык, пакеты и база на хост не ставятся. Микросервисы, второй язык и отдельный сервер СУБД в это окно нечем окупать: пользователей десятки, боевого реестра ФСП нет, модерации нет. Стек ниже выбран один раз. До стоп-кода его можно сменить отдельным решением. После 11.10.2026, 23:59 МСК — нет.
 
@@ -51,7 +51,7 @@
 - веса жюри из раздела «Сдача и оценка» как константы, пороги или метрики продукта;
 - парольный сброс по почте и любая внешняя почта: транспорта нет, код подтверждения показывается на странице стенда;
 - обязательный адаптив, свои вакансии, отклик и короткое задание работодателя — это FSP-8, его не начинают, пока не закрыты FSP-1…FSP-7 и обязательная часть FSP-6;
-- второй способ запуска и операторский `deploy/compose.yaml` обвязки. Файл продукта только `deploy/fsp/compose.yaml`.
+- второй способ запуска. Файл продукта только `deploy/fsp/compose.yaml`.
 
 Q11 и Q13 на прототип не влияют. Их не решаем в коде.
 
@@ -66,7 +66,7 @@ Q11 и Q13 на прототип не влияют. Их не решаем в к
 - `product.app` может импортировать `product.matching` и `product.fsp_mock`;
 - `product.matching` не импортирует `product.app`, не открывает сокеты и не ходит в сеть;
 - `product.fsp_mock` не импортирует `product.app` и тоже не ходит в сеть;
-- никто в `product/` не импортирует `memory`.
+- код в `product/` импортирует только стандартную библиотеку, прямые зависимости пакета и соседние модули `product`.
 
 ```mermaid
 flowchart TB
@@ -157,7 +157,7 @@ product/
 Рядом, не внутри пакета и не вместо операторского стека:
 
 ```text
-deploy/fsp/compose.yaml       # FSP-1. Не deploy/compose.yaml обвязки
+deploy/fsp/compose.yaml       # FSP-1. Единственный файл запуска
 deploy/fsp/Dockerfile
 deploy/fsp/entrypoint.sh
 deploy/fsp/compose.env.example
@@ -268,9 +268,9 @@ def _sqlite_pragmas(dbapi_conn, _connection_record):
 
 ### Зависимости и установка
 
-Свой проект `product/pyproject.toml`, имя дистрибутива `fsp-vacancies`, `requires-python >= 3.12`. Корневой `pyproject.toml` агентик не редактируем и пакет `product` в него не добавляем. `pip` выполняется только в `Dockerfile`. Инструкция стенда не ставит venv и не вызывает uvicorn на хосте. Пакет обвязки в образ не копируется.
+Свой проект `product/pyproject.toml`, имя дистрибутива `fsp-vacancies`, `requires-python >= 3.12`. `pip` выполняется только в `Dockerfile`. Инструкция стенда не ставит venv и не вызывает uvicorn на хосте. В образ копируется дерево `product/` и точка входа.
 
-Каталог `product/` сам является пакетом Python (`product/__init__.py` рядом с `pyproject.toml`). Вложенный `product/product/` не создавать. Setuptools получает явную карту, иначе он будет искать пакет на уровень выше и заденет `memory`:
+Каталог `product/` сам является пакетом Python (`product/__init__.py` рядом с `pyproject.toml`). Вложенный `product/product/` не создавать. Setuptools получает явную карту пакетов, чтобы не подхватить соседние каталоги репозитория:
 
 ```toml
 [project]
@@ -322,7 +322,7 @@ product = [
 
 Патч `argon2-cffi` не фиксируем: в коде стоят явные `Type.ID` и три параметра OWASP, на дефолт памяти библиотеки расчёт не опирается. Extra `uvicorn[standard]` не ставим: в образе не нужны uvloop и сборка C. Точные версии uvicorn, pypdf и reportlab — те, что сверены 2026-10-05 (раздел «Источники»). `package-data` обязателен: без него шаблоны и JSON останутся в исходниках и не попадут в site-packages образа. FSP-6 коммитит `product/requirements.lock`, снятый `pip freeze` внутри уже собранного образа. Dockerfile FSP-1 ставит зависимости из `pyproject.toml`; lock — запись того, что собралось, а не вторая команда запуска.
 
-Команда тестов внутри контейнера `tests` — `pytest product/tests`. Команду обвязки `pytest memory/` не расширяем и в неё тесты продукта не кладём. Контейнер тестов том `/data` не монтирует: фикстура пишет временный sqlite внутри контейнера и стенд не затирает.
+Команда тестов внутри контейнера `tests` — `pytest product/tests`. Контейнер тестов том `/data` не монтирует: фикстура пишет временный sqlite внутри контейнера и стенд не затирает.
 
 `python-dotenv` не подключаем. Если `PRODUCT_SECRET` короче 32 символов, точка входа пишет секрет в `/data/product_secret` и экспортирует его: стенд стартует без `compose.env`. Свой секрет можно положить в `deploy/fsp/compose.env` — файл в git не входит. Пример — `deploy/fsp/compose.env.example`.
 
@@ -574,7 +574,7 @@ hasher = PasswordHasher(
 | Риск | Тяжесть | Что делаем |
 |---|---|---|
 | Почта соискателя в ответе до `accepted` | высокая | Ключ `candidate_email` отсутствует; `contact_channel` хранит только контакт компании; тест на тело ответа; на карточке человека нет слота почты |
-| Импорт `memory` или дашборда из продукта | высокая | Отдельный pyproject; тест обходит AST `product/` и падает на `import memory` |
+| Импорт пакетов вне дерева `product/` | высокая | Свой pyproject; тест обходит AST `product/` и падает на чужой верхний модуль |
 | Несколько воркеров и очередь записи SQLite | средняя | В инструкции и в compose `--workers 1`, `busy_timeout` 5000 мс |
 | `/docs` тянет CDN, жюри без сети | средняя | Своя статика, тест на HTML `/docs` |
 | Правка шаблона v1 меняет золотой прогон задним числом | средняя | Прогон файлы не пишет; новая редакция только как v2 |
@@ -720,7 +720,7 @@ PyMuPDF. На PyPI двойная лицензия: GNU AGPL 3.0 или комм
 
 ## Выкладка и откат
 
-Файл запуска — `deploy/fsp/compose.yaml`, его пишет FSP-1. Это не `deploy/compose.yaml` обвязки и не `product/compose.yaml`. Инструкция в `product/README.md` (FSP-6) состоит из одной команды стенда. На хосте заранее стоят только Docker Engine и плагин Compose. Python, pip, uvicorn, SQLite, Node, Pango и Keycloak на хост не ставятся.
+Файл запуска — `deploy/fsp/compose.yaml`, его пишет FSP-1. Это не `product/compose.yaml`. Инструкция в `product/README.md` (FSP-6) состоит из одной команды стенда. На хосте заранее стоят только Docker Engine и плагин Compose. Python, pip, uvicorn, SQLite, Node, Pango и Keycloak на хост не ставятся.
 
 Копировать `compose.env` перед запуском не нужно. Если `PRODUCT_SECRET` короче 32 символов, точка входа пишет секрет в `/data/product_secret`. Свой секрет можно положить в `deploy/fsp/compose.env` по образцу `compose.env.example`; файл в git не входит.
 
@@ -742,7 +742,7 @@ docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests
 
 Прогон валидации на стенде — кнопка `GET /validation`, одно действие. Та же функция есть в образе как `python -m product.matching.golden_run`, но в инструкцию приёмки второй командой не выносится: жюри нажимает кнопку.
 
-В образе нет Pango, нет Node и нет обвязки `memory`. Секрет не попадает в слой образа. Хост публичного URL, если стенд поднимут, выбирается отдельно и в код не зашит. Q9 закрыт тем, что хост наш, а URL нужен только если стенд есть.
+В образе нет Pango и нет Node. Секрет не попадает в слой образа. Хост публичного URL, если стенд поднимут, выбирается отдельно и в код не зашит. Q9 закрыт тем, что хост наш, а URL нужен только если стенд есть.
 
 Откат — предыдущий коммит `main` и том sqlite, которого в git нет. Если схема коммита и файл разъехались, том удаляют и заново поднимают compose: seed создаёт файл, данные синтетические. Откатывать боевую базу не требуется.
 
@@ -764,8 +764,6 @@ docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests
 - `track/lct-fsp-vacancies/04-plan.md` — порядок FSP-1…FSP-8.
 - `track/lct-fsp-vacancies/03-open-questions.md` — закрытые ответы не переоткрывались; Q11 и Q13 не влияют на код.
 - `track/lct-fsp-vacancies/02-domain.md` — канонические названия дисциплин для мока.
-- `track/lct-fsp-vacancies/roles/CONTRACT.md`, `roles/backend.md`, `roles/frontend.md`, `roles/matching.md` — границы ролей.
-- Корневой `pyproject.toml` — пакет `agentix`, extra `dashboard`. Это не стек продукта.
 
 Стек, сверено 2026-10-05:
 
@@ -792,8 +790,8 @@ docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests
 
 ## Key Decisions
 
-- Монолит Python 3.12+ в `product/`, один процесс uvicorn `--workers 1`. Слои: Jinja2 + локальный htmx, FastAPI `/api`, SQLite WAL. Обвязку `memory/` не импортируем.
-- Зависимости — свой `product/pyproject.toml` (`fsp-vacancies`). Extra дашборда агентик стеком продукта не считается. `uvicorn[standard]` не ставим.
+- Монолит Python 3.12+ в `product/`, один процесс uvicorn `--workers 1`. Слои: Jinja2 + локальный htmx, FastAPI `/api`, SQLite WAL. Импорты не выходят за пакет `product` и его прямые зависимости.
+- Зависимости — свой `product/pyproject.toml` (`fsp-vacancies`). `uvicorn[standard]` не ставим.
 - OpenAPI коммитится в `product/openapi.json` в FSP-1. Параллельные срезы с маршрутами этот файл не занимают. После попадания среза в `main` один `python -m product.export_openapi` переписывает файл, и только тогда гоняется тест расхождения. `/docs` и `/redoc` берут статику из репозитория, без CDN.
 - Схема обязательного MVP создаётся в FSP-1 через `create_all`. Alembic нет. На стенде файл — `/data/app.sqlite` в томе `fsp-sqlite`. `product/var/` в gitignore только как запасной путь, если `PRODUCT_SQLITE` не задана; стенд её задаёт. `busy_timeout` не меньше 5000 мс, режим WAL, писатель один.
 - Пароль и код почты — Argon2id, `memory_cost=19456`, `time_cost=2`, `parallelism=1`, `type=ID`. Код на стенде показывается на странице, в базе только хэш. Сессия — cookie Starlette `product_session`, httponly, `samesite=lax`, секрет `PRODUCT_SECRET`. В git секрет не кладём.

@@ -8,8 +8,8 @@
 > [![Тесты](https://img.shields.io/badge/tests-compose_profile_test-0A3069?style=flat-square)](deploy/fsp/compose.yaml)
 > [![Шрифт OFL](https://img.shields.io/badge/font-OFL_1.1-lightgrey?style=flat-square)](product/static/fonts/OFL.txt)
 >
-> Стенд: `docker compose -f deploy/fsp/compose.yaml up --build` → <http://127.0.0.1:8000>.  
-> Тесты: `docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests`.
+> **Быстрый старт.** `docker compose -f deploy/fsp/compose.yaml up --build` → <http://127.0.0.1:8000>.  
+> Тесты: `docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests`. Подробности — в [`product/README.md`](product/README.md).
 
 [![Version](https://img.shields.io/badge/version-3.13.0-blue?style=flat-square)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)

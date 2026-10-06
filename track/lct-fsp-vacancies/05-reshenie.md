@@ -324,7 +324,7 @@ product = [
 
 Команда тестов внутри контейнера `tests` — `pytest product/tests`. Команду обвязки `pytest memory/` не расширяем и в неё тесты продукта не кладём. Контейнер тестов том `/data` не монтирует: фикстура пишет временный sqlite внутри контейнера и стенд не затирает.
 
-`python-dotenv` не подключаем. Секрет приходит из `env_file` compose, файл `deploy/fsp/compose.env` в git не входит. Пример с пустым значением — `deploy/fsp/compose.env.example`.
+`python-dotenv` не подключаем. Если `PRODUCT_SECRET` короче 32 символов, точка входа пишет секрет в `/data/product_secret` и экспортирует его: стенд стартует без `compose.env`. Свой секрет можно положить в `deploy/fsp/compose.env` — файл в git не входит. Пример — `deploy/fsp/compose.env.example`.
 
 ### Правила v1
 
@@ -550,7 +550,7 @@ hasher = PasswordHasher(
 
 Код — шесть цифр, `secrets.randbelow`. Срок 30 минут, не больше пяти неверных попыток, после пятой хэш стирается. На стенде код показывается на странице подтверждения: кладётся в подписанную сессию и вынимается при отрисовке. В URL кода нет. В базе открытого кода нет. Повторная выдача кода — отдельный POST, он заменяет хэш и снова показывает код на странице. Внешней почты нет.
 
-Сессия — `SessionMiddleware` Starlette. Cookie `product_session`, `same_site=lax`, `https_only` только если `PRODUCT_COOKIE_SECURE=1` (стенд публикует HTTP на порту 8000, иначе cookie не уедет). `httponly` выставлен самим middleware и отдельным флагом не отключается. Срок сессии 7 суток. Секрет — переменная `PRODUCT_SECRET`, не короче 32 символов, иначе процесс не стартует. В git только `deploy/fsp/compose.env.example` с пустым значением. Имя cookie не `session`, чтобы не столкнуться с другим приложением в том же браузере.
+Сессия — `SessionMiddleware` Starlette. Cookie `product_session`, `same_site=lax`, `https_only` только если `PRODUCT_COOKIE_SECURE=1` (стенд публикует HTTP на порту 8000, иначе cookie не уедет). `httponly` выставлен самим middleware и отдельным флагом не отключается. Срок сессии 7 суток. Секрет — переменная `PRODUCT_SECRET`, не короче 32 символов, иначе процесс не стартует. На стенде точку входа заполняет файл тома `/data/product_secret`, если переменная короче. В git только `deploy/fsp/compose.env.example` с пустым значением. Имя cookie не `session`, чтобы не столкнуться с другим приложением в том же браузере.
 
 На POST-формы дополнительно поле `csrf` из сессии. Несовпадение — 403 `csrf`. Заголовок `X-CSRF-Token` принимает тот же секрет для запросов htmx.
 
@@ -721,7 +721,7 @@ PyMuPDF. На PyPI двойная лицензия: GNU AGPL 3.0 или комм
 
 Файл запуска — `deploy/fsp/compose.yaml`, его пишет FSP-1. Это не `deploy/compose.yaml` обвязки и не `product/compose.yaml`. Инструкция в `product/README.md` (FSP-6) состоит из одной команды стенда. На хосте заранее стоят только Docker Engine и плагин Compose. Python, pip, uvicorn, SQLite, Node, Pango и Keycloak на хост не ставятся.
 
-Перед командой оператор один раз копирует `deploy/fsp/compose.env.example` в `deploy/fsp/compose.env` и записывает туда `PRODUCT_SECRET` не короче 32 символов. Сам файл в git не входит. Это не второй способ запуска.
+Копировать `compose.env` перед запуском не нужно. Если `PRODUCT_SECRET` короче 32 символов, точка входа пишет секрет в `/data/product_secret`. Свой секрет можно положить в `deploy/fsp/compose.env` по образцу `compose.env.example`; файл в git не входит.
 
 Команда стенда:
 
@@ -729,7 +729,7 @@ PyMuPDF. На PyPI двойная лицензия: GNU AGPL 3.0 или комм
 docker compose -f deploy/fsp/compose.yaml up --build
 ```
 
-Она собирает образ `python:3.12-slim` по `deploy/fsp/Dockerfile` и поднимает сервис `app`. В образ копируется только дерево `product/` и `deploy/fsp/entrypoint.sh`. `pip install` пакета `fsp-vacancies` выполняется в `RUN` этого Dockerfile. Entrypoint делает `python -m product.seed`, затем `exec uvicorn product.app.main:app --host 0.0.0.0 --port 8000 --workers 1`. Повторный seed на уже заполненном томе завершается успехом: занятый уникальный ключ мока или уже существующая почта демо-пользователя uvicorn не отменяют. Клиент, API и хранилище — этот один процесс и том `fsp-sqlite` на `/data`. Порт 8000 опубликован на хост, кабинеты открываются в браузере. Флага `--reload` нет.
+Она собирает образ `python:3.12-slim` по `deploy/fsp/Dockerfile` и поднимает сервис `app`. В образ копируется только дерево `product/` и `deploy/fsp/entrypoint.sh`. `pip install` пакета `fsp-vacancies` выполняется в `RUN` этого Dockerfile. Entrypoint при необходимости пишет `PRODUCT_SECRET`, делает `python -m product.seed`, затем `exec uvicorn product.app.main:app --host 0.0.0.0 --port 8000 --workers 1`. Повторный seed на уже заполненном томе завершается успехом: занятый уникальный ключ мока или уже существующая почта демо-пользователя uvicorn не отменяют. Клиент, API и хранилище — этот один процесс и том `fsp-sqlite` на `/data`. Порт 8000 опубликован на хост, кабинеты открываются в браузере. Флага `--reload` нет.
 
 Сервис `tests` объявлен в том же файле и закрыт профилем `test`, чтобы обычный `up` не гонял набор на каждом старте стенда. Команда проверки:
 

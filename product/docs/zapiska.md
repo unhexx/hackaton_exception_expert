@@ -90,13 +90,13 @@ pytest и httpx нужны прогону тестов в том же образ
 
 ## Сборка и запуск
 
-На хосте заранее стоят только Docker Engine и плагин Compose. Язык, пакеты и база продукта на хост не ставятся. Один раз скопируйте `deploy/fsp/compose.env.example` в `deploy/fsp/compose.env` и запишите `PRODUCT_SECRET` не короче 32 символов. Файл с секретом в git не входит.
+На хосте заранее стоят только Docker Engine и плагин Compose. Язык, пакеты и база продукта на хост не ставятся. Копировать `compose.env` не нужно: если `PRODUCT_SECRET` короче 32 символов, точка входа пишет секрет в том `/data/product_secret`. Свой секрет можно положить в `deploy/fsp/compose.env` по образцу `compose.env.example`; файл в git не входит.
 
 ```text
 docker compose -f deploy/fsp/compose.yaml up --build
 ```
 
-Образ собирается из `python:3.12-slim`. Зависимости ставит `pip` внутри Dockerfile. Точка входа выполняет `python -m product.seed`, затем uvicorn на порту 8000. Клиент, API и файл базы — этот процесс и том. Keycloak, Pango и Node в образ не входят. Кабинеты: `http://127.0.0.1:8000`.
+Образ собирается из `python:3.12-slim`. Зависимости ставит `pip` внутри Dockerfile. Точка входа при необходимости пишет секрет, выполняет `python -m product.seed`, затем uvicorn на порту 8000. Клиент, API и файл базы — этот процесс и том. Keycloak, Pango и Node в образ не входят. Кабинеты: `http://127.0.0.1:8000`.
 
 Проверка тестов:
 

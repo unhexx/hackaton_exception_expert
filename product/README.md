@@ -10,13 +10,11 @@
 
 Кабинеты соискателя и работодателя живут в одном процессе. Боевого реестра ФСП на стенде нет: достижения читаются из JSON в git.
 
-## Стенд
+## Быстрый старт
 
-На машине заранее стоят только Docker Engine и плагин Compose. Язык, пакеты и база на хост не ставятся. Keycloak в стенд не входит.
+На машине заранее стоят только Docker Engine и плагин Compose. Язык, пакеты и база на хост не ставятся. Keycloak в стенд не входит. Копировать `compose.env` не нужно: если `PRODUCT_SECRET` короче 32 символов, точка входа пишет секрет в том `/data/product_secret`.
 
-Один раз скопируйте `deploy/fsp/compose.env.example` в `deploy/fsp/compose.env` и запишите туда `PRODUCT_SECRET` не короче 32 символов. Файл с секретом в git не входит. Это подготовка, не второй способ запуска.
-
-Команда стенда — из корня репозитория:
+Из корня репозитория:
 
 ```text
 docker compose -f deploy/fsp/compose.yaml up --build
@@ -28,17 +26,15 @@ docker compose -f deploy/fsp/compose.yaml up --build
 | OpenAPI, без сети | <http://127.0.0.1:8000/docs> |
 | ReDoc, без сети | <http://127.0.0.1:8000/redoc> |
 
-Прогон валидации — ссылка «Прогон валидации» в подборке работодателя. Один раз после четырёх шагов из [`track/lct-fsp-vacancies/demo.md`](../track/lct-fsp-vacancies/demo.md). Ответ — пять строк этого запуска, не целевые проценты.
-
-## Тесты
-
-Тем же compose, отдельным контейнером:
+Вторая команда — тесты тем же образом, отдельным контейнером:
 
 ```text
 docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests
 ```
 
-Второго способа (venv и pytest на хосте) нет.
+Второго способа (venv и pytest на хосте) нет. Свой `PRODUCT_SECRET` можно положить в `deploy/fsp/compose.env` по образцу `compose.env.example`; файл в git не входит.
+
+Прогон валидации — ссылка «Прогон валидации» в подборке работодателя. Один раз после четырёх шагов из [`track/lct-fsp-vacancies/demo.md`](../track/lct-fsp-vacancies/demo.md). Ответ — пять строк этого запуска, не целевые проценты.
 
 ## Как устроено
 

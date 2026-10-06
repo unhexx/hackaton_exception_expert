@@ -16,6 +16,6 @@ docker compose -f deploy/fsp/compose.yaml up --build
 | [01-requirements.md](01-requirements.md) | Как требования постановки садятся на прототип |
 | [02-domain.md](02-domain.md) | Открытые факты о ФСП и ЛЦТ. Не путать с постановкой |
 | [03-open-questions.md](03-open-questions.md) | Вопросы модератору и экспертам. Не закрывать молча |
-| [04-plan.md](04-plan.md) | Срезы работ на окно 05–11.10.2026 |
+| [04-plan.md](04-plan.md) | Срезы работ на окно 05–11.10.2026, в том числе R1–R5 после Q&A |
 | [05-reshenie.md](05-reshenie.md) | Стек и устройство прототипа. Требования не копирует |
 | [demo.md](demo.md) | Сквозной сценарий приёмки на стенде |

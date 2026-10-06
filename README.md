@@ -3,9 +3,14 @@
 > **Спецтрек ЛЦТ / ФСП.** Прототип агрегатора ИТ-вакансий — каталог [`product/`](product/README.md).
 >
 > [![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?style=flat-square&logo=python&logoColor=white)](product/pyproject.toml)
+> [![JavaScript](https://img.shields.io/badge/javascript-htmx_2.0.4-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](product/app/static/htmx.min.js)
+> [![HTML](https://img.shields.io/badge/html-Jinja2-E34F26?style=flat-square&logo=html5&logoColor=white)](product/app/templates)
+> [![CSS](https://img.shields.io/badge/css-brand-1572B6?style=flat-square&logo=css3&logoColor=white)](product/app/static/brand.css)
+> [![SQL](https://img.shields.io/badge/sql-SQLite_WAL-003B57?style=flat-square&logo=sqlite&logoColor=white)](product/app/db)
+> [![Shell](https://img.shields.io/badge/shell-POSIX-4EAA25?style=flat-square&logo=gnubash&logoColor=white)](deploy/fsp/entrypoint.sh)
 > [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)](product/pyproject.toml)
 > [![Docker Compose](https://img.shields.io/badge/stand-Docker_Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](deploy/fsp/compose.yaml)
-> [![Тесты](https://img.shields.io/badge/tests-compose_profile_test-0A3069?style=flat-square)](deploy/fsp/compose.yaml)
+> [![Тесты](product/docs/badges/tests.svg)](deploy/fsp/compose.yaml)
 > [![Шрифт OFL](https://img.shields.io/badge/font-OFL_1.1-lightgrey?style=flat-square)](product/static/fonts/OFL.txt)
 >
 > **Быстрый старт.** `docker compose -f deploy/fsp/compose.yaml up --build` → <http://127.0.0.1:8000>.  

@@ -24,6 +24,12 @@ from product.app.db.session import reset_engine
 from product.seed import init_db
 
 
+def pytest_sessionfinish(session, exitstatus):
+    from product.tests.badge import write_session_badge
+
+    write_session_badge(session, exitstatus)
+
+
 @pytest.fixture()
 def client(tmp_path, monkeypatch):
     db_path = tmp_path / "app.sqlite"

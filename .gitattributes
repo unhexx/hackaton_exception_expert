@@ -1,0 +1,3 @@
+# Вендор в статистике языков не считается своим кодом.
+product/app/static/htmx.min.js linguist-vendored
+product/app/static/docs/** linguist-vendored

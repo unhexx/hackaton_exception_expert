@@ -1,9 +1,14 @@
 # Агрегатор ИТ-вакансий ФСП
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?style=flat-square&logo=python&logoColor=white)](pyproject.toml)
+[![JavaScript](https://img.shields.io/badge/javascript-htmx_2.0.4-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](app/static/htmx.min.js)
+[![HTML](https://img.shields.io/badge/html-Jinja2-E34F26?style=flat-square&logo=html5&logoColor=white)](app/templates)
+[![CSS](https://img.shields.io/badge/css-brand-1572B6?style=flat-square&logo=css3&logoColor=white)](app/static/brand.css)
+[![SQL](https://img.shields.io/badge/sql-SQLite_WAL-003B57?style=flat-square&logo=sqlite&logoColor=white)](app/db)
+[![Shell](https://img.shields.io/badge/shell-POSIX-4EAA25?style=flat-square&logo=gnubash&logoColor=white)](../deploy/fsp/entrypoint.sh)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)](pyproject.toml)
 [![Docker Compose](https://img.shields.io/badge/stand-Docker_Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](../deploy/fsp/compose.yaml)
-[![Тесты](https://img.shields.io/badge/tests-compose_profile_test-0A3069?style=flat-square)](../deploy/fsp/compose.yaml)
+[![Тесты](docs/badges/tests.svg)](../deploy/fsp/compose.yaml)
 [![Шрифт OFL](https://img.shields.io/badge/font-OFL_1.1-lightgrey?style=flat-square)](static/fonts/OFL.txt)
 
 Прототип спецтрека ЛЦТ: работодатель открывает категорию людей с записанным грейдом и профилем достижений Федерации спортивного программирования, затем сам шлёт приглашение с вилкой в рублях.
@@ -32,7 +37,7 @@ docker compose -f deploy/fsp/compose.yaml up --build
 docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests
 ```
 
-Второго способа (venv и pytest на хосте) нет. Свой `PRODUCT_SECRET` можно положить в `deploy/fsp/compose.env` по образцу `compose.env.example`; файл в git не входит.
+Второго способа (venv и pytest на хосте) нет. Бейдж «tests» в шапке пишет этот прогон: зелёный, если все тесты прошли. Свой `PRODUCT_SECRET` можно положить в `deploy/fsp/compose.env` по образцу `compose.env.example`; файл в git не входит.
 
 Прогон валидации — ссылка «Прогон валидации» в подборке работодателя. Один раз после четырёх шагов из [`track/lct-fsp-vacancies/demo.md`](../track/lct-fsp-vacancies/demo.md). Ответ — пять строк этого запуска, не целевые проценты.
 

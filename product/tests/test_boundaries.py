@@ -108,6 +108,10 @@ def test_handover_note_quotes_stand_run():
     assert "95.8" not in note
     assert "Быстрый старт" in readme
     assert "docker compose -f deploy/fsp/compose.yaml up --build" in readme
+    for language in ("Python", "JavaScript", "HTML", "CSS", "SQL", "Shell"):
+        assert language in readme
+    assert "docs/badges/tests.svg" in readme
+    assert (root / "docs" / "badges" / "tests.svg").is_file()
     entrypoint_paths = (Path("/srv/entrypoint.sh"), root.parent / "deploy" / "fsp" / "entrypoint.sh")
     entrypoint = next(path.read_text(encoding="utf-8") for path in entrypoint_paths if path.is_file())
     assert "/data/product_secret" in entrypoint

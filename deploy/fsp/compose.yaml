@@ -28,6 +28,9 @@ services:
     environment:
       PRODUCT_SECRET: "test-secret-32-characters-minimum!!"
       PRODUCT_COOKIE_SECURE: "0"
+      PRODUCT_BADGE_DIR: /badge
+    volumes:
+      - ../../product/docs/badges:/badge
     entrypoint: ["pytest", "product/tests", "-q", "--tb=short"]
 
 volumes:

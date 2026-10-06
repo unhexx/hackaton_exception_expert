@@ -9,7 +9,7 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
 
-from product.app.services.errors import ApiError, explain
+from product.app.services.errors import ApiError, fail
 
 _TEMPLATES = Path(__file__).resolve().parent.parent / "templates"
 templates = Jinja2Templates(directory=str(_TEMPLATES))
@@ -35,7 +35,7 @@ def assert_csrf(request: Request, form_token: str) -> None:
     header = request.headers.get("x-csrf-token", "")
     sent = header or form_token
     if not tokens_match(request.session.get("csrf"), sent):
-        raise ApiError(403, "csrf", explain("csrf"))
+        fail(403, "csrf")
 
 
 def render(request: Request, name: str, context: dict, status_code: int = 200):

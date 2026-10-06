@@ -7,6 +7,7 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
 from product.app.api.deps import load_session_user
+from product.app.services.errors import explain
 from product.app.web.render import ensure_csrf, render
 
 
@@ -20,5 +21,11 @@ def page_user(request: Request, db: Session, role: str):
     if user is None:
         return None, RedirectResponse("/auth/login", status_code=303)
     if user.role != role:
-        return None, render(request, "forbidden.html", {"csrf": ensure_csrf(request)}, status_code=403)
+        key = "forbidden_candidate" if role == "candidate" else "forbidden_employer"
+        return None, render(
+            request,
+            "forbidden.html",
+            {"csrf": ensure_csrf(request), "hint": explain(key)},
+            status_code=403,
+        )
     return user, None

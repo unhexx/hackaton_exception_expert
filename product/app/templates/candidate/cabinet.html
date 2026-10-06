@@ -11,21 +11,7 @@
   </form>
 </nav>
 <p>Почта: {{ user.email }}</p>
-{% if not profile %}
-<p class="hint">Что случилось. Анкеты ещё нет.
-Почему. Категория и тест берутся из специализации и заявленного грейда; без опроса стенд не знает, куда вас положить.
-Что сделать. Заполните форму ниже: ФИО, специализация, грейд, стек. Поставьте галочку публикации, если хотите попасть в подборку работодателя.</p>
-{% elif not test_done %}
-<p class="hint">Что случилось. Тест ещё не сдан.
-Почему. Работодатель видит категорию {{ profile.specialization }}:{{ profile.grade }}, но без балла карточка стоит ниже сдавших.
-Что сделать. Откройте <a href="/candidate/test">страницу теста</a> и сдайте испытание записанного грейда.</p>
-{% elif not publication %}
-<p class="hint">Что случилось. Профиль не публикуется.
-Почему. Подборка показывает только тех, кто включил публикацию. Контакты при этом не открываются.
-Что сделать. Поставьте галочку «Публиковать профиль в подборке работодателя» и сохраните анкету.</p>
-{% elif assignment %}
-<p class="hint">Профиль опубликован в категории {{ assignment.category_id }}. Дальше ждите приглашение или обновите стек, если потребность работодателя уже известна.</p>
-{% endif %}
+{% include "_notice.html" %}
 {% if profile %}
 <p>Отрасль: {{ profile.industry }}. Категория: {% if assignment %}{{ assignment.category_id }}{% else %}ещё нет{% endif %}.</p>
 {% if assignment and assignment.explanation %}<p>{{ assignment.explanation }}</p>{% endif %}
@@ -78,15 +64,12 @@
 <p><a href="/candidate/offers">Есть приглашения</a></p>
 {% else %}
 <p>Приглашений нет.</p>
-<p class="hint">Что случилось. Работодатель ещё не писал.
-Почему. Письмо приходит, когда вас нашли в подборке. Для этого нужны анкета, сданный тест и включённая публикация.
-Что сделать. Закройте шаги выше. Самому откликаться на вакансию на этом стенде нельзя.</p>
+{% if offers_hint %}<p class="hint">{{ offers_hint }}</p>{% endif %}
 {% endif %}
 {% include "candidate/achievements.html" %}
 {% include "candidate/resume_status.html" %}
 <section>
   <h2>Профиль и публикация</h2>
-  {% include "_notice.html" %}
   <form method="post" action="/candidate/profile">
     <input type="hidden" name="csrf" value="{{ csrf }}">
     <label for="full_name">ФИО</label>

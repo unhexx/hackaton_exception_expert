@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session
 from product.app.db.models import User
 from product.app.log import log_event
 from product.app.services.clock import utc_after, utc_now, is_past
-from product.app.services.errors import ApiError, explain
+from product.app.services.errors import ApiError, fail
 from product.app.services.passwords import hash_secret, verify_secret
 
 _EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
@@ -25,10 +25,10 @@ _CODE_TTL_MINUTES = 30
 
 def _clean_email(email: object) -> str:
     if not isinstance(email, str):
-        raise ApiError(422, "email", explain("email"))
+        fail(422, "email")
     cleaned = email.strip().lower()
     if len(cleaned) > 254 or not _EMAIL.match(cleaned):
-        raise ApiError(422, "email", explain("email"))
+        fail(422, "email")
     return cleaned
 
 
@@ -46,18 +46,18 @@ def register_user(
 ) -> tuple[User, str]:
     cleaned = _clean_email(email)
     if not isinstance(password, str) or not 8 <= len(password) <= 128:
-        raise ApiError(422, "password_length", explain("password_length"))
+        fail(422, "password_length", minimum=8, maximum=128)
     if role not in ("candidate", "employer"):
-        raise ApiError(422, "role", explain("role"))
+        fail(422, "role")
     if role == "candidate":
         if not isinstance(consent, bool):
-            raise ApiError(422, "consent_required", explain("consent_required"))
+            fail(422, "consent_required")
         flag = 1 if consent else 0
     else:
         flag = 0
     taken = db.scalar(select(User.id).where(User.email == cleaned))
     if taken is not None:
-        raise ApiError(409, "email_taken", explain("email_taken"))
+        fail(409, "email_taken")
     code = _new_code()
     user = User(
         email=cleaned,
@@ -76,7 +76,7 @@ def register_user(
         db.commit()
     except IntegrityError:
         db.rollback()
-        raise ApiError(409, "email_taken", explain("email_taken")) from None
+        fail(409, "email_taken")
     db.refresh(user)
     log_event("register")
     return user, code
@@ -87,29 +87,29 @@ def confirm_email(db: Session, *, email: object, code: object) -> None:
         cleaned = _clean_email(email)
     except ApiError:
         log_event("confirm_failed", "code_invalid")
-        raise ApiError(400, "code_invalid", explain("code_invalid")) from None
+        fail(400, "code_invalid")
     user = db.scalar(select(User).where(User.email == cleaned))
     if user is None:
         log_event("confirm_failed", "code_invalid")
-        raise ApiError(400, "code_invalid", explain("code_invalid"))
+        fail(400, "code_invalid")
     if user.email_verified:
-        raise ApiError(409, "already_verified", explain("already_verified"))
+        fail(409, "already_verified")
     if not user.confirmation_code_hash or user.confirmation_attempts >= _CODE_ATTEMPTS:
         log_event("confirm_failed", "code_locked")
-        raise ApiError(400, "code_locked", explain("code_locked", attempts=_CODE_ATTEMPTS))
+        fail(400, "code_locked", attempts=_CODE_ATTEMPTS)
     if is_past(user.confirmation_expires_at):
         log_event("confirm_failed", "code_expired")
-        raise ApiError(400, "code_expired", explain("code_expired", minutes=_CODE_TTL_MINUTES))
+        fail(400, "code_expired", minutes=_CODE_TTL_MINUTES)
     if not isinstance(code, str) or not verify_secret(user.confirmation_code_hash, code):
         user.confirmation_attempts += 1
         if user.confirmation_attempts >= _CODE_ATTEMPTS:
             user.confirmation_code_hash = None
             db.commit()
             log_event("confirm_failed", "code_locked")
-            raise ApiError(400, "code_locked", explain("code_locked", attempts=_CODE_ATTEMPTS))
+            fail(400, "code_locked", attempts=_CODE_ATTEMPTS)
         db.commit()
         log_event("confirm_failed", "code_invalid")
-        raise ApiError(400, "code_invalid", explain("code_invalid"))
+        fail(400, "code_invalid")
     user.email_verified = 1
     user.confirmation_code_hash = None
     user.confirmation_attempts = 0
@@ -119,13 +119,13 @@ def confirm_email(db: Session, *, email: object, code: object) -> None:
 
 def resend_code(db: Session, *, email: object) -> str:
     if not isinstance(email, str):
-        raise ApiError(400, "email", explain("email"))
+        fail(400, "email")
     cleaned = email.strip().lower()
     if len(cleaned) > 254 or not _EMAIL.match(cleaned):
-        raise ApiError(400, "email", explain("email"))
+        fail(400, "email")
     user = db.scalar(select(User).where(User.email == cleaned))
     if user is None or user.email_verified:
-        raise ApiError(400, "email", explain("email_resend"))
+        fail(400, "email", "email_resend")
     code = _new_code()
     user.confirmation_code_hash = hash_secret(code)
     user.confirmation_attempts = 0
@@ -139,8 +139,8 @@ def authenticate(db: Session, *, email: object, password: object) -> User:
     user = db.scalar(select(User).where(User.email == cleaned)) if cleaned else None
     if user is None or not isinstance(password, str) or not verify_secret(user.password_hash, password):
         log_event("login_failed", "credentials")
-        raise ApiError(401, "credentials", explain("credentials"))
+        fail(401, "credentials")
     if not user.email_verified:
         log_event("login_failed", "email_unverified")
-        raise ApiError(403, "email_unverified", explain("email_unverified"))
+        fail(403, "email_unverified")
     return user

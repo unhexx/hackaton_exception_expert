@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from product.app.db.models import Consent, Profile, SurveyAttempt, User
 from product.app.services.categories import latest_assignment, recompute
 from product.app.services.clock import utc_now
-from product.app.services.errors import ApiError, explain
+from product.app.services.errors import explain, fail
 from product.app.services.fsp import achievements_for
 from product.app.services.offers import list_candidate_offers
 from product.app.services.tests import list_attempts
@@ -38,21 +38,13 @@ def _as_labels(value: object, allowed: list[str], label: str) -> list[str]:
     if value is None:
         return []
     if not isinstance(value, list) or any(not isinstance(item, str) or item not in allowed for item in value):
-        raise ApiError(
-            422,
-            "closed_list",
-            explain("closed_list", what=label, allowed=", ".join(allowed)),
-        )
+        fail(422, "closed_list", what=label, allowed=", ".join(allowed))
     return list(value)
 
 
 def _one(value: object, allowed: list[str], what: str) -> str:
     if not isinstance(value, str) or value not in allowed:
-        raise ApiError(
-            422,
-            "closed_list",
-            explain("closed_list", what=what, allowed=", ".join(allowed)),
-        )
+        fail(422, "closed_list", what=what, allowed=", ".join(allowed))
     return value
 
 
@@ -114,11 +106,27 @@ def cabinet_payload(db: Session, user: User) -> dict:
     history = list_attempts(db, user)
     surveys = list_surveys(db, user)
     has_offers = bool(list_candidate_offers(db, user)) if profile is not None else False
+    test_done = any(row["status"] == "submitted" for row in history)
+    publication = bool(user.consent_publication) if body is None else body["publication"]
+    assignment = None if body is None or not body["category_id"] else body
+    if profile is None:
+        hint = explain("hint_no_profile")
+    elif not test_done:
+        hint = explain("hint_no_test", specialization=profile.specialization, grade=profile.grade)
+    elif not publication:
+        hint = explain("hint_no_publication")
+    elif assignment is not None:
+        hint = explain("hint_published", category_id=assignment["category_id"])
+    else:
+        hint = ""
+    offers_hint = ""
+    if profile is not None and not has_offers:
+        offers_hint = explain("hint_no_invites_candidate")
     return {
         "profile": profile,
-        "assignment": None if body is None or not body["category_id"] else body,
+        "assignment": assignment,
         "fsp": achievements_for(db, None if profile is None else profile.external_id),
-        "test_done": any(row["status"] == "submitted" for row in history),
+        "test_done": test_done,
         "has_offers": has_offers,
         "surveys": surveys,
         "history": history,
@@ -126,14 +134,16 @@ def cabinet_payload(db: Session, user: User) -> dict:
         "stack": [] if body is None else body["stack"],
         "soft": [] if body is None else body["soft_skills"],
         "field_sources": {} if body is None else body["field_sources"],
-        "publication": bool(user.consent_publication) if body is None else body["publication"],
+        "publication": publication,
+        "hint": hint,
+        "offers_hint": offers_hint,
     }
 
 
 def get_own_profile(db: Session, user: User) -> Profile:
     profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
     if profile is None:
-        raise ApiError(404, "not_found", explain("not_found_profile"))
+        fail(404, "not_found", "not_found_profile")
     return profile
 
 
@@ -148,29 +158,29 @@ def save_profile(db: Session, user: User, payload: dict) -> dict:
     soft = _as_labels(payload.get("soft_skills"), rules["soft_skills"], "Софт-скиллы")
     full_name = payload.get("full_name")
     if not isinstance(full_name, str) or not full_name.strip():
-        raise ApiError(422, "full_name", explain("full_name"))
+        fail(422, "full_name")
     experience = payload.get("experience", "")
     if experience is None:
         experience = ""
     if not isinstance(experience, str):
-        raise ApiError(422, "experience", explain("experience"))
+        fail(422, "experience")
     external = payload.get("external_id")
     if external is None or external == "":
         external_id = None
     elif isinstance(external, str) and external.strip():
         external_id = external.strip()
     else:
-        raise ApiError(422, "external_id", explain("external_id"))
+        fail(422, "external_id")
     publication_given = "publication" in payload and payload["publication"] is not None
     flag = None
     if publication_given:
         if not isinstance(payload["publication"], bool):
-            raise ApiError(422, "consent_required", explain("consent_publication"))
+            fail(422, "consent_required", "consent_publication")
         flag = 1 if payload["publication"] else 0
 
     profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
     if profile is not None and profile.grade != grade:
-        raise ApiError(409, "grade_via_test", explain("grade_via_test"))
+        fail(409, "grade_via_test")
 
     now = utc_now()
     stack_json = json.dumps(stack, ensure_ascii=False)
@@ -262,7 +272,7 @@ def save_profile(db: Session, user: User, payload: dict) -> dict:
     except IntegrityError as exc:
         db.rollback()
         if _integrity_code(exc) == "external_id":
-            raise ApiError(409, "external_id", explain("external_id_taken")) from None
-        raise ApiError(409, "conflict", explain("conflict")) from None
+            fail(409, "external_id", "external_id_taken")
+        fail(409, "conflict")
     db.refresh(profile)
     return profile_payload(db, user, profile)

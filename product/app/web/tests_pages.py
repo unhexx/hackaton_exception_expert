@@ -12,10 +12,9 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
 from product.app.db.models import Profile, TestAttempt
-from product.app.services.clock import days_remaining
 from product.app.services.errors import ApiError, explain
 from product.app.services.tests import (
-    interval_days,
+    interval_message,
     interval_open,
     list_attempts,
     proposed_adjacent,
@@ -53,19 +52,15 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
     history = list_attempts(db, user)
     offer = proposed_adjacent(db, profile) if profile is not None else ""
     interval_notice = ""
-    if profile is not None and offer and not interval_open(profile.grade_changed_at):
-        days = interval_days()
-        interval_notice = explain(
-            "grade_interval",
-            current=profile.grade,
-            requested=offer,
-            changed_at=profile.grade_changed_at,
-            interval=days,
-            left=days_remaining(profile.grade_changed_at, days),
-        )
+    hint = ""
+    if profile is None:
+        hint = explain("survey_required")
+    elif offer and not interval_open(profile.grade_changed_at):
+        interval_notice = interval_message(profile, offer)
     return {
         "csrf": ensure_csrf(request),
         "error": error,
+        "hint": hint,
         "user": user,
         "profile": profile,
         "draft": draft,

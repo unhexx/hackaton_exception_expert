@@ -7,6 +7,8 @@
 
 from __future__ import annotations
 
+from typing import NoReturn
+
 
 class ApiError(Exception):
     def __init__(self, status: int, error: str, message: str) -> None:
@@ -20,13 +22,8 @@ def compose(what: str, why: str, how: str) -> str:
     return f"Что случилось. {what}\nПочему. {why}\nЧто сделать. {how}"
 
 
-class _Safe(dict):
-    def __missing__(self, key: str) -> str:
-        return "{" + key + "}"
-
-
 def _fill(text: str, parts: dict[str, object]) -> str:
-    return text.format_map(_Safe(parts))
+    return text.format(**parts)
 
 
 _DEFAULTS: dict[str, dict[str, object]] = {
@@ -47,6 +44,8 @@ _DEFAULTS: dict[str, dict[str, object]] = {
     "code_locked": {"attempts": 5},
     "code_expired": {"minutes": 30},
     "password_length": {"minimum": 8, "maximum": 128},
+    "hint_no_test": {"specialization": "backend", "grade": "middle"},
+    "hint_published": {"category_id": "backend:middle"},
 }
 
 _CATALOG: dict[str, tuple[str, str, str]] = {
@@ -340,15 +339,60 @@ _CATALOG: dict[str, tuple[str, str, str]] = {
         "Страницы /docs и /redoc отдают локальные swagger-ui и redoc. Без файлов в образе UI схемы нет.",
         "Соберите стенд командой docker compose -f deploy/fsp/compose.yaml up --build. Кабинеты при этом работают и без /docs.",
     ),
+    "hint_no_profile": (
+        "Анкеты ещё нет.",
+        "Категория и тест берутся из специализации и заявленного грейда; без опроса стенд не знает, куда вас положить.",
+        "Заполните форму ниже: ФИО, специализация, грейд, стек. Поставьте галочку публикации, если хотите попасть в подборку работодателя.",
+    ),
+    "hint_no_test": (
+        "Тест ещё не сдан.",
+        "Работодатель видит категорию {specialization}:{grade}, но без балла карточка стоит ниже сдавших.",
+        "Откройте /candidate/test и сдайте испытание записанного грейда.",
+    ),
+    "hint_no_publication": (
+        "Профиль не публикуется.",
+        "Подборка показывает только тех, кто включил публикацию. Контакты при этом не открываются.",
+        "Поставьте галочку «Публиковать профиль в подборке работодателя» и сохраните анкету.",
+    ),
+    "hint_published": (
+        "Профиль опубликован в категории {category_id}.",
+        "Подборка работодателя видит карточку. Контакты при публикации не открываются.",
+        "Ждите приглашение или обновите стек, если потребность работодателя уже известна.",
+    ),
+    "hint_no_invites_candidate": (
+        "Работодатель ещё не писал.",
+        "Письмо приходит, когда вас нашли в подборке. Для этого нужны анкета, сданный тест и включённая публикация.",
+        "Закройте шаги в кабинете. Самому откликаться на вакансию на этом стенде нельзя.",
+    ),
+    "hint_no_invites_employer": (
+        "Приглашений ещё нет.",
+        "Работодатель сам пишет соискателю из подборки, самоотклика нет.",
+        "Откройте /employer/shortlist, выберите категорию вида specialization:grade и нажмите «Пригласить».",
+    ),
+    "hint_shortlist_empty": (
+        "Подборка пустая.",
+        "Видны только опубликованные профили с категорией, совпавшей с фильтром. Нет анкеты, выключена публикация или другая пара specialization:grade — карточки нет.",
+        "Снимите лишние фильтры стека и текста потребности либо попросите соискателя заполнить анкету, сдать тест и включить публикацию.",
+    ),
+    "hint_offer_form": (
+        "Форму приглашения открыть нельзя.",
+        "Название и контакт копируются с карточки компании. Без них соискатель не увидит, кто пишет и как ответить.",
+        "Откройте /employer, заполните название и контакт, сохраните, затем нажмите «Пригласить» на карточке подборки.",
+    ),
 }
 
 
 def explain(key: str, **parts: object) -> str:
     row = _CATALOG[key]
-    merged = {**_DEFAULTS.get(key, {}), **parts}
-    what, why, how = (_fill(part, merged) for part in row)
+    what, why, how = (_fill(part, parts) for part in row)
     return compose(what, why, how)
 
 
 def example(code: str, key: str | None = None, **parts: object) -> dict[str, str]:
-    return {"error": code, "message": explain(key or code, **parts)}
+    catalog_key = key or code
+    merged = {**_DEFAULTS.get(catalog_key, {}), **parts}
+    return {"error": code, "message": explain(catalog_key, **merged)}
+
+
+def fail(status: int, error: str, key: str | None = None, **parts: object) -> NoReturn:
+    raise ApiError(status, error, explain(key or error, **parts))

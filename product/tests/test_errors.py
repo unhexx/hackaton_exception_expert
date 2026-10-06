@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import pytest
+
 from product.app.services.clock import days_remaining, utc_now
-from product.app.services.errors import _CATALOG, compose, explain
+from product.app.services.errors import ApiError, _CATALOG, _DEFAULTS, compose, explain, fail
 from product.tests.conftest import register_and_confirm
 
 
@@ -15,10 +17,23 @@ def test_compose_joins_three_parts():
 def test_every_catalog_key_has_headings_and_advice():
     assert _CATALOG
     for key in _CATALOG:
-        text = explain(key)
+        text = explain(key, **_DEFAULTS.get(key, {}))
         assert text.startswith("Что случилось. "), key
         assert "\nПочему. " in text, key
         assert "\nЧто сделать. " in text, key
+
+
+def test_explain_without_parts_raises():
+    with pytest.raises(KeyError):
+        explain("grade_interval")
+
+
+def test_fail_sets_machine_code():
+    with pytest.raises(ApiError) as caught:
+        fail(409, "survey_required")
+    assert caught.value.status == 409
+    assert caught.value.error == "survey_required"
+    assert "Что случилось" in caught.value.message
 
 
 def test_grade_interval_names_days_and_grades():

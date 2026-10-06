@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from product.app.api.deps import db_session, require_candidate, require_employer
 from product.app.db.models import User
 from product.app.services.categories import employer_candidates, latest_assignment, parse_has_fsp
-from product.app.services.errors import ApiError, example, explain
+from product.app.services.errors import example, fail
 from product.app.services.profiles import get_own_profile
 
 router = APIRouter(tags=["category"])
@@ -50,7 +50,7 @@ def read_category(user: User = Depends(require_candidate), db: Session = Depends
     profile = get_own_profile(db, user)
     row = latest_assignment(db, profile.id)
     if row is None:
-        raise ApiError(404, "not_found", explain("not_found_category"))
+        fail(404, "not_found", "not_found_category")
     return {
         "profile_id": profile.id,
         "category_id": row.category_id,
@@ -82,7 +82,7 @@ def read_candidates(
     db: Session = Depends(db_session),
 ):
     if not category_id:
-        raise ApiError(422, "category_id", explain("category_id"))
+        fail(422, "category_id")
     return employer_candidates(
         db,
         category_id=category_id,

@@ -10,8 +10,8 @@ docker compose -f deploy/fsp/compose.yaml up --build
 
 | Файл | Что в нём лежит |
 |------|-----------------|
-| [00-postanovka.md](00-postanovka.md) | Текст заказчика, без доработок |
-| [01-requirements.md](01-requirements.md) | Требования, которые можно реализовывать |
+| [00-postanovka.md](00-postanovka.md) | Текст заказчика и полный перечень требований ТЗ без исключений |
+| [01-requirements.md](01-requirements.md) | Как требования постановки садятся на прототип |
 | [02-domain.md](02-domain.md) | Открытые факты о ФСП и ЛЦТ. Не путать с постановкой |
 | [03-open-questions.md](03-open-questions.md) | Вопросы модератору и экспертам. Не закрывать молча |
 | [04-plan.md](04-plan.md) | Срезы работ на окно 05–11.10.2026 |

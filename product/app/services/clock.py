@@ -25,6 +25,15 @@ def days_elapsed(stamp: str, days: int) -> bool:
     return datetime.now(timezone.utc) >= parse_utc(stamp) + timedelta(days=days)
 
 
+def days_remaining(stamp: str, days: int) -> int:
+    """Полных суток до stamp+days, округление вверх. После дедлайна — 0."""
+    leftover = parse_utc(stamp) + timedelta(days=days) - datetime.now(timezone.utc)
+    seconds = leftover.total_seconds()
+    if seconds <= 0:
+        return 0
+    return int((seconds + 86399) // 86400)
+
+
 def is_past(stamp: str | None) -> bool:
     if not stamp:
         return True

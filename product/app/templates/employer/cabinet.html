@@ -13,6 +13,15 @@
 <section>
   <h2>Статус</h2>
   <p>Почта: {{ user.email }}</p>
+  {% if not company or not company.name or not company.contact %}
+  <p class="hint">Что случилось. Карточка компании не готова.
+Почему. Приглашение копирует название и способ связи с карточки; без них вилку и контакт подставить нечем.
+Что сделать. Заполните название и контакт ниже, сохраните, затем откройте <a href="/employer/shortlist">подборку</a> и нажмите «Пригласить» на карточке соискателя.</p>
+  {% elif not has_offers %}
+  <p class="hint">Что случилось. Приглашений ещё нет.
+Почему. Работодатель сам пишет соискателю из подборки, самоотклика нет.
+Что сделать. Откройте <a href="/employer/shortlist">подборку</a>, выберите категорию вида specialization:grade и нажмите «Пригласить».</p>
+  {% endif %}
   {% if has_offers %}
   <p><a href="/employer/offers">Есть отправленные приглашения</a></p>
   {% else %}
@@ -21,7 +30,7 @@
 </section>
 <section>
   <h2>Карточка компании</h2>
-  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  {% include "_notice.html" %}
   <form method="post" action="/employer/company">
     <input type="hidden" name="csrf" value="{{ csrf }}">
     <label for="name">Название</label>

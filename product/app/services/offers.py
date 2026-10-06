@@ -10,7 +10,7 @@ from product.app.db.models import Company, Offer, Profile, User
 from product.app.log import log_event
 from product.app.services.categories import visible_in_category
 from product.app.services.clock import utc_now
-from product.app.services.errors import ApiError
+from product.app.services.errors import ApiError, explain
 
 _FIELDS = {
     "profile_id",
@@ -31,7 +31,7 @@ def _fail(status: int, code: str, message: str) -> None:
 
 def _money(value: object) -> int:
     if isinstance(value, bool) or not isinstance(value, int):
-        _fail(422, "salary_range", "Нужны две целые границы, max больше min")
+        _fail(422, "salary_range", explain("salary_range_type"))
     return value
 
 
@@ -89,38 +89,38 @@ def _candidate_offer(db: Session, user: User, offer_id: int) -> Offer:
     profile_id = _own_profile_id(db, user)
     row = db.get(Offer, offer_id)
     if row is None or profile_id is None or row.profile_id != profile_id:
-        raise ApiError(404, "not_found", "Приглашение не найдено")
+        raise ApiError(404, "not_found", explain("not_found_offer"))
     return row
 
 
 def create_offer(db: Session, user: User, payload: dict) -> dict:
     extra = set(payload) - _FIELDS
     if extra:
-        _fail(422, "extra_forbidden", "Лишнее поле")
+        _fail(422, "extra_forbidden", explain("extra_forbidden"))
     message = payload.get("message")
     if not isinstance(message, str) or not message.strip():
-        _fail(422, "offer_incomplete", "Нужен текст приглашения")
+        _fail(422, "offer_incomplete", explain("offer_incomplete_message"))
     salary_min = _money(payload.get("salary_min"))
     salary_max = _money(payload.get("salary_max"))
     if salary_max <= salary_min:
-        _fail(422, "salary_range", "Верхняя граница больше нижней")
+        _fail(422, "salary_range", explain("salary_range"))
     if payload.get("salary_currency") != "RUB":
-        _fail(422, "currency", "Валюта только RUB")
+        _fail(422, "currency", explain("currency"))
     company = db.scalar(select(Company).where(Company.employer_id == user.id))
     name = payload.get("company_name")
     if company is None or not company.name.strip() or not isinstance(name, str) or name != company.name:
-        _fail(422, "company_name", "Название берётся с карточки компании")
+        _fail(422, "company_name", explain("company_name"))
     contact = payload.get("contact_channel")
     if not company.contact.strip() or not isinstance(contact, str) or contact != company.contact:
-        _fail(422, "contact_channel", "Способ связи берётся с карточки компании")
+        _fail(422, "contact_channel", explain("contact_channel"))
     profile_id = payload.get("profile_id")
     if isinstance(profile_id, bool) or not isinstance(profile_id, int):
-        _fail(422, "offer_incomplete", "Нужен профиль из категории")
+        _fail(422, "offer_incomplete", explain("offer_incomplete_profile"))
     category_id = payload.get("category_id")
     if not isinstance(category_id, str):
-        _fail(422, "category_id", "Нужна категория из специализации и грейда")
+        _fail(422, "category_id", explain("category_id"))
     if not visible_in_category(db, profile_id, category_id):
-        _fail(404, "profile_not_in_category", "Профиля нет в этой категории")
+        _fail(404, "profile_not_in_category", explain("profile_not_in_category"))
     opened = db.scalar(
         select(Offer).where(
             Offer.employer_id == user.id,
@@ -129,7 +129,7 @@ def create_offer(db: Session, user: User, payload: dict) -> dict:
         )
     )
     if opened is not None:
-        _fail(409, "offer_open", "Открытое приглашение уже есть")
+        _fail(409, "offer_open", explain("offer_open"))
     now = utc_now()
     row = Offer(
         employer_id=user.id,
@@ -151,7 +151,7 @@ def create_offer(db: Session, user: User, payload: dict) -> dict:
         db.commit()
     except IntegrityError:
         db.rollback()
-        _fail(409, "offer_open", "Открытое приглашение уже есть")
+        _fail(409, "offer_open", explain("offer_open"))
     db.refresh(row)
     return offer_payload(db, row, viewer="employer")
 
@@ -188,6 +188,6 @@ def set_offer_status(db: Session, user: User, offer_id: int, status: str) -> dic
     db.commit()
     db.refresh(row)
     if result.rowcount == 0:
-        _fail(409, "offer_closed", "Приглашение уже закрыто")
+        _fail(409, "offer_closed", explain("offer_closed"))
     log_event("offer_status", status)
     return offer_payload(db, row, viewer="candidate")

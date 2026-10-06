@@ -11,30 +11,26 @@ from product.app.db.models import Profile, TestAttempt, User
 from product.app.log import log_event
 from product.app.services.categories import latest_assignment, recompute
 from product.app.services.clock import utc_now
-from product.app.services.errors import ApiError
+from product.app.services.errors import ApiError, explain
 from product.app.services.profiles import profile_payload
 from product.matching.pdf_profile import render_profile_pdf
 from product.matching.resume import read_resume_bytes
 
-_MESSAGES = {
-    "resume_too_large": "Файл больше 2 МиБ",
-    "resume_not_pdf": "Файл не похож на PDF",
-    "resume_no_text": "В PDF нет текстового слоя. Скан без текста не читается, заполните поля вручную.",
-}
+
 _TEXT_FIELDS = ("full_name", "industry", "specialization", "team_role", "work_format", "experience")
 
 
 def _reject(code: str) -> None:
     log_event("resume_rejected", code)
     status = 413 if code == "resume_too_large" else 422
-    raise ApiError(status, code, _MESSAGES[code])
+    raise ApiError(status, code, explain(code))
 
 
 def _own(db: Session, user: User) -> Profile:
     profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
     if profile is None:
         log_event("resume_rejected", "not_found")
-        raise ApiError(404, "not_found", "Анкета ещё не заполнена")
+        raise ApiError(404, "not_found", explain("not_found_profile"))
     return profile
 
 

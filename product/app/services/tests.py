@@ -9,8 +9,8 @@ from sqlalchemy.orm import Session
 
 from product.app.db.models import Profile, TestAttempt, User
 from product.app.services.categories import latest_assignment, recompute
-from product.app.services.clock import days_elapsed, utc_now
-from product.app.services.errors import ApiError
+from product.app.services.clock import days_elapsed, days_remaining, utc_now
+from product.app.services.errors import ApiError, explain
 from product.matching.grade import (
     GradeError,
     is_adjacent_grade,
@@ -28,9 +28,24 @@ _OUTCOME = {
 }
 
 
+def interval_days() -> int:
+    return int(load_rules()["grade_change_interval_days"])
+
+
 def interval_open(stamp: str) -> bool:
-    days = int(load_rules()["grade_change_interval_days"])
-    return days_elapsed(stamp, days)
+    return days_elapsed(stamp, interval_days())
+
+
+def _interval_message(profile: Profile, requested: str) -> str:
+    days = interval_days()
+    return explain(
+        "grade_interval",
+        current=profile.grade,
+        requested=requested,
+        changed_at=profile.grade_changed_at,
+        interval=days,
+        left=days_remaining(profile.grade_changed_at, days),
+    )
 
 
 def _profile(db: Session, user: User) -> Profile | None:
@@ -110,37 +125,59 @@ def list_attempts(db: Session, user: User) -> list[dict]:
 def start_attempt(db: Session, user: User, payload: dict | None) -> dict:
     profile = _profile(db, user)
     if profile is None:
-        raise ApiError(409, "survey_required", "Сначала заполните анкету")
+        raise ApiError(409, "survey_required", explain("survey_required"))
     requested = ""
     if payload:
         raw = payload.get("grade", "")
         if raw is None:
             raw = ""
         if not isinstance(raw, str):
-            raise ApiError(422, "closed_list", "Грейд — строка")
+            raise ApiError(422, "closed_list", explain("closed_list_grade"))
         requested = raw.strip()
     target = profile.grade
     adjacent = False
     if requested and requested != profile.grade:
         if not is_adjacent_grade(profile.grade, requested):
-            raise ApiError(409, "grade_not_offered", "Этот грейд не предложен")
-        if proposed_adjacent(db, profile) != requested:
-            raise ApiError(409, "grade_not_offered", "Этот грейд не предложен")
+            raise ApiError(
+                409,
+                "grade_not_offered",
+                explain("grade_not_adjacent", current=profile.grade, requested=requested),
+            )
+        offered = proposed_adjacent(db, profile)
+        if offered != requested:
+            raise ApiError(
+                409,
+                "grade_not_offered",
+                explain(
+                    "grade_not_proposed",
+                    current=profile.grade,
+                    requested=requested,
+                    offered=offered or "нет",
+                ),
+            )
         target = requested
         adjacent = True
     draft = _draft(db, profile.id)
     if draft is not None:
         same = draft.specialization == profile.specialization and draft.declared_grade == target
         if not same:
-            raise ApiError(409, "attempt_open", "Сначала сдайте открытый тест")
+            raise ApiError(
+                409,
+                "attempt_open",
+                explain("attempt_open", draft_grade=draft.declared_grade, template_id=draft.template_id),
+            )
         return _public_attempt(draft)
     if adjacent and not interval_open(profile.grade_changed_at):
-        raise ApiError(409, "grade_interval", "Смена грейда ещё рано")
+        raise ApiError(409, "grade_interval", _interval_message(profile, target))
     spec = profile.specialization
     try:
         template_id = select_template(profile.id, spec, target, rule_version())
     except GradeError as exc:
-        raise ApiError(409, exc.code, "Для пары нет двух своих шаблонов") from exc
+        raise ApiError(
+            409,
+            exc.code,
+            explain("template_pair", specialization=spec, grade=target),
+        ) from exc
     row = TestAttempt(
         profile_id=profile.id,
         specialization=spec,
@@ -164,23 +201,27 @@ def start_attempt(db: Session, user: User, payload: dict | None) -> dict:
 def submit_attempt(db: Session, user: User, attempt_id: int, payload: dict) -> dict:
     profile = _profile(db, user)
     if profile is None:
-        raise ApiError(404, "not_found", "Попытка не найдена")
+        raise ApiError(404, "not_found", explain("not_found_attempt"))
     row = db.get(TestAttempt, attempt_id)
     if row is None or row.profile_id != profile.id:
-        raise ApiError(404, "not_found", "Попытка не найдена")
+        raise ApiError(404, "not_found", explain("not_found_attempt"))
     if row.status != "draft":
-        raise ApiError(409, "attempt_closed", "Попытка уже сдана")
+        raise ApiError(409, "attempt_closed", explain("attempt_closed"))
     recorded = row.specialization == profile.specialization and row.declared_grade == profile.grade
     if not recorded and not interval_open(profile.grade_changed_at):
-        raise ApiError(409, "grade_interval", "Смена грейда ещё рано")
+        raise ApiError(409, "grade_interval", _interval_message(profile, row.declared_grade))
     answers = payload.get("answers") if isinstance(payload, dict) else None
     try:
         template = load_template(row.template_id)
         scored = score_attempt(template, answers)
     except GradeError as exc:
         if exc.code == "answer_unknown":
-            raise ApiError(422, "answer_unknown", "Ответ не из вариантов") from exc
-        raise ApiError(409, exc.code, "Шаблон испытания не найден") from exc
+            raise ApiError(422, "answer_unknown", explain("answer_unknown")) from exc
+        raise ApiError(
+            409,
+            exc.code,
+            explain("template_missing", template_id=row.template_id),
+        ) from exc
     row.answers_json = json.dumps(answers, ensure_ascii=False)
     row.score = scored["score"]
     row.outcome = scored["outcome"]

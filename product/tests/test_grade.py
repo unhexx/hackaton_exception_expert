@@ -190,6 +190,11 @@ def test_adjacent_grade_respects_offer_and_interval(client):
     blocked = client.post("/api/candidate/tests/start", json={"grade": "senior"})
     assert blocked.status_code == 409
     assert blocked.json()["error"] == "grade_interval"
+    interval_text = blocked.json()["message"]
+    assert "Что случилось" in interval_text
+    assert "Почему" in interval_text
+    assert "Что сделать" in interval_text
+    assert "90" in interval_text
     assert _drafts(client, profile_id) == 0
     assert client.post("/api/candidate/tests/start", json={"grade": "lead"}).json()["error"] == "grade_not_offered"
     assert client.post("/api/candidate/tests/start", json={"grade": "junior"}).json()["error"] == "grade_not_offered"
@@ -346,3 +351,5 @@ def test_page_shows_attempt_history_and_vacancy_link(client):
     assert "балл 100" in again.text
     assert "предложен грейд выше" in again.text
     assert "Начать тест грейда senior" in again.text
+    assert "Что случилось" in again.text
+    assert "90" in again.text

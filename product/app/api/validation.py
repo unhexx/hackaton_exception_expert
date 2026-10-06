@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import PlainTextResponse
 
 from product.app.api.deps import current_user
+from product.app.services.errors import example
 from product.app.db.models import User
 from product.matching.golden_run import render_report
 
@@ -25,7 +26,7 @@ _SAMPLE = (
     response_class=PlainTextResponse,
     responses={
         200: {"content": {"text/plain": {"example": _SAMPLE}}},
-        401: {"content": {"application/json": {"example": {"error": "unauthorized", "message": "Нужен вход"}}}},
+        401: {"content": {"application/json": {"example": example("unauthorized")}}},
     },
 )
 def validation_report(_user: User = Depends(current_user)):

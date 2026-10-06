@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from product.app.db.models import Consent, Profile, SurveyAttempt, User
 from product.app.services.categories import latest_assignment, recompute
 from product.app.services.clock import utc_now
-from product.app.services.errors import ApiError
+from product.app.services.errors import ApiError, explain
 from product.app.services.fsp import achievements_for
 from product.app.services.offers import list_candidate_offers
 from product.app.services.tests import list_attempts
@@ -38,13 +38,21 @@ def _as_labels(value: object, allowed: list[str], label: str) -> list[str]:
     if value is None:
         return []
     if not isinstance(value, list) or any(not isinstance(item, str) or item not in allowed for item in value):
-        raise ApiError(422, "closed_list", f"{label} не из списка")
+        raise ApiError(
+            422,
+            "closed_list",
+            explain("closed_list", what=label, allowed=", ".join(allowed)),
+        )
     return list(value)
 
 
-def _one(value: object, allowed: list[str]) -> str:
+def _one(value: object, allowed: list[str], what: str) -> str:
     if not isinstance(value, str) or value not in allowed:
-        raise ApiError(422, "closed_list", "Значение не из списка")
+        raise ApiError(
+            422,
+            "closed_list",
+            explain("closed_list", what=what, allowed=", ".join(allowed)),
+        )
     return value
 
 
@@ -125,44 +133,44 @@ def cabinet_payload(db: Session, user: User) -> dict:
 def get_own_profile(db: Session, user: User) -> Profile:
     profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
     if profile is None:
-        raise ApiError(404, "not_found", "Анкета ещё не заполнена")
+        raise ApiError(404, "not_found", explain("not_found_profile"))
     return profile
 
 
 def save_profile(db: Session, user: User, payload: dict) -> dict:
     rules = load_rules()
-    industry = _one(payload.get("industry"), rules["industries"])
-    specialization = _one(payload.get("specialization"), rules["specializations"])
-    grade = _one(payload.get("grade"), rules["grades"])
-    team_role = _one(payload.get("team_role"), rules["team_roles"])
-    work_format = _one(payload.get("work_format"), rules["work_formats"])
+    industry = _one(payload.get("industry"), rules["industries"], "отрасль")
+    specialization = _one(payload.get("specialization"), rules["specializations"], "специализация")
+    grade = _one(payload.get("grade"), rules["grades"], "грейд")
+    team_role = _one(payload.get("team_role"), rules["team_roles"], "роль в компании")
+    work_format = _one(payload.get("work_format"), rules["work_formats"], "формат работы")
     stack = _as_labels(payload.get("stack"), rules["stack"], "Стек")
     soft = _as_labels(payload.get("soft_skills"), rules["soft_skills"], "Софт-скиллы")
     full_name = payload.get("full_name")
     if not isinstance(full_name, str) or not full_name.strip():
-        raise ApiError(422, "full_name", "Нужно ФИО")
+        raise ApiError(422, "full_name", explain("full_name"))
     experience = payload.get("experience", "")
     if experience is None:
         experience = ""
     if not isinstance(experience, str):
-        raise ApiError(422, "experience", "Стаж — строка")
+        raise ApiError(422, "experience", explain("experience"))
     external = payload.get("external_id")
     if external is None or external == "":
         external_id = None
     elif isinstance(external, str) and external.strip():
         external_id = external.strip()
     else:
-        raise ApiError(422, "external_id", "Идентификатор ФСП — строка")
+        raise ApiError(422, "external_id", explain("external_id"))
     publication_given = "publication" in payload and payload["publication"] is not None
     flag = None
     if publication_given:
         if not isinstance(payload["publication"], bool):
-            raise ApiError(422, "consent_required", "Публикация — да или нет")
+            raise ApiError(422, "consent_required", explain("consent_publication"))
         flag = 1 if payload["publication"] else 0
 
     profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
     if profile is not None and profile.grade != grade:
-        raise ApiError(409, "grade_via_test", "Грейд меняет только тест")
+        raise ApiError(409, "grade_via_test", explain("grade_via_test"))
 
     now = utc_now()
     stack_json = json.dumps(stack, ensure_ascii=False)
@@ -254,7 +262,7 @@ def save_profile(db: Session, user: User, payload: dict) -> dict:
     except IntegrityError as exc:
         db.rollback()
         if _integrity_code(exc) == "external_id":
-            raise ApiError(409, "external_id", "Идентификатор ФСП уже занят") from None
-        raise ApiError(409, "conflict", "Запись не сохранилась") from None
+            raise ApiError(409, "external_id", explain("external_id_taken")) from None
+        raise ApiError(409, "conflict", explain("conflict")) from None
     db.refresh(profile)
     return profile_payload(db, user, profile)

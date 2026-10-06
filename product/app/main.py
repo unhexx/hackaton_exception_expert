@@ -15,7 +15,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from product.app.api import router as api_router
 from product.app.secret import product_secret
-from product.app.services.errors import ApiError
+from product.app.services.errors import ApiError, explain
 from product.app.web.routes import router as web_router
 
 _APP_DIR = Path(__file__).resolve().parent
@@ -51,7 +51,7 @@ def create_app() -> FastAPI:
     async def _bad_json(_request, _exc: RequestValidationError):
         return JSONResponse(
             status_code=400,
-            content={"error": "json", "message": "Неверное тело запроса"},
+            content={"error": "json", "message": explain("json")},
         )
 
     application.include_router(api_router)
@@ -66,7 +66,7 @@ def create_app() -> FastAPI:
         if not (docs_dir / "swagger-ui-bundle.js").is_file() or not (docs_dir / "swagger-ui.css").is_file():
             return JSONResponse(
                 status_code=503,
-                content={"error": "docs_assets", "message": "Статика документации не собрана"},
+                content={"error": "docs_assets", "message": explain("docs_assets")},
             )
         return get_swagger_ui_html(
             openapi_url="/openapi.json",
@@ -83,7 +83,7 @@ def create_app() -> FastAPI:
         if not (docs_dir / "redoc.standalone.js").is_file():
             return JSONResponse(
                 status_code=503,
-                content={"error": "docs_assets", "message": "Статика документации не собрана"},
+                content={"error": "docs_assets", "message": explain("docs_assets")},
             )
         return get_redoc_html(
             openapi_url="/openapi.json",

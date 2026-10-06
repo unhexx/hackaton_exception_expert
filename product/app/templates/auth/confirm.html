@@ -3,7 +3,7 @@
 {% block body %}
 <h1>Подтверждение почты</h1>
 <p class="quiet">Внешней почты нет. Код показан только на этой странице стенда.</p>
-{% if error %}<p class="error">{{ error }}</p>{% endif %}
+{% include "_notice.html" %}
 {% if code %}
 <p>Код подтверждения: <strong id="stand-code">{{ code }}</strong></p>
 {% else %}

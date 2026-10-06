@@ -71,7 +71,22 @@ button, .button {
 
 .quiet { color: var(--fsp-ink); }
 
-.error { color: var(--fsp-red); }
+.error, .hint {
+  white-space: pre-wrap;
+  background: #fff;
+  padding: 0.8rem 1rem;
+  margin: 0 0 1rem;
+}
+
+.error {
+  color: var(--fsp-ink);
+  border: 1px solid var(--fsp-red);
+}
+
+.hint {
+  color: var(--fsp-ink);
+  border: 1px solid var(--fsp-blue);
+}
 
 a.button { display: inline-block; text-decoration: none; }
 

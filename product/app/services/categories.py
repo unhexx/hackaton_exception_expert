@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 from product.app.db.models import CategoryAssignment as StoredCategory
 from product.app.db.models import Consent, FspAchievement, FspParticipant, Profile, TestAttempt
 from product.app.services.clock import utc_now
-from product.app.services.errors import ApiError
+from product.app.services.errors import ApiError, explain
 from product.matching.category import assign_category
 from product.matching.need import evaluate_need, haystack_text
 from product.matching.rules import load_rules, rule_version
@@ -92,7 +92,7 @@ def _require_category(category_id: str) -> str:
         or parts[1] not in rules["grades"]
         or "/" in category_id
     ):
-        raise ApiError(422, "category_id", "Нужна категория из специализации и грейда")
+        raise ApiError(422, "category_id", explain("category_id"))
     return category_id
 
 
@@ -103,12 +103,16 @@ def parse_has_fsp(raw: str | None) -> bool | None:
         return True
     if raw == "false":
         return False
-    raise ApiError(422, "closed_list", "Признак достижений — true или false")
+    raise ApiError(422, "closed_list", explain("closed_list_has_fsp"))
 
 
 def _closed(value: str, allowed: list[str], code: str) -> None:
     if value not in allowed:
-        raise ApiError(422, code, "Значение не из списка")
+        raise ApiError(
+            422,
+            code,
+            explain("closed_list", what="фильтр подборки", allowed=", ".join(allowed)),
+        )
 
 
 def _need(

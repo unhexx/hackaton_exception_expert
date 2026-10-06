@@ -3,8 +3,11 @@
 {% block body %}
 <h1>Тест грейда</h1>
 <p><a href="/candidate">В кабинет</a></p>
-{% if error %}<p class="error">{{ error }}</p>{% endif %}
+{% include "_notice.html" %}
 {% if not profile %}
+<p class="hint">Что случилось. Тест не стартует.
+Почему. Испытание привязано к анкете: специализация и заявленный грейд берутся оттуда.
+Что сделать. Откройте <a href="/candidate">кабинет</a>, заполните анкету и вернитесь сюда.</p>
 <p>Сначала заполните анкету: без неё испытание не стартует.</p>
 {% else %}
 <p>Записанный грейд: {{ profile.grade }}. Специализация: {{ profile.specialization }}.</p>
@@ -14,6 +17,7 @@
   <button type="submit">Начать тест записанного грейда</button>
 </form>
 {% if offer %}
+{% if interval_notice %}<p class="hint">{{ interval_notice }}</p>{% endif %}
 <form method="post" action="/candidate/test/start">
   <input type="hidden" name="csrf" value="{{ csrf }}">
   <input type="hidden" name="grade" value="{{ offer }}">

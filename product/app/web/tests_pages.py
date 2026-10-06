@@ -12,8 +12,16 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
 from product.app.db.models import Profile, TestAttempt
-from product.app.services.errors import ApiError
-from product.app.services.tests import list_attempts, proposed_adjacent, start_attempt, submit_attempt
+from product.app.services.clock import days_remaining
+from product.app.services.errors import ApiError, explain
+from product.app.services.tests import (
+    interval_days,
+    interval_open,
+    list_attempts,
+    proposed_adjacent,
+    start_attempt,
+    submit_attempt,
+)
 from product.app.web.guards import page_user
 from product.app.web.render import assert_csrf, ensure_csrf, page_error, render
 from product.matching.grade import load_template, public_questions
@@ -44,6 +52,17 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
             questions = public_questions(load_template(draft.template_id))
     history = list_attempts(db, user)
     offer = proposed_adjacent(db, profile) if profile is not None else ""
+    interval_notice = ""
+    if profile is not None and offer and not interval_open(profile.grade_changed_at):
+        days = interval_days()
+        interval_notice = explain(
+            "grade_interval",
+            current=profile.grade,
+            requested=offer,
+            changed_at=profile.grade_changed_at,
+            interval=days,
+            left=days_remaining(profile.grade_changed_at, days),
+        )
     return {
         "csrf": ensure_csrf(request),
         "error": error,
@@ -53,6 +72,7 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
         "questions": questions,
         "history": history,
         "offer": offer,
+        "interval_notice": interval_notice,
         "samples": _samples(),
     }
 

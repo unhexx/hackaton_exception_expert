@@ -10,6 +10,7 @@ from sqlalchemy import select
 from product.app.api.deps import db_session, require_candidate
 from product.app.db.models import Profile, User
 from product.app.services.fsp import achievements_for
+from product.app.services.errors import example
 from product.app.services.profiles import get_own_profile, profile_payload, save_profile
 
 router = APIRouter(tags=["candidate"])
@@ -27,8 +28,8 @@ _PROFILE = {
     "external_id": "",
     "publication": True,
 }
-_NOT_FOUND = {"error": "not_found", "message": "Анкета ещё не заполнена"}
-_CLOSED = {"error": "closed_list", "message": "Значение не из списка"}
+_NOT_FOUND = example("not_found", "not_found_profile")
+_CLOSED = example("closed_list")
 
 
 @router.get(
@@ -50,8 +51,8 @@ _CLOSED = {"error": "closed_list", "message": "Значение не из спи
                 }
             }
         },
-        401: {"content": {"application/json": {"example": {"error": "unauthorized", "message": "Нужен вход"}}}},
-        403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет соискателя"}}}},
+        401: {"content": {"application/json": {"example": example("unauthorized")}}},
+        403: {"content": {"application/json": {"example": example("forbidden", "forbidden_candidate")}}},
         404: {"content": {"application/json": {"example": _NOT_FOUND}}},
     },
 )
@@ -76,7 +77,7 @@ def read_profile(user: User = Depends(require_candidate), db: Session = Depends(
                 }
             }
         },
-        409: {"content": {"application/json": {"example": {"error": "grade_via_test", "message": "Грейд меняет только тест"}}}},
+        409: {"content": {"application/json": {"example": example("grade_via_test")}}},
         422: {"content": {"application/json": {"example": _CLOSED}}},
     },
 )
@@ -98,8 +99,8 @@ def write_profile(
                 }
             }
         },
-        401: {"content": {"application/json": {"example": {"error": "unauthorized", "message": "Нужен вход"}}}},
-        403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет соискателя"}}}},
+        401: {"content": {"application/json": {"example": example("unauthorized")}}},
+        403: {"content": {"application/json": {"example": example("forbidden", "forbidden_candidate")}}},
     },
 )
 def read_achievements(user: User = Depends(require_candidate), db: Session = Depends(db_session)):

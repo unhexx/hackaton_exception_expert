@@ -3,7 +3,7 @@
 {% block body %}
 <h1>Приглашения</h1>
 <p><a href="/employer">В кабинет</a></p>
-{% if error %}<p class="error">{{ error }}</p>{% endif %}
+{% include "_notice.html" %}
 {% if company and company.name and company.contact and prefill_profile_id and prefill_category_id %}
 <form method="post" action="/employer/offers">
   <input type="hidden" name="csrf" value="{{ csrf }}">
@@ -26,6 +26,9 @@
 {% elif company and company.name and company.contact %}
 <p>Откройте приглашение кнопкой «Пригласить» на карточке подборки. Номер профиля с карточки подставляется сам.</p>
 {% else %}
+<p class="hint">Что случилось. Форму приглашения открыть нельзя.
+Почему. Название и контакт копируются с карточки компании. Без них соискатель не увидит, кто пишет и как ответить.
+Что сделать. Откройте <a href="/employer">кабинет</a>, заполните название и контакт, сохраните, затем нажмите «Пригласить» на карточке подборки.</p>
 <p>Сначала заполните название и контакт компании.</p>
 <p><button type="button" disabled>Отправить приглашение</button></p>
 {% endif %}

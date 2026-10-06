@@ -1,0 +1,29 @@
+<section class="kept">
+  <h2>{{ title }}</h2>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  {% if cards %}
+  <ul>
+    {% for card in cards %}
+    <li>
+      <p>{{ card.full_name }}. Отрасль: {{ card.industry }}. Категория: {{ card.category_id }}.</p>
+      <p>{{ card.explanation }}</p>
+      <p>{{ card.list_reason }}</p>
+      <p>Балл {{ card.test_score }}, порядок {{ card.rank_key }}. Роль в компании: {{ card.team_role }}. Формат: {{ card.work_format }}.</p>
+      <p>Стек: {{ card.stack | join(', ') }}.</p>
+      {% if card.achievements %}
+      <ul>
+        {% for row in card.achievements %}
+        <li>{{ row.discipline }}, роль на старте: {{ row.role_in_team }}, результат: {{ row.place }}</li>
+        {% endfor %}
+      </ul>
+      {% if card.fsp_rank %}<p>Разряд источника: {{ card.fsp_rank }}</p>{% endif %}
+      {% else %}
+      <p>Достижений ФСП нет.</p>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% elif not error %}
+  <p>В этой категории никого нет.</p>
+  {% endif %}
+</section>

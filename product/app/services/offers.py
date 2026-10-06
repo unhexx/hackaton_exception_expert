@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from product.app.db.models import Company, Offer, Profile, User
 from product.app.log import log_event
-from product.app.services.categories import employer_candidates
+from product.app.services.categories import visible_in_category
 from product.app.services.clock import utc_now
 from product.app.services.errors import ApiError
 
@@ -119,16 +119,7 @@ def create_offer(db: Session, user: User, payload: dict) -> dict:
     category_id = payload.get("category_id")
     if not isinstance(category_id, str):
         _fail(422, "category_id", "Нужна категория из специализации и грейда")
-    visible = employer_candidates(
-        db,
-        category_id=category_id,
-        stack=[],
-        team_role="",
-        work_format="",
-        has_fsp=None,
-        q="",
-    )
-    if not any(card["profile_id"] == profile_id for card in visible):
+    if not visible_in_category(db, profile_id, category_id):
         _fail(404, "profile_not_in_category", "Профиля нет в этой категории")
     opened = db.scalar(
         select(Offer).where(
@@ -165,24 +156,38 @@ def create_offer(db: Session, user: User, payload: dict) -> dict:
     return offer_payload(db, row, viewer="employer")
 
 
+def get_offer(db: Session, user: User, offer_id: int) -> dict:
+    row = _candidate_offer(db, user, offer_id)
+    return offer_payload(db, row, viewer="candidate")
+
+
 def open_offer(db: Session, user: User, offer_id: int) -> dict:
     row = _candidate_offer(db, user, offer_id)
     if row.status == "sent":
-        row.status = "seen"
-        row.updated_at = utc_now()
+        now = utc_now()
+        result = db.execute(
+            update(Offer)
+            .where(Offer.id == row.id, Offer.status == "sent")
+            .values(status="seen", updated_at=now)
+        )
         db.commit()
         db.refresh(row)
-        log_event("offer_status", "seen")
+        if result.rowcount:
+            log_event("offer_status", "seen")
     return offer_payload(db, row, viewer="candidate")
 
 
 def set_offer_status(db: Session, user: User, offer_id: int, status: str) -> dict:
     row = _candidate_offer(db, user, offer_id)
-    if row.status not in {"sent", "seen"}:
-        _fail(409, "offer_closed", "Приглашение уже закрыто")
-    row.status = status
-    row.updated_at = utc_now()
+    now = utc_now()
+    result = db.execute(
+        update(Offer)
+        .where(Offer.id == row.id, Offer.status.in_(("sent", "seen")))
+        .values(status=status, updated_at=now)
+    )
     db.commit()
     db.refresh(row)
+    if result.rowcount == 0:
+        _fail(409, "offer_closed", "Приглашение уже закрыто")
     log_event("offer_status", status)
     return offer_payload(db, row, viewer="candidate")

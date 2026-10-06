@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import secrets
+
 from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
@@ -138,11 +140,10 @@ def login_submit(
             {"csrf": ensure_csrf(request)},
             exc,
         )
-    csrf_token = ensure_csrf(request)
     request.session.clear()
     request.session["user_id"] = user.id
     request.session["role"] = user.role
-    request.session["csrf"] = csrf_token
+    request.session["csrf"] = secrets.token_urlsafe(32)
     target = "/candidate" if user.role == "candidate" else "/employer"
     return RedirectResponse(target, status_code=303)
 

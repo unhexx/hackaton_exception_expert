@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 from product.matching.category import assign_category
+from product.matching.need import haystack_text, matches_need
 from product.matching.rules import rule_version
 from product.matching.types import ProfileView
 
@@ -37,41 +38,46 @@ def _view(row: dict) -> ProfileView:
 
 
 def _need_text(row: dict) -> str:
-    stack = " ".join(row.get("stack") or [])
-    return " ".join(
-        [
-            str(row.get("specialization") or ""),
-            str(row.get("grade") or ""),
-            stack,
-            str(row.get("team_role") or ""),
-            str(row.get("work_format") or ""),
-            str(row.get("experience") or ""),
-        ]
-    ).casefold()
+    return haystack_text(
+        specialization=str(row.get("specialization") or ""),
+        grade=str(row.get("grade") or ""),
+        stack=list(row.get("stack") or []),
+        team_role=str(row.get("team_role") or ""),
+        work_format=str(row.get("work_format") or ""),
+        experience=str(row.get("experience") or ""),
+    )
 
 
 def _matches_need(row: dict, category_id: str, need: dict) -> bool:
-    if category_id != need["category_id"]:
-        return False
-    if row.get("test_score") is None:
-        return False
-    stack_filter = [item for item in (need.get("stack") or []) if item]
-    if stack_filter and not set(stack_filter) & set(row.get("stack") or []):
-        return False
-    if need.get("team_role") and row.get("team_role") != need["team_role"]:
-        return False
-    if need.get("work_format") and row.get("work_format") != need["work_format"]:
-        return False
-    has_fsp = need.get("has_fsp")
-    count = int(row.get("fsp_confirmed_count") or 0)
-    if has_fsp is True and count <= 0:
-        return False
-    if has_fsp is False and count > 0:
-        return False
-    query = str(need.get("q") or "").strip()
-    if query and query.casefold() not in _need_text(row):
-        return False
-    return True
+    return matches_need(
+        assigned_category_id=category_id,
+        test_score=None if row.get("test_score") is None else int(row["test_score"]),
+        stack=list(row.get("stack") or []),
+        team_role=str(row.get("team_role") or ""),
+        work_format=str(row.get("work_format") or ""),
+        fsp_count=int(row.get("fsp_confirmed_count") or 0),
+        haystack=_need_text(row),
+        need=need,
+    )
+
+
+def _scores_match_answers(cases: dict) -> None:
+    from product.matching.grade import load_template, score_attempt
+
+    for row in cases["profiles"]:
+        if "answers" not in row:
+            continue
+        scored = score_attempt(load_template(row["template_id"]), row["answers"])
+        if row.get("expected_outcome") not in (None, scored["outcome"]):
+            raise ValueError(
+                f"profile {row['profile_id']}: expected_outcome {row.get('expected_outcome')} "
+                f"не сходится с ответами {scored['outcome']}"
+            )
+        if row.get("test_score") != scored["score"] or row.get("test_outcome") != scored["outcome"]:
+            raise ValueError(
+                f"profile {row['profile_id']}: балл {row.get('test_score')}/{row.get('test_outcome')} "
+                f"не сходится с ответами {scored['score']}/{scored['outcome']}"
+            )
 
 
 def _outcome_counts(cases: dict) -> tuple[int, int]:
@@ -115,12 +121,9 @@ def _resume_counts() -> tuple[int, int]:
     ok = 0
     for item in items:
         pdf = manifest.parent / "resumes" / item["file"]
-        try:
-            result = read_resume_bytes(pdf.read_bytes())
-        except Exception:
-            continue
+        result = read_resume_bytes(pdf.read_bytes())
         if not isinstance(result, dict):
-            continue
+            raise TypeError(f"разбор {item['file']} вернул {type(result)!r}")
         code = result.get("error")
         expect = item.get("expect")
         if expect:
@@ -134,6 +137,7 @@ def _resume_counts() -> tuple[int, int]:
 
 def summarize(cases: dict | None = None) -> dict:
     data = cases if cases is not None else load_cases()
+    _scores_match_answers(data)
     version = rule_version()
     matched = 0
     ranked = []

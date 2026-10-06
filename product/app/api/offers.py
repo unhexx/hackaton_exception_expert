@@ -9,6 +9,7 @@ from product.app.api.deps import db_session, require_candidate, require_employer
 from product.app.db.models import User
 from product.app.services.offers import (
     create_offer,
+    get_offer,
     list_candidate_offers,
     list_employer_offers,
     open_offer,
@@ -96,13 +97,26 @@ def candidate_offers(user: User = Depends(require_candidate), db: Session = Depe
 @router.get(
     "/candidate/offers/{offer_id}",
     responses={
-        200: {"content": {"application/json": {"example": {**_CREATED, "status": "seen"}}}},
+        200: {"content": {"application/json": {"example": _CREATED}}},
         401: {"content": {"application/json": {"example": _DENIED}}},
         403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет соискателя"}}}},
         404: {"content": {"application/json": {"example": _MISSING}}},
     },
 )
 def read_offer(offer_id: int, user: User = Depends(require_candidate), db: Session = Depends(db_session)):
+    return get_offer(db, user, offer_id)
+
+
+@router.post(
+    "/candidate/offers/{offer_id}/open",
+    responses={
+        200: {"content": {"application/json": {"example": {**_CREATED, "status": "seen"}}}},
+        401: {"content": {"application/json": {"example": _DENIED}}},
+        403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет соискателя"}}}},
+        404: {"content": {"application/json": {"example": _MISSING}}},
+    },
+)
+def open_offer_route(offer_id: int, user: User = Depends(require_candidate), db: Session = Depends(db_session)):
     return open_offer(db, user, offer_id)
 
 

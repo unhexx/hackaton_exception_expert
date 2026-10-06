@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
 
 
 class CategoryError(Exception):
@@ -30,4 +29,3 @@ class CategoryAssignment:
     explanation: str
     test_score: int | None
     rank_key: str
-    scored_at: datetime | None

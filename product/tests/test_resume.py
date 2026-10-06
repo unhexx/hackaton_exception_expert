@@ -1,4 +1,4 @@
-"""Текстовый PDF заполняет поля с source=resume и не собирает категорию."""
+"""Текстовый PDF заполняет поля с source=resume и пересчитывает категорию."""
 
 from __future__ import annotations
 
@@ -136,7 +136,7 @@ def test_upload_writes_resume_source_without_category_or_fsp(client):
     assert body["grade"] == "senior"
     assert body["grade_skipped"] is False
     assert "error" not in body
-    assert body["category_id"] == "backend:middle"
+    assert body["category_id"] == "backend:senior"
     assert "it" not in body["category_id"]
     assert body["field_sources"]["grade"] == "resume"
     assert body["field_sources"]["full_name"] == "resume"
@@ -146,7 +146,7 @@ def test_upload_writes_resume_source_without_category_or_fsp(client):
     assert body["experience"] == "четыре года в контуре"
     assert _stamp(client, profile_id) == stamp
     assert _achievements(client) == achievements
-    assert client.get("/api/candidate/category").json()["category_id"] == "backend:middle"
+    assert client.get("/api/candidate/category").json()["category_id"] == "backend:senior"
     assert "Тест ещё не сдан" in client.get("/api/candidate/category").json()["explanation"]
     kept = client.post(
         "/api/candidate/resume",

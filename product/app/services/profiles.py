@@ -11,8 +11,8 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from product.app.db.models import CategoryAssignment, Consent, Profile, SurveyAttempt, User
-from product.app.services.categories import recompute
+from product.app.db.models import Consent, Profile, SurveyAttempt, User
+from product.app.services.categories import latest_assignment, recompute
 from product.app.services.clock import utc_now
 from product.app.services.errors import ApiError
 from product.matching.rules import load_rules, rule_version
@@ -45,13 +45,11 @@ def _one(value: object, allowed: list[str]) -> str:
     return value
 
 
-def latest_assignment(db: Session, profile_id: int) -> CategoryAssignment | None:
-    return db.scalar(
-        select(CategoryAssignment)
-        .where(CategoryAssignment.profile_id == profile_id)
-        .order_by(CategoryAssignment.id.desc())
-        .limit(1)
-    )
+def _integrity_code(exc: IntegrityError) -> str:
+    orig = str(getattr(exc, "orig", exc)).lower()
+    if "uq_profiles_external" in orig or "external_id" in orig or "external" in orig:
+        return "external_id"
+    return "conflict"
 
 
 def profile_payload(db: Session, user: User, profile: Profile) -> dict:
@@ -109,12 +107,12 @@ def save_profile(db: Session, user: User, payload: dict) -> dict:
         external_id = external.strip()
     else:
         raise ApiError(422, "external_id", "Идентификатор ФСП — строка")
-    if "publication" in payload and payload["publication"] is not None:
+    publication_given = "publication" in payload and payload["publication"] is not None
+    flag = None
+    if publication_given:
         if not isinstance(payload["publication"], bool):
             raise ApiError(422, "consent_required", "Публикация — да или нет")
         flag = 1 if payload["publication"] else 0
-    else:
-        flag = 1 if user.consent_publication else 0
 
     profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
     if profile is not None and profile.grade != grade:
@@ -144,11 +142,12 @@ def save_profile(db: Session, user: User, payload: dict) -> dict:
         )
         db.add(profile)
         db.flush()
+        consent_flag = flag if flag is not None else (1 if user.consent_publication else 0)
         db.add(
             Consent(
                 profile_id=profile.id,
-                processing=flag,
-                publication=flag,
+                processing=consent_flag,
+                publication=consent_flag,
                 accepted_at=now,
             )
         )
@@ -169,20 +168,21 @@ def save_profile(db: Session, user: User, payload: dict) -> dict:
         profile.external_id = external_id
         profile.field_sources_json = json.dumps(sources, ensure_ascii=False)
         profile.updated_at = now
-        consent = db.scalar(select(Consent).where(Consent.profile_id == profile.id))
-        if consent is None:
-            db.add(
-                Consent(
-                    profile_id=profile.id,
-                    processing=flag,
-                    publication=flag,
-                    accepted_at=now,
+        if publication_given:
+            consent = db.scalar(select(Consent).where(Consent.profile_id == profile.id))
+            if consent is None:
+                db.add(
+                    Consent(
+                        profile_id=profile.id,
+                        processing=flag,
+                        publication=flag,
+                        accepted_at=now,
+                    )
                 )
-            )
-        else:
-            consent.processing = flag
-            consent.publication = flag
-            consent.accepted_at = now
+            else:
+                consent.processing = flag
+                consent.publication = flag
+                consent.accepted_at = now
 
     db.add(
         SurveyAttempt(
@@ -202,10 +202,13 @@ def save_profile(db: Session, user: User, payload: dict) -> dict:
         )
     )
     try:
+        db.flush()
+        recompute(db, profile.id)
         db.commit()
-    except IntegrityError:
+    except IntegrityError as exc:
         db.rollback()
-        raise ApiError(409, "external_id", "Идентификатор ФСП уже занят") from None
+        if _integrity_code(exc) == "external_id":
+            raise ApiError(409, "external_id", "Идентификатор ФСП уже занят") from None
+        raise ApiError(409, "conflict", "Запись не сохранилась") from None
     db.refresh(profile)
-    recompute(db, profile.id)
     return profile_payload(db, user, profile)

@@ -9,8 +9,8 @@ from sqlalchemy import select
 
 from product.app.api.deps import db_session, require_candidate
 from product.app.db.models import Profile, User
+from product.app.services.fsp import achievements_for
 from product.app.services.profiles import get_own_profile, profile_payload, save_profile
-from product.fsp_mock.read import achievements_for
 
 router = APIRouter(tags=["candidate"])
 
@@ -104,4 +104,4 @@ def write_profile(
 )
 def read_achievements(user: User = Depends(require_candidate), db: Session = Depends(db_session)):
     external_id = db.scalar(select(Profile.external_id).where(Profile.user_id == user.id))
-    return achievements_for(external_id)
+    return achievements_for(db, external_id)

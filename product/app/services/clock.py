@@ -14,14 +14,22 @@ def utc_after(minutes: int) -> str:
     return moment.replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
+def parse_utc(stamp: str) -> datetime:
+    moment = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    return moment
+
+
+def days_elapsed(stamp: str, days: int) -> bool:
+    return datetime.now(timezone.utc) >= parse_utc(stamp) + timedelta(days=days)
+
+
 def is_past(stamp: str | None) -> bool:
     if not stamp:
         return True
-    text = stamp.replace("Z", "+00:00")
     try:
-        moment = datetime.fromisoformat(text)
+        moment = parse_utc(stamp)
     except ValueError:
         return True
-    if moment.tzinfo is None:
-        moment = moment.replace(tzinfo=timezone.utc)
     return moment <= datetime.now(timezone.utc)

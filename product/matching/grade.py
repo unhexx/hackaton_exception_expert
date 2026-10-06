@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from functools import lru_cache
 from pathlib import Path
 
 from product.matching.rules import load_rules
@@ -17,26 +18,27 @@ class GradeError(Exception):
         super().__init__(code)
 
 
-def _read_all() -> list[dict]:
+@lru_cache(maxsize=1)
+def _catalog() -> tuple[dict, ...]:
     rows = []
     if not _TEMPLATES.is_dir():
-        return rows
+        return tuple()
     for path in sorted(_TEMPLATES.glob("*.json")):
         rows.append(json.loads(path.read_text(encoding="utf-8")))
-    return rows
+    return tuple(rows)
 
 
 def load_template(template_id: str) -> dict:
-    for row in _read_all():
+    for row in _catalog():
         if row.get("template_id") == template_id:
             return row
-    raise GradeError("template_pair")
+    raise GradeError("template_missing")
 
 
 def templates_for(specialization: str, grade: str, rule_version: str) -> list[dict]:
     found = [
         row
-        for row in _read_all()
+        for row in _catalog()
         if row.get("specialization") == specialization
         and row.get("grade") == grade
         and row.get("rule_version") == rule_version
@@ -56,6 +58,13 @@ def select_template(profile_id: int, specialization: str, grade: str, rule_versi
 
 def _grades() -> list[str]:
     return list(load_rules()["grades"])
+
+
+def is_adjacent_grade(current: str, requested: str) -> bool:
+    grades = _grades()
+    if current not in grades or requested not in grades:
+        return False
+    return abs(grades.index(current) - grades.index(requested)) == 1
 
 
 def propose(score: int, grade: str, template: dict) -> tuple[str, str]:

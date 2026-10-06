@@ -111,7 +111,9 @@ def test_handover_note_quotes_stand_run():
     for language in ("Python", "JavaScript", "HTML", "CSS", "SQL", "Shell"):
         assert language in readme
     assert "docs/badges/tests.svg" in readme
-    assert (root / "docs" / "badges" / "tests.svg").is_file()
+    from product.tests.badge import badge_dir
+
+    assert (badge_dir() / "tests.svg").is_file()
     entrypoint_paths = (Path("/srv/entrypoint.sh"), root.parent / "deploy" / "fsp" / "entrypoint.sh")
     entrypoint = next(path.read_text(encoding="utf-8") for path in entrypoint_paths if path.is_file())
     assert "/data/product_secret" in entrypoint

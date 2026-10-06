@@ -14,18 +14,16 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 from product.app.api import router as api_router
+from product.app.secret import product_secret
 from product.app.services.errors import ApiError
 from product.app.web.routes import router as web_router
 
 _APP_DIR = Path(__file__).resolve().parent
 _PKG_DIR = _APP_DIR.parent
-_SECRET_MIN = 32
 
 
 def create_app() -> FastAPI:
-    secret = os.environ.get("PRODUCT_SECRET", "")
-    if len(secret) < _SECRET_MIN:
-        raise RuntimeError("PRODUCT_SECRET короче 32 символов")
+    secret = product_secret()
     application = FastAPI(
         title="Агрегатор ИТ-вакансий ФСП",
         version="0.1.0",

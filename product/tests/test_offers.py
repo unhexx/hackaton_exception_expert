@@ -115,7 +115,10 @@ def test_offer_hides_email_until_accepted_and_keeps_company_contact(client):
     assert listed.json()[0]["status"] == "sent"
     assert listed.json()[0]["contact_channel"] == "telegram: @sintetika"
     assert "candidate_email" not in listed.json()[0]
-    opened = client.get(f"/api/candidate/offers/{body['id']}")
+    peeked = client.get(f"/api/candidate/offers/{body['id']}")
+    assert peeked.status_code == 200, peeked.text
+    assert peeked.json()["status"] == "sent"
+    opened = client.post(f"/api/candidate/offers/{body['id']}/open")
     assert opened.status_code == 200, opened.text
     assert opened.json()["status"] == "seen"
     assert "candidate_email" not in opened.json()
@@ -239,6 +242,12 @@ def test_pages_show_contact_and_email_only_after_accept(client):
     assert "page-seeker@example.com" not in page.text
     assert "Принять" in page.text
     offer_id = page.text.split("/candidate/offers/")[1].split('"')[0]
+    prefetch = client.get(
+        f"/candidate/offers/{offer_id}",
+        headers={"sec-fetch-site": "cross-site"},
+    )
+    assert prefetch.status_code == 200
+    assert "Статус: sent" in prefetch.text
     opened = client.get(f"/candidate/offers/{offer_id}")
     assert "Статус: seen" in opened.text
     accepted = client.post(

@@ -13,6 +13,7 @@ services:
     environment:
       PRODUCT_SQLITE: /data/app.sqlite
       PRODUCT_COOKIE_SECURE: "0"
+      PRODUCT_SECRET_FILE: /data/product_secret
     ports:
       - "127.0.0.1:8000:8000"
     volumes:

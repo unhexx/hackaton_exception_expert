@@ -44,7 +44,6 @@ def test_category_is_spec_and_grade_without_fsp_or_industry():
     assert plain.category_id == "backend:middle"
     assert "/" not in plain.category_id
     assert "it" not in plain.category_id
-    assert plain.scored_at is None
     assert plain.test_score is None
     assert plain.explanation == (
         "Опрос: специализация backend, грейд middle. Тест ещё не сдан. Правила v1."
@@ -109,8 +108,8 @@ def _submit(profile_id: int, score: int, outcome: str, spec: str = "backend", gr
                 submitted_at=now,
             )
         )
-        db.commit()
         recompute(db, profile_id)
+        db.commit()
     finally:
         db.close()
 

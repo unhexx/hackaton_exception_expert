@@ -1410,6 +1410,98 @@
                   "salary_max": 250000,
                   "salary_currency": "RUB",
                   "contact_channel": "telegram: @sintetika",
+                  "status": "sent",
+                  "created_at": "2026-10-05T12:00:00Z",
+                  "updated_at": "2026-10-05T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Приглашение не найдено"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/offers/{offer_id}/open": {
+      "post": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Open Offer Route",
+        "operationId": "open_offer_route_api_candidate_offers__offer_id__open_post",
+        "parameters": [
+          {
+            "name": "offer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Offer Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "profile_id": 12,
+                  "category_id": "backend:middle",
+                  "company_name": "Синтетика",
+                  "message": "Ищем backend middle в команду платежей",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "contact_channel": "telegram: @sintetika",
                   "status": "seen",
                   "created_at": "2026-10-05T12:00:00Z",
                   "updated_at": "2026-10-05T12:00:00Z"

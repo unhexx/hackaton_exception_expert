@@ -43,6 +43,6 @@
   <input id="q" name="q" type="text">
   <p><button type="submit">Показать</button></p>
 </form>
-<div id="shown">{{ kept | safe }}</div>
+<div id="shown">{% if show_block %}{% include "employer/_shortlist_block.html" %}{% endif %}</div>
 <p><a href="/employer">В кабинет</a></p>
 {% endblock %}

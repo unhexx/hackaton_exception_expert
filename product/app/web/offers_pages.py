@@ -11,12 +11,13 @@ from product.app.services.company import get_company
 from product.app.services.errors import ApiError
 from product.app.services.offers import (
     create_offer,
+    get_offer,
     list_candidate_offers,
     list_employer_offers,
     open_offer,
     set_offer_status,
 )
-from product.app.web.guards import page_user
+from product.app.web.guards import page_user, same_site_navigation
 from product.app.web.render import assert_csrf, ensure_csrf, page_error, render
 
 router = APIRouter()
@@ -67,7 +68,10 @@ def candidate_offer(offer_id: int, request: Request, db: Session = Depends(db_se
     if denial is not None:
         return denial
     try:
-        open_offer(db, user, offer_id)
+        if same_site_navigation(request):
+            open_offer(db, user, offer_id)
+        else:
+            get_offer(db, user, offer_id)
     except ApiError as exc:
         return page_error(request, "candidate/offers.html", _candidate_context(request, db, user), exc)
     return render(request, "candidate/offers.html", _candidate_context(request, db, user))

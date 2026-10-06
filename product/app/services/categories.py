@@ -15,11 +15,13 @@ from product.app.db.models import Consent, FspAchievement, FspParticipant, Profi
 from product.app.services.clock import utc_now
 from product.app.services.errors import ApiError
 from product.matching.category import assign_category
+from product.matching.need import haystack_text, matches_need
 from product.matching.rules import load_rules, rule_version
 from product.matching.types import ProfileView
 
 
 def recompute(session: Session, profile_id: int) -> None:
+    session.flush()
     profile = session.get(Profile, profile_id)
     if profile is None:
         return
@@ -66,7 +68,7 @@ def recompute(session: Session, profile_id: int) -> None:
             test_attempt_id=None if attempt is None else attempt.id,
         )
     )
-    session.commit()
+    session.flush()
 
 
 def latest_assignment(session: Session, profile_id: int) -> StoredCategory | None:
@@ -109,6 +111,91 @@ def _closed(value: str, allowed: list[str], code: str) -> None:
         raise ApiError(422, code, "Значение не из списка")
 
 
+def _need(
+    *,
+    category_id: str,
+    stack: list[str],
+    team_role: str,
+    work_format: str,
+    has_fsp: bool | None,
+    q: str,
+) -> dict:
+    return {
+        "category_id": category_id,
+        "stack": stack,
+        "team_role": team_role,
+        "work_format": work_format,
+        "has_fsp": has_fsp,
+        "q": q,
+    }
+
+
+def _profile_matches(
+    session: Session,
+    profile: Profile,
+    assignment: StoredCategory,
+    need: dict,
+) -> tuple[bool, list[str], list[FspAchievement], str]:
+    labels = json.loads(profile.stack_json or "[]")
+    achievements: list[FspAchievement] = []
+    rank = ""
+    if profile.external_id:
+        rank_row = session.get(FspParticipant, profile.external_id)
+        if rank_row is not None:
+            rank = rank_row.rank
+        achievements = list(
+            session.scalars(
+                select(FspAchievement).where(FspAchievement.external_id == profile.external_id)
+            ).all()
+        )
+    haystack = haystack_text(
+        specialization=profile.specialization,
+        grade=profile.grade,
+        stack=labels,
+        team_role=profile.team_role,
+        work_format=profile.work_format,
+        experience=profile.experience or "",
+    )
+    ok = matches_need(
+        assigned_category_id=assignment.category_id,
+        test_score=assignment.test_score,
+        stack=labels,
+        team_role=profile.team_role,
+        work_format=profile.work_format,
+        fsp_count=len(achievements),
+        haystack=haystack,
+        need=need,
+    )
+    return ok, labels, achievements, rank
+
+
+def visible_in_category(session: Session, profile_id: int, category_id: str) -> bool:
+    category_id = _require_category(category_id)
+    profile = session.get(Profile, profile_id)
+    if profile is None:
+        return False
+    consent = session.scalar(select(Consent).where(Consent.profile_id == profile.id))
+    if consent is None or not consent.publication:
+        return False
+    assignment = latest_assignment(session, profile.id)
+    if assignment is None:
+        return False
+    ok, _labels, _achievements, _rank = _profile_matches(
+        session,
+        profile,
+        assignment,
+        _need(
+            category_id=category_id,
+            stack=[],
+            team_role="",
+            work_format="",
+            has_fsp=None,
+            q="",
+        ),
+    )
+    return ok
+
+
 def employer_candidates(
     session: Session,
     *,
@@ -127,7 +214,14 @@ def employer_candidates(
         _closed(team_role, rules["team_roles"], "closed_list")
     if work_format:
         _closed(work_format, rules["work_formats"], "closed_list")
-    needle = q.casefold().strip()
+    need = _need(
+        category_id=category_id,
+        stack=stack,
+        team_role=team_role,
+        work_format=work_format,
+        has_fsp=has_fsp,
+        q=q,
+    )
     found: list[dict] = []
     profiles = session.scalars(select(Profile)).all()
     for profile in profiles:
@@ -135,43 +229,10 @@ def employer_candidates(
         if consent is None or not consent.publication:
             continue
         assignment = latest_assignment(session, profile.id)
-        if assignment is None or assignment.category_id != category_id:
+        if assignment is None:
             continue
-        if assignment.test_score is None:
-            continue
-        labels = json.loads(profile.stack_json or "[]")
-        if stack and not set(stack) & set(labels):
-            continue
-        if team_role and profile.team_role != team_role:
-            continue
-        if work_format and profile.work_format != work_format:
-            continue
-        achievements = []
-        rank = ""
-        if profile.external_id:
-            rank_row = session.get(FspParticipant, profile.external_id)
-            if rank_row is not None:
-                rank = rank_row.rank
-            achievements = list(
-                session.scalars(
-                    select(FspAchievement).where(FspAchievement.external_id == profile.external_id)
-                ).all()
-            )
-        if has_fsp is True and not achievements:
-            continue
-        if has_fsp is False and achievements:
-            continue
-        haystack = " ".join(
-            [
-                profile.specialization,
-                profile.grade,
-                " ".join(labels),
-                profile.team_role,
-                profile.work_format,
-                profile.experience or "",
-            ]
-        ).casefold()
-        if needle and needle not in haystack:
+        ok, labels, achievements, rank = _profile_matches(session, profile, assignment, need)
+        if not ok:
             continue
         found.append(
             _card(

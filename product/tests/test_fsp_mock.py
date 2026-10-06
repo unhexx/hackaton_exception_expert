@@ -8,11 +8,11 @@ import sqlite3
 from pathlib import Path
 
 import product
-from product.app.db.session import open_session
 from product.fsp_mock.adapter import CANONICAL_DISCIPLINES, discipline_label
 from product.fsp_mock.client import JsonFspClient
 from product.fsp_mock.load import load_into
-from product.fsp_mock.read import achievements_for
+from product.app.db.session import open_session
+from product.app.services.fsp import achievements_for
 from product.seed import init_db
 from product.tests.conftest import register_and_confirm
 
@@ -71,10 +71,15 @@ def test_json_keeps_rank_and_adapts_discipline():
     assert discipline_label("Продуктовое программирование") == "Продуктовое программирование"
 
 
-def test_unknown_id_is_empty_history():
-    assert achievements_for(None) == {"display_name": "", "rank": "", "results": []}
-    assert achievements_for("") == {"display_name": "", "rank": "", "results": []}
-    assert achievements_for("fsp-no-such") == {"display_name": "", "rank": "", "results": []}
+def test_unknown_id_is_empty_history(client):
+    empty = {"display_name": "", "rank": "", "results": []}
+    db = open_session()
+    try:
+        assert achievements_for(db, None) == empty
+        assert achievements_for(db, "") == empty
+        assert achievements_for(db, "fsp-no-such") == empty
+    finally:
+        db.close()
 
 
 def test_seed_loads_once_and_skips_existing_keys(client):

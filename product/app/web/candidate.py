@@ -2,21 +2,19 @@
 
 from __future__ import annotations
 
-import json
-
 from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import RedirectResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
-from product.app.db.models import Consent, Offer, Profile, TestAttempt
+from product.app.db.models import Offer, Profile, TestAttempt
 from product.app.services.errors import ApiError
-from product.app.services.profiles import latest_assignment, save_profile
+from product.app.services.fsp import achievements_for
+from product.app.services.profiles import profile_payload, save_profile
 from product.app.services.resumes import apply_resume
 from product.app.web.guards import page_user
 from product.app.web.render import assert_csrf, ensure_csrf, page_error, render
-from product.fsp_mock.read import achievements_for
 from product.matching.rules import load_rules
 
 router = APIRouter()
@@ -24,7 +22,7 @@ router = APIRouter()
 
 def _cabinet_context(request: Request, db: Session, user, error: str = "") -> dict:
     profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
-    assignment = latest_assignment(db, profile.id) if profile is not None else None
+    body = profile_payload(db, user, profile) if profile is not None else None
     test_done = False
     has_offers = False
     if profile is not None:
@@ -40,32 +38,20 @@ def _cabinet_context(request: Request, db: Session, user, error: str = "") -> di
         has_offers = (
             db.scalar(select(Offer.id).where(Offer.profile_id == profile.id)) is not None
         )
-    rules = load_rules()
-    stack: list[str] = []
-    soft: list[str] = []
-    sources: dict = {}
-    publication = bool(user.consent_publication)
-    if profile is not None:
-        stack = json.loads(profile.stack_json or "[]")
-        soft = json.loads(profile.soft_skills_json or "[]")
-        sources = json.loads(profile.field_sources_json or "{}")
-        consent = db.scalar(select(Consent).where(Consent.profile_id == profile.id))
-        if consent is not None:
-            publication = bool(consent.publication)
     return {
         "csrf": ensure_csrf(request),
         "error": error,
         "user": user,
         "profile": profile,
-        "assignment": assignment,
-        "fsp": achievements_for(profile.external_id if profile is not None else None),
+        "assignment": None if body is None or not body["category_id"] else body,
+        "fsp": achievements_for(db, None if profile is None else profile.external_id),
         "test_done": test_done,
         "has_offers": has_offers,
-        "rules": rules,
-        "stack": stack,
-        "soft": soft,
-        "field_sources": sources,
-        "publication": publication,
+        "rules": load_rules(),
+        "stack": [] if body is None else body["stack"],
+        "soft": [] if body is None else body["soft_skills"],
+        "field_sources": {} if body is None else body["field_sources"],
+        "publication": bool(user.consent_publication) if body is None else body["publication"],
     }
 
 

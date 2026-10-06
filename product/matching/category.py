@@ -44,5 +44,4 @@ def assign_category(profile: ProfileView, rule_version: str) -> CategoryAssignme
         explanation=explanation,
         test_score=stored_score,
         rank_key=rank_key(points, profile.fsp_confirmed_count, profile.profile_id),
-        scored_at=None,
     )

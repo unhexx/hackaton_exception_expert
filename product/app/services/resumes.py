@@ -1,4 +1,4 @@
-"""Запись полей из текстового PDF. Категорию этот разбор не собирает."""
+"""Запись полей из текстового PDF. После записи категория пересчитывается тем же правилом, что и после анкеты."""
 
 from __future__ import annotations
 
@@ -9,9 +9,10 @@ from sqlalchemy.orm import Session
 
 from product.app.db.models import Profile, TestAttempt, User
 from product.app.log import log_event
+from product.app.services.categories import latest_assignment, recompute
 from product.app.services.clock import utc_now
 from product.app.services.errors import ApiError
-from product.app.services.profiles import latest_assignment, profile_payload
+from product.app.services.profiles import profile_payload
 from product.matching.pdf_profile import render_profile_pdf
 from product.matching.resume import read_resume_bytes
 
@@ -76,6 +77,7 @@ def apply_resume(db: Session, user: User, data: bytes) -> dict:
             sources["grade"] = "resume"
     profile.field_sources_json = json.dumps(sources, ensure_ascii=False)
     profile.updated_at = utc_now()
+    recompute(db, profile.id)
     db.commit()
     db.refresh(profile)
     body = profile_payload(db, user, profile)

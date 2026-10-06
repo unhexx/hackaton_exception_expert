@@ -14,11 +14,24 @@ def db_session():
     yield from session_scope()
 
 
-def current_user(request: Request, db: Session = Depends(db_session)) -> User:
+def load_session_user(request: Request, db: Session) -> User | None:
     raw = request.session.get("user_id")
     if not raw:
-        raise ApiError(401, "unauthorized", "Нужен вход")
-    user = db.get(User, int(raw))
+        return None
+    try:
+        user_id = int(raw)
+    except (TypeError, ValueError):
+        request.session.clear()
+        return None
+    user = db.get(User, user_id)
+    if user is None:
+        request.session.clear()
+        return None
+    return user
+
+
+def current_user(request: Request, db: Session = Depends(db_session)) -> User:
+    user = load_session_user(request, db)
     if user is None:
         raise ApiError(401, "unauthorized", "Нужен вход")
     return user

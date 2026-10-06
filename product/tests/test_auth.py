@@ -194,6 +194,13 @@ def test_roles_profile_and_company(client):
     renamed = client.put("/api/candidate/profile", json={**_PROFILE, "full_name": "Иван Обновлённый"})
     assert renamed.status_code == 200
     assert renamed.json()["full_name"] == "Иван Обновлённый"
+    hidden = client.put("/api/candidate/profile", json={**_PROFILE, "publication": False})
+    assert hidden.status_code == 200
+    assert hidden.json()["publication"] is False
+    omitted = {key: value for key, value in _PROFILE.items() if key != "publication"}
+    kept = client.put("/api/candidate/profile", json=omitted)
+    assert kept.status_code == 200
+    assert kept.json()["publication"] is False
     blocked = client.put("/api/candidate/profile", json={**_PROFILE, "grade": "senior"})
     assert blocked.status_code == 409
     assert blocked.json()["error"] == "grade_via_test"

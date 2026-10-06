@@ -78,7 +78,6 @@ CategoryAssignment
   explanation
   test_score
   rank_key
-  scored_at
 ```
 
 ## Тестирование соискателя

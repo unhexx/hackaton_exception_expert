@@ -11,9 +11,9 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
-from product.app.api.tests import list_attempts, start_attempt, submit_attempt
 from product.app.db.models import Profile, TestAttempt
 from product.app.services.errors import ApiError
+from product.app.services.tests import list_attempts, proposed_adjacent, start_attempt, submit_attempt
 from product.app.web.guards import page_user
 from product.app.web.render import assert_csrf, ensure_csrf, page_error, render
 from product.matching.grade import load_template, public_questions
@@ -52,23 +52,7 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
         row = dict(row)
         row["outcome_label"] = _OUTCOME.get(row.get("outcome") or "", "")
         history.append(row)
-    offer = ""
-    if history:
-        latest_recorded = next(
-            (
-                row
-                for row in history
-                if profile is not None
-                and row["status"] == "submitted"
-                and row["specialization"] == profile.specialization
-                and row["declared_grade"] == profile.grade
-                and row["proposed_grade"]
-                and row["proposed_grade"] != profile.grade
-            ),
-            None,
-        )
-        if latest_recorded is not None:
-            offer = latest_recorded["proposed_grade"]
+    offer = proposed_adjacent(db, profile) if profile is not None else ""
     return {
         "csrf": ensure_csrf(request),
         "error": error,

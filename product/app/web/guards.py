@@ -6,17 +6,18 @@ from fastapi import Request
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
-from product.app.db.models import User
+from product.app.api.deps import load_session_user
 from product.app.web.render import ensure_csrf, render
 
 
+def same_site_navigation(request: Request) -> bool:
+    site = (request.headers.get("sec-fetch-site") or "").casefold()
+    return site not in {"cross-site"}
+
+
 def page_user(request: Request, db: Session, role: str):
-    raw = request.session.get("user_id")
-    if not raw:
-        return None, RedirectResponse("/auth/login", status_code=303)
-    user = db.get(User, int(raw))
+    user = load_session_user(request, db)
     if user is None:
-        request.session.clear()
         return None, RedirectResponse("/auth/login", status_code=303)
     if user.role != role:
         return None, render(request, "forbidden.html", {"csrf": ensure_csrf(request)}, status_code=403)

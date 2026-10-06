@@ -29,3 +29,40 @@ class CategoryAssignment:
     explanation: str
     test_score: int | None
     rank_key: str
+
+
+@dataclass(frozen=True)
+class Need:
+    category_id: str
+    stack: tuple[str, ...] = ()
+    team_role: str = ""
+    work_format: str = ""
+    has_fsp: bool | None = None
+    q: str = ""
+
+    @classmethod
+    def from_mapping(cls, raw: dict) -> Need:
+        has = raw.get("has_fsp")
+        if has is not True and has is not False:
+            has = None
+        return cls(
+            category_id=str(raw.get("category_id") or ""),
+            stack=tuple(item for item in (raw.get("stack") or []) if item),
+            team_role=str(raw.get("team_role") or ""),
+            work_format=str(raw.get("work_format") or ""),
+            has_fsp=has,
+            q=str(raw.get("q") or ""),
+        )
+
+
+@dataclass(frozen=True)
+class NeedFit:
+    """Один проход: фильтр, порядок внутри категории и фраза для карточки.
+
+    sort_key: совпадения стека, роли, формата, признака ФСП, токенов, затем rank_key.
+    Большее значение выше при сортировке reverse=True. Баллов нет.
+    """
+
+    matched: bool
+    sort_key: tuple[int, int, int, int, int, str]
+    reason: str

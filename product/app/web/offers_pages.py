@@ -32,20 +32,30 @@ def _candidate_context(request: Request, db: Session, user, error: str = "") -> 
     }
 
 
-def _employer_context(request: Request, db: Session, user, error: str = "") -> dict:
+def _employer_context(
+    request: Request,
+    db: Session,
+    user,
+    error: str = "",
+    *,
+    profile_id: str = "",
+    category_id: str = "",
+) -> dict:
     company = None
     try:
         company = get_company(db, user)
     except ApiError:
         company = None
+    prefill_profile = profile_id or (request.query_params.get("profile_id") or "").strip()
+    prefill_category = category_id or (request.query_params.get("category_id") or "").strip()
     return {
         "csrf": ensure_csrf(request),
         "error": error,
         "user": user,
         "company": company,
         "offers": list_employer_offers(db, user),
-        "prefill_profile_id": (request.query_params.get("profile_id") or "").strip(),
-        "prefill_category_id": (request.query_params.get("category_id") or "").strip(),
+        "prefill_profile_id": prefill_profile,
+        "prefill_category_id": prefill_category,
     }
 
 
@@ -154,5 +164,16 @@ def send_page(
         assert_csrf(request, csrf)
         create_offer(db, user, payload)
     except ApiError as exc:
-        return page_error(request, "employer/offer.html", _employer_context(request, db, user), exc)
+        return page_error(
+            request,
+            "employer/offer.html",
+            _employer_context(
+                request,
+                db,
+                user,
+                profile_id=str(profile_id or "").strip(),
+                category_id=str(category_id or "").strip(),
+            ),
+            exc,
+        )
     return RedirectResponse("/employer/offers", status_code=303)

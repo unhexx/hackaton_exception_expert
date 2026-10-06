@@ -21,6 +21,12 @@ from product.matching.grade import (
 )
 from product.matching.rules import load_rules, rule_version
 
+_OUTCOME = {
+    "confirm": "заявленный грейд подтверждён",
+    "suggest_lower": "предложен грейд ниже",
+    "suggest_higher": "предложен грейд выше",
+}
+
 
 def interval_open(stamp: str) -> bool:
     days = int(load_rules()["grade_change_interval_days"])
@@ -92,6 +98,7 @@ def list_attempts(db: Session, user: User) -> list[dict]:
                 "status": row.status,
                 "score": row.score,
                 "outcome": row.outcome,
+                "outcome_label": _OUTCOME.get(row.outcome or "", ""),
                 "proposed_grade": row.proposed_grade,
                 "created_at": row.created_at,
                 "submitted_at": row.submitted_at,

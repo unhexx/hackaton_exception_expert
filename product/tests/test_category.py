@@ -9,8 +9,8 @@ from product.app.db.session import open_session
 from product.app.services.categories import recompute
 from product.app.services.clock import utc_now
 from product.matching.category import assign_category, rank_key
-from product.matching.need import list_reason, need_score, rank_tuple
-from product.matching.types import CategoryError, ProfileView
+from product.matching.need import evaluate_need
+from product.matching.types import CategoryError, Need, ProfileView
 from product.tests.conftest import register_and_confirm
 
 _PROFILE = {
@@ -277,60 +277,59 @@ def test_history_survives_specialization_change(client):
 
 
 def test_need_ranks_stack_overlap_then_rank_key():
-    empty = {
-        "category_id": "backend:middle",
-        "stack": [],
-        "team_role": "",
-        "work_format": "",
-        "has_fsp": None,
-        "q": "",
-    }
-    both = {
-        **empty,
-        "stack": ["python", "sql"],
-    }
-    python_only = need_score(
-        stack=["python"],
+    empty = Need(category_id="backend:middle")
+    both = Need(category_id="backend:middle", stack=("python", "sql"))
+    common = dict(
+        assigned_category_id="backend:middle",
+        test_score=90,
         team_role="разработчик",
         work_format="удалённо",
         fsp_count=0,
+        rank_key="010-0000-00000001",
+    )
+    python_only = evaluate_need(
+        stack=["python"],
         haystack="backend middle python разработчик удалённо",
         need=both,
+        **common,
     )
-    python_sql = need_score(
+    python_sql = evaluate_need(
         stack=["python", "sql"],
-        team_role="разработчик",
-        work_format="удалённо",
-        fsp_count=0,
         haystack="backend middle python sql разработчик удалённо",
         need=both,
+        **common,
     )
-    assert python_sql > python_only
-    assert need_score(
+    assert python_sql.sort_key > python_only.sort_key
+    vacant = evaluate_need(
         stack=["python"],
-        team_role="разработчик",
-        work_format="удалённо",
-        fsp_count=9,
         haystack="backend middle python разработчик удалённо",
         need=empty,
-    ) == 0
+        fsp_count=9,
+        assigned_category_id="backend:middle",
+        test_score=90,
+        team_role="разработчик",
+        work_format="удалённо",
+        rank_key="010-0009-00000001",
+    )
+    assert vacant.sort_key[:5] == (0, 0, 0, 0, 0)
     high_key = "090-0000-00000002"
     low_key = "010-0009-00000001"
     ordered = sorted(
-        [(0, high_key), (0, low_key)],
-        key=lambda pair: rank_tuple(pair[0], pair[1]),
+        [high_key, low_key],
+        key=lambda key: (0, 0, 0, 0, 0, key),
         reverse=True,
     )
-    assert ordered[0][1] == high_key
-    reason = list_reason(
+    assert ordered[0] == high_key
+    reason = evaluate_need(
         assigned_category_id="backend:middle",
+        test_score=90,
         stack=["python"],
         team_role="разработчик",
         work_format="удалённо",
         fsp_count=0,
         haystack="backend middle python разработчик удалённо платежи в контуре",
-        need={**empty, "q": "платеж"},
-    )
+        need=Need(category_id="backend:middle", q="платеж"),
+    ).reason
     assert "в тексте профиля: платеж" in reason
     assert "Стек:" not in reason
     assert "Текст: платеж" not in reason

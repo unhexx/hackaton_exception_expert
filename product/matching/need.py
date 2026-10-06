@@ -1,6 +1,8 @@
-"""Общий предикат выдачи. Им пользуются золотой прогон и живая подборка."""
+"""Общий разбор потребности. Им пользуются золотой прогон и живая подборка."""
 
 from __future__ import annotations
+
+from product.matching.types import Need, NeedFit
 
 
 def haystack_text(
@@ -36,6 +38,81 @@ def need_tokens(query: str) -> list[str]:
     return tokens
 
 
+def _needles(query: str) -> list[str]:
+    tokens = need_tokens(query)
+    if tokens:
+        return tokens
+    folded = str(query or "").strip().casefold()
+    return [folded] if folded else []
+
+
+def _as_need(need: Need | dict) -> Need:
+    if isinstance(need, Need):
+        return need
+    return Need.from_mapping(need)
+
+
+def evaluate_need(
+    *,
+    assigned_category_id: str,
+    test_score: int | None,
+    stack: list[str],
+    team_role: str,
+    work_format: str,
+    fsp_count: int,
+    haystack: str,
+    need: Need | dict,
+    rank_key: str = "",
+) -> NeedFit:
+    """Фильтр, порядок внутри категории и фраза «почему этот человек» — один проход."""
+    spec = _as_need(need)
+    empty = (0, 0, 0, 0, 0, rank_key)
+    if assigned_category_id != spec.category_id or test_score is None:
+        return NeedFit(False, empty, "")
+    overlap = [item for item in stack if item in set(spec.stack)]
+    if spec.stack and not overlap:
+        return NeedFit(False, empty, "")
+    if spec.team_role and team_role != spec.team_role:
+        return NeedFit(False, empty, "")
+    if spec.work_format and work_format != spec.work_format:
+        return NeedFit(False, empty, "")
+    if spec.has_fsp is True and fsp_count <= 0:
+        return NeedFit(False, empty, "")
+    if spec.has_fsp is False and fsp_count > 0:
+        return NeedFit(False, empty, "")
+    needles = _needles(spec.q)
+    hit = [token for token in needles if token in haystack]
+    if needles and len(hit) != len(needles):
+        return NeedFit(False, empty, "")
+    role_hit = 1 if spec.team_role and team_role == spec.team_role else 0
+    format_hit = 1 if spec.work_format and work_format == spec.work_format else 0
+    fsp_hit = 0
+    if spec.has_fsp is True and fsp_count > 0:
+        fsp_hit = 1
+    elif spec.has_fsp is False and fsp_count <= 0:
+        fsp_hit = 1
+    parts = [f"Категория {assigned_category_id}"]
+    if overlap:
+        parts.append("в профиле стек " + ", ".join(overlap))
+    if role_hit:
+        parts.append(f"в профиле роль {team_role}")
+    if format_hit:
+        parts.append(f"в профиле формат {work_format}")
+    if spec.has_fsp is True and fsp_count > 0:
+        parts.append(f"в профиле {fsp_count} достижений ФСП")
+    elif spec.has_fsp is False and fsp_count <= 0:
+        parts.append("в профиле нет достижений ФСП")
+    if hit:
+        parts.append("в тексте профиля: " + ", ".join(hit))
+    if len(parts) == 1:
+        parts.append("тест сдан, потребность без уточнений")
+    return NeedFit(
+        True,
+        (len(overlap), role_hit, format_hit, fsp_hit, len(hit), rank_key),
+        ". ".join(parts) + ".",
+    )
+
+
 def matches_need(
     *,
     assigned_category_id: str,
@@ -45,100 +122,15 @@ def matches_need(
     work_format: str,
     fsp_count: int,
     haystack: str,
-    need: dict,
+    need: Need | dict,
 ) -> bool:
-    if assigned_category_id != need["category_id"]:
-        return False
-    if test_score is None:
-        return False
-    stack_filter = [item for item in (need.get("stack") or []) if item]
-    if stack_filter and not set(stack_filter) & set(stack):
-        return False
-    if need.get("team_role") and team_role != need["team_role"]:
-        return False
-    if need.get("work_format") and work_format != need["work_format"]:
-        return False
-    has_fsp = need.get("has_fsp")
-    if has_fsp is True and fsp_count <= 0:
-        return False
-    if has_fsp is False and fsp_count > 0:
-        return False
-    query = str(need.get("q") or "").strip()
-    tokens = need_tokens(query)
-    if tokens:
-        if not all(token in haystack for token in tokens):
-            return False
-    elif query and query.casefold() not in haystack:
-        return False
-    return True
-
-
-def need_score(
-    *,
-    stack: list[str],
-    team_role: str,
-    work_format: str,
-    fsp_count: int,
-    haystack: str,
-    need: dict,
-) -> int:
-    """Степень соответствия потребности внутри уже отфильтрованной категории.
-
-    Пустая потребность даёт 0: сортировка остаётся прежним rank_key.
-    """
-    points = 0
-    stack_filter = [item for item in (need.get("stack") or []) if item]
-    if stack_filter:
-        points += 10 * len(set(stack_filter) & set(stack))
-    if need.get("team_role") and team_role == need["team_role"]:
-        points += 8
-    if need.get("work_format") and work_format == need["work_format"]:
-        points += 6
-    has_fsp = need.get("has_fsp")
-    if has_fsp is True and fsp_count > 0:
-        points += 4
-    elif has_fsp is False and fsp_count <= 0:
-        points += 4
-    tokens = need_tokens(str(need.get("q") or ""))
-    if tokens:
-        points += 3 * sum(1 for token in tokens if token in haystack)
-        points += 5 * sum(1 for item in stack if item.casefold() in tokens)
-    return points
-
-
-def rank_tuple(need_points: int, rank_key: str) -> tuple[int, str]:
-    return (need_points, rank_key)
-
-
-def list_reason(
-    *,
-    assigned_category_id: str,
-    stack: list[str],
-    team_role: str,
-    work_format: str,
-    fsp_count: int,
-    haystack: str,
-    need: dict,
-) -> str:
-    """Почему этот человек попал в потребность, а не эхо набора фильтров."""
-    parts = [f"Категория {assigned_category_id}"]
-    stack_filter = [item for item in (need.get("stack") or []) if item]
-    overlap = [item for item in stack if item in set(stack_filter)]
-    if overlap:
-        parts.append("в профиле стек " + ", ".join(overlap))
-    if need.get("team_role") and team_role == need["team_role"]:
-        parts.append(f"в профиле роль {team_role}")
-    if need.get("work_format") and work_format == need["work_format"]:
-        parts.append(f"в профиле формат {work_format}")
-    has_fsp = need.get("has_fsp")
-    if has_fsp is True and fsp_count > 0:
-        parts.append(f"в профиле {fsp_count} достижений ФСП")
-    elif has_fsp is False and fsp_count <= 0:
-        parts.append("в профиле нет достижений ФСП")
-    tokens = need_tokens(str(need.get("q") or ""))
-    hit = [token for token in tokens if token in haystack]
-    if hit:
-        parts.append("в тексте профиля: " + ", ".join(hit))
-    if len(parts) == 1:
-        parts.append("тест сдан, потребность без уточнений")
-    return ". ".join(parts) + "."
+    return evaluate_need(
+        assigned_category_id=assigned_category_id,
+        test_score=test_score,
+        stack=stack,
+        team_role=team_role,
+        work_format=work_format,
+        fsp_count=fsp_count,
+        haystack=haystack,
+        need=need,
+    ).matched

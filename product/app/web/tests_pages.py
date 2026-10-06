@@ -20,11 +20,6 @@ from product.matching.grade import load_template, public_questions
 
 router = APIRouter()
 _SAMPLES = Path(__file__).resolve().parents[2] / "matching" / "vacancies" / "samples.json"
-_OUTCOME = {
-    "confirm": "заявленный грейд подтверждён",
-    "suggest_lower": "предложен грейд ниже",
-    "suggest_higher": "предложен грейд выше",
-}
 
 
 def _samples() -> list[dict]:
@@ -47,11 +42,7 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
         )
         if draft is not None:
             questions = public_questions(load_template(draft.template_id))
-    history = []
-    for row in list_attempts(db, user):
-        row = dict(row)
-        row["outcome_label"] = _OUTCOME.get(row.get("outcome") or "", "")
-        history.append(row)
+    history = list_attempts(db, user)
     offer = proposed_adjacent(db, profile) if profile is not None else ""
     return {
         "csrf": ensure_csrf(request),

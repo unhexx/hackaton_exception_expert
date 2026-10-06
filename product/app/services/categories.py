@@ -15,9 +15,9 @@ from product.app.db.models import Consent, FspAchievement, FspParticipant, Profi
 from product.app.services.clock import utc_now
 from product.app.services.errors import ApiError
 from product.matching.category import assign_category
-from product.matching.need import haystack_text, list_reason, matches_need, need_score, rank_tuple
+from product.matching.need import evaluate_need, haystack_text
 from product.matching.rules import load_rules, rule_version
-from product.matching.types import ProfileView
+from product.matching.types import Need, NeedFit, ProfileView
 
 
 def recompute(session: Session, profile_id: int) -> None:
@@ -119,23 +119,23 @@ def _need(
     work_format: str,
     has_fsp: bool | None,
     q: str,
-) -> dict:
-    return {
-        "category_id": category_id,
-        "stack": stack,
-        "team_role": team_role,
-        "work_format": work_format,
-        "has_fsp": has_fsp,
-        "q": q,
-    }
+) -> Need:
+    return Need(
+        category_id=category_id,
+        stack=tuple(item for item in stack if item),
+        team_role=team_role,
+        work_format=work_format,
+        has_fsp=has_fsp,
+        q=q,
+    )
 
 
 def _profile_matches(
     session: Session,
     profile: Profile,
     assignment: StoredCategory,
-    need: dict,
-) -> tuple[bool, list[str], list[FspAchievement], str, str]:
+    need: Need,
+) -> tuple[NeedFit, list[str], list[FspAchievement], str]:
     labels = json.loads(profile.stack_json or "[]")
     achievements: list[FspAchievement] = []
     rank = ""
@@ -156,7 +156,7 @@ def _profile_matches(
         work_format=profile.work_format,
         experience=profile.experience or "",
     )
-    ok = matches_need(
+    fit = evaluate_need(
         assigned_category_id=assignment.category_id,
         test_score=assignment.test_score,
         stack=labels,
@@ -165,8 +165,9 @@ def _profile_matches(
         fsp_count=len(achievements),
         haystack=haystack,
         need=need,
+        rank_key=assignment.rank_key,
     )
-    return ok, labels, achievements, rank, haystack
+    return fit, labels, achievements, rank
 
 
 def visible_in_category(session: Session, profile_id: int, category_id: str) -> bool:
@@ -180,7 +181,7 @@ def visible_in_category(session: Session, profile_id: int, category_id: str) -> 
     assignment = latest_assignment(session, profile.id)
     if assignment is None:
         return False
-    ok, _labels, _achievements, _rank, _haystack = _profile_matches(
+    fit, _labels, _achievements, _rank = _profile_matches(
         session,
         profile,
         assignment,
@@ -193,7 +194,7 @@ def visible_in_category(session: Session, profile_id: int, category_id: str) -> 
             q="",
         ),
     )
-    return ok
+    return fit.matched
 
 
 def employer_candidates(
@@ -222,7 +223,7 @@ def employer_candidates(
         has_fsp=has_fsp,
         q=q,
     )
-    found: list[dict] = []
+    ranked: list[tuple[tuple[int, int, int, int, int, str], dict]] = []
     profiles = session.scalars(select(Profile)).all()
     for profile in profiles:
         consent = session.scalar(select(Consent).where(Consent.profile_id == profile.id))
@@ -231,24 +232,17 @@ def employer_candidates(
         assignment = latest_assignment(session, profile.id)
         if assignment is None:
             continue
-        ok, labels, achievements, rank, haystack = _profile_matches(session, profile, assignment, need)
-        if not ok:
+        fit, labels, achievements, rank = _profile_matches(session, profile, assignment, need)
+        if not fit.matched:
             continue
-        found.append(
-            _card(
-                profile,
-                assignment,
-                labels,
-                achievements,
-                rank,
-                haystack=haystack,
-                need=need,
+        ranked.append(
+            (
+                fit.sort_key,
+                _card(profile, assignment, labels, achievements, rank, reason=fit.reason),
             )
         )
-    found.sort(key=lambda item: rank_tuple(item["_need_score"], item["rank_key"]), reverse=True)
-    for item in found:
-        item.pop("_need_score")
-    return found
+    ranked.sort(key=lambda item: item[0], reverse=True)
+    return [card for _key, card in ranked]
 
 
 def _card(
@@ -258,34 +252,16 @@ def _card(
     achievements: list[FspAchievement],
     rank: str,
     *,
-    haystack: str,
-    need: dict,
+    reason: str,
 ) -> dict:
-    fsp_count = len(achievements)
     return {
         "profile_id": profile.id,
         "full_name": profile.full_name,
         "industry": profile.industry,
         "category_id": assignment.category_id,
         "explanation": assignment.explanation,
-        "list_reason": list_reason(
-            assigned_category_id=assignment.category_id,
-            stack=labels,
-            team_role=profile.team_role,
-            work_format=profile.work_format,
-            fsp_count=fsp_count,
-            haystack=haystack,
-            need=need,
-        ),
+        "list_reason": reason,
         "rank_key": assignment.rank_key,
-        "_need_score": need_score(
-            stack=labels,
-            team_role=profile.team_role,
-            work_format=profile.work_format,
-            fsp_count=fsp_count,
-            haystack=haystack,
-            need=need,
-        ),
         "test_score": assignment.test_score,
         "stack": labels,
         "team_role": profile.team_role,

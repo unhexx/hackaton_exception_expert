@@ -15,6 +15,9 @@ from product.app.db.models import Consent, Profile, SurveyAttempt, User
 from product.app.services.categories import latest_assignment, recompute
 from product.app.services.clock import utc_now
 from product.app.services.errors import ApiError
+from product.app.services.fsp import achievements_for
+from product.app.services.offers import list_candidate_offers
+from product.app.services.tests import list_attempts
 from product.matching.rules import load_rules, rule_version
 
 _FORM_FIELDS = (
@@ -73,6 +76,49 @@ def profile_payload(db: Session, user: User, profile: Profile) -> dict:
         "category_id": assignment.category_id if assignment else None,
         "explanation": assignment.explanation if assignment else None,
         "field_sources": json.loads(profile.field_sources_json or "{}"),
+    }
+
+
+def list_surveys(db: Session, user: User) -> list[dict]:
+    profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
+    if profile is None:
+        return []
+    rows = db.scalars(
+        select(SurveyAttempt)
+        .where(SurveyAttempt.profile_id == profile.id)
+        .order_by(SurveyAttempt.id.desc())
+    ).all()
+    return [
+        {
+            "created_at": row.created_at,
+            "specialization": row.specialization,
+            "grade": row.grade,
+            "rule_version": row.rule_version,
+        }
+        for row in rows
+    ]
+
+
+def cabinet_payload(db: Session, user: User) -> dict:
+    """Один словарь для кабинета: профиль, опрос, тест, достижения."""
+    profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
+    body = profile_payload(db, user, profile) if profile is not None else None
+    history = list_attempts(db, user)
+    surveys = list_surveys(db, user)
+    has_offers = bool(list_candidate_offers(db, user)) if profile is not None else False
+    return {
+        "profile": profile,
+        "assignment": None if body is None or not body["category_id"] else body,
+        "fsp": achievements_for(db, None if profile is None else profile.external_id),
+        "test_done": any(row["status"] == "submitted" for row in history),
+        "has_offers": has_offers,
+        "surveys": surveys,
+        "history": history,
+        "rules": load_rules(),
+        "stack": [] if body is None else body["stack"],
+        "soft": [] if body is None else body["soft_skills"],
+        "field_sources": {} if body is None else body["field_sources"],
+        "publication": bool(user.consent_publication) if body is None else body["publication"],
     }
 
 

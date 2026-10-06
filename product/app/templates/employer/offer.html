@@ -4,13 +4,12 @@
 <h1>Приглашения</h1>
 <p><a href="/employer">В кабинет</a></p>
 {% if error %}<p class="error">{{ error }}</p>{% endif %}
-{% if company and company.name and company.contact %}
+{% if company and company.name and company.contact and prefill_profile_id and prefill_category_id %}
 <form method="post" action="/employer/offers">
   <input type="hidden" name="csrf" value="{{ csrf }}">
-  <label for="profile_id">Профиль</label>
-  <input id="profile_id" name="profile_id" type="number" required value="{{ prefill_profile_id }}">
-  <label for="category_id">Категория</label>
-  <input id="category_id" name="category_id" type="text" required value="{{ prefill_category_id }}">
+  <input id="profile_id" name="profile_id" type="hidden" value="{{ prefill_profile_id }}">
+  <input id="category_id" name="category_id" type="hidden" value="{{ prefill_category_id }}">
+  <p>Профиль {{ prefill_profile_id }}, категория {{ prefill_category_id }}.</p>
   <label for="company_name">Название</label>
   <input id="company_name" name="company_name" type="text" required readonly value="{{ company.name }}">
   <label for="contact_channel">Способ связи компании</label>
@@ -24,6 +23,8 @@
   <input type="hidden" name="salary_currency" value="RUB">
   <p><button type="submit">Отправить приглашение</button></p>
 </form>
+{% elif company and company.name and company.contact %}
+<p>Откройте приглашение кнопкой «Пригласить» на карточке подборки. Номер профиля с карточки подставляется сам.</p>
 {% else %}
 <p>Сначала заполните название и контакт компании.</p>
 <p><button type="button" disabled>Отправить приглашение</button></p>

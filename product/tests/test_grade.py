@@ -10,6 +10,7 @@ import product
 from product.app.services.clock import utc_now
 from product.matching.grade import load_template, score_attempt, select_template, templates_for
 from product.matching.rules import load_rules
+from product.matching.stems import catalog
 from product.tests.conftest import register_and_confirm
 
 _PROFILE = {
@@ -88,8 +89,21 @@ def test_pair_templates_are_stable_and_offline():
     source = (root / "grade.py").read_text(encoding="utf-8")
     assert "sqlalchemy" not in source
     assert "samples.json" not in source
-    files = list((root / "templates").glob("*.json"))
-    assert len(files) == 48
+    assert not list((root / "templates").glob("*.json"))
+    rows = catalog()
+    assert len(rows) == 48
+    ids = [row["template_id"] for row in rows]
+    assert len(ids) == len(set(ids))
+    texts = []
+    for row in rows:
+        assert len(row["questions"]) == 3
+        assert {choice["id"] for choice in row["questions"][0]["choices"]} == {"a", "b", "c"}
+        for question in row["questions"]:
+            texts.append(question["text"])
+            blob = question["text"] + "".join(choice["text"] for choice in question["choices"])
+            assert "вариант a про" not in blob
+            assert "Пара " not in blob
+    assert len(texts) == len(set(texts))
     for spec in rules["specializations"]:
         for grade in rules["grades"]:
             found = templates_for(spec, grade, "v1")
@@ -112,13 +126,6 @@ def test_pair_templates_are_stable_and_offline():
     assert shown
     for template_id in shown:
         load_template(template_id)
-    for path in files:
-        blob = path.read_text(encoding="utf-8")
-        assert "вариант a про" not in blob
-        assert "Пара " not in blob
-        row = json.loads(blob)
-        assert len(row["questions"]) == 3
-        assert {choice["id"] for choice in row["questions"][0]["choices"]} == {"a", "b", "c"}
 
 
 def test_recorded_attempt_confirms_without_moving_grade(client):

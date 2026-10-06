@@ -211,10 +211,14 @@ def test_pages_show_contact_and_email_only_after_accept(client):
     assert "Отправить приглашение" in bare.text
     saved = client.put("/api/employer/company", json=_CARD)
     assert saved.status_code == 200, saved.text
-    form = client.get("/employer/offers")
+    form = client.get(
+        "/employer/offers",
+        params={"profile_id": str(profile_id), "category_id": "backend:middle"},
+    )
     assert "telegram: @sintetika" in form.text
     assert "disabled" not in form.text
     assert "page-seeker@example.com" not in form.text
+    assert f'type="hidden" value="{profile_id}"' in form.text
     sent = client.post(
         "/employer/offers",
         data={
@@ -275,10 +279,12 @@ def test_shortlist_card_invites_with_profile_id(client):
         params={"profile_id": str(profile_id), "category_id": "backend:middle"},
     )
     assert form.status_code == 200
-    assert f'id="profile_id" name="profile_id" type="number" required value="{profile_id}"' in form.text
-    assert 'id="category_id" name="category_id" type="text" required value="backend:middle"' in form.text
+    assert f'id="profile_id" name="profile_id" type="hidden" value="{profile_id}"' in form.text
+    assert 'id="category_id" name="category_id" type="hidden" value="backend:middle"' in form.text
+    assert 'name="profile_id" type="number"' not in form.text
     bare = client.get("/employer/offers")
-    assert 'value="backend:middle"' not in bare.text
+    assert 'name="profile_id"' not in bare.text
+    assert "на карточке подборки" in bare.text
     _login(client, "card-seeker@example.com")
     cabinet = client.get("/candidate")
     assert cabinet.status_code == 200

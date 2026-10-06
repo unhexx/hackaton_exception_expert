@@ -37,7 +37,6 @@ product = [
   "app/templates/**/*.html",
   "app/static/**/*",
   "matching/rules/*.json",
-  "matching/templates/**/*.json",
   "matching/golden/**/*",
   "matching/stack_synonyms.json",
   "matching/vacancies/*.json",

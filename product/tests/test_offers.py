@@ -260,3 +260,31 @@ def test_pages_show_contact_and_email_only_after_accept(client):
     after = client.get("/employer/offers")
     assert "Почта соискателя: page-seeker@example.com" in after.text
     assert "Способ связи компании: telegram: @sintetika" in after.text
+
+
+def test_shortlist_card_invites_with_profile_id(client):
+    profile_id = _scored(client, "card-seeker@example.com")
+    _employer(client, email="card-boss@example.com")
+    listed = client.get("/employer/shortlist", params={"category_id": "backend:middle"})
+    assert listed.status_code == 200
+    assert f"Номер профиля: {profile_id}" in listed.text
+    assert f"/employer/offers?profile_id={profile_id}&amp;category_id=backend:middle" in listed.text
+    assert "Пригласить" in listed.text
+    form = client.get(
+        "/employer/offers",
+        params={"profile_id": str(profile_id), "category_id": "backend:middle"},
+    )
+    assert form.status_code == 200
+    assert f'id="profile_id" name="profile_id" type="number" required value="{profile_id}"' in form.text
+    assert 'id="category_id" name="category_id" type="text" required value="backend:middle"' in form.text
+    bare = client.get("/employer/offers")
+    assert 'value="backend:middle"' not in bare.text
+    _login(client, "card-seeker@example.com")
+    cabinet = client.get("/candidate")
+    assert cabinet.status_code == 200
+    assert "История опроса" in cabinet.text
+    assert "backend" in cabinet.text
+    assert "middle" in cabinet.text
+    assert "История теста" in cabinet.text
+    assert "Публиковать профиль в подборке работодателя" in cabinet.text
+    assert "Публиковать профиль и согласие на обработку" not in cabinet.text

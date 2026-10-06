@@ -9,6 +9,7 @@ from product.app.db.session import open_session
 from product.app.services.categories import recompute
 from product.app.services.clock import utc_now
 from product.matching.category import assign_category, rank_key
+from product.matching.need import list_reason, need_score, rank_tuple
 from product.matching.types import CategoryError, ProfileView
 from product.tests.conftest import register_and_confirm
 
@@ -206,7 +207,13 @@ def test_employer_sees_scored_profiles_without_email(client):
         params={"category_id": "backend:middle", "q": "платеж"},
     )
     assert [card["profile_id"] for card in text.json()] == [high]
-    assert "Текст: платеж" in text.json()[0]["list_reason"]
+    reason = text.json()[0]["list_reason"]
+    assert "платеж" in reason
+    assert "в тексте профиля" in reason
+    assert "Текст: платеж" not in reason
+    empty_reason = cards[0]["list_reason"]
+    assert empty_reason.startswith("Категория backend:middle")
+    assert "потребность без уточнений" in empty_reason
     role = client.get(
         "/api/employer/candidates",
         params={"category_id": "backend:middle", "team_role": "аналитик"},
@@ -229,6 +236,23 @@ def test_employer_sees_scored_profiles_without_email(client):
     assert odd.status_code == 200
     assert odd.json() == []
 
+    overlap_low = _seeker(client, "overlap-low@example.com", stack=["python", "sql"])
+    overlap_high_id = _seeker(client, "overlap-high@example.com", stack=["python"])
+    _submit(overlap_low, 90, "suggest_higher")
+    _submit(overlap_high_id, 90, "suggest_higher")
+    logged = client.post("/api/auth/login", json={"email": "boss@example.com", "password": "password-ok"})
+    assert logged.status_code == 200, logged.text
+    ranked = client.get(
+        "/api/employer/candidates",
+        params=[("category_id", "backend:middle"), ("stack", "python"), ("stack", "sql")],
+    )
+    ranked_ids = [card["profile_id"] for card in ranked.json()]
+    assert overlap_low in ranked_ids
+    assert overlap_high_id in ranked_ids
+    assert ranked_ids.index(overlap_low) < ranked_ids.index(overlap_high_id)
+    assert "в профиле стек python" in ranked.json()[0]["list_reason"]
+    assert "Стек: python" not in ranked.json()[0]["list_reason"]
+
 
 def test_history_survives_specialization_change(client):
     profile_id = _seeker(client, "move@example.com")
@@ -250,3 +274,63 @@ def test_history_survives_specialization_change(client):
     assert ("backend:middle", 70) in stored
     assert stored[-1] == ("frontend:middle", None)
     assert len(stored) >= 2
+
+
+def test_need_ranks_stack_overlap_then_rank_key():
+    empty = {
+        "category_id": "backend:middle",
+        "stack": [],
+        "team_role": "",
+        "work_format": "",
+        "has_fsp": None,
+        "q": "",
+    }
+    both = {
+        **empty,
+        "stack": ["python", "sql"],
+    }
+    python_only = need_score(
+        stack=["python"],
+        team_role="разработчик",
+        work_format="удалённо",
+        fsp_count=0,
+        haystack="backend middle python разработчик удалённо",
+        need=both,
+    )
+    python_sql = need_score(
+        stack=["python", "sql"],
+        team_role="разработчик",
+        work_format="удалённо",
+        fsp_count=0,
+        haystack="backend middle python sql разработчик удалённо",
+        need=both,
+    )
+    assert python_sql > python_only
+    assert need_score(
+        stack=["python"],
+        team_role="разработчик",
+        work_format="удалённо",
+        fsp_count=9,
+        haystack="backend middle python разработчик удалённо",
+        need=empty,
+    ) == 0
+    high_key = "090-0000-00000002"
+    low_key = "010-0009-00000001"
+    ordered = sorted(
+        [(0, high_key), (0, low_key)],
+        key=lambda pair: rank_tuple(pair[0], pair[1]),
+        reverse=True,
+    )
+    assert ordered[0][1] == high_key
+    reason = list_reason(
+        assigned_category_id="backend:middle",
+        stack=["python"],
+        team_role="разработчик",
+        work_format="удалённо",
+        fsp_count=0,
+        haystack="backend middle python разработчик удалённо платежи в контуре",
+        need={**empty, "q": "платеж"},
+    )
+    assert "в тексте профиля: платеж" in reason
+    assert "Стек:" not in reason
+    assert "Текст: платеж" not in reason

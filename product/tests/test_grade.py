@@ -112,6 +112,13 @@ def test_pair_templates_are_stable_and_offline():
     assert shown
     for template_id in shown:
         load_template(template_id)
+    for path in files:
+        blob = path.read_text(encoding="utf-8")
+        assert "вариант a про" not in blob
+        assert "Пара " not in blob
+        row = json.loads(blob)
+        assert len(row["questions"]) == 3
+        assert {choice["id"] for choice in row["questions"][0]["choices"]} == {"a", "b", "c"}
 
 
 def test_recorded_attempt_confirms_without_moving_grade(client):

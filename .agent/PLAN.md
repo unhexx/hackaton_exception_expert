@@ -2,7 +2,7 @@
 
 **Инициатива:** трек ЛЦТ, агрегатор ИТ-вакансий с профилем ФСП  
 **Обновлено:** 2026-10-06  
-**Маркер:** FSP-TOP5-ADVANTAGE-LOOP закрыт записью ТОП-5. Следующие прогоны — отдельные срезы ниже, не этот планировщик.
+**Маркер:** FSP-T123-DEV-LOOP. Активные срезы этого прогона — T1, T2, T3. T4 и T5 не брать. FSP-TOP5-ADVANTAGE-LOOP закрыт записью ТОП-5.
 
 ## Фаза
 
@@ -41,17 +41,15 @@
 
 ## Порядок прогонов (непересекающиеся владельцы)
 
-Не драться с FSP-QUALITY-RELEASE-LOOP (`01a110f2-01d7-7913-90e6-eb38f964e4f0`): золотой набор, теги, выгрузка на Bitbucket — только у него.
+Этот прогон закрывает T1, T2 и T3. Золотой набор `product/matching/golden/` не расширять, ключи ответов не менять. Теги `v1.0.0` не двигать.
 
-1. **Параллельно, сразу**
-   - **T1 Тексты заданий.** Только `product/matching/templates/*.json` (+ опционально `vacancies/samples.json`). Не менять `template_id`, id вопросов, id вариантов, `correct`, пороги. Не трогать `golden/`.
-   - **T2 Ранг потребности.** `product/matching/need.py`, `product/app/services/categories.py`, `product/tests/test_category.py`. Пустая потребность → прежний `rank_key`. `cases.json` не переписывать здесь.
-   - **T4 Стенд и записка.** `track/lct-fsp-vacancies/03-open-questions.md` (Q9), `product/docs/zapiska.md` (схема антифрода/ATS, не отказ), подпись строк валидации в кабинете работодателя без смены `PlainTextResponse` пяти строк. Хост — вне git-секретов.
-2. **Затем T3 Кабинеты.** Шаблоны и `brand.css`. Зависит от T2, чтобы карточка показала новый `list_reason`. Кнопка «Пригласить» с подстановкой id. Не править matching.
-3. **T5 FSP-8**, только если T1–T4 закрыты примерно к 09.10. Файлы как в 05-reshenie FSP-8. Том sqlite удалить и поднять compose заново. `openapi.json` — перегенерация уже на `main`, не в ветке. `main.py` и `grade.py` не трогать. Адаптив — хвост `brand.css` после T3.
-4. **Питч** не в этом цикле. Файл `product/docs/prezentaciya.pptx` трогать после 18.10, если команда в ТОП-10.
+1. **T1 Тексты заданий — сделано.** Только `product/matching/templates/*.json` (+ опционально `vacancies/samples.json`). Не менять `template_id`, id вопросов, id вариантов, `correct`, пороги. Не трогать `golden/`.
+2. **T2 Ранг потребности — сделано.** `product/matching/need.py`, `product/app/services/categories.py`, `product/tests/test_category.py`, сортировка в `golden_run.py` тем же предикатом. Пустая потребность → прежний `rank_key`. `cases.json` не переписывать здесь.
+3. **T3 Кабинеты — сделано.** `app/templates/**`, `brand.css`, `app/web/{shortlist,offers_pages,candidate}.py`, `tests/test_offers.py`. Кнопка «Пригласить» с подстановкой id. Не править matching, кроме уже сделанного T2.
+4. **T4 Стенд и записка — не этот прогон.**
+5. **T5 FSP-8 — не этот прогон.** Только если T1–T4 закрыты примерно к 09.10.
 
-`product/openapi.json` параллельный срез не коммитит. `product/matching/golden/` и бейдж тестов — quality-release. Коммит локальный как Евгений Чистяков `<echistyakov@aq.ru>`. GitHub origin не пушить. Bitbucket — только у quality-release.
+`product/openapi.json` этот срез не коммитит, если схема не менялась. GitHub origin `unhexx/agentic_loop_template` не пушить. Коммиты этого прогона — `exception.expert <jenyach@exception.expert>`, после `main` — выгрузка на spectrack-10-26.
 
 ## Не пересоздавать
 

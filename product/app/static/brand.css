@@ -27,14 +27,14 @@ body {
   padding: 0.8rem 1.5rem;
   background: #fff;
   color: var(--fsp-ink);
-  border-bottom: 1px solid var(--fsp-gray);
+  border-bottom: 2px solid var(--fsp-blue);
 }
 
 .logo { height: 2.5rem; width: auto; }
 
 .mark { color: var(--fsp-blue); font-weight: 700; }
 
-.sub { color: var(--fsp-gray); }
+.sub { color: var(--fsp-ink); }
 
 main { max-width: 52rem; margin: 0 auto; padding: 1.5rem; }
 
@@ -69,9 +69,34 @@ button, .button {
   cursor: pointer;
 }
 
-.quiet { color: var(--fsp-gray); }
+.quiet { color: var(--fsp-ink); }
 
 .error { color: var(--fsp-red); }
+
+a.button { display: inline-block; text-decoration: none; }
+
+input[type="number"] {
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--fsp-gray);
+  background: #fff;
+  color: var(--fsp-ink);
+  font: inherit;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid var(--fsp-gray);
+  color: var(--fsp-ink);
+}
+
+section + section { margin-top: 1rem; }
 
 .row { display: flex; flex-wrap: wrap; gap: 0.8rem; }
 

@@ -5,11 +5,12 @@
   <ul>
     {% for card in cards %}
     <li>
-      <p>{{ card.full_name }}. Отрасль: {{ card.industry }}. Категория: {{ card.category_id }}.</p>
+      <p>Номер профиля: {{ card.profile_id }}. {{ card.full_name }}. Отрасль: {{ card.industry }}. Категория: {{ card.category_id }}.</p>
       <p>{{ card.explanation }}</p>
       <p>{{ card.list_reason }}</p>
       <p>Балл {{ card.test_score }}, порядок {{ card.rank_key }}. Роль в компании: {{ card.team_role }}. Формат: {{ card.work_format }}.</p>
       <p>Стек: {{ card.stack | join(', ') }}.</p>
+      <p><a class="button" href="/employer/offers?profile_id={{ card.profile_id }}&amp;category_id={{ card.category_id }}">Пригласить</a></p>
       {% if card.achievements %}
       <ul>
         {% for row in card.achievements %}

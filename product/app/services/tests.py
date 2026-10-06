@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from product.app.db.models import Profile, TestAttempt, User
 from product.app.services.categories import latest_assignment, recompute
 from product.app.services.clock import days_elapsed, days_remaining, utc_now
-from product.app.services.errors import ApiError, explain, fail
+from product.app.services.errors import explain, fail
 from product.matching.grade import (
     GradeError,
     is_adjacent_grade,
@@ -36,16 +36,19 @@ def interval_open(stamp: str) -> bool:
     return days_elapsed(stamp, interval_days())
 
 
-def interval_message(profile: Profile, requested: str) -> str:
+def interval_parts(profile: Profile, requested: str) -> dict[str, object]:
     days = interval_days()
-    return explain(
-        "grade_interval",
-        current=profile.grade,
-        requested=requested,
-        changed_at=profile.grade_changed_at,
-        interval=days,
-        left=days_remaining(profile.grade_changed_at, days),
-    )
+    return {
+        "current": profile.grade,
+        "requested": requested,
+        "changed_at": profile.grade_changed_at,
+        "interval": days,
+        "left": days_remaining(profile.grade_changed_at, days),
+    }
+
+
+def interval_message(profile: Profile, requested: str) -> str:
+    return explain("grade_interval", **interval_parts(profile, requested))
 
 
 def _profile(db: Session, user: User) -> Profile | None:
@@ -169,7 +172,7 @@ def start_attempt(db: Session, user: User, payload: dict | None) -> dict:
             )
         return _public_attempt(draft)
     if adjacent and not interval_open(profile.grade_changed_at):
-        raise ApiError(409, "grade_interval", interval_message(profile, target))
+        fail(409, "grade_interval", **interval_parts(profile, target))
     spec = profile.specialization
     try:
         template_id = select_template(profile.id, spec, target, rule_version())
@@ -206,7 +209,7 @@ def submit_attempt(db: Session, user: User, attempt_id: int, payload: dict) -> d
         fail(409, "attempt_closed")
     recorded = row.specialization == profile.specialization and row.declared_grade == profile.grade
     if not recorded and not interval_open(profile.grade_changed_at):
-        raise ApiError(409, "grade_interval", interval_message(profile, row.declared_grade))
+        fail(409, "grade_interval", **interval_parts(profile, row.declared_grade))
     answers = payload.get("answers") if isinstance(payload, dict) else None
     try:
         template = load_template(row.template_id)

@@ -1,0 +1,9 @@
+.git
+.venv
+venv
+**/__pycache__
+**/*.pyc
+product/var
+deploy/fsp/compose.env
+*.sqlite
+*.sqlite-*

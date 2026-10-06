@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Кабинет работодателя{% endblock %}
+{% block body %}
+<h1>Кабинет работодателя</h1>
+<nav>
+  <a href="/employer/shortlist">Подборка</a>
+  <a href="/employer/offers">Приглашения</a>
+  <form method="post" action="/auth/logout">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <button type="submit">Выйти</button>
+  </form>
+</nav>
+<p>Почта: {{ user.email }}</p>
+{% if has_offers %}
+<p><a href="/employer/offers">Есть отправленные приглашения</a></p>
+{% else %}
+<p>Приглашений нет.</p>
+{% endif %}
+<section>
+  <h2>Карточка компании</h2>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <form method="post" action="/employer/company">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <label for="name">Название</label>
+    <input id="name" name="name" type="text" value="{{ company.name if company else '' }}">
+    <label for="description">Описание</label>
+    <textarea id="description" name="description" rows="3">{{ company.description if company else '' }}</textarea>
+    <label for="direction">Направление</label>
+    <input id="direction" name="direction" type="text" value="{{ company.direction if company else '' }}">
+    <label for="contact">Контакт компании</label>
+    <input id="contact" name="contact" type="text" value="{{ company.contact if company else '' }}">
+    <p><button type="submit">Сохранить карточку</button></p>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,198 @@
+"""Старт, сдача и история испытания грейда."""
+
+from __future__ import annotations
+
+import json
+
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from product.app.db.models import Profile, TestAttempt, User
+from product.app.services.categories import latest_assignment, recompute
+from product.app.services.clock import days_elapsed, utc_now
+from product.app.services.errors import ApiError
+from product.matching.grade import (
+    GradeError,
+    is_adjacent_grade,
+    load_template,
+    public_questions,
+    score_attempt,
+    select_template,
+)
+from product.matching.rules import load_rules, rule_version
+
+
+def interval_open(stamp: str) -> bool:
+    days = int(load_rules()["grade_change_interval_days"])
+    return days_elapsed(stamp, days)
+
+
+def _profile(db: Session, user: User) -> Profile | None:
+    return db.scalar(select(Profile).where(Profile.user_id == user.id))
+
+
+def _draft(db: Session, profile_id: int) -> TestAttempt | None:
+    return db.scalar(
+        select(TestAttempt).where(
+            TestAttempt.profile_id == profile_id,
+            TestAttempt.status == "draft",
+        )
+    )
+
+
+def latest_recorded_attempt(db: Session, profile: Profile) -> TestAttempt | None:
+    return db.scalar(
+        select(TestAttempt)
+        .where(
+            TestAttempt.profile_id == profile.id,
+            TestAttempt.status == "submitted",
+            TestAttempt.specialization == profile.specialization,
+            TestAttempt.declared_grade == profile.grade,
+        )
+        .order_by(TestAttempt.id.desc())
+        .limit(1)
+    )
+
+
+def proposed_adjacent(db: Session, profile: Profile) -> str:
+    offer = latest_recorded_attempt(db, profile)
+    if offer is None or not offer.proposed_grade or offer.proposed_grade == profile.grade:
+        return ""
+    if not is_adjacent_grade(profile.grade, offer.proposed_grade):
+        return ""
+    return offer.proposed_grade
+
+
+def _public_attempt(row: TestAttempt) -> dict:
+    template = load_template(row.template_id)
+    return {
+        "attempt_id": row.id,
+        "template_id": row.template_id,
+        "specialization": row.specialization,
+        "declared_grade": row.declared_grade,
+        "questions": public_questions(template),
+    }
+
+
+def list_attempts(db: Session, user: User) -> list[dict]:
+    profile = _profile(db, user)
+    if profile is None:
+        return []
+    rows = db.scalars(
+        select(TestAttempt).where(TestAttempt.profile_id == profile.id).order_by(TestAttempt.id.desc())
+    ).all()
+    history = []
+    for row in rows:
+        history.append(
+            {
+                "attempt_id": row.id,
+                "template_id": row.template_id,
+                "specialization": row.specialization,
+                "declared_grade": row.declared_grade,
+                "status": row.status,
+                "score": row.score,
+                "outcome": row.outcome,
+                "proposed_grade": row.proposed_grade,
+                "created_at": row.created_at,
+                "submitted_at": row.submitted_at,
+            }
+        )
+    return history
+
+
+def start_attempt(db: Session, user: User, payload: dict | None) -> dict:
+    profile = _profile(db, user)
+    if profile is None:
+        raise ApiError(409, "survey_required", "Сначала заполните анкету")
+    requested = ""
+    if payload:
+        raw = payload.get("grade", "")
+        if raw is None:
+            raw = ""
+        if not isinstance(raw, str):
+            raise ApiError(422, "closed_list", "Грейд — строка")
+        requested = raw.strip()
+    target = profile.grade
+    adjacent = False
+    if requested and requested != profile.grade:
+        if not is_adjacent_grade(profile.grade, requested):
+            raise ApiError(409, "grade_not_offered", "Этот грейд не предложен")
+        if proposed_adjacent(db, profile) != requested:
+            raise ApiError(409, "grade_not_offered", "Этот грейд не предложен")
+        target = requested
+        adjacent = True
+    draft = _draft(db, profile.id)
+    if draft is not None:
+        same = draft.specialization == profile.specialization and draft.declared_grade == target
+        if not same:
+            raise ApiError(409, "attempt_open", "Сначала сдайте открытый тест")
+        return _public_attempt(draft)
+    if adjacent and not interval_open(profile.grade_changed_at):
+        raise ApiError(409, "grade_interval", "Смена грейда ещё рано")
+    spec = profile.specialization
+    try:
+        template_id = select_template(profile.id, spec, target, rule_version())
+    except GradeError as exc:
+        raise ApiError(409, exc.code, "Для пары нет двух своих шаблонов") from exc
+    row = TestAttempt(
+        profile_id=profile.id,
+        specialization=spec,
+        declared_grade=target,
+        template_id=template_id,
+        rule_version=rule_version(),
+        answers_json=None,
+        score=None,
+        outcome=None,
+        proposed_grade=None,
+        status="draft",
+        created_at=utc_now(),
+        submitted_at=None,
+    )
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return _public_attempt(row)
+
+
+def submit_attempt(db: Session, user: User, attempt_id: int, payload: dict) -> dict:
+    profile = _profile(db, user)
+    if profile is None:
+        raise ApiError(404, "not_found", "Попытка не найдена")
+    row = db.get(TestAttempt, attempt_id)
+    if row is None or row.profile_id != profile.id:
+        raise ApiError(404, "not_found", "Попытка не найдена")
+    if row.status != "draft":
+        raise ApiError(409, "attempt_closed", "Попытка уже сдана")
+    recorded = row.specialization == profile.specialization and row.declared_grade == profile.grade
+    if not recorded and not interval_open(profile.grade_changed_at):
+        raise ApiError(409, "grade_interval", "Смена грейда ещё рано")
+    answers = payload.get("answers") if isinstance(payload, dict) else None
+    try:
+        template = load_template(row.template_id)
+        scored = score_attempt(template, answers)
+    except GradeError as exc:
+        if exc.code == "answer_unknown":
+            raise ApiError(422, "answer_unknown", "Ответ не из вариантов") from exc
+        raise ApiError(409, exc.code, "Шаблон испытания не найден") from exc
+    row.answers_json = json.dumps(answers, ensure_ascii=False)
+    row.score = scored["score"]
+    row.outcome = scored["outcome"]
+    row.proposed_grade = scored["proposed_grade"]
+    row.status = "submitted"
+    row.submitted_at = utc_now()
+    if not recorded and scored["outcome"] == "confirm":
+        profile.grade = row.declared_grade
+        profile.grade_changed_at = row.submitted_at
+        profile.updated_at = row.submitted_at
+    db.flush()
+    recompute(db, profile.id)
+    assignment = latest_assignment(db, profile.id)
+    db.commit()
+    return {
+        "attempt_id": row.id,
+        "score": row.score,
+        "outcome": row.outcome,
+        "proposed_grade": row.proposed_grade,
+        "category_id": None if assignment is None else assignment.category_id,
+        "grade": profile.grade,
+    }

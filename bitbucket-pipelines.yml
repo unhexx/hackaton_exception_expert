@@ -1,0 +1,9 @@
+image: docker:24
+
+pipelines:
+  default:
+    - step:
+        name: Автотесты
+        services: [docker]
+        script:
+          - docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests

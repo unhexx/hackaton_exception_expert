@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Стенд
+product/var/
+deploy/fsp/compose.env
+deploy/fsp/wheels/*.whl
+*.sqlite
+*.sqlite-*
+
+# Входные материалы заказчика, в сдачу не входят
+ТЗ.pdf
+tz_extracted.txt
+brandbook-fsp/
+шаблон_презентации.pptx

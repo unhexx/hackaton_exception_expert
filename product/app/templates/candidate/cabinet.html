@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Кабинет соискателя{% endblock %}
+{% block body %}
+<h1>Кабинет соискателя</h1>
+<nav>
+  <a href="/candidate/test">Тест</a>
+  <a href="/candidate/offers">Приглашения</a>
+  <form method="post" action="/auth/logout">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <button type="submit">Выйти</button>
+  </form>
+</nav>
+<p>Почта: {{ user.email }}</p>
+{% if profile %}
+<p>Отрасль: {{ profile.industry }}. Категория: {% if assignment %}{{ assignment.category_id }}{% else %}ещё нет{% endif %}.</p>
+{% if assignment and assignment.explanation %}<p>{{ assignment.explanation }}</p>{% endif %}
+{% else %}
+<p>Отрасль появится в статусе после опроса. В название категории она не входит.</p>
+{% endif %}
+{% if test_done %}
+<p>Тест сдан, история хранится отдельно.</p>
+{% else %}
+<p>Тест ещё не сдан.</p>
+{% endif %}
+{% if has_offers %}
+<p><a href="/candidate/offers">Есть приглашения</a></p>
+{% else %}
+<p>Приглашений нет.</p>
+{% endif %}
+{% include "candidate/achievements.html" %}
+{% include "candidate/resume_status.html" %}
+<section>
+  <h2>Профиль и публикация</h2>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <form method="post" action="/candidate/profile">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <label for="full_name">ФИО</label>
+    <input id="full_name" name="full_name" type="text" required value="{{ profile.full_name if profile else '' }}">
+    <label for="industry">Отрасль</label>
+    <select id="industry" name="industry">
+      {% for item in rules.industries %}
+      <option value="{{ item }}" {% if not profile or profile.industry == item %}selected{% endif %}>{{ item }}</option>
+      {% endfor %}
+    </select>
+    <label for="specialization">Специализация</label>
+    <select id="specialization" name="specialization" required>
+      {% for item in rules.specializations %}
+      <option value="{{ item }}" {% if profile and profile.specialization == item %}selected{% endif %}>{{ item }}</option>
+      {% endfor %}
+    </select>
+    <label for="grade">Грейд</label>
+    <select id="grade" name="grade" required>
+      {% for item in rules.grades %}
+      <option value="{{ item }}" {% if profile and profile.grade == item %}selected{% endif %}>{{ item }}</option>
+      {% endfor %}
+    </select>
+    <p>Стек</p>
+    <div class="row">
+      {% for item in rules.stack %}
+      <label><input type="checkbox" name="stack" value="{{ item }}" {% if item in stack %}checked{% endif %}> {{ item }}</label>
+      {% endfor %}
+    </div>
+    <label for="team_role">Роль в компании</label>
+    <select id="team_role" name="team_role" required>
+      {% for item in rules.team_roles %}
+      <option value="{{ item }}" {% if profile and profile.team_role == item %}selected{% endif %}>{{ item }}</option>
+      {% endfor %}
+    </select>
+    <label for="work_format">Формат</label>
+    <select id="work_format" name="work_format" required>
+      {% for item in rules.work_formats %}
+      <option value="{{ item }}" {% if profile and profile.work_format == item %}selected{% endif %}>{{ item }}</option>
+      {% endfor %}
+    </select>
+    <label for="experience">Стаж</label>
+    <input id="experience" name="experience" type="text" value="{{ profile.experience if profile else '' }}">
+    <p>Софт-скиллы</p>
+    <div class="row">
+      {% for item in rules.soft_skills %}
+      <label><input type="checkbox" name="soft_skills" value="{{ item }}" {% if item in soft %}checked{% endif %}> {{ item }}</label>
+      {% endfor %}
+    </div>
+    <label for="external_id">ID ФСП, если есть</label>
+    <input id="external_id" name="external_id" type="text" value="{{ profile.external_id if profile and profile.external_id else '' }}">
+    <label><input type="checkbox" name="publication" value="1" {% if publication %}checked{% endif %}> Публиковать профиль и согласие на обработку</label>
+    <p><button type="submit">Сохранить</button></p>
+  </form>
+</section>
+{% endblock %}

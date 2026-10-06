@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Подборка{% endblock %}
+{% block body %}
+<h1>Подборка</h1>
+<p><a href="/validation">Прогон валидации</a></p>
+<form method="get" action="/employer/shortlist" hx-get="/employer/shortlist" hx-target="#shown" hx-swap="afterbegin">
+  <label for="category_id">Категория</label>
+  <select id="category_id" name="category_id" required>
+    <option value="">Выберите</option>
+    {% for spec in rules.specializations %}
+    {% for grade in rules.grades %}
+    <option value="{{ spec }}:{{ grade }}">{{ spec }}:{{ grade }}</option>
+    {% endfor %}
+    {% endfor %}
+  </select>
+  <p>Стек</p>
+  <div class="row">
+    {% for item in rules.stack %}
+    <label><input type="checkbox" name="stack" value="{{ item }}"> {{ item }}</label>
+    {% endfor %}
+  </div>
+  <label for="team_role">Роль в компании</label>
+  <select id="team_role" name="team_role">
+    <option value="">любая</option>
+    {% for item in rules.team_roles %}
+    <option value="{{ item }}">{{ item }}</option>
+    {% endfor %}
+  </select>
+  <label for="work_format">Формат</label>
+  <select id="work_format" name="work_format">
+    <option value="">любой</option>
+    {% for item in rules.work_formats %}
+    <option value="{{ item }}">{{ item }}</option>
+    {% endfor %}
+  </select>
+  <label for="has_fsp">Достижения ФСП</label>
+  <select id="has_fsp" name="has_fsp">
+    <option value="">не важно</option>
+    <option value="true">есть</option>
+    <option value="false">нет</option>
+  </select>
+  <label for="q">Текст потребности</label>
+  <input id="q" name="q" type="text">
+  <p><button type="submit">Показать</button></p>
+</form>
+<div id="shown">{% if show_block %}{% include "employer/_shortlist_block.html" %}{% endif %}</div>
+<p><a href="/employer">В кабинет</a></p>
+{% endblock %}

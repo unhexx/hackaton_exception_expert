@@ -1,0 +1,28 @@
+{
+  "vacancies": [
+    {
+      "id": "vac-backend-middle",
+      "title": "Синтетическая вакансия backend middle",
+      "text": "Платежи на python. Текст не выбирает шаблон.",
+      "shows_template": "backend-middle-a"
+    },
+    {
+      "id": "vac-frontend-junior",
+      "title": "Синтетическая вакансия frontend junior",
+      "text": "Экран списка. Текст не выбирает шаблон.",
+      "shows_template": "frontend-junior-b"
+    },
+    {
+      "id": "vac-data-senior",
+      "title": "Синтетическая вакансия data senior",
+      "text": "Витрина заказов. Текст не выбирает шаблон.",
+      "shows_template": "data-senior-a"
+    },
+    {
+      "id": "vac-devops-lead",
+      "title": "Синтетическая вакансия devops lead",
+      "text": "Поставка сервиса. Текст не выбирает шаблон.",
+      "shows_template": "devops-lead-b"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+[project]
+name = "fsp-vacancies"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115,<1",
+  "uvicorn==0.54.0",
+  "sqlalchemy>=2,<3",
+  "jinja2>=3.1,<4",
+  "python-multipart>=0.0.9",
+  "argon2-cffi",
+  "itsdangerous>=2,<3",
+  "pypdf==6.19.0",
+  "reportlab==5.0.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "httpx>=0.27,<1"]
+
+[tool.setuptools]
+packages = [
+  "product",
+  "product.app",
+  "product.app.api",
+  "product.app.db",
+  "product.app.services",
+  "product.app.web",
+  "product.matching",
+  "product.fsp_mock",
+]
+
+[tool.setuptools.package-dir]
+product = "."
+
+[tool.setuptools.package-data]
+product = [
+  "app/templates/**/*.html",
+  "app/static/**/*",
+  "matching/rules/*.json",
+  "matching/templates/**/*.json",
+  "matching/golden/**/*",
+  "matching/stack_synonyms.json",
+  "matching/vacancies/*.json",
+  "fsp_mock/*.json",
+  "static/fonts/*",
+]

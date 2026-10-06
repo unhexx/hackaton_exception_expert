@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}ФСП{% endblock %}</title>
+  <link rel="stylesheet" href="/static/brand.css">
+  <script src="/static/htmx.min.js"></script>
+</head>
+<body>
+  <header class="top">
+    <img class="logo" src="/static/logo_02w.svg" alt="ФСП">
+    <span class="sub">вакансии в ИТ</span>
+  </header>
+  <main>
+    {% block body %}{% endblock %}
+  </main>
+</body>
+</html>

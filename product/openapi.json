@@ -1,0 +1,2000 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Агрегатор ИТ-вакансий ФСП",
+    "description": "Кабинеты соискателя и работодателя, API и один файл SQLite.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Register",
+        "operationId": "register_api_auth_register_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "candidate": {
+                    "value": {
+                      "email": "seeker@example.com",
+                      "password": "password-ok",
+                      "role": "candidate",
+                      "consent": true
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "code": "123456"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "email_taken",
+                  "message": "Почта уже зарегистрирована"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "consent_required",
+                  "message": "Нужно явное согласие"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/api/auth/confirm": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Confirm",
+        "operationId": "confirm_api_auth_confirm_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "code": {
+                    "value": {
+                      "email": "seeker@example.com",
+                      "code": "123456"
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "verified": true
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "code_invalid",
+                  "message": "Код не подошёл"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "already_verified",
+                  "message": "Почта уже подтверждена"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/confirm/resend": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Confirm Resend",
+        "operationId": "confirm_resend_api_auth_confirm_resend_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "email": {
+                    "value": {
+                      "email": "seeker@example.com"
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "code": "654321"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "email",
+                  "message": "Некорректная почта"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Login",
+        "operationId": "login_api_auth_login_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "login": {
+                    "value": {
+                      "email": "seeker@example.com",
+                      "password": "password-ok"
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "role": "candidate"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "credentials",
+                  "message": "Неверная почта или пароль"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "email_unverified",
+                  "message": "Почта не подтверждена"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Logout",
+        "operationId": "logout_api_auth_logout_post",
+        "responses": {
+          "204": {
+            "description": "Сессия закрыта"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/profile": {
+      "get": {
+        "tags": [
+          "candidate"
+        ],
+        "summary": "Read Profile",
+        "operationId": "read_profile_api_candidate_profile_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "profile_id": 1,
+                  "full_name": "Иван Синтетиков",
+                  "email": "seeker@example.com",
+                  "industry": "it",
+                  "specialization": "backend",
+                  "grade": "middle",
+                  "publication": true
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Анкета ещё не заполнена"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "candidate"
+        ],
+        "summary": "Write Profile",
+        "operationId": "write_profile_api_candidate_profile_put",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "survey": {
+                    "value": {
+                      "full_name": "Иван Синтетиков",
+                      "industry": "it",
+                      "specialization": "backend",
+                      "grade": "middle",
+                      "stack": [
+                        "python"
+                      ],
+                      "team_role": "разработчик",
+                      "work_format": "удалённо",
+                      "experience": "3 года",
+                      "soft_skills": [
+                        "коммуникация"
+                      ],
+                      "external_id": "",
+                      "publication": true
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "profile_id": 1,
+                  "industry": "it",
+                  "grade": "middle",
+                  "specialization": "backend"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "grade_via_test",
+                  "message": "Грейд меняет только тест"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "closed_list",
+                  "message": "Значение не из списка"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/achievements": {
+      "get": {
+        "tags": [
+          "candidate"
+        ],
+        "summary": "Read Achievements",
+        "operationId": "read_achievements_api_candidate_achievements_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "display_name": "",
+                  "rank": "",
+                  "results": []
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/employer/company": {
+      "get": {
+        "tags": [
+          "employer"
+        ],
+        "summary": "Read Company",
+        "operationId": "read_company_api_employer_company_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "name": "Синтетика",
+                  "description": "Платежи",
+                  "direction": "backend",
+                  "contact": "telegram: @sintetika"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет работодателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "company_missing",
+                  "message": "Карточка компании не заполнена"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "employer"
+        ],
+        "summary": "Write Company",
+        "operationId": "write_company_api_employer_company_put",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "card": {
+                    "value": {
+                      "name": "Синтетика",
+                      "description": "Платежи",
+                      "direction": "backend",
+                      "contact": "telegram: @sintetika"
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "name": "Синтетика",
+                  "description": "Платежи",
+                  "direction": "backend",
+                  "contact": "telegram: @sintetika"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "extra_forbidden",
+                  "message": "Лишнее поле"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/category": {
+      "get": {
+        "tags": [
+          "category"
+        ],
+        "summary": "Read Category",
+        "operationId": "read_category_api_candidate_category_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "profile_id": 1,
+                  "category_id": "backend:middle",
+                  "rule_version": "v1",
+                  "explanation": "Опрос: специализация backend, грейд middle. Тест ещё не сдан. Правила v1.",
+                  "industry": "it"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Опроса ещё не было"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/employer/candidates": {
+      "get": {
+        "tags": [
+          "category"
+        ],
+        "summary": "Read Candidates",
+        "operationId": "read_candidates_api_employer_candidates_get",
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category Id"
+            }
+          },
+          {
+            "name": "stack",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [],
+              "title": "Stack"
+            }
+          },
+          {
+            "name": "team_role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Team Role"
+            }
+          },
+          {
+            "name": "work_format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Work Format"
+            }
+          },
+          {
+            "name": "has_fsp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Has Fsp"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Q"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "profile_id": 1,
+                    "full_name": "Иван Синтетиков",
+                    "industry": "it",
+                    "category_id": "backend:middle",
+                    "explanation": "Опрос: специализация backend, грейд middle. Тест ещё не сдан. Правила v1.",
+                    "list_reason": "Категория backend:middle.",
+                    "rank_key": "067-0000-00000001",
+                    "test_score": 67,
+                    "stack": [
+                      "python"
+                    ],
+                    "team_role": "разработчик",
+                    "work_format": "удалённо"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет работодателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "category_id",
+                  "message": "Нужна категория"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/tests/start": {
+      "post": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Start Route",
+        "operationId": "start_route_api_candidate_tests_start_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "examples": {
+                  "recorded": {
+                    "value": {}
+                  },
+                  "adjacent": {
+                    "value": {
+                      "grade": "senior"
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "attempt_id": 1,
+                  "template_id": "backend-middle-a",
+                  "specialization": "backend",
+                  "declared_grade": "middle",
+                  "questions": [
+                    {
+                      "id": "q1",
+                      "text": "Синтетический вопрос",
+                      "choices": [
+                        {
+                          "id": "a",
+                          "text": "первый"
+                        },
+                        {
+                          "id": "b",
+                          "text": "второй"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "survey_required",
+                  "message": "Сначала заполните анкету"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/tests/{attempt_id}/submit": {
+      "post": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Submit Route",
+        "operationId": "submit_route_api_candidate_tests__attempt_id__submit_post",
+        "parameters": [
+          {
+            "name": "attempt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Attempt Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "answers": {
+                    "value": {
+                      "answers": [
+                        "a",
+                        "b",
+                        "c"
+                      ]
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "attempt_id": 1,
+                  "score": 67,
+                  "outcome": "confirm",
+                  "proposed_grade": "middle",
+                  "category_id": "backend:middle",
+                  "grade": "middle"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Попытка не найдена"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "attempt_closed",
+                  "message": "Попытка уже сдана"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "answer_unknown",
+                  "message": "Ответ не из вариантов"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/tests": {
+      "get": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "History Route",
+        "operationId": "history_route_api_candidate_tests_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "attempt_id": 1,
+                    "score": 67,
+                    "outcome": "confirm",
+                    "proposed_grade": "middle",
+                    "category_id": "backend:middle",
+                    "grade": "middle"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/employer/offers": {
+      "post": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Send Offer",
+        "operationId": "send_offer_api_employer_offers_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "offer": {
+                    "value": {
+                      "profile_id": 12,
+                      "category_id": "backend:middle",
+                      "company_name": "Синтетика",
+                      "message": "Ищем backend middle в команду платежей",
+                      "salary_min": 180000,
+                      "salary_max": 250000,
+                      "salary_currency": "RUB",
+                      "contact_channel": "telegram: @sintetika"
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "profile_id": 12,
+                  "category_id": "backend:middle",
+                  "company_name": "Синтетика",
+                  "message": "Ищем backend middle в команду платежей",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "contact_channel": "telegram: @sintetika",
+                  "status": "sent",
+                  "created_at": "2026-10-05T12:00:00Z",
+                  "updated_at": "2026-10-05T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет работодателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "profile_not_in_category",
+                  "message": "Профиля нет в этой категории"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "offer_open",
+                  "message": "Открытое приглашение уже есть"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "salary_range",
+                  "message": "Верхняя граница больше нижней"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Employer Offers",
+        "operationId": "employer_offers_api_employer_offers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "id": 1,
+                    "profile_id": 12,
+                    "category_id": "backend:middle",
+                    "company_name": "Синтетика",
+                    "message": "Ищем backend middle в команду платежей",
+                    "salary_min": 180000,
+                    "salary_max": 250000,
+                    "salary_currency": "RUB",
+                    "contact_channel": "telegram: @sintetika",
+                    "status": "accepted",
+                    "created_at": "2026-10-05T12:00:00Z",
+                    "updated_at": "2026-10-05T12:00:00Z",
+                    "candidate_email": "seeker@example.com"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет работодателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/offers": {
+      "get": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Candidate Offers",
+        "operationId": "candidate_offers_api_candidate_offers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "id": 1,
+                    "profile_id": 12,
+                    "category_id": "backend:middle",
+                    "company_name": "Синтетика",
+                    "message": "Ищем backend middle в команду платежей",
+                    "salary_min": 180000,
+                    "salary_max": 250000,
+                    "salary_currency": "RUB",
+                    "contact_channel": "telegram: @sintetika",
+                    "status": "sent",
+                    "created_at": "2026-10-05T12:00:00Z",
+                    "updated_at": "2026-10-05T12:00:00Z"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/offers/{offer_id}": {
+      "get": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Read Offer",
+        "operationId": "read_offer_api_candidate_offers__offer_id__get",
+        "parameters": [
+          {
+            "name": "offer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Offer Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "profile_id": 12,
+                  "category_id": "backend:middle",
+                  "company_name": "Синтетика",
+                  "message": "Ищем backend middle в команду платежей",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "contact_channel": "telegram: @sintetika",
+                  "status": "sent",
+                  "created_at": "2026-10-05T12:00:00Z",
+                  "updated_at": "2026-10-05T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Приглашение не найдено"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/offers/{offer_id}/open": {
+      "post": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Open Offer Route",
+        "operationId": "open_offer_route_api_candidate_offers__offer_id__open_post",
+        "parameters": [
+          {
+            "name": "offer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Offer Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "profile_id": 12,
+                  "category_id": "backend:middle",
+                  "company_name": "Синтетика",
+                  "message": "Ищем backend middle в команду платежей",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "contact_channel": "telegram: @sintetika",
+                  "status": "seen",
+                  "created_at": "2026-10-05T12:00:00Z",
+                  "updated_at": "2026-10-05T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Приглашение не найдено"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/offers/{offer_id}/accept": {
+      "post": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Accept Offer",
+        "operationId": "accept_offer_api_candidate_offers__offer_id__accept_post",
+        "parameters": [
+          {
+            "name": "offer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Offer Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "profile_id": 12,
+                  "category_id": "backend:middle",
+                  "company_name": "Синтетика",
+                  "message": "Ищем backend middle в команду платежей",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "contact_channel": "telegram: @sintetika",
+                  "status": "accepted",
+                  "created_at": "2026-10-05T12:00:00Z",
+                  "updated_at": "2026-10-05T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Приглашение не найдено"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "offer_closed",
+                  "message": "Приглашение уже закрыто"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/offers/{offer_id}/decline": {
+      "post": {
+        "tags": [
+          "offers"
+        ],
+        "summary": "Decline Offer",
+        "operationId": "decline_offer_api_candidate_offers__offer_id__decline_post",
+        "parameters": [
+          {
+            "name": "offer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Offer Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "profile_id": 12,
+                  "category_id": "backend:middle",
+                  "company_name": "Синтетика",
+                  "message": "Ищем backend middle в команду платежей",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "contact_channel": "telegram: @sintetika",
+                  "status": "declined",
+                  "created_at": "2026-10-05T12:00:00Z",
+                  "updated_at": "2026-10-05T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Приглашение не найдено"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "offer_closed",
+                  "message": "Приглашение уже закрыто"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/resume": {
+      "post": {
+        "tags": [
+          "resume"
+        ],
+        "summary": "Upload Resume",
+        "operationId": "upload_resume_api_candidate_resume_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "profile_id": 1,
+                  "full_name": "Анна Синтетикова",
+                  "industry": "it",
+                  "specialization": "backend",
+                  "grade": "senior",
+                  "category_id": "backend:middle",
+                  "field_sources": {
+                    "full_name": "resume",
+                    "grade": "resume"
+                  },
+                  "grade_skipped": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Анкета ещё не заполнена"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request Entity Too Large",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "resume_too_large",
+                  "message": "Файл больше 2 МиБ"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "resume_no_text",
+                  "message": "В PDF нет текстового слоя. Скан без текста не читается, заполните поля вручную."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/profile.pdf": {
+      "get": {
+        "tags": [
+          "resume"
+        ],
+        "summary": "Download Profile",
+        "operationId": "download_profile_api_candidate_profile_pdf_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Это кабинет соискателя"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Анкета ещё не заполнена"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/validation": {
+      "get": {
+        "tags": [
+          "validation"
+        ],
+        "summary": "Validation Report",
+        "operationId": "validation_report_validation_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "category_match 0 0\noutcome_match 0 0\ntemplate_stable 0 0\nrelevant_in_top 0 0\nresume_ok 0 0\n"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Нужен вход"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "product_session": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "product_session"
+      }
+    }
+  }
+}

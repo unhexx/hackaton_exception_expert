@@ -1,0 +1,12 @@
+{
+  "python": ["питон", "py", "python3"],
+  "java": ["джава"],
+  "go": ["golang", "го"],
+  "javascript": ["js", "жс"],
+  "typescript": ["ts", "тс"],
+  "kotlin": ["котлин"],
+  "swift": ["свифт"],
+  "sql": ["сиквел"],
+  "linux": ["линукс"],
+  "docker": ["докер"]
+}

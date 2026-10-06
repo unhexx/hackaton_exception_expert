@@ -1,0 +1,227 @@
+"""Полная схема обязательного MVP. Срезы до вакансий эту таблицу не расширяют.
+
+Свои вакансии, отклик и короткое задание сюда не входят: колонка vacancy_id
+у приглашения пустая и без внешнего ключа.
+"""
+
+from __future__ import annotations
+
+from sqlalchemy import CheckConstraint, ForeignKey, Index, Integer, String, Text, text
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class User(Base):
+    __tablename__ = "users"
+    __table_args__ = (
+        CheckConstraint("role IN ('candidate', 'employer')", name="ck_users_role"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    email: Mapped[str] = mapped_column(String(254), unique=True, nullable=False)
+    password_hash: Mapped[str] = mapped_column(String(512), nullable=False)
+    role: Mapped[str] = mapped_column(String(16), nullable=False)
+    email_verified: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    confirmation_code_hash: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    confirmation_expires_at: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    confirmation_attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    consent_processing: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    consent_publication: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[str] = mapped_column(String(40), nullable=False)
+
+
+class Company(Base):
+    __tablename__ = "companies"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    employer_id: Mapped[int] = mapped_column(ForeignKey("users.id"), unique=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(200), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    direction: Mapped[str] = mapped_column(String(200), nullable=False, default="")
+    contact: Mapped[str] = mapped_column(String(200), nullable=False, default="")
+    updated_at: Mapped[str] = mapped_column(String(40), nullable=False)
+
+
+class Profile(Base):
+    __tablename__ = "profiles"
+    __table_args__ = (
+        CheckConstraint("industry IN ('it')", name="ck_profiles_industry"),
+        CheckConstraint(
+            "specialization IN ('backend', 'frontend', 'mobile', 'data', 'security', 'devops')",
+            name="ck_profiles_specialization",
+        ),
+        CheckConstraint(
+            "grade IN ('junior', 'middle', 'senior', 'lead')",
+            name="ck_profiles_grade",
+        ),
+        CheckConstraint(
+            "work_format IN ('офис', 'удалённо', 'гибрид')",
+            name="ck_profiles_work_format",
+        ),
+        CheckConstraint(
+            "team_role IN ('разработчик', 'тимлид', 'аналитик')",
+            name="ck_profiles_team_role",
+        ),
+        Index(
+            "uq_profiles_external",
+            "external_id",
+            unique=True,
+            sqlite_where=text("external_id IS NOT NULL AND external_id != ''"),
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), unique=True, nullable=False)
+    full_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    industry: Mapped[str] = mapped_column(String(16), nullable=False)
+    stack_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    specialization: Mapped[str] = mapped_column(String(32), nullable=False)
+    grade: Mapped[str] = mapped_column(String(16), nullable=False)
+    grade_changed_at: Mapped[str] = mapped_column(String(40), nullable=False)
+    team_role: Mapped[str] = mapped_column(String(32), nullable=False)
+    work_format: Mapped[str] = mapped_column(String(16), nullable=False)
+    experience: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    soft_skills_json: Mapped[str] = mapped_column(Text, nullable=False, default="[]")
+    external_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    field_sources_json: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
+    created_at: Mapped[str] = mapped_column(String(40), nullable=False)
+    updated_at: Mapped[str] = mapped_column(String(40), nullable=False)
+
+
+class Consent(Base):
+    __tablename__ = "consents"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id"), unique=True, nullable=False)
+    processing: Mapped[int] = mapped_column(Integer, nullable=False)
+    publication: Mapped[int] = mapped_column(Integer, nullable=False)
+    accepted_at: Mapped[str] = mapped_column(String(40), nullable=False)
+
+
+class SurveyAttempt(Base):
+    __tablename__ = "survey_attempts"
+    __table_args__ = (Index("ix_survey_profile", "profile_id"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id"), nullable=False)
+    full_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    industry: Mapped[str] = mapped_column(String(16), nullable=False)
+    stack_json: Mapped[str] = mapped_column(Text, nullable=False)
+    specialization: Mapped[str] = mapped_column(String(32), nullable=False)
+    grade: Mapped[str] = mapped_column(String(16), nullable=False)
+    team_role: Mapped[str] = mapped_column(String(32), nullable=False)
+    work_format: Mapped[str] = mapped_column(String(16), nullable=False)
+    experience: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    soft_skills_json: Mapped[str] = mapped_column(Text, nullable=False)
+    external_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    rule_version: Mapped[str] = mapped_column(String(16), nullable=False)
+    created_at: Mapped[str] = mapped_column(String(40), nullable=False)
+
+
+class TestAttempt(Base):
+    __tablename__ = "test_attempts"
+    __table_args__ = (
+        CheckConstraint("status IN ('draft', 'submitted')", name="ck_test_status"),
+        Index(
+            "uq_test_draft",
+            "profile_id",
+            unique=True,
+            sqlite_where=text("status = 'draft'"),
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id"), nullable=False)
+    specialization: Mapped[str] = mapped_column(String(32), nullable=False)
+    declared_grade: Mapped[str] = mapped_column(String(16), nullable=False)
+    template_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    rule_version: Mapped[str] = mapped_column(String(16), nullable=False)
+    answers_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    score: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    outcome: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    proposed_grade: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    status: Mapped[str] = mapped_column(String(16), nullable=False, default="draft")
+    created_at: Mapped[str] = mapped_column(String(40), nullable=False)
+    submitted_at: Mapped[str | None] = mapped_column(String(40), nullable=True)
+
+
+class CategoryAssignment(Base):
+    __tablename__ = "category_assignments"
+    __table_args__ = (
+        Index("ix_category_lookup", "category_id", "rule_version"),
+        Index("ix_category_profile", "profile_id", "rule_version"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id"), nullable=False)
+    category_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    rule_version: Mapped[str] = mapped_column(String(16), nullable=False)
+    explanation: Mapped[str] = mapped_column(Text, nullable=False)
+    test_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    rank_key: Mapped[str] = mapped_column(String(32), nullable=False)
+    scored_at: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    test_attempt_id: Mapped[int | None] = mapped_column(ForeignKey("test_attempts.id"), nullable=True)
+
+
+class Offer(Base):
+    __tablename__ = "offers"
+    __table_args__ = (
+        CheckConstraint("salary_currency = 'RUB'", name="ck_offers_currency"),
+        CheckConstraint("salary_max > salary_min", name="ck_offers_range"),
+        CheckConstraint("length(message) > 0", name="ck_offers_message"),
+        CheckConstraint("length(company_name) > 0", name="ck_offers_company"),
+        CheckConstraint("length(contact_channel) > 0", name="ck_offers_contact"),
+        CheckConstraint(
+            "status IN ('sent', 'seen', 'accepted', 'declined')",
+            name="ck_offers_status",
+        ),
+        Index(
+            "uq_offers_open",
+            "employer_id",
+            "profile_id",
+            unique=True,
+            sqlite_where=text("status IN ('sent', 'seen')"),
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    employer_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id"), nullable=False)
+    category_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    company_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    message: Mapped[str] = mapped_column(Text, nullable=False)
+    salary_min: Mapped[int] = mapped_column(Integer, nullable=False)
+    salary_max: Mapped[int] = mapped_column(Integer, nullable=False)
+    salary_currency: Mapped[str] = mapped_column(String(8), nullable=False)
+    contact_channel: Mapped[str] = mapped_column(String(200), nullable=False)
+    vacancy_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    status: Mapped[str] = mapped_column(String(16), nullable=False)
+    created_at: Mapped[str] = mapped_column(String(40), nullable=False)
+    updated_at: Mapped[str] = mapped_column(String(40), nullable=False)
+
+
+class FspParticipant(Base):
+    __tablename__ = "fsp_participants"
+
+    external_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    display_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    rank: Mapped[str] = mapped_column(String(64), nullable=False)
+
+
+class FspAchievement(Base):
+    __tablename__ = "fsp_achievements"
+    __table_args__ = (
+        Index("uq_fsp_result", "external_id", "competition_id", unique=True),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    external_id: Mapped[str] = mapped_column(ForeignKey("fsp_participants.external_id"), nullable=False)
+    competition_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    competition_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    discipline: Mapped[str] = mapped_column(String(200), nullable=False)
+    role_in_team: Mapped[str] = mapped_column(String(120), nullable=False)
+    place: Mapped[str] = mapped_column(String(64), nullable=False)
+    held_on: Mapped[str] = mapped_column(String(40), nullable=False)

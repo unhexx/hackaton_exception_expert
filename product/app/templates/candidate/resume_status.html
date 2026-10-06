@@ -1,0 +1,24 @@
+<section id="resume-status">
+  <h2>Резюме</h2>
+  {% set ns = namespace(names=[]) %}
+  {% for key, source in field_sources.items() %}
+    {% if source == 'resume' %}{% set ns.names = ns.names + [key] %}{% endif %}
+  {% endfor %}
+  {% if ns.names %}
+  <p>Из резюме: {{ ns.names | join(', ') }}.</p>
+  {% else %}
+  <p>Из резюме поля ещё не заполнялись.</p>
+  {% endif %}
+  <p>Подпись «из резюме» не является отметкой достижений ФСП.</p>
+  {% if profile %}
+  <form method="post" action="/candidate/resume" enctype="multipart/form-data">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <label for="resume-file">PDF с текстовым слоем</label>
+    <input id="resume-file" name="file" type="file" accept="application/pdf">
+    <button type="submit">Загрузить резюме</button>
+  </form>
+  <p><a href="/api/candidate/profile.pdf">PDF профиля</a></p>
+  {% else %}
+  <p>Сначала заполните анкету, затем можно загрузить PDF.</p>
+  {% endif %}
+</section>

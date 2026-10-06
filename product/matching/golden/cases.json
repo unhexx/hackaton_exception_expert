@@ -1,0 +1,1012 @@
+{
+  "top_k": 3,
+  "profiles": [
+    {
+      "profile_id": 1,
+      "specialization": "backend",
+      "grade": "middle",
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "fsp_confirmed_count": 1,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "платежи и очереди",
+      "expected_category_id": "backend:middle",
+      "template_id": "backend-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "expected_outcome": "suggest_higher"
+    },
+    {
+      "profile_id": 2,
+      "specialization": "backend",
+      "grade": "middle",
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "fsp_confirmed_count": 4,
+      "stack": [
+        "python",
+        "sql"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "backend:middle",
+      "template_id": "backend-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "expected_outcome": "suggest_higher"
+    },
+    {
+      "profile_id": 3,
+      "specialization": "backend",
+      "grade": "middle",
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "fsp_confirmed_count": 1,
+      "stack": [
+        "go"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "backend:middle",
+      "template_id": "backend-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "expected_outcome": "suggest_higher"
+    },
+    {
+      "profile_id": 4,
+      "specialization": "backend",
+      "grade": "middle",
+      "test_score": 33,
+      "test_outcome": "suggest_lower",
+      "fsp_confirmed_count": 9,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "backend:middle",
+      "template_id": "backend-middle-a",
+      "answers": [
+        "b",
+        "a",
+        "b"
+      ],
+      "expected_outcome": "suggest_lower"
+    },
+    {
+      "profile_id": 5,
+      "specialization": "backend",
+      "grade": "middle",
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "fsp_confirmed_count": 4,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "backend:middle",
+      "template_id": "backend-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "expected_outcome": "suggest_higher"
+    },
+    {
+      "profile_id": 6,
+      "specialization": "backend",
+      "grade": "senior",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "java"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "платформа",
+      "expected_category_id": "backend:senior",
+      "template_id": "backend-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 7,
+      "specialization": "backend",
+      "grade": "junior",
+      "test_score": null,
+      "test_outcome": null,
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "backend:junior"
+    },
+    {
+      "profile_id": 8,
+      "specialization": "backend",
+      "grade": "lead",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 2,
+      "stack": [
+        "go"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "синтетический стаж",
+      "expected_category_id": "backend:lead",
+      "template_id": "backend-lead-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 9,
+      "specialization": "frontend",
+      "grade": "middle",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "frontend:middle",
+      "template_id": "frontend-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 10,
+      "specialization": "frontend",
+      "grade": "middle",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 2,
+      "stack": [
+        "typescript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "frontend:middle",
+      "template_id": "frontend-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 11,
+      "specialization": "frontend",
+      "grade": "middle",
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "docker"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "frontend:middle",
+      "template_id": "frontend-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "expected_outcome": "suggest_higher"
+    },
+    {
+      "profile_id": 12,
+      "specialization": "frontend",
+      "grade": "senior",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 1,
+      "stack": [
+        "linux"
+      ],
+      "team_role": "аналитик",
+      "work_format": "офис",
+      "experience": "синтетический стаж",
+      "expected_category_id": "frontend:senior",
+      "template_id": "frontend-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 13,
+      "specialization": "frontend",
+      "grade": "junior",
+      "test_score": null,
+      "test_outcome": null,
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "frontend:junior"
+    },
+    {
+      "profile_id": 14,
+      "specialization": "frontend",
+      "grade": "lead",
+      "test_score": 33,
+      "test_outcome": "suggest_lower",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "docker"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "frontend:lead",
+      "template_id": "frontend-lead-a",
+      "answers": [
+        "b",
+        "a",
+        "b"
+      ],
+      "expected_outcome": "suggest_lower"
+    },
+    {
+      "profile_id": 15,
+      "specialization": "mobile",
+      "grade": "middle",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "mobile:middle",
+      "template_id": "mobile-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 16,
+      "specialization": "mobile",
+      "grade": "middle",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 2,
+      "stack": [
+        "sql"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "mobile:middle",
+      "template_id": "mobile-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 17,
+      "specialization": "mobile",
+      "grade": "middle",
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "mobile:middle",
+      "template_id": "mobile-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "expected_outcome": "suggest_higher"
+    },
+    {
+      "profile_id": 18,
+      "specialization": "mobile",
+      "grade": "senior",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 1,
+      "stack": [
+        "linux"
+      ],
+      "team_role": "аналитик",
+      "work_format": "офис",
+      "experience": "синтетический стаж",
+      "expected_category_id": "mobile:senior",
+      "template_id": "mobile-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 19,
+      "specialization": "mobile",
+      "grade": "junior",
+      "test_score": null,
+      "test_outcome": null,
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "mobile:junior"
+    },
+    {
+      "profile_id": 20,
+      "specialization": "mobile",
+      "grade": "lead",
+      "test_score": 33,
+      "test_outcome": "suggest_lower",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "docker"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "mobile:lead",
+      "template_id": "mobile-lead-a",
+      "answers": [
+        "b",
+        "a",
+        "b"
+      ],
+      "expected_outcome": "suggest_lower"
+    },
+    {
+      "profile_id": 21,
+      "specialization": "data",
+      "grade": "middle",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "data:middle",
+      "template_id": "data-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 22,
+      "specialization": "data",
+      "grade": "middle",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 2,
+      "stack": [
+        "sql"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "data:middle",
+      "template_id": "data-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 23,
+      "specialization": "data",
+      "grade": "middle",
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "docker"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "data:middle",
+      "template_id": "data-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "expected_outcome": "suggest_higher"
+    },
+    {
+      "profile_id": 24,
+      "specialization": "data",
+      "grade": "senior",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 1,
+      "stack": [
+        "linux"
+      ],
+      "team_role": "аналитик",
+      "work_format": "офис",
+      "experience": "синтетический стаж",
+      "expected_category_id": "data:senior",
+      "template_id": "data-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 25,
+      "specialization": "data",
+      "grade": "junior",
+      "test_score": null,
+      "test_outcome": null,
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "data:junior"
+    },
+    {
+      "profile_id": 26,
+      "specialization": "data",
+      "grade": "lead",
+      "test_score": 33,
+      "test_outcome": "suggest_lower",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "docker"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "data:lead",
+      "template_id": "data-lead-a",
+      "answers": [
+        "b",
+        "a",
+        "b"
+      ],
+      "expected_outcome": "suggest_lower"
+    },
+    {
+      "profile_id": 27,
+      "specialization": "security",
+      "grade": "middle",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "security:middle",
+      "template_id": "security-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 28,
+      "specialization": "security",
+      "grade": "middle",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 2,
+      "stack": [
+        "sql"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "security:middle",
+      "template_id": "security-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 29,
+      "specialization": "security",
+      "grade": "middle",
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "docker"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "security:middle",
+      "template_id": "security-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "expected_outcome": "suggest_higher"
+    },
+    {
+      "profile_id": 30,
+      "specialization": "security",
+      "grade": "senior",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 1,
+      "stack": [
+        "linux"
+      ],
+      "team_role": "аналитик",
+      "work_format": "офис",
+      "experience": "синтетический стаж",
+      "expected_category_id": "security:senior",
+      "template_id": "security-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 31,
+      "specialization": "security",
+      "grade": "junior",
+      "test_score": null,
+      "test_outcome": null,
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "security:junior"
+    },
+    {
+      "profile_id": 32,
+      "specialization": "security",
+      "grade": "lead",
+      "test_score": 33,
+      "test_outcome": "suggest_lower",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "docker"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "security:lead",
+      "template_id": "security-lead-a",
+      "answers": [
+        "b",
+        "a",
+        "b"
+      ],
+      "expected_outcome": "suggest_lower"
+    },
+    {
+      "profile_id": 33,
+      "specialization": "devops",
+      "grade": "middle",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "devops:middle",
+      "template_id": "devops-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 34,
+      "specialization": "devops",
+      "grade": "middle",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 2,
+      "stack": [
+        "sql"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "devops:middle",
+      "template_id": "devops-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 35,
+      "specialization": "devops",
+      "grade": "middle",
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "docker"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "devops:middle",
+      "template_id": "devops-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "expected_outcome": "suggest_higher"
+    },
+    {
+      "profile_id": 36,
+      "specialization": "devops",
+      "grade": "senior",
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "fsp_confirmed_count": 1,
+      "stack": [
+        "linux"
+      ],
+      "team_role": "аналитик",
+      "work_format": "офис",
+      "experience": "синтетический стаж",
+      "expected_category_id": "devops:senior",
+      "template_id": "devops-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "expected_outcome": "confirm"
+    },
+    {
+      "profile_id": 37,
+      "specialization": "devops",
+      "grade": "junior",
+      "test_score": null,
+      "test_outcome": null,
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "devops:junior"
+    },
+    {
+      "profile_id": 38,
+      "specialization": "devops",
+      "grade": "lead",
+      "test_score": 33,
+      "test_outcome": "suggest_lower",
+      "fsp_confirmed_count": 0,
+      "stack": [
+        "docker"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "синтетический стаж",
+      "expected_category_id": "devops:lead",
+      "template_id": "devops-lead-a",
+      "answers": [
+        "b",
+        "a",
+        "b"
+      ],
+      "expected_outcome": "suggest_lower"
+    }
+  ],
+  "needs": [
+    {
+      "id": "backend-middle",
+      "category_id": "backend:middle",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": "backend-senior",
+      "category_id": "backend:senior",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        6
+      ]
+    },
+    {
+      "id": "frontend-middle",
+      "category_id": "frontend:middle",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "id": "frontend-senior",
+      "category_id": "frontend:senior",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        12
+      ]
+    },
+    {
+      "id": "mobile-middle",
+      "category_id": "mobile:middle",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "id": "mobile-senior",
+      "category_id": "mobile:senior",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        18
+      ]
+    },
+    {
+      "id": "data-middle",
+      "category_id": "data:middle",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "id": "data-senior",
+      "category_id": "data:senior",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        24
+      ]
+    },
+    {
+      "id": "security-middle",
+      "category_id": "security:middle",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        27,
+        28,
+        29
+      ]
+    },
+    {
+      "id": "security-senior",
+      "category_id": "security:senior",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        30
+      ]
+    },
+    {
+      "id": "devops-middle",
+      "category_id": "devops:middle",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        33,
+        34,
+        35
+      ]
+    },
+    {
+      "id": "devops-senior",
+      "category_id": "devops:senior",
+      "stack": [],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": [
+        36
+      ]
+    }
+  ],
+  "template_pairs": [
+    {
+      "template_id": "backend-middle-a",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "answers_repeat": [
+        "b",
+        "c",
+        "b"
+      ]
+    },
+    {
+      "template_id": "backend-middle-b",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "answers_repeat": [
+        "b",
+        "c",
+        "a"
+      ]
+    },
+    {
+      "template_id": "frontend-junior-a",
+      "answers": [
+        "a",
+        "a",
+        "b"
+      ],
+      "answers_repeat": [
+        "a",
+        "a",
+        "b"
+      ]
+    },
+    {
+      "template_id": "security-lead-b",
+      "answers": [
+        "b",
+        "a",
+        "b"
+      ],
+      "answers_repeat": [
+        "b",
+        "a",
+        "b"
+      ]
+    }
+  ]
+}

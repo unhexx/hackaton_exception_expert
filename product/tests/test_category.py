@@ -1,4 +1,4 @@
-"""Категория после опроса и выдача только со сданным тестом."""
+"""Категория после опроса и выдача опубликованных профилей."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from product.app.db import models as db_models
 from product.app.db.session import open_session
 from product.app.services.categories import recompute
 from product.app.services.clock import utc_now
-from product.matching.category import assign_category, rank_key
+from product.matching.category import assign_category, has_prize_place, rank_key
 from product.matching.need import evaluate_need
 from product.matching.types import CategoryError, Need, ProfileView
 from product.tests.conftest import register_and_confirm
@@ -61,7 +61,10 @@ def test_category_is_spec_and_grade_without_fsp_or_industry():
         "Опрос: специализация backend, грейд middle. "
         "Тест: предложен грейд ниже, балл 0. Правила v1."
     )
-    assert taken.rank_key == rank_key(0, 4, 1)
+    assert plain.rank_key == rank_key(0, 0, 1, confirmed=False, has_prize=False)
+    assert plain.rank_key == "0-000-0000-0-00000001"
+    assert taken.rank_key == rank_key(0, 4, 1, confirmed=True, has_prize=False)
+    assert taken.rank_key == "1-000-0004-0-00000001"
     try:
         assign_category(_view(), "v2")
     except CategoryError as exc:
@@ -80,6 +83,35 @@ def test_rank_orders_score_then_achievements_and_keeps_ties():
     ordered = sorted((assign_category(row, "v1") for row in rows), key=lambda item: item.rank_key, reverse=True)
     assert [item.profile_id for item in ordered] == [13, 14, 12, 11]
     assert {item.category_id for item in ordered} == {"backend:middle"}
+
+
+def test_has_prize_place_only_first_three():
+    assert has_prize_place(["1"])
+    assert has_prize_place(["финал", "2"])
+    assert has_prize_place(("3",))
+    assert not has_prize_place(["финал", "4"])
+    assert not has_prize_place([])
+    assert not has_prize_place(["unknown"])
+
+
+def test_rank_key_prize_bit_breaks_count_tie():
+    prize = rank_key(80, 1, 1, confirmed=True, has_prize=True)
+    rest = rank_key(80, 1, 2, confirmed=True, has_prize=False)
+    ordered = sorted([prize, rest], reverse=True)
+    assert ordered[0] == prize
+    assert prize == "1-080-0001-1-00000001"
+    assert rest == "1-080-0001-0-00000002"
+
+
+def test_rank_key_unconfirmed_stays_below_scored_zero():
+    confirmed = rank_key(0, 0, 1, confirmed=True, has_prize=False)
+    unconfirmed = rank_key(0, 9, 2, confirmed=False, has_prize=True)
+    ordered = sorted([confirmed, unconfirmed], reverse=True)
+    assert ordered[0] == confirmed
+    prize = assign_category(_view(profile_id=3, test_score=80, test_outcome="confirm", fsp_has_prize=True), "v1")
+    plain = assign_category(_view(profile_id=4, test_score=80, test_outcome="confirm", fsp_has_prize=False), "v1")
+    ranked = sorted([prize, plain], key=lambda item: item.rank_key, reverse=True)
+    assert [item.profile_id for item in ranked] == [3, 4]
 
 
 def _seeker(client, email: str, **extra) -> int:
@@ -170,10 +202,11 @@ def test_employer_sees_scored_profiles_without_email(client):
     assert listed.status_code == 200
     cards = listed.json()
     ids = [card["profile_id"] for card in cards]
-    assert fresh not in ids
+    assert fresh in ids
     assert hidden not in ids
     assert zero in ids
     assert ids[0] == high
+    assert ids.index(zero) < ids.index(fresh)
     assert ids.index(many) < ids.index(one)
     assert ids.index(one) < ids.index(tie_low)
     assert ids.index(one) < ids.index(tie_high)
@@ -193,7 +226,14 @@ def test_employer_sees_scored_profiles_without_email(client):
     assert "Программирование алгоритмическое" in {row["discipline"] for row in many_card["achievements"]}
     zero_card = next(card for card in cards if card["profile_id"] == zero)
     assert zero_card["test_score"] == 0
+    assert zero_card["grade_status"] == "подтверждён"
     assert "балл 0" in zero_card["explanation"]
+    fresh_card = next(card for card in cards if card["profile_id"] == fresh)
+    assert fresh_card["test_score"] is None
+    assert fresh_card["grade_status"] == "не подтверждён"
+    assert fresh_card["rank_key"].startswith("0-")
+    assert zero_card["rank_key"].startswith("1-")
+    assert "Грейд не подтверждён, потребность без уточнений" in fresh_card["list_reason"]
 
     only_python = client.get(
         "/api/employer/candidates",
@@ -213,7 +253,7 @@ def test_employer_sees_scored_profiles_without_email(client):
     assert "Текст: платеж" not in reason
     empty_reason = cards[0]["list_reason"]
     assert empty_reason.startswith("Категория backend:middle")
-    assert "потребность без уточнений" in empty_reason
+    assert "Тест сдан, потребность без уточнений" in empty_reason
     role = client.get(
         "/api/employer/candidates",
         params={"category_id": "backend:middle", "team_role": "аналитик"},
@@ -276,6 +316,51 @@ def test_history_survives_specialization_change(client):
     assert len(stored) >= 2
 
 
+def test_prize_place_ranks_above_participant_with_same_count(client):
+    db = open_session()
+    try:
+        db.add(db_models.FspParticipant(external_id="fsp-prize-1", display_name="Призёр", rank="I"))
+        db.add(db_models.FspParticipant(external_id="fsp-prize-4", display_name="Участник", rank="I"))
+        db.flush()
+        db.add(
+            db_models.FspAchievement(
+                external_id="fsp-prize-1",
+                competition_id="prize-1",
+                competition_name="Синтетический кубок",
+                discipline="алгоритмика",
+                role_in_team="участник",
+                place="1",
+                held_on="2025-04-12",
+            )
+        )
+        db.add(
+            db_models.FspAchievement(
+                external_id="fsp-prize-4",
+                competition_id="prize-4",
+                competition_name="Синтетический кубок",
+                discipline="алгоритмика",
+                role_in_team="участник",
+                place="4",
+                held_on="2025-04-12",
+            )
+        )
+        db.commit()
+    finally:
+        db.close()
+    prize = _seeker(client, "prize@example.com", external_id="fsp-prize-1", stack=["python"])
+    rest = _seeker(client, "rest@example.com", external_id="fsp-prize-4", stack=["python"])
+    _submit(prize, 80, "confirm")
+    _submit(rest, 80, "confirm")
+    register_and_confirm(client, email="boss-prize@example.com", role="employer")
+    listed = client.get("/api/employer/candidates", params={"category_id": "backend:middle"})
+    ids = [card["profile_id"] for card in listed.json()]
+    assert ids.index(prize) < ids.index(rest)
+    prize_card = next(card for card in listed.json() if card["profile_id"] == prize)
+    rest_card = next(card for card in listed.json() if card["profile_id"] == rest)
+    assert prize_card["rank_key"].split("-")[3] == "1"
+    assert rest_card["rank_key"].split("-")[3] == "0"
+
+
 def test_need_ranks_stack_overlap_then_rank_key():
     empty = Need(category_id="backend:middle")
     both = Need(category_id="backend:middle", stack=("python", "sql"))
@@ -285,7 +370,7 @@ def test_need_ranks_stack_overlap_then_rank_key():
         team_role="разработчик",
         work_format="удалённо",
         fsp_count=0,
-        rank_key="010-0000-00000001",
+        rank_key="1-010-0000-0-00000001",
     )
     python_only = evaluate_need(
         stack=["python"],
@@ -309,11 +394,11 @@ def test_need_ranks_stack_overlap_then_rank_key():
         test_score=90,
         team_role="разработчик",
         work_format="удалённо",
-        rank_key="010-0009-00000001",
+        rank_key="1-010-0009-0-00000001",
     )
     assert vacant.sort_key[:5] == (0, 0, 0, 0, 0)
-    high_key = "090-0000-00000002"
-    low_key = "010-0009-00000001"
+    high_key = "1-090-0000-0-00000002"
+    low_key = "1-010-0009-0-00000001"
     ordered = sorted(
         [high_key, low_key],
         key=lambda key: (0, 0, 0, 0, 0, key),
@@ -333,3 +418,28 @@ def test_need_ranks_stack_overlap_then_rank_key():
     assert "в тексте профиля: платеж" in reason
     assert "Стек:" not in reason
     assert "Текст: платеж" not in reason
+    vacant_unconfirmed = evaluate_need(
+        assigned_category_id="backend:middle",
+        test_score=None,
+        stack=["python"],
+        team_role="разработчик",
+        work_format="удалённо",
+        fsp_count=0,
+        haystack="backend middle python разработчик удалённо",
+        need=Need(category_id="backend:middle"),
+        rank_key="0-000-0000-0-00000001",
+    )
+    assert vacant_unconfirmed.matched
+    assert vacant_unconfirmed.reason == "Категория backend:middle. Грейд не подтверждён, потребность без уточнений."
+    vacant_scored = evaluate_need(
+        assigned_category_id="backend:middle",
+        test_score=67,
+        stack=["python"],
+        team_role="разработчик",
+        work_format="удалённо",
+        fsp_count=0,
+        haystack="backend middle python разработчик удалённо",
+        need=Need(category_id="backend:middle"),
+        rank_key="1-067-0000-0-00000001",
+    )
+    assert vacant_scored.reason == "Категория backend:middle. Тест сдан, потребность без уточнений."

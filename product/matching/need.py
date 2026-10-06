@@ -67,7 +67,7 @@ def evaluate_need(
     """Фильтр, порядок внутри категории и фраза «почему этот человек» — один проход."""
     spec = _as_need(need)
     empty = (0, 0, 0, 0, 0, rank_key)
-    if assigned_category_id != spec.category_id or test_score is None:
+    if assigned_category_id != spec.category_id:
         return NeedFit(False, empty, "")
     overlap = [item for item in stack if item in set(spec.stack)]
     if spec.stack and not overlap:
@@ -105,7 +105,10 @@ def evaluate_need(
     if hit:
         parts.append("в тексте профиля: " + ", ".join(hit))
     if len(parts) == 1:
-        parts.append("тест сдан, потребность без уточнений")
+        if test_score is None:
+            parts.append("Грейд не подтверждён, потребность без уточнений")
+        else:
+            parts.append("Тест сдан, потребность без уточнений")
     return NeedFit(
         True,
         (len(overlap), role_hit, format_hit, fsp_hit, len(hit), rank_key),

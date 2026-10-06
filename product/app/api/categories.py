@@ -27,13 +27,17 @@ _CARD = {
     "full_name": "Иван Синтетиков",
     "industry": "it",
     "category_id": "backend:middle",
-    "explanation": _CATEGORY["explanation"],
-    "list_reason": "Категория backend:middle.",
-    "rank_key": "067-0000-00000001",
+    "explanation": "Опрос: специализация backend, грейд middle. Тест: заявленный грейд подтверждён, балл 67. Правила v1.",
+    "list_reason": "Категория backend:middle. Тест сдан, потребность без уточнений.",
+    "rank_key": "1-067-0000-0-00000001",
     "test_score": 67,
+    "grade_status": "подтверждён",
     "stack": ["python"],
     "team_role": "разработчик",
     "work_format": "удалённо",
+    "experience": "синтетический стаж",
+    "fsp_rank": "",
+    "achievements": [],
 }
 
 

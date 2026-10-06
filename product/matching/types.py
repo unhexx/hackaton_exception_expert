@@ -19,6 +19,7 @@ class ProfileView:
     test_score: int | None
     test_outcome: str | None
     fsp_confirmed_count: int
+    fsp_has_prize: bool = False
 
 
 @dataclass(frozen=True)

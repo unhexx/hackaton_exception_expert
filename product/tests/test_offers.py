@@ -172,7 +172,7 @@ def test_offer_rejects_incomplete_range_and_foreign_profile(client):
     assert unpublished.status_code == 404
     assert unpublished.json()["error"] == "profile_not_in_category"
     untested = client.post("/api/employer/offers", json=_offer(plain))
-    assert untested.status_code == 404
+    assert untested.status_code == 201, untested.text
     other = client.post("/api/employer/offers", json=_offer(visible, category_id="frontend:middle"))
     assert other.status_code == 404
     assert other.json()["error"] == "profile_not_in_category"
@@ -274,6 +274,8 @@ def test_shortlist_card_invites_with_profile_id(client):
     assert f"Номер профиля: {profile_id}" in listed.text
     assert f"/employer/offers?profile_id={profile_id}&amp;category_id=backend:middle" in listed.text
     assert "Пригласить" in listed.text
+    assert "Статус грейда: подтверждён" in listed.text
+    assert "Балл None" not in listed.text
     form = client.get(
         "/employer/offers",
         params={"profile_id": str(profile_id), "category_id": "backend:middle"},

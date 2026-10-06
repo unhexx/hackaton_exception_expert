@@ -7,14 +7,14 @@ from __future__ import annotations
 
 import json
 
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from product.app.db.models import CategoryAssignment as StoredCategory
 from product.app.db.models import Consent, FspAchievement, FspParticipant, Profile, TestAttempt
 from product.app.services.clock import utc_now
 from product.app.services.errors import fail
-from product.matching.category import assign_category
+from product.matching.category import assign_category, has_prize_place
 from product.matching.need import evaluate_need, haystack_text
 from product.matching.rules import load_rules, rule_version
 from product.matching.types import Need, NeedFit, ProfileView
@@ -26,15 +26,15 @@ def recompute(session: Session, profile_id: int) -> None:
     if profile is None:
         return
     fsp_count = 0
+    has_prize = False
     if profile.external_id:
-        fsp_count = int(
-            session.scalar(
-                select(func.count())
-                .select_from(FspAchievement)
-                .where(FspAchievement.external_id == profile.external_id)
-            )
-            or 0
+        places = list(
+            session.scalars(
+                select(FspAchievement.place).where(FspAchievement.external_id == profile.external_id)
+            ).all()
         )
+        fsp_count = len(places)
+        has_prize = has_prize_place(places)
     attempt = session.scalar(
         select(TestAttempt)
         .where(
@@ -54,6 +54,7 @@ def recompute(session: Session, profile_id: int) -> None:
         test_score=None if attempt is None else attempt.score,
         test_outcome=None if attempt is None else attempt.outcome,
         fsp_confirmed_count=fsp_count,
+        fsp_has_prize=has_prize,
     )
     decision = assign_category(view, rule_version())
     session.add(
@@ -269,6 +270,7 @@ def _card(
         "list_reason": reason,
         "rank_key": assignment.rank_key,
         "test_score": assignment.test_score,
+        "grade_status": "подтверждён" if assignment.test_score is not None else "не подтверждён",
         "stack": labels,
         "team_role": profile.team_role,
         "work_format": profile.work_format,

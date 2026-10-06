@@ -10,12 +10,15 @@
     <button type="submit">Выйти</button>
   </form>
 </nav>
-<p>Почта: {{ user.email }}</p>
-{% if has_offers %}
-<p><a href="/employer/offers">Есть отправленные приглашения</a></p>
-{% else %}
-<p>Приглашений нет.</p>
-{% endif %}
+<section>
+  <h2>Статус</h2>
+  <p>Почта: {{ user.email }}</p>
+  {% if has_offers %}
+  <p><a href="/employer/offers">Есть отправленные приглашения</a></p>
+  {% else %}
+  <p>Приглашений нет.</p>
+  {% endif %}
+</section>
 <section>
   <h2>Карточка компании</h2>
   {% if error %}<p class="error">{{ error }}</p>{% endif %}

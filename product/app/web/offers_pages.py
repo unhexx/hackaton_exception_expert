@@ -44,6 +44,8 @@ def _employer_context(request: Request, db: Session, user, error: str = "") -> d
         "user": user,
         "company": company,
         "offers": list_employer_offers(db, user),
+        "prefill_profile_id": (request.query_params.get("profile_id") or "").strip(),
+        "prefill_category_id": (request.query_params.get("category_id") or "").strip(),
     }
 
 

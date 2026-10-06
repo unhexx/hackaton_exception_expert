@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 from product.matching.category import assign_category
-from product.matching.need import haystack_text, matches_need
+from product.matching.need import haystack_text, matches_need, need_score, rank_tuple
 from product.matching.rules import rule_version
 from product.matching.types import ProfileView
 
@@ -58,6 +58,20 @@ def _matches_need(row: dict, category_id: str, need: dict) -> bool:
         fsp_count=int(row.get("fsp_confirmed_count") or 0),
         haystack=_need_text(row),
         need=need,
+    )
+
+
+def _need_rank(row: dict, rank_key: str, need: dict) -> tuple[int, str]:
+    return rank_tuple(
+        need_score(
+            stack=list(row.get("stack") or []),
+            team_role=str(row.get("team_role") or ""),
+            work_format=str(row.get("work_format") or ""),
+            fsp_count=int(row.get("fsp_confirmed_count") or 0),
+            haystack=_need_text(row),
+            need=need,
+        ),
+        rank_key,
     )
 
 
@@ -151,7 +165,7 @@ def summarize(cases: dict | None = None) -> dict:
     slots = 0
     for need in data["needs"]:
         pool = [pair for pair in ranked if _matches_need(pair[0], pair[1].category_id, need)]
-        pool.sort(key=lambda pair: pair[1].rank_key, reverse=True)
+        pool.sort(key=lambda pair: _need_rank(pair[0], pair[1].rank_key, need), reverse=True)
         taken = pool[:top_k]
         slots += len(taken)
         marked = set(need["relevant_profile_ids"])

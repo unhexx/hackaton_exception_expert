@@ -8,14 +8,21 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
-from product.app.db.models import Offer, Profile, TestAttempt
+from product.app.db.models import Offer, Profile, SurveyAttempt, TestAttempt
 from product.app.services.errors import ApiError
 from product.app.services.fsp import achievements_for
 from product.app.services.profiles import profile_payload, save_profile
 from product.app.services.resumes import apply_resume
+from product.app.services.tests import list_attempts
 from product.app.web.guards import page_user
 from product.app.web.render import assert_csrf, ensure_csrf, page_error, render
 from product.matching.rules import load_rules
+
+_OUTCOME = {
+    "confirm": "заявленный грейд подтверждён",
+    "suggest_lower": "предложен грейд ниже",
+    "suggest_higher": "предложен грейд выше",
+}
 
 router = APIRouter()
 
@@ -25,6 +32,8 @@ def _cabinet_context(request: Request, db: Session, user, error: str = "") -> di
     body = profile_payload(db, user, profile) if profile is not None else None
     test_done = False
     has_offers = False
+    surveys: list = []
+    history: list = []
     if profile is not None:
         test_done = (
             db.scalar(
@@ -38,6 +47,17 @@ def _cabinet_context(request: Request, db: Session, user, error: str = "") -> di
         has_offers = (
             db.scalar(select(Offer.id).where(Offer.profile_id == profile.id)) is not None
         )
+        surveys = list(
+            db.scalars(
+                select(SurveyAttempt)
+                .where(SurveyAttempt.profile_id == profile.id)
+                .order_by(SurveyAttempt.id.desc())
+            ).all()
+        )
+        for row in list_attempts(db, user):
+            item = dict(row)
+            item["outcome_label"] = _OUTCOME.get(row.get("outcome") or "", "")
+            history.append(item)
     return {
         "csrf": ensure_csrf(request),
         "error": error,
@@ -47,6 +67,8 @@ def _cabinet_context(request: Request, db: Session, user, error: str = "") -> di
         "fsp": achievements_for(db, None if profile is None else profile.external_id),
         "test_done": test_done,
         "has_offers": has_offers,
+        "surveys": surveys,
+        "history": history,
         "rules": load_rules(),
         "stack": [] if body is None else body["stack"],
         "soft": [] if body is None else body["soft_skills"],

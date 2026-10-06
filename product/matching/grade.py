@@ -59,6 +59,13 @@ def is_adjacent_grade(current: str, requested: str) -> bool:
     return abs(grades.index(current) - grades.index(requested)) == 1
 
 
+def is_lower_grade(current: str, requested: str) -> bool:
+    grades = _grades()
+    if current not in grades or requested not in grades:
+        return False
+    return grades.index(requested) < grades.index(current)
+
+
 def propose(score: int, grade: str, template: dict) -> tuple[str, str]:
     grades = _grades()
     index = grades.index(grade)

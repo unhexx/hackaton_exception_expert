@@ -14,6 +14,7 @@ from product.app.services.errors import explain, fail
 from product.matching.grade import (
     GradeError,
     is_adjacent_grade,
+    is_lower_grade,
     load_template,
     public_questions,
     score_attempt,
@@ -49,6 +50,37 @@ def interval_parts(profile: Profile, requested: str) -> dict[str, object]:
 
 def interval_message(profile: Profile, requested: str) -> str:
     return explain("grade_interval", **interval_parts(profile, requested))
+
+
+def grade_written_by_test(db: Session, profile: Profile) -> bool:
+    """True, только если соседний confirm уже записал новый грейд (ветка submit_attempt)."""
+    rows = db.scalars(
+        select(TestAttempt)
+        .where(
+            TestAttempt.profile_id == profile.id,
+            TestAttempt.status == "submitted",
+        )
+        .order_by(TestAttempt.id.asc())
+    ).all()
+    if not rows:
+        return False
+    running = rows[0].declared_grade
+    written = False
+    for row in rows:
+        if row.outcome == "confirm" and row.declared_grade != running:
+            written = True
+            running = row.declared_grade
+    return written
+
+
+def interval_blocks(db: Session, profile: Profile, requested: str) -> bool:
+    if requested == profile.grade:
+        return False
+    if interval_open(profile.grade_changed_at):
+        return False
+    if not grade_written_by_test(db, profile) and is_lower_grade(profile.grade, requested):
+        return False
+    return True
 
 
 def _profile(db: Session, user: User) -> Profile | None:
@@ -171,7 +203,7 @@ def start_attempt(db: Session, user: User, payload: dict | None) -> dict:
                 template_id=draft.template_id,
             )
         return _public_attempt(draft)
-    if adjacent and not interval_open(profile.grade_changed_at):
+    if adjacent and interval_blocks(db, profile, target):
         fail(409, "grade_interval", **interval_parts(profile, target))
     spec = profile.specialization
     try:
@@ -208,7 +240,7 @@ def submit_attempt(db: Session, user: User, attempt_id: int, payload: dict) -> d
     if row.status != "draft":
         fail(409, "attempt_closed")
     recorded = row.specialization == profile.specialization and row.declared_grade == profile.grade
-    if not recorded and not interval_open(profile.grade_changed_at):
+    if not recorded and interval_blocks(db, profile, row.declared_grade):
         fail(409, "grade_interval", **interval_parts(profile, row.declared_grade))
     answers = payload.get("answers") if isinstance(payload, dict) else None
     try:

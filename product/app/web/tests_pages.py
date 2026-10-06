@@ -14,8 +14,8 @@ from product.app.api.deps import db_session
 from product.app.db.models import Profile, TestAttempt
 from product.app.services.errors import ApiError, explain
 from product.app.services.tests import (
+    interval_blocks,
     interval_message,
-    interval_open,
     list_attempts,
     proposed_adjacent,
     start_attempt,
@@ -55,7 +55,7 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
     hint = ""
     if profile is None:
         hint = explain("survey_required")
-    elif offer and not interval_open(profile.grade_changed_at):
+    elif offer and interval_blocks(db, profile, offer):
         interval_notice = interval_message(profile, offer)
     return {
         "csrf": ensure_csrf(request),

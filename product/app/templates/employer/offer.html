@@ -16,11 +16,12 @@
   <input id="contact_channel" name="contact_channel" type="text" required readonly value="{{ company.contact }}">
   <label for="message">Текст</label>
   <textarea id="message" name="message" rows="3" required></textarea>
-  <label for="salary_min">Вилка от, руб.</label>
+  <label for="salary_min">Вилка от, руб. (до вычета НДФЛ)</label>
   <input id="salary_min" name="salary_min" type="number" required>
-  <label for="salary_max">Вилка до, руб.</label>
+  <label for="salary_max">Вилка до, руб. (до вычета НДФЛ)</label>
   <input id="salary_max" name="salary_max" type="number" required>
   <input type="hidden" name="salary_currency" value="RUB">
+  <p>Суммы до вычета НДФЛ.</p>
   <p><button type="submit">Отправить приглашение</button></p>
 </form>
 {% elif company and company.name and company.contact %}
@@ -35,7 +36,7 @@
   <li>
     {{ row.company_name }}, {{ row.status }}, {{ row.category_id }}
     <p>Способ связи компании: {{ row.contact_channel }}</p>
-    <p>Вилка: {{ row.salary_min }}–{{ row.salary_max }} {{ row.salary_currency }}</p>
+    <p>Вилка: {{ row.salary_min }}–{{ row.salary_max }} {{ row.salary_currency }} до вычета НДФЛ</p>
     <p>{{ row.message }}</p>
     {% if row.candidate_email %}<p>Почта соискателя: {{ row.candidate_email }}</p>{% endif %}
   </li>

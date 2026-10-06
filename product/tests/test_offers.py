@@ -219,6 +219,11 @@ def test_pages_show_contact_and_email_only_after_accept(client):
     assert "disabled" not in form.text
     assert "page-seeker@example.com" not in form.text
     assert f'type="hidden" value="{profile_id}"' in form.text
+    assert "Вилка от, руб. (до вычета НДФЛ)" in form.text
+    assert "Вилка до, руб. (до вычета НДФЛ)" in form.text
+    assert "Суммы до вычета НДФЛ." in form.text
+    assert "нетто" not in form.text
+    assert "на руки" not in form.text
     sent = client.post(
         "/employer/offers",
         data={
@@ -238,6 +243,9 @@ def test_pages_show_contact_and_email_only_after_accept(client):
     listed = client.get("/employer/offers")
     assert "Способ связи компании: telegram: @sintetika" in listed.text
     assert "page-seeker@example.com" not in listed.text
+    assert "до вычета НДФЛ" in listed.text
+    assert "нетто" not in listed.text
+    assert "на руки" not in listed.text
     assert "<script>alert(1)</script>" not in listed.text
     assert "&lt;script&gt;" in listed.text
     _login(client, "page-seeker@example.com")
@@ -245,6 +253,9 @@ def test_pages_show_contact_and_email_only_after_accept(client):
     assert "telegram: @sintetika" in page.text
     assert "page-seeker@example.com" not in page.text
     assert "Принять" in page.text
+    assert "до вычета НДФЛ" in page.text
+    assert "нетто" not in page.text
+    assert "на руки" not in page.text
     offer_id = page.text.split("/candidate/offers/")[1].split('"')[0]
     prefetch = client.get(
         f"/candidate/offers/{offer_id}",

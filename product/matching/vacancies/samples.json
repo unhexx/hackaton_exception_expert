@@ -3,7 +3,7 @@
     {
       "id": "vac-backend-middle",
       "title": "Синтетическая вакансия backend middle",
-      "text": "Платежи на python. Текст не выбирает шаблон, пара backend middle открывает backend-middle-a или backend-middle-b по profile_id.",
+      "text": "Платежи на python. Текст не выбирает шаблон, пара backend middle открывает backend-middle-a, backend-middle-b или backend-middle-c по profile_id.",
       "shows_template": "backend-middle-a"
     },
     {

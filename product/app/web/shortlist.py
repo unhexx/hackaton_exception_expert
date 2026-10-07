@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
 from product.app.services.categories import employer_candidates, parse_has_fsp
-from product.app.services.errors import ApiError, explain
+from product.app.services.errors import ApiError, hint as catalog_hint
 from product.app.web.guards import page_user
 from product.app.web.render import ensure_csrf, render
 from product.matching.rules import load_rules
@@ -48,7 +48,7 @@ def shortlist_page(request: Request, db: Session = Depends(db_session)):
             ctx["title"] = f"Подборка {category_id}"
             ctx["cards"] = cards
             if not cards:
-                ctx["hint"] = explain("hint_shortlist_empty")
+                ctx["hint"] = catalog_hint("hint_shortlist_empty")
         except ApiError as exc:
             ctx["title"] = "Подборка"
             ctx["error"] = exc.message

@@ -7,7 +7,7 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
 from product.app.api.deps import load_session_user
-from product.app.services.errors import explain
+from product.app.services.errors import hint as catalog_hint
 from product.app.web.render import ensure_csrf, render
 
 
@@ -25,7 +25,7 @@ def page_user(request: Request, db: Session, role: str):
         return None, render(
             request,
             "forbidden.html",
-            {"csrf": ensure_csrf(request), "hint": explain(key)},
+            {"csrf": ensure_csrf(request), "hint": catalog_hint(key)},
             status_code=403,
         )
     return user, None

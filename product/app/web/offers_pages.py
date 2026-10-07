@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
 from product.app.services.company import get_company
-from product.app.services.errors import ApiError, explain
+from product.app.services.errors import ApiError, hint as catalog_hint
 from product.app.services.offers import (
     create_offer,
     get_offer,
@@ -28,7 +28,7 @@ def _candidate_context(request: Request, db: Session, user, error: str = "") -> 
     return {
         "csrf": ensure_csrf(request),
         "error": error,
-        "hint": "" if offers else explain("hint_no_invites_candidate"),
+        "hint": "" if offers else catalog_hint("hint_no_invites_candidate"),
         "user": user,
         "offers": offers,
     }
@@ -52,7 +52,7 @@ def _employer_context(
     prefill_category = category_id or (request.query_params.get("category_id") or "").strip()
     name = "" if company is None else str(company.get("name") or "")
     contact = "" if company is None else str(company.get("contact") or "")
-    hint = "" if name.strip() and contact.strip() else explain("hint_offer_form")
+    hint = "" if name.strip() and contact.strip() else catalog_hint("hint_offer_form")
     return {
         "csrf": ensure_csrf(request),
         "error": error,

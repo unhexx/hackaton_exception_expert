@@ -448,6 +448,13 @@ def explain(key: str, **parts: object) -> str:
     return compose(what, why, how)
 
 
+def hint(key: str, **parts: object) -> str:
+    """Три фразы подсказки без заголовков «Что случилось», «Почему» и «Что сделать»."""
+    row = _CATALOG[key]
+    lines = [_fill(part, parts).strip() for part in row]
+    return "\n".join(line for line in lines if line)
+
+
 def example(code: str, key: str | None = None, **parts: object) -> dict[str, str]:
     catalog_key = key or code
     merged = {**_DEFAULTS.get(catalog_key, {}), **parts}

@@ -12,10 +12,10 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
 from product.app.db.models import Profile, TestAttempt
-from product.app.services.errors import ApiError, explain
+from product.app.services.errors import ApiError, hint as catalog_hint
 from product.app.services.tests import (
     interval_blocks,
-    interval_message,
+    interval_parts,
     list_attempts,
     proposed_adjacent,
     start_attempt,
@@ -54,9 +54,9 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
     interval_notice = ""
     hint = ""
     if profile is None:
-        hint = explain("survey_required")
+        hint = catalog_hint("survey_required")
     elif offer and interval_blocks(db, profile, offer):
-        interval_notice = interval_message(profile, offer)
+        interval_notice = catalog_hint("grade_interval", **interval_parts(profile, offer))
     return {
         "csrf": ensure_csrf(request),
         "error": error,

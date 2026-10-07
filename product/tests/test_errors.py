@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from product.app.services.clock import days_remaining, utc_now
-from product.app.services.errors import ApiError, _CATALOG, _DEFAULTS, compose, explain, fail
+from product.app.services.errors import ApiError, _CATALOG, _DEFAULTS, compose, explain, fail, hint
 from product.tests.conftest import register_and_confirm
 
 
@@ -72,10 +72,21 @@ def test_start_without_survey_explains_next_step(client):
     assert "анкет" in body["message"].casefold()
 
 
+def test_hint_drops_three_headings():
+    text = hint("hint_no_profile")
+    assert text.startswith("Анкеты ещё нет.")
+    assert "Что случилось" not in text
+    assert "Почему" not in text
+    assert "Что сделать" not in text
+    assert "Заполните форму ниже" in text
+
+
 def test_cabinet_without_profile_shows_hint(client):
     register_and_confirm(client)
     page = client.get("/candidate")
     assert page.status_code == 200
-    assert "Что случилось. Анкеты ещё нет." in page.text
-    assert "Приглашений нет" in page.text
-    assert "Тест ещё не сдан" in page.text
+    assert "Анкеты ещё нет." in page.text
+    assert "Что случилось" not in page.text
+    assert "Почему." not in page.text
+    assert "Что сделать" not in page.text
+    assert "Тест ещё не сдан." in page.text

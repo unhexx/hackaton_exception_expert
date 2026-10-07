@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
 from product.app.services.company import get_company
-from product.app.services.errors import ApiError, explain
+from product.app.services.errors import ApiError, hint as catalog_hint
 from product.app.services.vacancies import (
     apply_to_vacancy,
     create_vacancy,
@@ -44,7 +44,7 @@ def _employer_context(request: Request, db: Session, user, error: str = "") -> d
     return {
         "csrf": ensure_csrf(request),
         "error": error,
-        "hint": "" if name.strip() and contact.strip() else explain("hint_vacancy_form"),
+        "hint": "" if name.strip() and contact.strip() else catalog_hint("hint_vacancy_form"),
         "user": user,
         "company": company,
         "vacancies": list_employer_vacancies(db, user),
@@ -58,7 +58,7 @@ def _candidate_context(request: Request, db: Session, user, error: str = "") -> 
     return {
         "csrf": ensure_csrf(request),
         "error": error,
-        "hint": "" if vacancies else explain("hint_no_vacancies"),
+        "hint": "" if vacancies else catalog_hint("hint_no_vacancies"),
         "user": user,
         "vacancies": vacancies,
         "applications": applications,

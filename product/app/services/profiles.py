@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from product.app.db.models import Consent, Profile, SurveyAttempt, User
 from product.app.services.categories import latest_assignment, recompute
 from product.app.services.clock import utc_now
-from product.app.services.errors import explain, fail
+from product.app.services.errors import hint as catalog_hint, fail
 from product.app.services.fsp import achievements_for
 from product.app.services.offers import list_candidate_offers
 from product.app.services.tests import list_attempts
@@ -111,18 +111,18 @@ def cabinet_payload(db: Session, user: User) -> dict:
     publication = bool(user.consent_publication) if body is None else body["publication"]
     assignment = None if body is None or not body["category_id"] else body
     if profile is None:
-        hint = explain("hint_no_profile")
+        hint = catalog_hint("hint_no_profile")
     elif not test_done:
-        hint = explain("hint_no_test", specialization=profile.specialization, grade=profile.grade)
+        hint = catalog_hint("hint_no_test", specialization=profile.specialization, grade=profile.grade)
     elif not publication:
-        hint = explain("hint_no_publication")
+        hint = catalog_hint("hint_no_publication")
     elif assignment is not None:
-        hint = explain("hint_published", category_id=assignment["category_id"])
+        hint = catalog_hint("hint_published", category_id=assignment["category_id"])
     else:
         hint = ""
     offers_hint = ""
     if profile is not None and not has_offers:
-        offers_hint = explain("hint_no_invites_candidate")
+        offers_hint = catalog_hint("hint_no_invites_candidate")
     return {
         "profile": profile,
         "assignment": assignment,

@@ -378,7 +378,8 @@ def test_page_shows_attempt_history_and_vacancy_link(client):
     assert "балл 100" in again.text
     assert "предложен грейд выше" in again.text
     assert "Начать тест грейда senior" in again.text
-    assert "Что случилось" in again.text
+    assert "Что случилось" not in again.text
+    assert "ещё нельзя" in again.text
     assert "90" in again.text
 
 

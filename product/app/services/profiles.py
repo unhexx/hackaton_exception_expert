@@ -32,6 +32,7 @@ _FORM_FIELDS = (
     "soft_skills",
     "external_id",
 )
+_EXTERNAL_ID_MAX = 64
 
 
 def _as_labels(value: object, allowed: list[str], label: str) -> list[str]:
@@ -169,6 +170,8 @@ def save_profile(db: Session, user: User, payload: dict) -> dict:
         external_id = None
     elif isinstance(external, str) and external.strip():
         external_id = external.strip()
+        if len(external_id) > _EXTERNAL_ID_MAX:
+            fail(422, "external_id")
     else:
         fail(422, "external_id")
     publication_given = "publication" in payload and payload["publication"] is not None

@@ -249,6 +249,34 @@ def test_roles_profile_and_company(client):
     assert extra.json()["error"] == "extra_forbidden"
 
 
+def test_long_external_id_is_not_stored(client):
+    register_and_confirm(client)
+    too_long = "b" * 65
+    rejected = client.put("/api/candidate/profile", json={**_PROFILE, "external_id": too_long})
+    assert rejected.status_code == 422
+    assert rejected.json()["error"] == "external_id"
+    with sqlite3.connect(client.db_path) as db:
+        assert db.execute("select count(*) from profiles").fetchone()[0] == 0
+        assert db.execute("select count(*) from survey_attempts").fetchone()[0] == 0
+    exact = "a" * 64
+    saved = client.put(
+        "/api/candidate/profile",
+        json={**_PROFILE, "external_id": " " + exact + " "},
+    )
+    assert saved.status_code == 200
+    assert saved.json()["external_id"] == exact
+    again = client.put("/api/candidate/profile", json={**_PROFILE, "external_id": too_long})
+    assert again.status_code == 422
+    assert again.json()["error"] == "external_id"
+    assert client.get("/api/candidate/profile").json()["external_id"] == exact
+    with sqlite3.connect(client.db_path) as db:
+        stored = db.execute("select external_id from profiles").fetchall()
+        attempts = db.execute("select external_id from survey_attempts").fetchall()
+    assert stored == [(exact,)]
+    assert attempts == [(exact,)]
+    assert too_long[:64] not in {row[0] for row in stored + attempts}
+
+
 def test_pages_keep_roles_and_show_code_on_the_page(client):
     page = client.get("/auth/register")
     token = _csrf(page.text)

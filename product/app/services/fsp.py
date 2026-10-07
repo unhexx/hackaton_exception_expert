@@ -7,15 +7,16 @@ from sqlalchemy.orm import Session
 
 from product.app.db.models import FspAchievement, FspParticipant
 
-_EMPTY = {"display_name": "", "rank": "", "results": []}
+def _blank() -> dict:
+    return {"display_name": "", "rank": "", "results": []}
 
 
 def achievements_for(session: Session, external_id: str | None) -> dict:
     if external_id is None or not str(external_id).strip():
-        return dict(_EMPTY)
+        return _blank()
     person = session.get(FspParticipant, str(external_id).strip())
     if person is None:
-        return dict(_EMPTY)
+        return _blank()
     rows = session.scalars(
         select(FspAchievement)
         .where(FspAchievement.external_id == person.external_id)

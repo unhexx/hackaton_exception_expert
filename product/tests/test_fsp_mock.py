@@ -82,6 +82,21 @@ def test_unknown_id_is_empty_history(client):
         db.close()
 
 
+def test_empty_achievements_do_not_share_results(client):
+    db = open_session()
+    try:
+        blank = achievements_for(db, None)
+        blank["results"].append({"competition_id": "leak"})
+        again = achievements_for(db, "   ")
+        missing = achievements_for(db, "fsp-no-such")
+    finally:
+        db.close()
+    assert again == {"display_name": "", "rank": "", "results": []}
+    assert missing["results"] == []
+    assert blank["results"] is not again["results"]
+    assert again["results"] is not missing["results"]
+
+
 def test_seed_loads_once_and_skips_existing_keys(client):
     with sqlite3.connect(client.db_path) as db:
         people = db.execute("select external_id, rank from fsp_participants order by external_id").fetchall()

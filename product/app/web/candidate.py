@@ -21,6 +21,12 @@ def _cabinet_context(request: Request, db: Session, user, error: str = "") -> di
     body["csrf"] = ensure_csrf(request)
     body["error"] = error
     body["user"] = user
+    link_error = request.session.pop("link_error", None)
+    link_hint = request.session.pop("link_hint", None)
+    if isinstance(link_error, str) and link_error and not error:
+        body["error"] = link_error
+    if isinstance(link_hint, str) and link_hint:
+        body["hint"] = link_hint
     return body
 
 

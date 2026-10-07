@@ -121,6 +121,7 @@
     </div>
     <label for="external_id">ID ФСП, если есть</label>
     <input id="external_id" name="external_id" type="text" value="{{ profile.external_id if profile and profile.external_id else '' }}">
+    <p><a href="/auth/fsp/start">Связь с ID участника ФСП</a></p>
     <p>Согласие на обработку персональных данных дано при регистрации.</p>
     <label><input type="checkbox" name="publication" value="1" {% if publication %}checked{% endif %}> Публиковать профиль в подборке работодателя</label>
     <p><button type="submit">Сохранить</button></p>

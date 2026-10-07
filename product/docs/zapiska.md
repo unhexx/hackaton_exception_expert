@@ -12,7 +12,7 @@
 - API: FastAPI, префикс JSON `/api`. Сессия — cookie `product_session`.
 - Хранилище: один файл SQLite в режиме WAL. На стенде это `/data/app.sqlite` в томе `fsp-sqlite`. Писатель один.
 
-Подбор, тест и разбор резюме — функции в `product/matching`. Мок достижений при старте кладёт JSON из git в SQLite; кабинеты и пересчёт категории читают одни таблицы. Каталог `memory` продукт не импортирует. Отдельной СУБД, React и Keycloak в compose нет.
+Подбор, тест и разбор резюме — функции в `product/matching`. Мок достижений при старте кладёт JSON из git в SQLite; кабинеты и пересчёт категории читают одни таблицы. Каталог `memory` продукт не импортирует. Отдельной СУБД и React в compose нет. Локальный Keycloak есть и в образ приложения не входит.
 
 ### Модели
 
@@ -60,14 +60,15 @@ resume_ok 4 4
 
 ## Будущая интеграция с реестром ФСП
 
-Кабинеты зависят от интерфейса `FspClient`. На стенде это чтение `participants.json`. Позже та же точка может получить HTTP-реализацию реестра. Вход в реестр по этой схеме опирается на Keycloak как будущую основу ФСП ID. На стенде Keycloak не поднимается, пунктир не настроен, секрета боевой ФСП нет. Связь анкеты с участником — необязательный `external_id`.
+Кабинеты зависят от интерфейса `FspClient`. На стенде это чтение `participants.json`. Боевого коннектора реестра нет. Стенд поднимает локальный реалм Keycloak. Кандидат, уже вошедший по почте, связывает `external_id` из claim `fsp_external_id` или `sub`. Секрета боевой ФСП нет. На схеме локальный Keycloak — сплошной узел стенда, issuer заказчика — пунктир.
 
 ```mermaid
 flowchart LR
   app[Сервисы кабинетов] --> client[FspClient]
   client --> json[JsonFspClient на стенде]
   client -.-> http[Будущая реализация HTTP реестра]
-  http -.-> idp[Keycloak как будущая основа ФСП ID]
+  app --> kc[Локальный Keycloak на стенде]
+  kc -.-> issuer[Issuer заказчика]
 ```
 
 ## API
@@ -78,7 +79,7 @@ flowchart LR
 
 ## Библиотеки
 
-Список снят `pip freeze` внутри образа `fsp-vacancies:local` на Python 3.12 и записан в `product/requirements.lock`. Строка `fsp-vacancies @ file:///srv/product` — так pip называет пакет, поставленный из дерева образа. Версия пакета в `product/pyproject.toml` — 1.0.1.
+Список снят `pip freeze` внутри образа `fsp-vacancies:local` на Python 3.12 и записан в `product/requirements.lock`. Строка `fsp-vacancies @ file:///srv/product` — так pip называет пакет, поставленный из дерева образа. Версия пакета в `product/pyproject.toml` — 1.1.0.
 
 Прямые зависимости образа:
 
@@ -108,7 +109,7 @@ pytest и httpx нужны прогону тестов в том же образ
 docker compose -f deploy/fsp/compose.yaml up --build
 ```
 
-Образ собирается из `python:3.12-slim`. Зависимости ставит `pip` внутри Dockerfile. Точка входа при необходимости пишет секрет, выполняет `python -m product.seed`, затем uvicorn на порту 8000. Клиент, API и файл базы — этот процесс и том. Keycloak, Pango и Node в образ не входят. Кабинеты: `http://127.0.0.1:8000`.
+Образ собирается из `python:3.12-slim`. Зависимости ставит `pip` внутри Dockerfile. Точка входа при необходимости пишет секрет, выполняет `python -m product.seed`, затем uvicorn на порту 8000. Клиент, API и файл базы — этот процесс и том. Контейнер Keycloak слушает `127.0.0.1:8080` и не блокирует старт uvicorn. Keycloak, Pango и Node в образ приложения не входят. Кабинеты: `http://127.0.0.1:8000`.
 
 Проверка тестов:
 

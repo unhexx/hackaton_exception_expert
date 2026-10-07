@@ -5,7 +5,6 @@ from __future__ import annotations
 import base64
 import hashlib
 import importlib
-import json
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -14,6 +13,7 @@ import pytest
 
 from product.app.main import create_app
 from product.app.services import oidc
+from product.tests.oidc_sign import jwks, sign
 
 _PUBLIC = "http://127.0.0.1:8080/realms/fsp"
 _INTERNAL = "http://keycloak:8080/realms/fsp"
@@ -30,25 +30,23 @@ def _clear_oidc_env(monkeypatch):
         monkeypatch.delenv(name, raising=False)
 
 
-def _jwt(payload: dict) -> str:
-    head = base64.urlsafe_b64encode(b'{"alg":"none"}').decode("ascii").rstrip("=")
-    body = base64.urlsafe_b64encode(
-        json.dumps(payload, separators=(",", ":")).encode("utf-8")
-    ).decode("ascii").rstrip("=")
-    return f"{head}.{body}.sig"
+def _install_http(monkeypatch, payload: dict, seen: dict, *, token: str | None = None):
+    signed = token if token is not None else sign(payload)
 
-
-def _install_http(monkeypatch, payload: dict, seen: dict):
     def get(url: str) -> dict:
-        seen["get"] = url
-        return {
-            "token_endpoint": f"{_PUBLIC}/protocol/openid-connect/token",
-        }
+        if url.endswith("openid-configuration"):
+            seen["get"] = url
+            return {
+                "token_endpoint": f"{_PUBLIC}/protocol/openid-connect/token",
+                "jwks_uri": f"{_PUBLIC}/protocol/openid-connect/certs",
+            }
+        seen["jwks"] = url
+        return jwks()
 
     def post(url: str, body: dict) -> dict:
         seen["post"] = url
         seen["body"] = body
-        return {"id_token": _jwt(payload)}
+        return {"id_token": signed}
 
     monkeypatch.setattr(oidc, "http_get", get)
     monkeypatch.setattr(oidc, "http_post", post)
@@ -110,6 +108,49 @@ def test_foreign_iss_rejected(monkeypatch):
     assert raised.value.code == "issuer"
     _install_http(monkeypatch, {"iss": _PUBLIC, "sub": "fsp-synth-1"}, seen)
     assert oidc.exchange("code-1", "verifier-1")["sub"] == "fsp-synth-1"
+
+
+def test_unsigned_token_rejected(monkeypatch):
+    seen: dict = {}
+    head = base64.urlsafe_b64encode(b'{"alg":"none"}').decode("ascii").rstrip("=")
+    body = base64.urlsafe_b64encode(b'{"iss":"x"}').decode("ascii").rstrip("=")
+    _install_http(monkeypatch, {}, seen, token=f"{head}.{body}.sig")
+    with pytest.raises(oidc.OidcError) as raised:
+        oidc.exchange("code-1", "verifier-1")
+    assert raised.value.code == "token"
+
+
+def test_bad_signature_rejected(monkeypatch):
+    seen: dict = {}
+    signed = sign({"iss": _PUBLIC, "sub": "fsp-synth-1"})
+    cut = signed.rindex(".") + 8
+    flipped = signed[:cut] + ("A" if signed[cut] != "A" else "B") + signed[cut + 1:]
+    _install_http(monkeypatch, {}, seen, token=flipped)
+    with pytest.raises(oidc.OidcError) as raised:
+        oidc.exchange("code-1", "verifier-1")
+    assert raised.value.code == "signature"
+
+
+def test_expired_and_foreign_audience(monkeypatch):
+    seen: dict = {}
+    _install_http(
+        monkeypatch,
+        {},
+        seen,
+        token=sign({"iss": _PUBLIC, "sub": "fsp-synth-1"}, exp=int(__import__("time").time()) - 120),
+    )
+    with pytest.raises(oidc.OidcError) as raised:
+        oidc.exchange("code-1", "verifier-1")
+    assert raised.value.code == "expired"
+    _install_http(
+        monkeypatch,
+        {},
+        seen,
+        token=sign({"iss": _PUBLIC, "sub": "fsp-synth-1"}, aud="other-client"),
+    )
+    with pytest.raises(oidc.OidcError) as audience:
+        oidc.exchange("code-1", "verifier-1")
+    assert audience.value.code == "audience"
 
 
 def test_long_claim_not_taken():

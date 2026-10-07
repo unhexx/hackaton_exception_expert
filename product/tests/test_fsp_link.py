@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import base64
 import hashlib
-import json
 import sqlite3
 import urllib.parse
 
@@ -14,6 +13,7 @@ from product.app.main import app
 from product.app.services import oidc
 from product.app.services.errors import explain
 from product.tests.conftest import register_and_confirm
+from product.tests.oidc_sign import jwks, sign
 
 _PUBLIC = "http://127.0.0.1:8080/realms/fsp"
 _PROFILE = {
@@ -31,23 +31,22 @@ _PROFILE = {
 }
 
 
-def _jwt(payload: dict) -> str:
-    head = base64.urlsafe_b64encode(b'{"alg":"none"}').decode("ascii").rstrip("=")
-    body = base64.urlsafe_b64encode(
-        json.dumps(payload, separators=(",", ":")).encode("utf-8")
-    ).decode("ascii").rstrip("=")
-    return f"{head}.{body}.sig"
-
-
 def _install_http(monkeypatch, payload: dict, seen: dict):
+    signed = sign(payload)
+
     def get(url: str) -> dict:
         seen.setdefault("get", []).append(url)
-        return {"token_endpoint": f"{_PUBLIC}/protocol/openid-connect/token"}
+        if url.endswith("openid-configuration"):
+            return {
+                "token_endpoint": f"{_PUBLIC}/protocol/openid-connect/token",
+                "jwks_uri": f"{_PUBLIC}/protocol/openid-connect/certs",
+            }
+        return jwks()
 
     def post(url: str, body: dict) -> dict:
         seen.setdefault("post", []).append(url)
         seen["body"] = body
-        return {"id_token": _jwt(payload)}
+        return {"id_token": signed}
 
     monkeypatch.setattr(oidc, "http_get", get)
     monkeypatch.setattr(oidc, "http_post", post)

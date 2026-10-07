@@ -11,9 +11,25 @@ _OUTCOME = {
     "suggest_higher": "предложен грейд выше",
 }
 
+PRIZE_PLACES = frozenset({"1", "2", "3"})
 
-def rank_key(test_score: int, fsp_confirmed_count: int, profile_id: int) -> str:
-    return f"{test_score:03d}-{fsp_confirmed_count:04d}-{profile_id:08d}"
+
+def has_prize_place(places: list[str] | tuple[str, ...]) -> bool:
+    return any(str(place) in PRIZE_PLACES for place in places)
+
+
+def rank_key(
+    test_score: int,
+    fsp_confirmed_count: int,
+    profile_id: int,
+    *,
+    confirmed: bool,
+    has_prize: bool,
+) -> str:
+    return (
+        f"{int(confirmed)}-{test_score:03d}-"
+        f"{fsp_confirmed_count:04d}-{int(has_prize)}-{profile_id:08d}"
+    )
 
 
 def assign_category(profile: ProfileView, rule_version: str) -> CategoryAssignment:
@@ -43,5 +59,11 @@ def assign_category(profile: ProfileView, rule_version: str) -> CategoryAssignme
         rule_version=rule_version,
         explanation=explanation,
         test_score=stored_score,
-        rank_key=rank_key(points, profile.fsp_confirmed_count, profile.profile_id),
+        rank_key=rank_key(
+            points,
+            profile.fsp_confirmed_count,
+            profile.profile_id,
+            confirmed=profile.test_score is not None,
+            has_prize=profile.fsp_has_prize,
+        ),
     )

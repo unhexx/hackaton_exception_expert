@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from product.app.api.deps import db_session, require_employer
 from product.app.db.models import User
 from product.app.services.company import get_company, save_company
+from product.app.services.errors import example, response_example
 
 router = APIRouter(tags=["employer"])
 
@@ -23,9 +24,9 @@ _CARD = {
     "/employer/company",
     responses={
         200: {"content": {"application/json": {"example": _CARD}}},
-        401: {"content": {"application/json": {"example": {"error": "unauthorized", "message": "Нужен вход"}}}},
-        403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет работодателя"}}}},
-        404: {"content": {"application/json": {"example": {"error": "company_missing", "message": "Карточка компании не заполнена"}}}},
+        401: {"content": {"application/json": {"example": example("unauthorized")}}},
+        403: {"content": {"application/json": {"example": example("forbidden", "forbidden_employer")}}},
+        404: {"content": {"application/json": {"example": example("company_missing")}}},
     },
 )
 def read_company(user: User = Depends(require_employer), db: Session = Depends(db_session)):
@@ -36,7 +37,7 @@ def read_company(user: User = Depends(require_employer), db: Session = Depends(d
     "/employer/company",
     responses={
         200: {"content": {"application/json": {"example": _CARD}}},
-        422: {"content": {"application/json": {"example": {"error": "extra_forbidden", "message": "Лишнее поле"}}}},
+        422: response_example(422, example("extra_forbidden")),
     },
 )
 def write_company(

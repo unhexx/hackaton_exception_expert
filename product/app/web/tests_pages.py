@@ -12,19 +12,21 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
 from product.app.db.models import Profile, TestAttempt
-from product.app.services.errors import ApiError
-from product.app.services.tests import list_attempts, proposed_adjacent, start_attempt, submit_attempt
+from product.app.services.errors import ApiError, explain
+from product.app.services.tests import (
+    interval_blocks,
+    interval_message,
+    list_attempts,
+    proposed_adjacent,
+    start_attempt,
+    submit_attempt,
+)
 from product.app.web.guards import page_user
 from product.app.web.render import assert_csrf, ensure_csrf, page_error, render
 from product.matching.grade import load_template, public_questions
 
 router = APIRouter()
 _SAMPLES = Path(__file__).resolve().parents[2] / "matching" / "vacancies" / "samples.json"
-_OUTCOME = {
-    "confirm": "заявленный грейд подтверждён",
-    "suggest_lower": "предложен грейд ниже",
-    "suggest_higher": "предложен грейд выше",
-}
 
 
 def _samples() -> list[dict]:
@@ -47,21 +49,25 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
         )
         if draft is not None:
             questions = public_questions(load_template(draft.template_id))
-    history = []
-    for row in list_attempts(db, user):
-        row = dict(row)
-        row["outcome_label"] = _OUTCOME.get(row.get("outcome") or "", "")
-        history.append(row)
+    history = list_attempts(db, user)
     offer = proposed_adjacent(db, profile) if profile is not None else ""
+    interval_notice = ""
+    hint = ""
+    if profile is None:
+        hint = explain("survey_required")
+    elif offer and interval_blocks(db, profile, offer):
+        interval_notice = interval_message(profile, offer)
     return {
         "csrf": ensure_csrf(request),
         "error": error,
+        "hint": hint,
         "user": user,
         "profile": profile,
         "draft": draft,
         "questions": questions,
         "history": history,
         "offer": offer,
+        "interval_notice": interval_notice,
         "samples": _samples(),
     }
 

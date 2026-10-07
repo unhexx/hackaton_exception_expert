@@ -7,7 +7,14 @@ from sqlalchemy.orm import Session
 
 from product.app.db.models import Company, User
 from product.app.services.clock import utc_now
-from product.app.services.errors import ApiError
+from product.app.services.errors import fail
+
+_LABELS = {
+    "name": "название",
+    "description": "описание",
+    "direction": "направление",
+    "contact": "контакт",
+}
 
 _FIELDS = ("name", "description", "direction", "contact")
 
@@ -24,19 +31,19 @@ def company_payload(row: Company) -> dict:
 def get_company(db: Session, user: User) -> dict:
     row = db.scalar(select(Company).where(Company.employer_id == user.id))
     if row is None:
-        raise ApiError(404, "company_missing", "Карточка компании не заполнена")
+        fail(404, "company_missing")
     return company_payload(row)
 
 
 def save_company(db: Session, user: User, payload: dict) -> dict:
     extra = set(payload) - set(_FIELDS)
     if extra:
-        raise ApiError(422, "extra_forbidden", "Лишнее поле")
+        fail(422, "extra_forbidden")
     values: dict[str, str] = {}
     for key in _FIELDS:
         raw = payload.get(key)
         if not isinstance(raw, str):
-            raise ApiError(422, key, "Нужна строка")
+            fail(422, key, "company_field", field=key, label=_LABELS[key])
         values[key] = raw.strip()
     row = db.scalar(select(Company).where(Company.employer_id == user.id))
     now = utc_now()

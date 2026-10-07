@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from product.app.api.deps import current_user, db_session
 from product.app.db.models import User
 from product.app.services.auth import authenticate, confirm_email, register_user, resend_code
+from product.app.services.errors import example, response_example
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -19,7 +20,7 @@ _CANDIDATE = {
     "role": "candidate",
     "consent": True,
 }
-_ERR = {"error": "email", "message": "Некорректная почта"}
+_ERR = example("email")
 
 
 @router.post(
@@ -27,8 +28,8 @@ _ERR = {"error": "email", "message": "Некорректная почта"}
     status_code=201,
     responses={
         201: {"content": {"application/json": {"example": {"code": "123456"}}}},
-        409: {"content": {"application/json": {"example": {"error": "email_taken", "message": "Почта уже зарегистрирована"}}}},
-        422: {"content": {"application/json": {"example": {"error": "consent_required", "message": "Нужно явное согласие"}}}},
+        409: {"content": {"application/json": {"example": example("email_taken")}}},
+        422: response_example(422, example("consent_required")),
     },
 )
 def register(
@@ -53,8 +54,8 @@ def register(
     "/confirm",
     responses={
         200: {"content": {"application/json": {"example": {"verified": True}}}},
-        400: {"content": {"application/json": {"example": {"error": "code_invalid", "message": "Код не подошёл"}}}},
-        409: {"content": {"application/json": {"example": {"error": "already_verified", "message": "Почта уже подтверждена"}}}},
+        400: {"content": {"application/json": {"example": example("code_invalid")}}},
+        409: {"content": {"application/json": {"example": example("already_verified")}}},
     },
 )
 def confirm(
@@ -87,8 +88,8 @@ def confirm_resend(
     "/login",
     responses={
         200: {"content": {"application/json": {"example": {"role": "candidate"}}}},
-        401: {"content": {"application/json": {"example": {"error": "credentials", "message": "Неверная почта или пароль"}}}},
-        403: {"content": {"application/json": {"example": {"error": "email_unverified", "message": "Почта не подтверждена"}}}},
+        401: {"content": {"application/json": {"example": example("credentials")}}},
+        403: {"content": {"application/json": {"example": example("email_unverified")}}},
     },
 )
 def login(
@@ -112,7 +113,7 @@ def login(
     status_code=204,
     responses={
         204: {"description": "Сессия закрыта"},
-        401: {"content": {"application/json": {"example": {"error": "unauthorized", "message": "Нужен вход"}}}},
+        401: {"content": {"application/json": {"example": example("unauthorized")}}},
     },
 )
 def logout(request: Request, user: User = Depends(current_user)):

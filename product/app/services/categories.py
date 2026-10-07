@@ -7,17 +7,17 @@ from __future__ import annotations
 
 import json
 
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from product.app.db.models import CategoryAssignment as StoredCategory
 from product.app.db.models import Consent, FspAchievement, FspParticipant, Profile, TestAttempt
 from product.app.services.clock import utc_now
-from product.app.services.errors import ApiError
-from product.matching.category import assign_category
-from product.matching.need import haystack_text, list_reason, matches_need, need_score, rank_tuple
+from product.app.services.errors import fail
+from product.matching.category import assign_category, has_prize_place
+from product.matching.need import evaluate_need, haystack_text
 from product.matching.rules import load_rules, rule_version
-from product.matching.types import ProfileView
+from product.matching.types import Need, NeedFit, ProfileView
 
 
 def recompute(session: Session, profile_id: int) -> None:
@@ -26,15 +26,15 @@ def recompute(session: Session, profile_id: int) -> None:
     if profile is None:
         return
     fsp_count = 0
+    has_prize = False
     if profile.external_id:
-        fsp_count = int(
-            session.scalar(
-                select(func.count())
-                .select_from(FspAchievement)
-                .where(FspAchievement.external_id == profile.external_id)
-            )
-            or 0
+        places = list(
+            session.scalars(
+                select(FspAchievement.place).where(FspAchievement.external_id == profile.external_id)
+            ).all()
         )
+        fsp_count = len(places)
+        has_prize = has_prize_place(places)
     attempt = session.scalar(
         select(TestAttempt)
         .where(
@@ -54,6 +54,7 @@ def recompute(session: Session, profile_id: int) -> None:
         test_score=None if attempt is None else attempt.score,
         test_outcome=None if attempt is None else attempt.outcome,
         fsp_confirmed_count=fsp_count,
+        fsp_has_prize=has_prize,
     )
     decision = assign_category(view, rule_version())
     session.add(
@@ -83,7 +84,7 @@ def latest_assignment(session: Session, profile_id: int) -> StoredCategory | Non
     )
 
 
-def _require_category(category_id: str) -> str:
+def require_category(category_id: str) -> str:
     rules = load_rules()
     parts = category_id.split(":")
     if (
@@ -92,7 +93,7 @@ def _require_category(category_id: str) -> str:
         or parts[1] not in rules["grades"]
         or "/" in category_id
     ):
-        raise ApiError(422, "category_id", "Нужна категория из специализации и грейда")
+        fail(422, "category_id")
     return category_id
 
 
@@ -103,12 +104,18 @@ def parse_has_fsp(raw: str | None) -> bool | None:
         return True
     if raw == "false":
         return False
-    raise ApiError(422, "closed_list", "Признак достижений — true или false")
+    fail(422, "closed_list", "closed_list_has_fsp")
 
 
 def _closed(value: str, allowed: list[str], code: str) -> None:
     if value not in allowed:
-        raise ApiError(422, code, "Значение не из списка")
+        fail(
+            422,
+            code,
+            "closed_list",
+            what="фильтр подборки",
+            allowed=", ".join(allowed),
+        )
 
 
 def _need(
@@ -119,23 +126,23 @@ def _need(
     work_format: str,
     has_fsp: bool | None,
     q: str,
-) -> dict:
-    return {
-        "category_id": category_id,
-        "stack": stack,
-        "team_role": team_role,
-        "work_format": work_format,
-        "has_fsp": has_fsp,
-        "q": q,
-    }
+) -> Need:
+    return Need(
+        category_id=category_id,
+        stack=tuple(item for item in stack if item),
+        team_role=team_role,
+        work_format=work_format,
+        has_fsp=has_fsp,
+        q=q,
+    )
 
 
 def _profile_matches(
     session: Session,
     profile: Profile,
     assignment: StoredCategory,
-    need: dict,
-) -> tuple[bool, list[str], list[FspAchievement], str, str]:
+    need: Need,
+) -> tuple[NeedFit, list[str], list[FspAchievement], str]:
     labels = json.loads(profile.stack_json or "[]")
     achievements: list[FspAchievement] = []
     rank = ""
@@ -156,7 +163,7 @@ def _profile_matches(
         work_format=profile.work_format,
         experience=profile.experience or "",
     )
-    ok = matches_need(
+    fit = evaluate_need(
         assigned_category_id=assignment.category_id,
         test_score=assignment.test_score,
         stack=labels,
@@ -165,12 +172,13 @@ def _profile_matches(
         fsp_count=len(achievements),
         haystack=haystack,
         need=need,
+        rank_key=assignment.rank_key,
     )
-    return ok, labels, achievements, rank, haystack
+    return fit, labels, achievements, rank
 
 
 def visible_in_category(session: Session, profile_id: int, category_id: str) -> bool:
-    category_id = _require_category(category_id)
+    category_id = require_category(category_id)
     profile = session.get(Profile, profile_id)
     if profile is None:
         return False
@@ -180,7 +188,7 @@ def visible_in_category(session: Session, profile_id: int, category_id: str) -> 
     assignment = latest_assignment(session, profile.id)
     if assignment is None:
         return False
-    ok, _labels, _achievements, _rank, _haystack = _profile_matches(
+    fit, _labels, _achievements, _rank = _profile_matches(
         session,
         profile,
         assignment,
@@ -193,7 +201,7 @@ def visible_in_category(session: Session, profile_id: int, category_id: str) -> 
             q="",
         ),
     )
-    return ok
+    return fit.matched
 
 
 def employer_candidates(
@@ -207,7 +215,7 @@ def employer_candidates(
     q: str,
 ) -> list[dict]:
     rules = load_rules()
-    category_id = _require_category(category_id)
+    category_id = require_category(category_id)
     for item in stack:
         _closed(item, rules["stack"], "closed_list")
     if team_role:
@@ -222,7 +230,7 @@ def employer_candidates(
         has_fsp=has_fsp,
         q=q,
     )
-    found: list[dict] = []
+    ranked: list[tuple[tuple[int, int, int, int, int, str], dict]] = []
     profiles = session.scalars(select(Profile)).all()
     for profile in profiles:
         consent = session.scalar(select(Consent).where(Consent.profile_id == profile.id))
@@ -231,24 +239,17 @@ def employer_candidates(
         assignment = latest_assignment(session, profile.id)
         if assignment is None:
             continue
-        ok, labels, achievements, rank, haystack = _profile_matches(session, profile, assignment, need)
-        if not ok:
+        fit, labels, achievements, rank = _profile_matches(session, profile, assignment, need)
+        if not fit.matched:
             continue
-        found.append(
-            _card(
-                profile,
-                assignment,
-                labels,
-                achievements,
-                rank,
-                haystack=haystack,
-                need=need,
+        ranked.append(
+            (
+                fit.sort_key,
+                _card(profile, assignment, labels, achievements, rank, reason=fit.reason),
             )
         )
-    found.sort(key=lambda item: rank_tuple(item["_need_score"], item["rank_key"]), reverse=True)
-    for item in found:
-        item.pop("_need_score")
-    return found
+    ranked.sort(key=lambda item: item[0], reverse=True)
+    return [card for _key, card in ranked]
 
 
 def _card(
@@ -258,35 +259,18 @@ def _card(
     achievements: list[FspAchievement],
     rank: str,
     *,
-    haystack: str,
-    need: dict,
+    reason: str,
 ) -> dict:
-    fsp_count = len(achievements)
     return {
         "profile_id": profile.id,
         "full_name": profile.full_name,
         "industry": profile.industry,
         "category_id": assignment.category_id,
         "explanation": assignment.explanation,
-        "list_reason": list_reason(
-            assigned_category_id=assignment.category_id,
-            stack=labels,
-            team_role=profile.team_role,
-            work_format=profile.work_format,
-            fsp_count=fsp_count,
-            haystack=haystack,
-            need=need,
-        ),
+        "list_reason": reason,
         "rank_key": assignment.rank_key,
-        "_need_score": need_score(
-            stack=labels,
-            team_role=profile.team_role,
-            work_format=profile.work_format,
-            fsp_count=fsp_count,
-            haystack=haystack,
-            need=need,
-        ),
         "test_score": assignment.test_score,
+        "grade_status": "подтверждён" if assignment.test_score is not None else "не подтверждён",
         "stack": labels,
         "team_role": profile.team_role,
         "work_format": profile.work_format,

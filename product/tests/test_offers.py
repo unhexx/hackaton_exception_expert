@@ -172,7 +172,7 @@ def test_offer_rejects_incomplete_range_and_foreign_profile(client):
     assert unpublished.status_code == 404
     assert unpublished.json()["error"] == "profile_not_in_category"
     untested = client.post("/api/employer/offers", json=_offer(plain))
-    assert untested.status_code == 404
+    assert untested.status_code == 201, untested.text
     other = client.post("/api/employer/offers", json=_offer(visible, category_id="frontend:middle"))
     assert other.status_code == 404
     assert other.json()["error"] == "profile_not_in_category"
@@ -211,10 +211,19 @@ def test_pages_show_contact_and_email_only_after_accept(client):
     assert "Отправить приглашение" in bare.text
     saved = client.put("/api/employer/company", json=_CARD)
     assert saved.status_code == 200, saved.text
-    form = client.get("/employer/offers")
+    form = client.get(
+        "/employer/offers",
+        params={"profile_id": str(profile_id), "category_id": "backend:middle"},
+    )
     assert "telegram: @sintetika" in form.text
     assert "disabled" not in form.text
     assert "page-seeker@example.com" not in form.text
+    assert f'type="hidden" value="{profile_id}"' in form.text
+    assert "Вилка от, руб. (до вычета НДФЛ)" in form.text
+    assert "Вилка до, руб. (до вычета НДФЛ)" in form.text
+    assert "Суммы до вычета НДФЛ." in form.text
+    assert "нетто" not in form.text
+    assert "на руки" not in form.text
     sent = client.post(
         "/employer/offers",
         data={
@@ -234,6 +243,9 @@ def test_pages_show_contact_and_email_only_after_accept(client):
     listed = client.get("/employer/offers")
     assert "Способ связи компании: telegram: @sintetika" in listed.text
     assert "page-seeker@example.com" not in listed.text
+    assert "до вычета НДФЛ" in listed.text
+    assert "нетто" not in listed.text
+    assert "на руки" not in listed.text
     assert "<script>alert(1)</script>" not in listed.text
     assert "&lt;script&gt;" in listed.text
     _login(client, "page-seeker@example.com")
@@ -241,6 +253,9 @@ def test_pages_show_contact_and_email_only_after_accept(client):
     assert "telegram: @sintetika" in page.text
     assert "page-seeker@example.com" not in page.text
     assert "Принять" in page.text
+    assert "до вычета НДФЛ" in page.text
+    assert "нетто" not in page.text
+    assert "на руки" not in page.text
     offer_id = page.text.split("/candidate/offers/")[1].split('"')[0]
     prefetch = client.get(
         f"/candidate/offers/{offer_id}",
@@ -270,15 +285,19 @@ def test_shortlist_card_invites_with_profile_id(client):
     assert f"Номер профиля: {profile_id}" in listed.text
     assert f"/employer/offers?profile_id={profile_id}&amp;category_id=backend:middle" in listed.text
     assert "Пригласить" in listed.text
+    assert "Статус грейда: подтверждён" in listed.text
+    assert "Балл None" not in listed.text
     form = client.get(
         "/employer/offers",
         params={"profile_id": str(profile_id), "category_id": "backend:middle"},
     )
     assert form.status_code == 200
-    assert f'id="profile_id" name="profile_id" type="number" required value="{profile_id}"' in form.text
-    assert 'id="category_id" name="category_id" type="text" required value="backend:middle"' in form.text
+    assert f'id="profile_id" name="profile_id" type="hidden" value="{profile_id}"' in form.text
+    assert 'id="category_id" name="category_id" type="hidden" value="backend:middle"' in form.text
+    assert 'name="profile_id" type="number"' not in form.text
     bare = client.get("/employer/offers")
-    assert 'value="backend:middle"' not in bare.text
+    assert 'name="profile_id"' not in bare.text
+    assert "на карточке подборки" in bare.text
     _login(client, "card-seeker@example.com")
     cabinet = client.get("/candidate")
     assert cabinet.status_code == 200

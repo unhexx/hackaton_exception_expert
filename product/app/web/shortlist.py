@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
 from product.app.services.categories import employer_candidates, parse_has_fsp
-from product.app.services.errors import ApiError
+from product.app.services.errors import ApiError, explain
 from product.app.web.guards import page_user
 from product.app.web.render import ensure_csrf, render
 from product.matching.rules import load_rules
@@ -31,6 +31,7 @@ def shortlist_page(request: Request, db: Session = Depends(db_session)):
         "title": "",
         "cards": [],
         "error": "",
+        "hint": "",
         "show_block": False,
     }
     if category_id or partial:
@@ -46,6 +47,8 @@ def shortlist_page(request: Request, db: Session = Depends(db_session)):
             )
             ctx["title"] = f"Подборка {category_id}"
             ctx["cards"] = cards
+            if not cards:
+                ctx["hint"] = explain("hint_shortlist_empty")
         except ApiError as exc:
             ctx["title"] = "Подборка"
             ctx["error"] = exc.message

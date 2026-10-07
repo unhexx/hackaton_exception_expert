@@ -1,15 +1,12 @@
-"""Испытание грейда. Шаблоны читаются, на проходе не переписываются."""
+"""Испытание грейда. Каталог собирается из стемов, на проходе не переписывается."""
 
 from __future__ import annotations
 
 import hashlib
-import json
 from functools import lru_cache
-from pathlib import Path
 
 from product.matching.rules import load_rules
-
-_TEMPLATES = Path(__file__).resolve().parent / "templates"
+from product.matching.stems import catalog
 
 
 class GradeError(Exception):
@@ -20,12 +17,7 @@ class GradeError(Exception):
 
 @lru_cache(maxsize=1)
 def _catalog() -> tuple[dict, ...]:
-    rows = []
-    if not _TEMPLATES.is_dir():
-        return tuple()
-    for path in sorted(_TEMPLATES.glob("*.json")):
-        rows.append(json.loads(path.read_text(encoding="utf-8")))
-    return tuple(rows)
+    return catalog()
 
 
 def load_template(template_id: str) -> dict:
@@ -65,6 +57,13 @@ def is_adjacent_grade(current: str, requested: str) -> bool:
     if current not in grades or requested not in grades:
         return False
     return abs(grades.index(current) - grades.index(requested)) == 1
+
+
+def is_lower_grade(current: str, requested: str) -> bool:
+    grades = _grades()
+    if current not in grades or requested not in grades:
+        return False
+    return grades.index(requested) < grades.index(current)
 
 
 def propose(score: int, grade: str, template: dict) -> tuple[str, str]:

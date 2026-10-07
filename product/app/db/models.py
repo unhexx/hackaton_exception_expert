@@ -1,7 +1,7 @@
-"""Полная схема обязательного MVP. Срезы до вакансий эту таблицу не расширяют.
+"""Схема стенда. Обязательный MVP собран в FSP-1; вакансия, отклик и задание — FSP-8.
 
-Свои вакансии, отклик и короткое задание сюда не входят: колонка vacancy_id
-у приглашения пустая и без внешнего ключа.
+Колонка offers.vacancy_id по-прежнему пустая у приглашения из подборки.
+Внешний ключ на vacancies есть: опубликованная вакансия больше не «таблица потом».
 """
 
 from __future__ import annotations
@@ -197,7 +197,75 @@ class Offer(Base):
     salary_max: Mapped[int] = mapped_column(Integer, nullable=False)
     salary_currency: Mapped[str] = mapped_column(String(8), nullable=False)
     contact_channel: Mapped[str] = mapped_column(String(200), nullable=False)
-    vacancy_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    vacancy_id: Mapped[int | None] = mapped_column(ForeignKey("vacancies.id"), nullable=True)
+    status: Mapped[str] = mapped_column(String(16), nullable=False)
+    created_at: Mapped[str] = mapped_column(String(40), nullable=False)
+    updated_at: Mapped[str] = mapped_column(String(40), nullable=False)
+
+
+class Vacancy(Base):
+    __tablename__ = "vacancies"
+    __table_args__ = (
+        CheckConstraint("salary_currency = 'RUB'", name="ck_vacancies_currency"),
+        CheckConstraint("salary_max > salary_min", name="ck_vacancies_range"),
+        CheckConstraint("length(title) > 0", name="ck_vacancies_title"),
+        CheckConstraint("length(description) > 0", name="ck_vacancies_description"),
+        CheckConstraint("length(company_name) > 0", name="ck_vacancies_company"),
+        CheckConstraint("length(contact_channel) > 0", name="ck_vacancies_contact"),
+        CheckConstraint("status IN ('published')", name="ck_vacancies_status"),
+        Index("ix_vacancies_employer", "employer_id"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    employer_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    category_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=False)
+    company_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    contact_channel: Mapped[str] = mapped_column(String(200), nullable=False)
+    salary_min: Mapped[int] = mapped_column(Integer, nullable=False)
+    salary_max: Mapped[int] = mapped_column(Integer, nullable=False)
+    salary_currency: Mapped[str] = mapped_column(String(8), nullable=False)
+    status: Mapped[str] = mapped_column(String(16), nullable=False)
+    created_at: Mapped[str] = mapped_column(String(40), nullable=False)
+    updated_at: Mapped[str] = mapped_column(String(40), nullable=False)
+
+
+class EmployerTask(Base):
+    __tablename__ = "employer_tasks"
+    __table_args__ = (
+        CheckConstraint("length(prompt) > 0", name="ck_employer_tasks_prompt"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    vacancy_id: Mapped[int] = mapped_column(ForeignKey("vacancies.id"), unique=True, nullable=False)
+    prompt: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[str] = mapped_column(String(40), nullable=False)
+
+
+class Application(Base):
+    __tablename__ = "applications"
+    __table_args__ = (
+        CheckConstraint("length(message) > 0", name="ck_applications_message"),
+        CheckConstraint(
+            "status IN ('sent', 'seen', 'accepted', 'declined')",
+            name="ck_applications_status",
+        ),
+        Index("ix_applications_vacancy", "vacancy_id"),
+        Index(
+            "uq_applications_open",
+            "vacancy_id",
+            "profile_id",
+            unique=True,
+            sqlite_where=text("status IN ('sent', 'seen')"),
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    vacancy_id: Mapped[int] = mapped_column(ForeignKey("vacancies.id"), nullable=False)
+    profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id"), nullable=False)
+    message: Mapped[str] = mapped_column(Text, nullable=False)
+    task_answer: Mapped[str | None] = mapped_column(Text, nullable=True)
     status: Mapped[str] = mapped_column(String(16), nullable=False)
     created_at: Mapped[str] = mapped_column(String(40), nullable=False)
     updated_at: Mapped[str] = mapped_column(String(40), nullable=False)

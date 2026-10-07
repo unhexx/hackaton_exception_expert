@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from product.app.api.deps import db_session
 from product.app.db.models import Company, Offer
 from product.app.services.company import save_company
-from product.app.services.errors import ApiError
+from product.app.services.errors import ApiError, explain
 from product.app.web.guards import page_user
 from product.app.web.render import assert_csrf, ensure_csrf, page_error, render
 
@@ -20,9 +20,16 @@ router = APIRouter()
 def _context(request: Request, db: Session, user, error: str = "") -> dict:
     company = db.scalar(select(Company).where(Company.employer_id == user.id))
     has_offers = db.scalar(select(Offer.id).where(Offer.employer_id == user.id)) is not None
+    if company is None or not company.name or not company.contact:
+        hint = explain("company_missing")
+    elif not has_offers:
+        hint = explain("hint_no_invites_employer")
+    else:
+        hint = ""
     return {
         "csrf": ensure_csrf(request),
         "error": error,
+        "hint": hint,
         "user": user,
         "company": company,
         "has_offers": has_offers,

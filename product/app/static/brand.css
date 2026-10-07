@@ -71,7 +71,22 @@ button, .button {
 
 .quiet { color: var(--fsp-ink); }
 
-.error { color: var(--fsp-red); }
+.error, .hint {
+  white-space: pre-wrap;
+  background: #fff;
+  padding: 0.8rem 1rem;
+  margin: 0 0 1rem;
+}
+
+.error {
+  color: var(--fsp-ink);
+  border: 1px solid var(--fsp-red);
+}
+
+.hint {
+  color: var(--fsp-ink);
+  border: 1px solid var(--fsp-blue);
+}
 
 a.button { display: inline-block; text-decoration: none; }
 
@@ -103,3 +118,8 @@ section + section { margin-top: 1rem; }
 .row label { display: flex; gap: 0.3rem; align-items: center; }
 
 nav { display: flex; gap: 1rem; margin: 0 0 1rem; }
+
+@media (max-width: 720px) {
+  .top, nav, .row { flex-direction: column; align-items: flex-start; }
+  main { padding: 0.6rem; }
+}

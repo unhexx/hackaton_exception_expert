@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Вакансии{% endblock %}
+{% block body %}
+<h1>Вакансии</h1>
+<p><a href="/candidate">В кабинет</a></p>
+{% include "_notice.html" %}
+{% if vacancies %}
+<ul>
+  {% for row in vacancies %}
+  <li>
+    {{ row.title }}, {{ row.company_name }}, {{ row.category_id }}
+    <p>Способ связи компании: {{ row.contact_channel }}</p>
+    <p>Вилка: {{ row.salary_min }}–{{ row.salary_max }} {{ row.salary_currency }} до вычета НДФЛ</p>
+    <p>{{ row.description }}</p>
+    <form method="post" action="/candidate/vacancies/{{ row.id }}/apply">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label for="message-{{ row.id }}">Текст отклика</label>
+      <textarea id="message-{{ row.id }}" name="message" rows="2" required></textarea>
+      {% if row.task_prompt %}
+      <p>Задание: {{ row.task_prompt }}</p>
+      <label for="task-{{ row.id }}">Ответ</label>
+      <textarea id="task-{{ row.id }}" name="task_answer" rows="2" required></textarea>
+      {% endif %}
+      <p><button type="submit">Откликнуться</button></p>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Опубликованных вакансий нет.</p>
+{% endif %}
+<h2>Мои отклики</h2>
+{% if applications %}
+<ul>
+  {% for row in applications %}
+  <li>
+    {{ row.title }}, {{ row.company_name }}, статус {{ row.status }}
+    <p>Вилка: {{ row.salary_min }}–{{ row.salary_max }} {{ row.salary_currency }} до вычета НДФЛ</p>
+    <p>Способ связи компании: {{ row.contact_channel }}</p>
+    {% if row.status == 'sent' or row.status == 'seen' %}
+    <form method="post" action="/candidate/applications/{{ row.id }}/decline">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button type="submit">Отозвать</button>
+    </form>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Откликов нет.</p>
+{% endif %}
+{% endblock %}

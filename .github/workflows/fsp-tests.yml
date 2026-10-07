@@ -1,0 +1,28 @@
+name: FSP tests
+
+on:
+  push:
+    paths:
+      - "product/**"
+      - "deploy/fsp/**"
+      - ".github/workflows/fsp-tests.yml"
+  pull_request:
+    paths:
+      - "product/**"
+      - "deploy/fsp/**"
+      - ".github/workflows/fsp-tests.yml"
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Прогон автотестов стенда
+        run: docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests
+      - name: Бейдж последнего прогона
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-badge
+          path: product/docs/badges/tests.svg

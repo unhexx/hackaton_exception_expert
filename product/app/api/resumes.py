@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session, require_candidate
 from product.app.db.models import User
+from product.app.services.errors import example, response_example
 from product.app.services.resumes import apply_resume, profile_pdf
 
 router = APIRouter(tags=["resume"])
@@ -22,15 +23,12 @@ _STORED = {
     "field_sources": {"full_name": "resume", "grade": "resume"},
     "grade_skipped": False,
 }
-_NO_TEXT = {
-    "error": "resume_no_text",
-    "message": "В PDF нет текстового слоя. Скан без текста не читается, заполните поля вручную.",
-}
-_LARGE = {"error": "resume_too_large", "message": "Файл больше 2 МиБ"}
-_NOT_PDF = {"error": "resume_not_pdf", "message": "Файл не похож на PDF"}
-_MISSING = {"error": "not_found", "message": "Анкета ещё не заполнена"}
-_DENIED = {"error": "unauthorized", "message": "Нужен вход"}
-_FORBIDDEN = {"error": "forbidden", "message": "Это кабинет соискателя"}
+_NO_TEXT = example("resume_no_text")
+_LARGE = example("resume_too_large")
+_NOT_PDF = example("resume_not_pdf")
+_MISSING = example("not_found", "not_found_profile")
+_DENIED = example("unauthorized")
+_FORBIDDEN = example("forbidden", "forbidden_candidate")
 
 
 @router.post(
@@ -40,8 +38,8 @@ _FORBIDDEN = {"error": "forbidden", "message": "Это кабинет соиск
         401: {"content": {"application/json": {"example": _DENIED}}},
         403: {"content": {"application/json": {"example": _FORBIDDEN}}},
         404: {"content": {"application/json": {"example": _MISSING}}},
-        413: {"content": {"application/json": {"example": _LARGE}}},
-        422: {"content": {"application/json": {"example": _NO_TEXT}}},
+        413: response_example(413, _LARGE),
+        422: response_example(422, _NO_TEXT),
     },
 )
 async def upload_resume(

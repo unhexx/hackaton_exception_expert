@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session, require_candidate, require_employer
 from product.app.db.models import User
+from product.app.services.errors import example, response_example
 from product.app.services.offers import (
     create_offer,
     get_offer,
@@ -43,11 +44,12 @@ _BODY = {
     "salary_currency": "RUB",
     "contact_channel": "telegram: @sintetika",
 }
-_DENIED = {"error": "unauthorized", "message": "Нужен вход"}
-_FORBIDDEN = {"error": "forbidden", "message": "Это кабинет работодателя"}
-_RANGE = {"error": "salary_range", "message": "Верхняя граница больше нижней"}
-_MISSING = {"error": "not_found", "message": "Приглашение не найдено"}
-_CLOSED = {"error": "offer_closed", "message": "Приглашение уже закрыто"}
+_DENIED = example("unauthorized")
+_FORBIDDEN = example("forbidden", "forbidden_employer")
+_RANGE = example("salary_range")
+_MISSING = example("not_found", "not_found_offer")
+_CLOSED = example("offer_closed")
+_SEEKER_FORBIDDEN = example("forbidden", "forbidden_candidate")
 
 
 @router.post(
@@ -57,9 +59,9 @@ _CLOSED = {"error": "offer_closed", "message": "Приглашение уже з
         201: {"content": {"application/json": {"example": _CREATED}}},
         401: {"content": {"application/json": {"example": _DENIED}}},
         403: {"content": {"application/json": {"example": _FORBIDDEN}}},
-        404: {"content": {"application/json": {"example": {"error": "profile_not_in_category", "message": "Профиля нет в этой категории"}}}},
-        409: {"content": {"application/json": {"example": {"error": "offer_open", "message": "Открытое приглашение уже есть"}}}},
-        422: {"content": {"application/json": {"example": _RANGE}}},
+        404: {"content": {"application/json": {"example": example("profile_not_in_category")}}},
+        409: {"content": {"application/json": {"example": example("offer_open")}}},
+        422: response_example(422, _RANGE),
     },
 )
 def send_offer(
@@ -87,7 +89,7 @@ def employer_offers(user: User = Depends(require_employer), db: Session = Depend
     responses={
         200: {"content": {"application/json": {"example": [_CREATED]}}},
         401: {"content": {"application/json": {"example": _DENIED}}},
-        403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет соискателя"}}}},
+        403: {"content": {"application/json": {"example": _SEEKER_FORBIDDEN}}},
     },
 )
 def candidate_offers(user: User = Depends(require_candidate), db: Session = Depends(db_session)):
@@ -99,7 +101,7 @@ def candidate_offers(user: User = Depends(require_candidate), db: Session = Depe
     responses={
         200: {"content": {"application/json": {"example": _CREATED}}},
         401: {"content": {"application/json": {"example": _DENIED}}},
-        403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет соискателя"}}}},
+        403: {"content": {"application/json": {"example": _SEEKER_FORBIDDEN}}},
         404: {"content": {"application/json": {"example": _MISSING}}},
     },
 )
@@ -112,7 +114,7 @@ def read_offer(offer_id: int, user: User = Depends(require_candidate), db: Sessi
     responses={
         200: {"content": {"application/json": {"example": {**_CREATED, "status": "seen"}}}},
         401: {"content": {"application/json": {"example": _DENIED}}},
-        403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет соискателя"}}}},
+        403: {"content": {"application/json": {"example": _SEEKER_FORBIDDEN}}},
         404: {"content": {"application/json": {"example": _MISSING}}},
     },
 )

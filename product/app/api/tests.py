@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session, require_candidate
 from product.app.db.models import User
+from product.app.services.errors import example, response_example
 from product.app.services.tests import list_attempts, start_attempt, submit_attempt
 
 router = APIRouter(tags=["tests"])
@@ -39,9 +40,9 @@ _SUBMITTED = {
     status_code=201,
     responses={
         201: {"content": {"application/json": {"example": _STARTED}}},
-        401: {"content": {"application/json": {"example": {"error": "unauthorized", "message": "Нужен вход"}}}},
-        403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет соискателя"}}}},
-        409: {"content": {"application/json": {"example": {"error": "survey_required", "message": "Сначала заполните анкету"}}}},
+        401: {"content": {"application/json": {"example": example("unauthorized")}}},
+        403: {"content": {"application/json": {"example": example("forbidden", "forbidden_candidate")}}},
+        409: {"content": {"application/json": {"example": example("survey_required")}}},
     },
 )
 def start_route(
@@ -59,10 +60,10 @@ def start_route(
     "/candidate/tests/{attempt_id}/submit",
     responses={
         200: {"content": {"application/json": {"example": _SUBMITTED}}},
-        401: {"content": {"application/json": {"example": {"error": "unauthorized", "message": "Нужен вход"}}}},
-        404: {"content": {"application/json": {"example": {"error": "not_found", "message": "Попытка не найдена"}}}},
-        409: {"content": {"application/json": {"example": {"error": "attempt_closed", "message": "Попытка уже сдана"}}}},
-        422: {"content": {"application/json": {"example": {"error": "answer_unknown", "message": "Ответ не из вариантов"}}}},
+        401: {"content": {"application/json": {"example": example("unauthorized")}}},
+        404: {"content": {"application/json": {"example": example("not_found", "not_found_attempt")}}},
+        409: {"content": {"application/json": {"example": example("attempt_closed")}}},
+        422: response_example(422, example("answer_unknown")),
     },
 )
 def submit_route(
@@ -78,8 +79,8 @@ def submit_route(
     "/candidate/tests",
     responses={
         200: {"content": {"application/json": {"example": [_SUBMITTED]}}},
-        401: {"content": {"application/json": {"example": {"error": "unauthorized", "message": "Нужен вход"}}}},
-        403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет соискателя"}}}},
+        401: {"content": {"application/json": {"example": example("unauthorized")}}},
+        403: {"content": {"application/json": {"example": example("forbidden", "forbidden_candidate")}}},
     },
 )
 def history_route(user: User = Depends(require_candidate), db: Session = Depends(db_session)):

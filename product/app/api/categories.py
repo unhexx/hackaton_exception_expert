@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from product.app.api.deps import db_session, require_candidate, require_employer
 from product.app.db.models import User
 from product.app.services.categories import employer_candidates, latest_assignment, parse_has_fsp
-from product.app.services.errors import ApiError
+from product.app.services.errors import example, fail, response_example
 from product.app.services.profiles import get_own_profile
 
 router = APIRouter(tags=["category"])
@@ -21,19 +21,23 @@ _CATEGORY = {
     "test_score": None,
     "industry": "it",
 }
-_MISSING = {"error": "category_id", "message": "Нужна категория"}
+_MISSING = example("category_id")
 _CARD = {
     "profile_id": 1,
     "full_name": "Иван Синтетиков",
     "industry": "it",
     "category_id": "backend:middle",
-    "explanation": _CATEGORY["explanation"],
-    "list_reason": "Категория backend:middle.",
-    "rank_key": "067-0000-00000001",
+    "explanation": "Опрос: специализация backend, грейд middle. Тест: заявленный грейд подтверждён, балл 67. Правила v1.",
+    "list_reason": "Категория backend:middle. Тест сдан, потребность без уточнений.",
+    "rank_key": "1-067-0000-0-00000001",
     "test_score": 67,
+    "grade_status": "подтверждён",
     "stack": ["python"],
     "team_role": "разработчик",
     "work_format": "удалённо",
+    "experience": "синтетический стаж",
+    "fsp_rank": "",
+    "achievements": [],
 }
 
 
@@ -41,16 +45,16 @@ _CARD = {
     "/candidate/category",
     responses={
         200: {"content": {"application/json": {"example": _CATEGORY}}},
-        401: {"content": {"application/json": {"example": {"error": "unauthorized", "message": "Нужен вход"}}}},
-        403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет соискателя"}}}},
-        404: {"content": {"application/json": {"example": {"error": "not_found", "message": "Опроса ещё не было"}}}},
+        401: {"content": {"application/json": {"example": example("unauthorized")}}},
+        403: {"content": {"application/json": {"example": example("forbidden", "forbidden_candidate")}}},
+        404: {"content": {"application/json": {"example": example("not_found", "not_found_category")}}},
     },
 )
 def read_category(user: User = Depends(require_candidate), db: Session = Depends(db_session)):
     profile = get_own_profile(db, user)
     row = latest_assignment(db, profile.id)
     if row is None:
-        raise ApiError(404, "not_found", "Опроса ещё не было")
+        fail(404, "not_found", "not_found_category")
     return {
         "profile_id": profile.id,
         "category_id": row.category_id,
@@ -66,9 +70,9 @@ def read_category(user: User = Depends(require_candidate), db: Session = Depends
     "/employer/candidates",
     responses={
         200: {"content": {"application/json": {"example": [_CARD]}}},
-        401: {"content": {"application/json": {"example": {"error": "unauthorized", "message": "Нужен вход"}}}},
-        403: {"content": {"application/json": {"example": {"error": "forbidden", "message": "Это кабинет работодателя"}}}},
-        422: {"content": {"application/json": {"example": _MISSING}}},
+        401: {"content": {"application/json": {"example": example("unauthorized")}}},
+        403: {"content": {"application/json": {"example": example("forbidden", "forbidden_employer")}}},
+        422: response_example(422, _MISSING),
     },
 )
 def read_candidates(
@@ -82,7 +86,7 @@ def read_candidates(
     db: Session = Depends(db_session),
 ):
     if not category_id:
-        raise ApiError(422, "category_id", "Нужна категория")
+        fail(422, "category_id")
     return employer_candidates(
         db,
         category_id=category_id,

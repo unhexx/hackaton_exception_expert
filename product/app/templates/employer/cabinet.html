@@ -5,6 +5,7 @@
 <nav>
   <a href="/employer/shortlist">Подборка</a>
   <a href="/employer/offers">Приглашения</a>
+  <a href="/employer/vacancies">Вакансии</a>
   <form method="post" action="/auth/logout">
     <input type="hidden" name="csrf" value="{{ csrf }}">
     <button type="submit">Выйти</button>
@@ -13,6 +14,7 @@
 <section>
   <h2>Статус</h2>
   <p>Почта: {{ user.email }}</p>
+  {% include "_notice.html" %}
   {% if has_offers %}
   <p><a href="/employer/offers">Есть отправленные приглашения</a></p>
   {% else %}
@@ -21,7 +23,6 @@
 </section>
 <section>
   <h2>Карточка компании</h2>
-  {% if error %}<p class="error">{{ error }}</p>{% endif %}
   <form method="post" action="/employer/company">
     <input type="hidden" name="csrf" value="{{ csrf }}">
     <label for="name">Название</label>

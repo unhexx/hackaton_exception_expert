@@ -14,9 +14,9 @@ import sys
 from pathlib import Path
 
 from product.matching.category import assign_category
-from product.matching.need import haystack_text, matches_need, need_score, rank_tuple
+from product.matching.need import evaluate_need, haystack_text
 from product.matching.rules import rule_version
-from product.matching.types import ProfileView
+from product.matching.types import Need, ProfileView
 
 _GOLDEN = Path(__file__).resolve().parent / "golden"
 _CASES = _GOLDEN / "cases.json"
@@ -48,8 +48,8 @@ def _need_text(row: dict) -> str:
     )
 
 
-def _matches_need(row: dict, category_id: str, need: dict) -> bool:
-    return matches_need(
+def _fit(row: dict, category_id: str, rank_key: str, need: dict):
+    return evaluate_need(
         assigned_category_id=category_id,
         test_score=None if row.get("test_score") is None else int(row["test_score"]),
         stack=list(row.get("stack") or []),
@@ -57,21 +57,8 @@ def _matches_need(row: dict, category_id: str, need: dict) -> bool:
         work_format=str(row.get("work_format") or ""),
         fsp_count=int(row.get("fsp_confirmed_count") or 0),
         haystack=_need_text(row),
-        need=need,
-    )
-
-
-def _need_rank(row: dict, rank_key: str, need: dict) -> tuple[int, str]:
-    return rank_tuple(
-        need_score(
-            stack=list(row.get("stack") or []),
-            team_role=str(row.get("team_role") or ""),
-            work_format=str(row.get("work_format") or ""),
-            fsp_count=int(row.get("fsp_confirmed_count") or 0),
-            haystack=_need_text(row),
-            need=need,
-        ),
-        rank_key,
+        need=Need.from_mapping(need),
+        rank_key=rank_key,
     )
 
 
@@ -164,9 +151,13 @@ def summarize(cases: dict | None = None) -> dict:
     relevant_hit = 0
     slots = 0
     for need in data["needs"]:
-        pool = [pair for pair in ranked if _matches_need(pair[0], pair[1].category_id, need)]
-        pool.sort(key=lambda pair: _need_rank(pair[0], pair[1].rank_key, need), reverse=True)
-        taken = pool[:top_k]
+        fitted = [
+            (pair, _fit(pair[0], pair[1].category_id, pair[1].rank_key, need))
+            for pair in ranked
+        ]
+        pool = [(pair, fit) for pair, fit in fitted if fit.matched]
+        pool.sort(key=lambda item: item[1].sort_key, reverse=True)
+        taken = [pair for pair, _fit_row in pool[:top_k]]
         slots += len(taken)
         marked = set(need["relevant_profile_ids"])
         relevant_hit += sum(1 for row, _decision in taken if row["profile_id"] in marked)

@@ -16,7 +16,7 @@ from product.app.db.session import sqlite_int
 from product.app.services.clock import utc_now
 from product.app.services.errors import fail
 from product.matching.category import assign_category, has_prize_place
-from product.matching.need import evaluate_need, haystack_text
+from product.matching.need import evaluate_need, haystack_text, neighbor_phrase
 from product.matching.rules import load_rules, rule_version
 from product.matching.types import Need, NeedFit, ProfileView
 
@@ -252,7 +252,14 @@ def employer_candidates(
             )
         )
     ranked.sort(key=lambda item: item[0], reverse=True)
-    return [card for _key, card in ranked]
+    cards = []
+    for index, (key, card) in enumerate(ranked):
+        nxt = ranked[index + 1][0] if index + 1 < len(ranked) else None
+        phrase = neighbor_phrase(key, nxt)
+        if phrase:
+            card["list_reason"] = f"{card['list_reason']} {phrase}".strip()
+        cards.append(card)
+    return cards
 
 
 def _card(

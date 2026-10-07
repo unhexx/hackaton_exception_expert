@@ -116,6 +116,63 @@ def evaluate_need(
     )
 
 
+_NEIGHBOR_FIELDS = (
+    ("подтверждён", True),
+    ("балл", False),
+    ("число достижений", False),
+    ("приз", True),
+)
+
+
+def _rank_fields(rank_key: str) -> tuple[int, int, int, int] | None:
+    bits = str(rank_key).split("-")
+    if len(bits) != 5:
+        return None
+    try:
+        confirmed, score, count, prize, _profile_id = (int(bit) for bit in bits)
+    except ValueError:
+        return None
+    return confirmed, score, count, prize
+
+
+def _field_text(value: int, yesno: bool) -> str:
+    if yesno:
+        return "да" if value else "нет"
+    return str(value)
+
+
+def neighbor_phrase(
+    sort_key: tuple[int, int, int, int, int, str],
+    next_sort_key: tuple[int, int, int, int, int, str] | None,
+) -> str:
+    """Сравнение с соседней карточкой. Кортеж сортировки не меняет."""
+    if next_sort_key is None:
+        return "Ниже этой карточки в подборке никого нет."
+    mine = _rank_fields(sort_key[5])
+    other = _rank_fields(next_sort_key[5])
+    if mine is None or other is None:
+        return ""
+    compared = ", ".join(
+        f"{name} {_field_text(left, yesno)} против {_field_text(right, yesno)}"
+        for (name, yesno), left, right in zip(_NEIGHBOR_FIELDS, mine, other, strict=True)
+    )
+    if sort_key[:5] != next_sort_key[:5]:
+        return f"Выше соседней карточки по совпадению потребности: {compared}."
+    for (name, yesno), left, right in zip(_NEIGHBOR_FIELDS, mine, other, strict=True):
+        if left == right:
+            continue
+        if left > right:
+            return (
+                f"Выше соседней карточки по полю {name}: "
+                f"{_field_text(left, yesno)} против {_field_text(right, yesno)}."
+            )
+        return (
+            "Выше соседней карточки не по полям подтверждён, балл, "
+            "число достижений и приз."
+        )
+    return "С соседней карточкой совпадают подтверждён, балл, число достижений и приз."
+
+
 def matches_need(
     *,
     assigned_category_id: str,

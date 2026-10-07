@@ -9,7 +9,7 @@ from product.app.db.session import open_session
 from product.app.services.categories import recompute
 from product.app.services.clock import utc_now
 from product.matching.category import assign_category, has_prize_place, rank_key
-from product.matching.need import evaluate_need
+from product.matching.need import evaluate_need, neighbor_phrase
 from product.matching.types import CategoryError, Need, ProfileView
 from product.tests.conftest import register_and_confirm
 
@@ -443,3 +443,59 @@ def test_need_ranks_stack_overlap_then_rank_key():
         rank_key="1-067-0000-0-00000001",
     )
     assert vacant_scored.reason == "Категория backend:middle. Тест сдан, потребность без уточнений."
+
+
+def test_neighbor_phrase_names_the_rank_field_that_puts_the_card_above():
+    score = neighbor_phrase(
+        (0, 0, 0, 0, 0, "1-067-0000-0-00000002"),
+        (0, 0, 0, 0, 0, "1-033-0009-1-00000001"),
+    )
+    assert score == "Выше соседней карточки по полю балл: 67 против 33."
+    assert neighbor_phrase((0, 0, 0, 0, 0, "1-033-0009-1-00000001"), None) == (
+        "Ниже этой карточки в подборке никого нет."
+    )
+    confirmed = neighbor_phrase(
+        (0, 0, 0, 0, 0, "1-000-0000-0-00000002"),
+        (0, 0, 0, 0, 0, "0-000-0009-1-00000001"),
+    )
+    assert confirmed == "Выше соседней карточки по полю подтверждён: да против нет."
+    prize = neighbor_phrase(
+        (0, 0, 0, 0, 0, "1-080-0001-1-00000002"),
+        (0, 0, 0, 0, 0, "1-080-0001-0-00000003"),
+    )
+    assert prize == "Выше соседней карточки по полю приз: да против нет."
+    count = neighbor_phrase(
+        (0, 0, 0, 0, 0, "1-040-0005-0-00000002"),
+        (0, 0, 0, 0, 0, "1-040-0001-0-00000003"),
+    )
+    assert count == "Выше соседней карточки по полю число достижений: 5 против 1."
+    tied = neighbor_phrase(
+        (0, 0, 0, 0, 0, "1-040-0001-0-00000009"),
+        (0, 0, 0, 0, 0, "1-040-0001-0-00000003"),
+    )
+    assert tied == "С соседней карточкой совпадают подтверждён, балл, число достижений и приз."
+
+
+def test_neighbor_phrase_does_not_pretend_rank_when_need_is_ahead():
+    text = neighbor_phrase(
+        (2, 0, 0, 0, 0, "1-040-0000-0-00000002"),
+        (1, 0, 0, 0, 0, "1-090-0000-0-00000001"),
+    )
+    assert text.startswith("Выше соседней карточки по совпадению потребности:")
+    assert "подтверждён да против да" in text
+    assert "балл 40 против 90" in text
+    assert "число достижений 0 против 0" in text
+    assert "приз нет против нет" in text
+    untouched = evaluate_need(
+        assigned_category_id="backend:middle",
+        test_score=40,
+        stack=["python", "sql"],
+        team_role="разработчик",
+        work_format="удалённо",
+        fsp_count=0,
+        haystack="backend middle python sql разработчик удалённо",
+        need=Need(category_id="backend:middle", stack=("python", "sql")),
+        rank_key="1-040-0000-0-00000002",
+    )
+    assert untouched.sort_key == (2, 0, 0, 0, 0, "1-040-0000-0-00000002")
+    assert "Выше соседней" not in untouched.reason

@@ -47,14 +47,14 @@ def _candidate(client, email: str, **extra) -> int:
     return saved.json()["profile_id"]
 
 
-def _scored(client, email: str, **extra) -> int:
+def _scored(client, email: str, *, correct_n: int = 2, **extra) -> int:
     profile_id = _candidate(client, email, **extra)
     started = client.post("/api/candidate/tests/start", json={})
     assert started.status_code == 201, started.text
     template = load_template(started.json()["template_id"])
     submitted = client.post(
         f"/api/candidate/tests/{started.json()['attempt_id']}/submit",
-        json={"answers": _answers(template, 2)},
+        json={"answers": _answers(template, correct_n)},
     )
     assert submitted.status_code == 200, submitted.text
     return profile_id
@@ -314,3 +314,27 @@ def test_shortlist_card_invites_with_profile_id(client):
     assert "История теста" in cabinet.text
     assert "Публиковать профиль в подборке работодателя" in cabinet.text
     assert "Публиковать профиль и согласие на обработку" not in cabinet.text
+
+
+def test_shortlist_card_compares_neighbor_instead_of_raw_rank_key(client):
+    higher = _scored(client, "neighbor-high@example.com")
+    lower = _scored(client, "neighbor-low@example.com", correct_n=1)
+    _employer(client, email="neighbor-boss@example.com")
+    listed = client.get("/employer/shortlist", params={"category_id": "backend:middle"})
+    assert listed.status_code == 200
+    assert "порядок" not in listed.text
+    assert "Выше соседней карточки по полю балл: 67 против 33." in listed.text
+    assert "Ниже этой карточки в подборке никого нет." in listed.text
+    assert "подтверждён" in listed.text
+    cards = client.get("/api/employer/candidates", params={"category_id": "backend:middle"}).json()
+    assert [card["profile_id"] for card in cards] == [higher, lower]
+    assert cards[0]["rank_key"].startswith("1-067-")
+    assert cards[1]["rank_key"].startswith("1-033-")
+    assert cards[0]["rank_key"] not in listed.text
+    assert cards[1]["rank_key"] not in listed.text
+    assert cards[0]["list_reason"].startswith("Категория backend:middle")
+    assert "Тест сдан, потребность без уточнений" in cards[0]["list_reason"]
+    assert cards[0]["list_reason"].endswith("Выше соседней карточки по полю балл: 67 против 33.")
+    assert cards[1]["list_reason"].endswith("Ниже этой карточки в подборке никого нет.")
+    assert cards[0]["test_score"] == 67
+    assert cards[1]["test_score"] == 33

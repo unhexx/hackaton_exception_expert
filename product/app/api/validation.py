@@ -1,4 +1,4 @@
-"""Один запуск прогона на стенде. Ответ — пять строк, без порога."""
+"""Один запуск прогона на стенде. Пять строк и grade_separation, без порога."""
 
 from __future__ import annotations
 
@@ -18,6 +18,7 @@ _SAMPLE = (
     "template_stable 0 0\n"
     "relevant_in_top 0 0\n"
     "resume_ok 0 0\n"
+    "grade_separation 0 0\n"
 )
 
 

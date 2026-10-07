@@ -44,7 +44,7 @@ docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests
 
 Публичного URL нет. Кабинеты после compose — <http://127.0.0.1:8000>. Хост не выдумываем: без Docker смотрите скрины и видео презентации.
 
-Прогон валидации — ссылка «Прогон валидации» в подборке работодателя. Один раз после четырёх шагов из [`track/lct-fsp-vacancies/demo.md`](../track/lct-fsp-vacancies/demo.md). Ответ — пять строк этого запуска, не целевые проценты. `category_match` — ожидаемая категория, `outcome_match` — итог теста, `template_stable` — тот же шаблон и те же ответы дали тот же грейд, `relevant_in_top` — отмеченные релевантными в топе, `resume_ok` — PDF без падения.
+Прогон валидации — ссылка «Прогон валидации» в подборке работодателя. Один раз после четырёх шагов из [`track/lct-fsp-vacancies/demo.md`](../track/lct-fsp-vacancies/demo.md). Ответ — пять строк этого запуска и `grade_separation`, не целевые проценты. `category_match` — ожидаемая категория, `outcome_match` — итог теста, `template_stable` — тот же шаблон и те же ответы дали тот же грейд, `relevant_in_top` — отмеченные релевантными в топе, `resume_ok` — PDF без падения. `grade_separation` — сколько пунктов разделяют грейды и сколько пунктов в стемах; порога по этой строке нет.
 
 ## Как устроено
 

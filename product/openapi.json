@@ -2806,7 +2806,7 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "category_match 0 0\noutcome_match 0 0\ntemplate_stable 0 0\nrelevant_in_top 0 0\nresume_ok 0 0\n"
+                "example": "category_match 0 0\noutcome_match 0 0\ntemplate_stable 0 0\nrelevant_in_top 0 0\nresume_ok 0 0\ngrade_separation 0 0\n"
               }
             }
           },

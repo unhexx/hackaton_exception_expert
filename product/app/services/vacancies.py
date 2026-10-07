@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from product.app.db.models import Application, Company, EmployerTask, Profile, User, Vacancy
+from product.app.db.session import sqlite_int
 from product.app.log import log_event
 from product.app.services.categories import require_category
 from product.app.services.clock import utc_now
@@ -35,6 +36,8 @@ def _fail(status: int, code: str, key: str | None = None, **parts: object) -> No
 def _money(value: object) -> int:
     if isinstance(value, bool) or not isinstance(value, int):
         _fail(422, "salary_range", "salary_range_type")
+    if sqlite_int(value) is None:
+        _fail(422, "salary_range")
     return value
 
 
@@ -192,7 +195,7 @@ def list_candidate_applications(db: Session, user: User) -> list[dict]:
 
 
 def _published(db: Session, vacancy_id: int) -> Vacancy:
-    row = db.get(Vacancy, vacancy_id)
+    row = db.get(Vacancy, vacancy_id) if sqlite_int(vacancy_id) is not None else None
     if row is None or row.status != "published":
         fail(404, "not_found", "not_found_vacancy")
     return row
@@ -246,7 +249,7 @@ def apply_to_vacancy(db: Session, user: User, vacancy_id: int, payload: dict) ->
 
 
 def _employer_application(db: Session, user: User, application_id: int) -> Application:
-    row = db.get(Application, application_id)
+    row = db.get(Application, application_id) if sqlite_int(application_id) is not None else None
     if row is None:
         fail(404, "not_found", "not_found_application")
     vacancy = db.get(Vacancy, row.vacancy_id)
@@ -257,7 +260,7 @@ def _employer_application(db: Session, user: User, application_id: int) -> Appli
 
 def _candidate_application(db: Session, user: User, application_id: int) -> Application:
     profile_id = _own_profile_id(db, user)
-    row = db.get(Application, application_id)
+    row = db.get(Application, application_id) if sqlite_int(application_id) is not None else None
     if row is None or profile_id is None or row.profile_id != profile_id:
         fail(404, "not_found", "not_found_application")
     return row

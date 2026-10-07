@@ -71,6 +71,7 @@ def test_vacancy_rejects_bad_range_and_hides_email_until_accept(client):
     assert missing.json()["error"] == "company_name"
     _employer(client)
     assert client.post("/api/employer/vacancies", json=_vacancy(salary_max=180000)).json()["error"] == "salary_range"
+    assert client.post("/api/employer/vacancies", json=_vacancy(salary_max=10**30)).json()["error"] == "salary_range"
     assert client.post("/api/employer/vacancies", json=_vacancy(salary_min="180000")).json()["error"] == "salary_range"
     assert client.post("/api/employer/vacancies", json=_vacancy(salary_currency="USD")).json()["error"] == "currency"
     assert client.post("/api/employer/vacancies", json=_vacancy(category_id="it:middle")).json()["error"] == "category_id"
@@ -80,12 +81,21 @@ def test_vacancy_rejects_bad_range_and_hides_email_until_accept(client):
     assert odd.json()["error"] == "extra_forbidden"
     created = client.post("/api/employer/vacancies", json=_vacancy())
     assert created.status_code == 201, created.text
+    ghost = client.post(f"/api/employer/applications/{10**30}/open")
+    assert ghost.status_code == 404
+    assert ghost.json()["error"] == "not_found"
     vacancy_id = created.json()["id"]
     assert created.json()["task_prompt"]
     assert "candidate_email" not in created.json()
     _candidate(client, "seeker-vacancy@example.com")
     denied = client.post("/api/employer/vacancies", json=_vacancy())
     assert denied.status_code == 403
+    missing_vacancy = client.post(
+        f"/api/vacancies/{10**30}/apply",
+        json={"message": "Готов обсудить платежи"},
+    )
+    assert missing_vacancy.status_code == 404
+    assert missing_vacancy.json()["error"] == "not_found"
     listed = client.get("/api/vacancies")
     assert listed.status_code == 200
     assert listed.json()[0]["id"] == vacancy_id

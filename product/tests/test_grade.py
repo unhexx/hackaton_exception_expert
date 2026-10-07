@@ -334,6 +334,9 @@ def test_edges_keep_recorded_grade(client):
     missing = _submit(client, 999999, ["a", "b", "c"])
     assert missing.status_code == 404
     assert missing.json()["error"] == "not_found"
+    overflow = _submit(client, 10**30, ["a", "b", "c"])
+    assert overflow.status_code == 404
+    assert overflow.json()["error"] == "not_found"
     register_and_confirm(client, email="bare@example.com")
     bare = client.post("/api/candidate/tests/1/submit", json={"answers": ["a", "b", "c"]})
     assert bare.status_code == 404

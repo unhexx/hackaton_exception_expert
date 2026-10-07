@@ -51,6 +51,19 @@ def get_engine() -> Engine:
     return _engine
 
 
+_SQLITE_MIN = -1 << 63
+_SQLITE_MAX = (1 << 63) - 1
+
+
+def sqlite_int(value: object) -> int | None:
+    """Целое, которое SQLite примет в INTEGER. bool и слишком длинное — нет."""
+    if isinstance(value, bool) or not isinstance(value, int):
+        return None
+    if value < _SQLITE_MIN or value > _SQLITE_MAX:
+        return None
+    return value
+
+
 def open_session() -> Session:
     get_engine()
     assert _factory is not None

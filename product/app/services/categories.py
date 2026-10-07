@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 
 from product.app.db.models import CategoryAssignment as StoredCategory
 from product.app.db.models import Consent, FspAchievement, FspParticipant, Profile, TestAttempt
+from product.app.db.session import sqlite_int
 from product.app.services.clock import utc_now
 from product.app.services.errors import fail
 from product.matching.category import assign_category, has_prize_place
@@ -179,6 +180,8 @@ def _profile_matches(
 
 def visible_in_category(session: Session, profile_id: int, category_id: str) -> bool:
     category_id = require_category(category_id)
+    if sqlite_int(profile_id) is None:
+        return False
     profile = session.get(Profile, profile_id)
     if profile is None:
         return False

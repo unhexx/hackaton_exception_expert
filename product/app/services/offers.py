@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from product.app.db.models import Company, Offer, Profile, User
+from product.app.db.session import sqlite_int
 from product.app.log import log_event
 from product.app.services.categories import visible_in_category
 from product.app.services.clock import utc_now
@@ -32,6 +33,8 @@ def _fail(status: int, code: str, key: str | None = None, **parts: object) -> No
 def _money(value: object) -> int:
     if isinstance(value, bool) or not isinstance(value, int):
         _fail(422, "salary_range", "salary_range_type")
+    if sqlite_int(value) is None:
+        _fail(422, "salary_range")
     return value
 
 
@@ -87,7 +90,7 @@ def list_employer_offers(db: Session, user: User) -> list[dict]:
 
 def _candidate_offer(db: Session, user: User, offer_id: int) -> Offer:
     profile_id = _own_profile_id(db, user)
-    row = db.get(Offer, offer_id)
+    row = db.get(Offer, offer_id) if sqlite_int(offer_id) is not None else None
     if row is None or profile_id is None or row.profile_id != profile_id:
         fail(404, "not_found", "not_found_offer")
     return row

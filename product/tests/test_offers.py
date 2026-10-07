@@ -117,6 +117,9 @@ def test_offer_hides_email_until_accepted_and_keeps_company_contact(client):
     assert "candidate_email" not in listed.json()[0]
     peeked = client.get(f"/api/candidate/offers/{body['id']}")
     assert peeked.status_code == 200, peeked.text
+    unknown = client.get(f"/api/candidate/offers/{10**30}")
+    assert unknown.status_code == 404
+    assert unknown.json()["error"] == "not_found"
     assert peeked.json()["status"] == "sent"
     opened = client.post(f"/api/candidate/offers/{body['id']}/open")
     assert opened.status_code == 200, opened.text
@@ -153,6 +156,7 @@ def test_offer_rejects_incomplete_range_and_foreign_profile(client):
     _employer(client, email="boss-rules@example.com")
     assert client.post("/api/employer/offers", json=_offer(visible, message="  ")).json()["error"] == "offer_incomplete"
     assert client.post("/api/employer/offers", json=_offer(visible, salary_max=180000)).json()["error"] == "salary_range"
+    assert client.post("/api/employer/offers", json=_offer(visible, salary_max=10**30)).json()["error"] == "salary_range"
     assert client.post("/api/employer/offers", json=_offer(visible, salary_min="180000")).json()["error"] == "salary_range"
     assert client.post("/api/employer/offers", json=_offer(visible, salary_currency="USD")).json()["error"] == "currency"
     assert client.post("/api/employer/offers", json=_offer(visible, company_name="Другая")).json()["error"] == "company_name"
@@ -167,6 +171,9 @@ def test_offer_rejects_incomplete_range_and_foreign_profile(client):
     assert odd.json()["error"] == "category_id"
     foreign = client.post("/api/employer/offers", json=_offer(999999))
     assert foreign.status_code == 404
+    overflow = client.post("/api/employer/offers", json=_offer(10**30))
+    assert overflow.status_code == 404
+    assert overflow.json()["error"] == "profile_not_in_category"
     assert foreign.json()["error"] == "profile_not_in_category"
     unpublished = client.post("/api/employer/offers", json=_offer(hidden))
     assert unpublished.status_code == 404

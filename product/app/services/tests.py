@@ -8,6 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from product.app.db.models import Profile, TestAttempt, User
+from product.app.db.session import sqlite_int
 from product.app.services.categories import latest_assignment, recompute
 from product.app.services.clock import days_elapsed, days_remaining, utc_now
 from product.app.services.errors import explain, fail
@@ -234,7 +235,7 @@ def submit_attempt(db: Session, user: User, attempt_id: int, payload: dict) -> d
     profile = _profile(db, user)
     if profile is None:
         fail(404, "not_found", "not_found_attempt")
-    row = db.get(TestAttempt, attempt_id)
+    row = db.get(TestAttempt, attempt_id) if sqlite_int(attempt_id) is not None else None
     if row is None or row.profile_id != profile.id:
         fail(404, "not_found", "not_found_attempt")
     if row.status != "draft":

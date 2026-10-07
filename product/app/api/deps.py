@@ -6,7 +6,7 @@ from fastapi import Depends, Request
 from sqlalchemy.orm import Session
 
 from product.app.db.models import User
-from product.app.db.session import session_scope
+from product.app.db.session import session_scope, sqlite_int
 from product.app.services.errors import fail
 
 
@@ -21,6 +21,9 @@ def load_session_user(request: Request, db: Session) -> User | None:
     try:
         user_id = int(raw)
     except (TypeError, ValueError):
+        request.session.clear()
+        return None
+    if sqlite_int(user_id) is None:
         request.session.clear()
         return None
     user = db.get(User, user_id)

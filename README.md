@@ -19,7 +19,7 @@
 
 ## Быстрый старт
 
-На машине заранее стоят только Docker Engine и плагин Compose. Язык, пакеты и база на хост не ставятся. Keycloak в стенд не входит. Копировать `compose.env` не нужно: если `PRODUCT_SECRET` короче 32 символов, точка входа пишет секрет в том `/data/product_secret`.
+На машине заранее стоят только Docker Engine и плагин Compose. Язык, пакеты и база на хост не ставятся. Полный `up` поднимает и локальный Keycloak. Почта остаётся входом, связь ID — кнопка в кабинете. Переключение на issuer заказчика — [`deploy/fsp/keycloak.md`](deploy/fsp/keycloak.md). Копировать `compose.env` не нужно: если `PRODUCT_SECRET` короче 32 символов, точка входа пишет секрет в том `/data/product_secret`.
 
 ```text
 docker compose -f deploy/fsp/compose.yaml up --build
@@ -28,6 +28,7 @@ docker compose -f deploy/fsp/compose.yaml up --build
 | Что | Адрес |
 | --- | --- |
 | Кабинеты | <http://127.0.0.1:8000> |
+| Консоль Keycloak | <http://127.0.0.1:8080> |
 | OpenAPI, без сети | <http://127.0.0.1:8000/docs> |
 | ReDoc, без сети | <http://127.0.0.1:8000/redoc> |
 

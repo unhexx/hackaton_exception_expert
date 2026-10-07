@@ -118,13 +118,13 @@ def test_grade_separation_is_not_a_threshold():
         ("data-senior-c", "q2"),
         ("data-lead-a", "q3"),
         ("data-senior-b", "q3"),
+        ("devops-junior-a", "q1"),
         ("frontend-lead-a", "q1"),
     )
     for template_id, question_id in separated_ids:
         row, question = _stem(template_id, question_id)
         assert item_separates(question, row["grade"]) is True
     drifted_ids = (
-        ("devops-junior-a", "q1"),
         ("frontend-junior-a", "q3"),
         ("security-lead-a", "q1"),
     )

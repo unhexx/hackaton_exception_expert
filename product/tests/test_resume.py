@@ -290,3 +290,41 @@ def test_cabinet_form_shows_resume_source(client):
     )
     assert broken.status_code == 422
     assert "текстового слоя" in broken.text
+
+
+def test_oversized_resume_stops_before_the_whole_file(client, monkeypatch):
+    from starlette.requests import Request
+
+    _seeker(client, "cap-read@example.com")
+    pulled = {"n": 0}
+    original = Request.stream
+    step = 32 * 1024
+
+    def stream(self):
+        async def pieces():
+            async for chunk in original(self):
+                for offset in range(0, len(chunk), step):
+                    piece = chunk[offset : offset + step]
+                    pulled["n"] += len(piece)
+                    yield piece
+
+        return pieces()
+
+    monkeypatch.setattr(Request, "stream", stream)
+    huge = b"%PDF-1.4\n" + b"0" * (_LIMIT + 512 * 1024)
+    large = client.post("/api/candidate/resume", files={"file": ("big.pdf", huge, "application/pdf")})
+    assert large.status_code == 413
+    assert large.json()["error"] == "resume_too_large"
+    assert 0 < pulled["n"] <= _LIMIT + 128 * 1024
+    assert pulled["n"] < len(huge)
+    pulled["n"] = 0
+    page = client.get("/candidate")
+    sent = client.post(
+        "/candidate/resume",
+        data={"csrf": _csrf(page.text)},
+        files={"file": ("big.pdf", huge, "application/pdf")},
+    )
+    assert sent.status_code == 413
+    assert "2 МиБ" in sent.text
+    assert 0 < pulled["n"] <= _LIMIT + 128 * 1024
+    assert pulled["n"] < len(huge)

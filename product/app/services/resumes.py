@@ -45,8 +45,10 @@ def _grade_fixed(db: Session, profile_id: int) -> bool:
     return found is not None
 
 
-def apply_resume(db: Session, user: User, data: bytes) -> dict:
+def apply_resume(db: Session, user: User, data: bytes, *, too_large: bool = False) -> dict:
     profile = _own(db, user)
+    if too_large:
+        _reject("resume_too_large")
     parsed = read_resume_bytes(data)
     code = parsed.get("error")
     if code:

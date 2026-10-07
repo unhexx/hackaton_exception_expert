@@ -10,6 +10,10 @@ from product.app.api.deps import db_session, require_candidate
 from product.app.db.models import User
 from product.app.services.errors import example, response_example
 from product.app.services.resumes import apply_resume, profile_pdf
+from product.matching.resume import _LIMIT
+
+# Запас на границы multipart и поле csrf. Сам файл длиннее _LIMIT сюда не входит.
+_BODY_SLACK = 64 * 1024
 
 router = APIRouter(tags=["resume"])
 
@@ -31,6 +35,36 @@ _DENIED = example("unauthorized")
 _FORBIDDEN = example("forbidden", "forbidden_candidate")
 
 
+async def read_resume_upload(request: Request) -> tuple[bytes, str, bool]:
+    """Байты файла, csrf и флаг обрыва. Хвост тела длиннее предела не читается."""
+    content_type = request.headers.get("content-type", "")
+    if content_type.split(";", 1)[0].strip().casefold() != "multipart/form-data":
+        return b"", "", False
+    cap = _LIMIT + _BODY_SLACK
+    chunks: list[bytes] = []
+    total = 0
+    async for chunk in request.stream():
+        if not chunk:
+            continue
+        room = cap + 1 - total
+        if len(chunk) > room:
+            return b"", "", True
+        chunks.append(chunk)
+        total += len(chunk)
+        if total > cap:
+            return b"", "", True
+    # form() снова идёт в stream(); отдаём ему уже собранное тело, не сокет.
+    request._body = b"".join(chunks)
+    request._stream_consumed = False
+    form = await request.form()
+    uploaded = form.get("file")
+    csrf_raw = form.get("csrf")
+    csrf = csrf_raw if isinstance(csrf_raw, str) else ""
+    if uploaded is None or isinstance(uploaded, str):
+        return b"", csrf, False
+    return await uploaded.read(_LIMIT + 1), csrf, False
+
+
 @router.post(
     "/candidate/resume",
     responses={
@@ -47,12 +81,8 @@ async def upload_resume(
     user: User = Depends(require_candidate),
     db: Session = Depends(db_session),
 ):
-    form = await request.form()
-    uploaded = form.get("file")
-    if uploaded is None or isinstance(uploaded, str):
-        return apply_resume(db, user, b"")
-    data = await uploaded.read()
-    return apply_resume(db, user, data)
+    data, _csrf, stopped = await read_resume_upload(request)
+    return apply_resume(db, user, data, too_large=stopped)
 
 
 @router.get(

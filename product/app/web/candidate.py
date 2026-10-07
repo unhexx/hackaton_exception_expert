@@ -7,6 +7,7 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
+from product.app.api.resumes import read_resume_upload
 from product.app.services.errors import ApiError
 from product.app.services.profiles import cabinet_payload, save_profile
 from product.app.services.resumes import apply_resume
@@ -84,15 +85,11 @@ async def upload_resume_page(request: Request, db: Session = Depends(db_session)
     user, denial = page_user(request, db, "candidate")
     if denial is not None:
         return denial
-    form = await request.form()
-    uploaded = form.get("file")
     try:
-        assert_csrf(request, str(form.get("csrf") or ""))
-        if uploaded is None or isinstance(uploaded, str):
-            payload = b""
-        else:
-            payload = await uploaded.read()
-        apply_resume(db, user, payload)
+        payload, csrf, stopped = await read_resume_upload(request)
+        if not stopped:
+            assert_csrf(request, csrf)
+        apply_resume(db, user, payload, too_large=stopped)
     except ApiError as exc:
         return page_error(request, "candidate/cabinet.html", _cabinet_context(request, db, user), exc)
     return RedirectResponse("/candidate", status_code=303)

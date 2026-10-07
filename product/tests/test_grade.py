@@ -112,12 +112,12 @@ def test_pair_templates_are_stable_and_offline():
     assert "samples.json" not in source
     assert not list((root / "templates").glob("*.json"))
     rows = catalog()
-    assert len(rows) == 48
     ids = [row["template_id"] for row in rows]
     assert len(ids) == len(set(ids))
     texts = []
     for row in rows:
         assert len(row["questions"]) == 3
+        assert [question["correct"] for question in row["questions"]] == ["b", "c", "a"]
         assert {choice["id"] for choice in row["questions"][0]["choices"]} == {"a", "b", "c"}
         for question in row["questions"]:
             texts.append(question["text"])
@@ -125,11 +125,14 @@ def test_pair_templates_are_stable_and_offline():
             assert "вариант a про" not in blob
             assert "Пара " not in blob
     assert len(texts) == len(set(texts))
+    covered = 0
     for spec in rules["specializations"]:
         for grade in rules["grades"]:
             found = templates_for(spec, grade, "v1")
-            assert len(found) == 2
+            assert len(found) in (2, 3)
+            covered += len(found)
             assert [row["template_id"] for row in found] == sorted(row["template_id"] for row in found)
+    assert len(rows) == covered
     chosen = {select_template(profile_id, "backend", "middle", "v1") for profile_id in range(1, 31)}
     assert len(chosen) >= 2
     assert select_template(7, "backend", "middle", "v1") == select_template(7, "backend", "middle", "v1")

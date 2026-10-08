@@ -6,12 +6,14 @@ from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from product.app.db.models import Company, Offer, Profile, User
+from product.app.db.models import Company, Offer, User
 from product.app.db.session import sqlite_int
 from product.app.log import log_event
 from product.app.services.categories import visible_in_category
 from product.app.services.clock import utc_now
 from product.app.services.errors import fail
+from product.app.services.fork import parse_fork
+from product.app.services.profile_ref import candidate_email, own_profile_id
 
 _FIELDS = {
     "profile_id",
@@ -30,22 +32,6 @@ def _fail(status: int, code: str, key: str | None = None, **parts: object) -> No
     fail(status, code, key, **parts)
 
 
-def _money(value: object) -> int:
-    if isinstance(value, bool) or not isinstance(value, int):
-        _fail(422, "salary_range", "salary_range_type")
-    if sqlite_int(value) is None:
-        _fail(422, "salary_range")
-    return value
-
-
-def _candidate_email(db: Session, profile_id: int) -> str:
-    profile = db.get(Profile, profile_id)
-    if profile is None:
-        return ""
-    owner = db.get(User, profile.user_id)
-    return "" if owner is None else owner.email
-
-
 def offer_payload(db: Session, row: Offer, *, viewer: str) -> dict:
     body = {
         "id": row.id,
@@ -62,17 +48,12 @@ def offer_payload(db: Session, row: Offer, *, viewer: str) -> dict:
         "updated_at": row.updated_at,
     }
     if viewer == "employer" and row.status == "accepted":
-        body["candidate_email"] = _candidate_email(db, row.profile_id)
+        body["candidate_email"] = candidate_email(db, row.profile_id)
     return body
 
 
-def _own_profile_id(db: Session, user: User) -> int | None:
-    profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
-    return None if profile is None else profile.id
-
-
 def list_candidate_offers(db: Session, user: User) -> list[dict]:
-    profile_id = _own_profile_id(db, user)
+    profile_id = own_profile_id(db, user)
     if profile_id is None:
         return []
     rows = db.scalars(
@@ -89,7 +70,7 @@ def list_employer_offers(db: Session, user: User) -> list[dict]:
 
 
 def _candidate_offer(db: Session, user: User, offer_id: int) -> Offer:
-    profile_id = _own_profile_id(db, user)
+    profile_id = own_profile_id(db, user)
     row = db.get(Offer, offer_id) if sqlite_int(offer_id) is not None else None
     if row is None or profile_id is None or row.profile_id != profile_id:
         fail(404, "not_found", "not_found_offer")
@@ -103,10 +84,7 @@ def create_offer(db: Session, user: User, payload: dict) -> dict:
     message = payload.get("message")
     if not isinstance(message, str) or not message.strip():
         _fail(422, "offer_incomplete", "offer_incomplete_message")
-    salary_min = _money(payload.get("salary_min"))
-    salary_max = _money(payload.get("salary_max"))
-    if salary_max <= salary_min:
-        _fail(422, "salary_range")
+    salary_min, salary_max = parse_fork(payload.get("salary_min"), payload.get("salary_max"), _fail)
     if payload.get("salary_currency") != "RUB":
         _fail(422, "currency")
     company = db.scalar(select(Company).where(Company.employer_id == user.id))

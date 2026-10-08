@@ -278,7 +278,7 @@ def _sqlite_pragmas(dbapi_conn, _connection_record):
 ```toml
 [project]
 name = "fsp-vacancies"
-version = "1.2.9"
+version = "1.2.10"
 requires-python = ">=3.12"
 dependencies = [
   "fastapi>=0.115,<1",

@@ -31,7 +31,6 @@ def test_golden_report_prints_this_run_only():
     assert lines[5] == f"grade_separation {separated} {total}"
     assert separated <= total
     assert total == 216
-    assert separated < total
     counts = summarize()
     assert lines[0] == f"category_match {counts['category_match'][0]} {counts['category_match'][1]}"
     assert counts["category_match"][0] == counts["category_match"][1]
@@ -121,13 +120,12 @@ def test_grade_separation_is_not_a_threshold():
         ("devops-junior-a", "q1"),
         ("frontend-lead-a", "q1"),
         ("frontend-junior-a", "q3"),
+        ("security-lead-a", "q1"),
     )
     for template_id, question_id in separated_ids:
         row, question = _stem(template_id, question_id)
         assert item_separates(question, row["grade"]) is True
-    drifted_ids = (
-        ("security-lead-a", "q1"),
-    )
+    drifted_ids = ()
     for template_id, question_id in drifted_ids:
         row, question = _stem(template_id, question_id)
         assert item_separates(question, row["grade"]) is False

@@ -17,6 +17,7 @@ from product.app.services.offers import (
     open_offer,
     set_offer_status,
 )
+from product.app.web.forms import form_int
 from product.app.web.guards import page_user, same_site_navigation
 from product.app.web.render import assert_csrf, ensure_csrf, page_error, render
 
@@ -63,13 +64,6 @@ def _employer_context(
         "prefill_profile_id": prefill_profile,
         "prefill_category_id": prefill_category,
     }
-
-
-def _int(raw: str) -> int | str:
-    text = raw.strip()
-    if text.lstrip("-").isdigit():
-        return int(text)
-    return raw
 
 
 @router.get("/candidate/offers")
@@ -157,13 +151,13 @@ def send_page(
     if denial is not None:
         return denial
     payload = {
-        "profile_id": _int(profile_id),
+        "profile_id": form_int(profile_id),
         "category_id": category_id,
         "company_name": company_name,
         "contact_channel": contact_channel,
         "message": message,
-        "salary_min": _int(salary_min),
-        "salary_max": _int(salary_max),
+        "salary_min": form_int(salary_min),
+        "salary_max": form_int(salary_max),
         "salary_currency": salary_currency,
     }
     try:

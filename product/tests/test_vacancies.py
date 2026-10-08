@@ -234,3 +234,24 @@ def test_pages_show_gross_fork_and_email_only_after_accept(client):
     assert accepted.status_code == 303
     after = client.get("/employer/vacancies")
     assert "Почта соискателя: page-seeker-vac@example.com" in after.text
+
+
+def test_vacancy_form_double_minus_is_rejected_not_crashed(client):
+    _employer(client, email="minus-vac-boss@example.com")
+    form = client.get("/employer/vacancies")
+    bad = client.post(
+        "/employer/vacancies",
+        data={
+            "csrf": _csrf(form.text),
+            "title": "Backend middle",
+            "description": "Платежи",
+            "category_id": "backend:middle",
+            "company_name": "Синтетика",
+            "contact_channel": "telegram: @sintetika",
+            "salary_min": "180000",
+            "salary_max": "--250000",
+            "salary_currency": "RUB",
+        },
+    )
+    assert bad.status_code == 422
+    assert "целыми числами" in bad.text

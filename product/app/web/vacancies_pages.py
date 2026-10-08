@@ -20,17 +20,11 @@ from product.app.services.vacancies import (
     open_application,
     set_employer_application_status,
 )
+from product.app.web.forms import form_int
 from product.app.web.guards import page_user, same_site_navigation
 from product.app.web.render import assert_csrf, ensure_csrf, page_error, render
 
 router = APIRouter()
-
-
-def _int(raw: str) -> int | str:
-    text = raw.strip()
-    if text.lstrip("-").isdigit():
-        return int(text)
-    return raw
 
 
 def _employer_context(request: Request, db: Session, user, error: str = "") -> dict:
@@ -97,8 +91,8 @@ def publish_page(
         "category_id": category_id,
         "company_name": company_name,
         "contact_channel": contact_channel,
-        "salary_min": _int(salary_min),
-        "salary_max": _int(salary_max),
+        "salary_min": form_int(salary_min),
+        "salary_max": form_int(salary_max),
         "salary_currency": salary_currency,
     }
     if task_prompt.strip():

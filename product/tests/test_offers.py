@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from product.app.web.forms import form_int
 from product.matching.grade import load_template
 from product.tests.conftest import register_and_confirm
 
@@ -338,3 +339,49 @@ def test_shortlist_card_compares_neighbor_instead_of_raw_rank_key(client):
     assert cards[1]["list_reason"].endswith("Ниже этой карточки в подборке никого нет.")
     assert cards[0]["test_score"] == 67
     assert cards[1]["test_score"] == 33
+
+
+def test_offer_form_double_minus_is_rejected_not_crashed(client):
+    assert form_int(" 180000 ") == 180000
+    assert form_int("-12") == -12
+    assert form_int("--180000") == "--180000"
+    assert form_int("+180000") == "+180000"
+    assert form_int("-") == "-"
+    profile_id = _scored(client, "minus-seeker@example.com")
+    _employer(client, email="minus-boss@example.com")
+    form = client.get(
+        "/employer/offers",
+        params={"profile_id": str(profile_id), "category_id": "backend:middle"},
+    )
+    bad = client.post(
+        "/employer/offers",
+        data={
+            "csrf": _csrf(form.text),
+            "profile_id": str(profile_id),
+            "category_id": "backend:middle",
+            "company_name": "Синтетика",
+            "contact_channel": "telegram: @sintetika",
+            "message": "Ищем backend",
+            "salary_min": "--180000",
+            "salary_max": "250000",
+            "salary_currency": "RUB",
+        },
+    )
+    assert bad.status_code == 422
+    assert "целыми числами" in bad.text
+    sent = client.post(
+        "/employer/offers",
+        data={
+            "csrf": _csrf(bad.text),
+            "profile_id": str(profile_id),
+            "category_id": "backend:middle",
+            "company_name": "Синтетика",
+            "contact_channel": "telegram: @sintetika",
+            "message": "Ищем backend",
+            "salary_min": "180000",
+            "salary_max": "250000",
+            "salary_currency": "RUB",
+        },
+        follow_redirects=False,
+    )
+    assert sent.status_code == 303

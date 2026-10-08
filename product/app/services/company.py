@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -33,6 +35,18 @@ def get_company(db: Session, user: User) -> dict:
     if row is None:
         fail(404, "company_missing")
     return company_payload(row)
+
+
+def posted_company(db: Session, user: User, payload: dict, reject: Callable[..., None]) -> Company:
+    """Имя и контакт запроса сверяются с карточкой. Журнал пишет вызывающий reject."""
+    company = db.scalar(select(Company).where(Company.employer_id == user.id))
+    name = payload.get("company_name")
+    if company is None or not company.name.strip() or not isinstance(name, str) or name != company.name:
+        reject(422, "company_name")
+    contact = payload.get("contact_channel")
+    if not company.contact.strip() or not isinstance(contact, str) or contact != company.contact:
+        reject(422, "contact_channel")
+    return company
 
 
 def save_company(db: Session, user: User, payload: dict) -> dict:

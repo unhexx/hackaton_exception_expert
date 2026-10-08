@@ -88,3 +88,46 @@ def test_bad_fork_logs_the_service_that_rejected_it(client, capsys):
     vacancy_log = capsys.readouterr().out
     assert "vacancy_rejected salary_range" in vacancy_log
     assert "offer_rejected" not in vacancy_log
+
+
+def test_card_mismatch_logs_the_service_that_rejected_it(client, capsys):
+    register_and_confirm(client, email="card-boss@example.com", role="employer")
+    saved = client.put("/api/employer/company", json=_CARD)
+    assert saved.status_code == 200, saved.text
+    capsys.readouterr()
+    offer = client.post(
+        "/api/employer/offers",
+        json={
+            "profile_id": 1,
+            "category_id": "backend:middle",
+            "company_name": "Чужая",
+            "message": "Ищем backend",
+            "salary_min": 180000,
+            "salary_max": 250000,
+            "salary_currency": "RUB",
+            "contact_channel": "telegram: @sintetika",
+        },
+    )
+    assert offer.status_code == 422
+    assert offer.json()["error"] == "company_name"
+    offer_log = capsys.readouterr().out
+    assert "offer_rejected company_name" in offer_log
+    assert "vacancy_rejected" not in offer_log
+    vacancy = client.post(
+        "/api/employer/vacancies",
+        json={
+            "title": "Backend middle",
+            "description": "Платежи",
+            "category_id": "backend:middle",
+            "company_name": "Синтетика",
+            "contact_channel": "почта@example.com",
+            "salary_min": 180000,
+            "salary_max": 250000,
+            "salary_currency": "RUB",
+        },
+    )
+    assert vacancy.status_code == 422
+    assert vacancy.json()["error"] == "contact_channel"
+    vacancy_log = capsys.readouterr().out
+    assert "vacancy_rejected contact_channel" in vacancy_log
+    assert "offer_rejected" not in vacancy_log

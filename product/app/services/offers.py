@@ -6,11 +6,12 @@ from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from product.app.db.models import Company, Offer, User
+from product.app.db.models import Offer, User
 from product.app.db.session import sqlite_int
 from product.app.log import log_event
 from product.app.services.categories import visible_in_category
 from product.app.services.clock import utc_now
+from product.app.services.company import posted_company
 from product.app.services.errors import fail
 from product.app.services.fork import parse_fork
 from product.app.services.profile_ref import candidate_email, own_profile_id
@@ -87,13 +88,7 @@ def create_offer(db: Session, user: User, payload: dict) -> dict:
     salary_min, salary_max = parse_fork(payload.get("salary_min"), payload.get("salary_max"), _fail)
     if payload.get("salary_currency") != "RUB":
         _fail(422, "currency")
-    company = db.scalar(select(Company).where(Company.employer_id == user.id))
-    name = payload.get("company_name")
-    if company is None or not company.name.strip() or not isinstance(name, str) or name != company.name:
-        _fail(422, "company_name")
-    contact = payload.get("contact_channel")
-    if not company.contact.strip() or not isinstance(contact, str) or contact != company.contact:
-        _fail(422, "contact_channel")
+    company = posted_company(db, user, payload, _fail)
     profile_id = payload.get("profile_id")
     if isinstance(profile_id, bool) or not isinstance(profile_id, int):
         _fail(422, "offer_incomplete", "offer_incomplete_profile")

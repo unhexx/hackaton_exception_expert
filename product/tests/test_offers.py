@@ -347,6 +347,9 @@ def test_offer_form_double_minus_is_rejected_not_crashed(client):
     assert form_int("--180000") == "--180000"
     assert form_int("+180000") == "+180000"
     assert form_int("-") == "-"
+    assert form_int("²") == "²"
+    assert form_int("-²") == "-²"
+    assert form_int("①") == "①"
     profile_id = _scored(client, "minus-seeker@example.com")
     _employer(client, email="minus-boss@example.com")
     form = client.get(
@@ -369,10 +372,26 @@ def test_offer_form_double_minus_is_rejected_not_crashed(client):
     )
     assert bad.status_code == 422
     assert "целыми числами" in bad.text
-    sent = client.post(
+    weird = client.post(
         "/employer/offers",
         data={
             "csrf": _csrf(bad.text),
+            "profile_id": str(profile_id),
+            "category_id": "backend:middle",
+            "company_name": "Синтетика",
+            "contact_channel": "telegram: @sintetika",
+            "message": "Ищем backend",
+            "salary_min": "²",
+            "salary_max": "250000",
+            "salary_currency": "RUB",
+        },
+    )
+    assert weird.status_code == 422
+    assert "целыми числами" in weird.text
+    sent = client.post(
+        "/employer/offers",
+        data={
+            "csrf": _csrf(weird.text),
             "profile_id": str(profile_id),
             "category_id": "backend:middle",
             "company_name": "Синтетика",

@@ -4,13 +4,12 @@ from __future__ import annotations
 
 
 def form_int(raw: str) -> int | str:
-    """Один минус и цифры — int. Двойной минус, плюс и пусто не бросают ValueError."""
+    """Один минус и цифры — int. Мусор, который int не читает, остаётся строкой."""
     text = raw.strip()
-    if text.startswith("-"):
-        digits = text[1:]
-        if digits.isdigit():
-            return int(text)
+    body = text[1:] if text.startswith("-") else text
+    if not body.isdigit():
         return raw
-    if text.isdigit():
+    try:
         return int(text)
-    return raw
+    except ValueError:
+        return raw

@@ -124,3 +124,46 @@ section + section { margin-top: 1rem; }
 .row label { display: flex; gap: 0.3rem; align-items: center; }
 
 nav { display: flex; gap: 1rem; margin: 0 0 1rem; }
+
+.test-track {
+  border: 1px solid var(--fsp-ink);
+  background: var(--fsp-light);
+  height: 0.75rem;
+  margin: 0.6rem 0;
+}
+.test-track-bar {
+  background: var(--fsp-blue);
+  height: 100%;
+  width: 0;
+}
+.test-stations { display: flex; gap: 0.4rem; margin: 0 0 1rem; }
+.test-station {
+  flex: 1;
+  text-align: center;
+  padding: 0.35rem;
+  border: 1px solid var(--fsp-ink);
+  color: var(--fsp-ink);
+}
+.test-station-current {
+  background: var(--fsp-blue);
+  color: var(--fsp-light);
+  border: 2px solid var(--fsp-ink);
+}
+.test-station-done {
+  background: var(--fsp-light);
+  color: var(--fsp-ink);
+  border: 1px solid var(--fsp-ink);
+}
+.test-station-todo {
+  border-color: var(--fsp-gray);
+}
+.test-paths { display: flex; gap: 0.4rem; padding: 0; list-style: none; }
+.test-path {
+  flex: 1;
+  border: 1px solid var(--fsp-ink);
+  padding: 0.6rem;
+}
+.test-path-current {
+  background: var(--fsp-blue);
+  color: var(--fsp-light);
+}

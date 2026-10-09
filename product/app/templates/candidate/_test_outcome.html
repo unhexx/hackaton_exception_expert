@@ -1,0 +1,29 @@
+<section>
+  <h2>Итог попытки</h2>
+  <p>Грейд попытки: {{ outcome_view.declared_grade }}.</p>
+  <p>{{ outcome_view.score }} из 100</p>
+  <ul class="test-paths">
+    <li class="test-path{% if outcome_view.outcome == 'suggest_lower' %} test-path-current{% endif %}">Ниже заявленного</li>
+    <li class="test-path{% if outcome_view.outcome == 'confirm' %} test-path-current{% endif %}">Подтвердить</li>
+    <li class="test-path{% if outcome_view.outcome == 'suggest_higher' %} test-path-current{% endif %}">Выше</li>
+  </ul>
+  <p>Порог подтверждения {{ outcome_view.confirm_min }}. Порог предложения выше {{ outcome_view.suggest_higher_min }}.</p>
+  {% if outcome_view.outcome == 'suggest_lower' %}
+  <p>предложен грейд ниже</p>
+  <p>Записанный грейд этой попыткой не понижен.</p>
+  {% elif outcome_view.outcome == 'confirm' %}
+  <p>заявленный грейд подтверждён</p>
+  {% elif outcome_view.outcome == 'suggest_higher' %}
+  <p>предложен грейд выше{% if outcome_view.proposed_grade %} {{ outcome_view.proposed_grade }}{% endif %}</p>
+  {% endif %}
+  {% if offer %}
+  {% if interval_notice %}<p class="hint">{{ interval_notice | cabinet_links }}</p>{% endif %}
+  <form method="post" action="/candidate/test/start">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="hidden" name="grade" value="{{ offer }}">
+    <p>Последний итог записанной пары предлагает соседний грейд {{ offer }}.</p>
+    <button type="submit">Начать тест грейда {{ offer }}</button>
+  </form>
+  {% endif %}
+  <p><a href="/candidate">В кабинет</a></p>
+</section>

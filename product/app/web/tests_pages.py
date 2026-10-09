@@ -12,10 +12,12 @@ from sqlalchemy.orm import Session
 
 from product.app.api.deps import db_session
 from product.app.db.models import Profile, TestAttempt
-from product.app.services.errors import ApiError, explain
+from product.app.db.session import sqlite_int
+from product.app.services.errors import ApiError, fail, explain
 from product.app.services.tests import (
     interval_blocks,
     interval_message,
+    latest_recorded_attempt,
     list_attempts,
     proposed_adjacent,
     start_attempt,
@@ -27,6 +29,170 @@ from product.matching.grade import load_template, public_questions
 
 router = APIRouter()
 _SAMPLES = Path(__file__).resolve().parents[2] / "matching" / "vacancies" / "samples.json"
+_TRUE = {"true"}
+_MARKS = {"true", "false"}
+_CHOICE_IDS = ("a", "b", "c")
+_RETRY_HINT = "Нужна ровно одна отметка «истинен». Пройдите этот вопрос ещё раз."
+
+
+def assemble_letter(marks: dict[str, str]) -> str:
+    """Ровно одна «истина» → эта буква. Иначе пустая строка (на сдаче станет answer_unknown)."""
+    truths = [cid for cid in _CHOICE_IDS if marks.get(cid, "") in _TRUE]
+    if len(truths) == 1:
+        return truths[0]
+    return ""
+
+
+def _parse_step(raw: str) -> int:
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return 0
+    if value < 0 or value > 12:
+        return 0
+    return value
+
+
+def _parse_attempt_id(raw: str) -> int | None:
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return None
+    return sqlite_int(value)
+
+
+def _step_posted(raw: str) -> bool:
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return False
+    return 0 <= value <= 12
+
+
+def _marks_from_fields(
+    mark_0_a: str,
+    mark_0_b: str,
+    mark_0_c: str,
+    mark_1_a: str,
+    mark_1_b: str,
+    mark_1_c: str,
+    mark_2_a: str,
+    mark_2_b: str,
+    mark_2_c: str,
+) -> dict[int, dict[str, str]]:
+    return {
+        0: {"a": mark_0_a, "b": mark_0_b, "c": mark_0_c},
+        1: {"a": mark_1_a, "b": mark_1_b, "c": mark_1_c},
+        2: {"a": mark_2_a, "b": mark_2_b, "c": mark_2_c},
+    }
+
+
+def _letters_from_form(
+    answer_0: str,
+    answer_1: str,
+    answer_2: str,
+    marks: dict[int, dict[str, str]],
+) -> list[str]:
+    letters = [answer_0, answer_1, answer_2]
+    if all(letter in _CHOICE_IDS for letter in letters):
+        return letters
+    return [assemble_letter(marks[q]) for q in range(3)]
+
+
+def _advance_step(
+    current: int,
+    advance: str,
+    mark: str,
+    marks: dict[int, dict[str, str]],
+    answers: dict[int, str],
+) -> tuple[int, str]:
+    if current == 12:
+        return 12, ""
+    phase = current % 4
+    question = current // 4
+    if phase == 0:
+        if advance == "1":
+            return current + 1, ""
+        return current, ""
+    if mark not in _MARKS:
+        return current, ""
+    choice = _CHOICE_IDS[phase - 1]
+    marks[question][choice] = mark
+    if phase in (1, 2):
+        return current + 1, ""
+    letter = assemble_letter(marks[question])
+    if letter:
+        answers[question] = letter
+        return current + 1, ""
+    for cid in _CHOICE_IDS:
+        marks[question][cid] = ""
+    answers[question] = ""
+    return question * 4, _RETRY_HINT
+
+
+def _station_classes(step: int) -> list[str]:
+    if step == 12:
+        return ["test-station-done", "test-station-done", "test-station-done"]
+    current_q = step // 4
+    classes = []
+    for index in range(3):
+        if index < current_q:
+            classes.append("test-station-done")
+        elif index == current_q:
+            classes.append("test-station-current")
+        else:
+            classes.append("test-station-todo")
+    return classes
+
+
+def _echo_fields(step: int, marks: dict[int, dict[str, str]], answers: dict[int, str]) -> dict:
+    fields = {"step": step}
+    for question in range(3):
+        for cid in _CHOICE_IDS:
+            fields[f"mark_{question}_{cid}"] = marks[question][cid]
+        fields[f"answer_{question}"] = answers[question]
+    return fields
+
+
+def _step_error_text(exc: ApiError) -> str:
+    line = exc.message.split("\n", 1)[0]
+    return line.removeprefix("Что случилось. ").strip() or exc.message
+
+
+def _render_step(
+    request: Request,
+    *,
+    step: int,
+    questions: list[dict],
+    marks: dict[int, dict[str, str]],
+    answers: dict[int, str],
+    hint: str = "",
+    error: str = "",
+):
+    phase = 0 if step == 12 else step % 4
+    question_index = 2 if step == 12 else step // 4
+    n = 3 if step == 12 else question_index + 1
+    k = 0 if step == 12 or phase == 0 else phase
+    question = None
+    choice = None
+    if questions and 0 <= question_index < len(questions):
+        question = questions[question_index]
+        if question is not None and 1 <= phase <= 3:
+            choices = question.get("choices") or []
+            if phase - 1 < len(choices):
+                choice = choices[phase - 1]
+    ctx = {
+        "n": n,
+        "k": k,
+        "phase": phase,
+        "stations": _station_classes(step),
+        "question": question,
+        "choice": choice,
+        "hint": hint,
+        "error": error,
+        **_echo_fields(step, marks, answers),
+    }
+    return render(request, "candidate/_test_step.html", ctx)
 
 
 def _samples() -> list[dict]:
@@ -53,10 +219,26 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
     offer = proposed_adjacent(db, profile) if profile is not None else ""
     interval_notice = ""
     hint = ""
+    recorded = latest_recorded_attempt(db, profile) if profile is not None else None
+    outcome_view = None
     if profile is None:
         hint = explain("survey_required")
     elif offer and interval_blocks(db, profile, offer):
         interval_notice = interval_message(profile, offer)
+    if draft is None and recorded is not None:
+        template = load_template(recorded.template_id)
+        outcome_view = {
+            "score": recorded.score,
+            "outcome": recorded.outcome,
+            "outcome_label": next(
+                (row["outcome_label"] for row in history if row["attempt_id"] == recorded.id),
+                "",
+            ),
+            "declared_grade": recorded.declared_grade,
+            "proposed_grade": recorded.proposed_grade,
+            "confirm_min": int(template["confirm_min"]),
+            "suggest_higher_min": int(template["suggest_higher_min"]),
+        }
     return {
         "csrf": ensure_csrf(request),
         "error": error,
@@ -68,6 +250,7 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
         "history": history,
         "offer": offer,
         "interval_notice": interval_notice,
+        "outcome_view": outcome_view,
         "samples": _samples(),
     }
 
@@ -107,6 +290,15 @@ def submit_page(
     answer_0: str = Form(""),
     answer_1: str = Form(""),
     answer_2: str = Form(""),
+    mark_0_a: str = Form(""),
+    mark_0_b: str = Form(""),
+    mark_0_c: str = Form(""),
+    mark_1_a: str = Form(""),
+    mark_1_b: str = Form(""),
+    mark_1_c: str = Form(""),
+    mark_2_a: str = Form(""),
+    mark_2_b: str = Form(""),
+    mark_2_c: str = Form(""),
     db: Session = Depends(db_session),
 ):
     user, denial = page_user(request, db, "candidate")
@@ -114,12 +306,122 @@ def submit_page(
         return denial
     try:
         assert_csrf(request, csrf)
+        letters = _letters_from_form(
+            answer_0,
+            answer_1,
+            answer_2,
+            _marks_from_fields(
+                mark_0_a,
+                mark_0_b,
+                mark_0_c,
+                mark_1_a,
+                mark_1_b,
+                mark_1_c,
+                mark_2_a,
+                mark_2_b,
+                mark_2_c,
+            ),
+        )
         submit_attempt(
             db,
             user,
             attempt_id,
-            {"answers": [answer_0, answer_1, answer_2]},
+            {"answers": letters},
         )
     except ApiError as exc:
         return page_error(request, "candidate/test.html", _context(request, db, user), exc)
     return RedirectResponse("/candidate/test", status_code=303)
+
+
+@router.post("/candidate/test/step")
+def step_page(
+    request: Request,
+    csrf: str = Form(""),
+    attempt_id: str = Form(""),
+    step: str = Form(""),
+    mark: str = Form(""),
+    advance: str = Form(""),
+    mark_0_a: str = Form(""),
+    mark_0_b: str = Form(""),
+    mark_0_c: str = Form(""),
+    mark_1_a: str = Form(""),
+    mark_1_b: str = Form(""),
+    mark_1_c: str = Form(""),
+    mark_2_a: str = Form(""),
+    mark_2_b: str = Form(""),
+    mark_2_c: str = Form(""),
+    answer_0: str = Form(""),
+    answer_1: str = Form(""),
+    answer_2: str = Form(""),
+    db: Session = Depends(db_session),
+):
+    user, denial = page_user(request, db, "candidate")
+    if denial is not None:
+        return denial
+    hx = request.headers.get("hx-request") == "true"
+    marks = _marks_from_fields(
+        mark_0_a,
+        mark_0_b,
+        mark_0_c,
+        mark_1_a,
+        mark_1_b,
+        mark_1_c,
+        mark_2_a,
+        mark_2_b,
+        mark_2_c,
+    )
+    answers = {0: answer_0, 1: answer_1, 2: answer_2}
+    # htmx 2.0.4 не свапает 4xx — любой HX-ответ шага это 200 и фрагмент.
+    try:
+        assert_csrf(request, csrf)
+    except ApiError as exc:
+        if hx:
+            return _render_step(
+                request,
+                step=_parse_step(step),
+                questions=[],
+                marks=marks,
+                answers=answers,
+                error=_step_error_text(exc),
+            )
+        return page_error(request, "candidate/test.html", _context(request, db, user), exc)
+    if not hx:
+        return RedirectResponse("/candidate/test", status_code=303)
+    try:
+        parsed_id = _parse_attempt_id(attempt_id)
+        if parsed_id is None:
+            fail(404, "not_found", "not_found_attempt")
+        profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
+        draft = None
+        if profile is not None:
+            draft = db.scalar(
+                select(TestAttempt).where(
+                    TestAttempt.id == parsed_id,
+                    TestAttempt.profile_id == profile.id,
+                    TestAttempt.status == "draft",
+                )
+            )
+        if draft is None:
+            fail(404, "not_found", "not_found_attempt")
+        questions = public_questions(load_template(draft.template_id))
+        hint = ""
+        display = 0
+        if _step_posted(step):
+            display, hint = _advance_step(_parse_step(step), advance, mark, marks, answers)
+        return _render_step(
+            request,
+            step=display,
+            questions=questions,
+            marks=marks,
+            answers=answers,
+            hint=hint,
+        )
+    except ApiError as exc:
+        return _render_step(
+            request,
+            step=_parse_step(step),
+            questions=[],
+            marks=marks,
+            answers=answers,
+            error=_step_error_text(exc),
+        )

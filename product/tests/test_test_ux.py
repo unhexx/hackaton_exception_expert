@@ -116,7 +116,7 @@ def test_draft_page_keeps_nine_mark_pairs_inside_noscript(client):
     noscript = _noscript(page.text)
     outside = _outside_noscript(page.text)
     assert 'id="test-step"' in page.text
-    assert "Загрузка шага…" in page.text
+    assert "Загрузка шага…" not in page.text
     assert 'name="mark_0_a"' in noscript
     for name in _MARK_NAMES:
         assert f'name="{name}"' in noscript

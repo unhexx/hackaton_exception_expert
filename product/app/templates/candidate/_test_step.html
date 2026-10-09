@@ -1,0 +1,60 @@
+<div class="test-step-inner" hx-disinherit="hx-post hx-target hx-swap hx-include hx-trigger">
+  <input type="hidden" name="step" value="{{ step }}">
+  <input type="hidden" name="mark_0_a" value="{{ mark_0_a }}">
+  <input type="hidden" name="mark_0_b" value="{{ mark_0_b }}">
+  <input type="hidden" name="mark_0_c" value="{{ mark_0_c }}">
+  <input type="hidden" name="mark_1_a" value="{{ mark_1_a }}">
+  <input type="hidden" name="mark_1_b" value="{{ mark_1_b }}">
+  <input type="hidden" name="mark_1_c" value="{{ mark_1_c }}">
+  <input type="hidden" name="mark_2_a" value="{{ mark_2_a }}">
+  <input type="hidden" name="mark_2_b" value="{{ mark_2_b }}">
+  <input type="hidden" name="mark_2_c" value="{{ mark_2_c }}">
+  <input type="hidden" name="answer_0" value="{{ answer_0 }}">
+  <input type="hidden" name="answer_1" value="{{ answer_1 }}">
+  <input type="hidden" name="answer_2" value="{{ answer_2 }}">
+  {% if error %}
+  <p class="error" role="alert">{{ error }}</p>
+  <p><a href="/candidate/test">Открыть тест</a></p>
+  {% else %}
+  <p class="test-caption">вопрос {{ n }} из 3{% if k %}, вариант {{ k }} из 3{% endif %}</p>
+  <div class="test-track">
+    <div class="test-track-bar" style="width: calc(100% * {{ step }} / 12)"></div>
+  </div>
+  <div class="test-stations">
+    <div class="test-station {{ stations[0] }}">1</div>
+    <div class="test-station {{ stations[1] }}">2</div>
+    <div class="test-station {{ stations[2] }}">3</div>
+  </div>
+  {% if hint %}<p class="hint">{{ hint }}</p>{% endif %}
+  {% if step == 12 %}
+  <p><button type="submit">Сдать тест</button></p>
+  {% elif phase == 0 %}
+  <p>{{ question.text }}</p>
+  <p><button type="button"
+             hx-post="/candidate/test/step"
+             hx-target="#test-step"
+             hx-swap="innerHTML"
+             hx-include="closest form"
+             hx-vals='{"advance":"1"}'
+             hx-push-url="false">К вариантам</button></p>
+  {% else %}
+  <p>{{ choice.text }}</p>
+  <p>
+    <button type="button"
+            hx-post="/candidate/test/step"
+            hx-target="#test-step"
+            hx-swap="innerHTML"
+            hx-include="closest form"
+            hx-vals='{"mark":"true"}'
+            hx-push-url="false">истинен</button>
+    <button type="button"
+            hx-post="/candidate/test/step"
+            hx-target="#test-step"
+            hx-swap="innerHTML"
+            hx-include="closest form"
+            hx-vals='{"mark":"false"}'
+            hx-push-url="false">ложен</button>
+  </p>
+  {% endif %}
+  {% endif %}
+</div>

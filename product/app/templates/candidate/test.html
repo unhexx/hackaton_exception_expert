@@ -13,30 +13,42 @@
   <input type="hidden" name="csrf" value="{{ csrf }}">
   <button type="submit">Начать тест записанного грейда</button>
 </form>
-{% if offer %}
-{% if interval_notice %}<p class="hint">{{ interval_notice | cabinet_links }}</p>{% endif %}
-<form method="post" action="/candidate/test/start">
-  <input type="hidden" name="csrf" value="{{ csrf }}">
-  <input type="hidden" name="grade" value="{{ offer }}">
-  <p>Последний итог записанной пары предлагает соседний грейд {{ offer }}.</p>
-  <button type="submit">Начать тест грейда {{ offer }}</button>
-</form>
+{% if outcome_view %}
+{% include "candidate/_test_outcome.html" %}
 {% endif %}
 {% else %}
 <p>Открыт шаблон {{ draft.template_id }} на грейд {{ draft.declared_grade }}.</p>
 <form method="post" action="/candidate/test/submit">
   <input type="hidden" name="csrf" value="{{ csrf }}">
   <input type="hidden" name="attempt_id" value="{{ draft.id }}">
-  {% for question in questions %}
-  {% set question_index = loop.index0 %}
-  <fieldset>
-    <legend>{{ question.text }}</legend>
-    {% for choice in question.choices %}
-    <label><input type="radio" name="answer_{{ question_index }}" value="{{ choice.id }}"> {{ choice.text }}</label>
+  <p>На вопрос нужна ровно одна отметка «истинен».</p>
+  <noscript>
+    {% for question in questions %}
+    {% set question_index = loop.index0 %}
+    <fieldset>
+      <legend>{{ question.text }}</legend>
+      {% for choice in question.choices %}
+      <p>{{ choice.text }}</p>
+      <label>
+        <input type="radio" name="mark_{{ question_index }}_{{ choice.id }}"
+               value="true" required> истинен
+      </label>
+      <label>
+        <input type="radio" name="mark_{{ question_index }}_{{ choice.id }}"
+               value="false" required> ложен
+      </label>
+      {% endfor %}
+    </fieldset>
     {% endfor %}
-  </fieldset>
-  {% endfor %}
-  <p><button type="submit">Сдать тест</button></p>
+    <p><button type="submit">Сдать тест</button></p>
+  </noscript>
+  <div id="test-step"
+       hx-post="/candidate/test/step"
+       hx-trigger="load"
+       hx-target="this"
+       hx-swap="innerHTML"
+       hx-include="closest form"
+       hx-push-url="false">Загрузка шага…</div>
 </form>
 {% endif %}
 {% endif %}

@@ -115,11 +115,18 @@ def test_pair_templates_are_stable_and_offline():
     ids = [row["template_id"] for row in rows]
     assert len(ids) == len(set(ids))
     texts = []
+    families = ("refusal_contract", "close_cause", "offline_check")
+    letters = {"a", "b", "c"}
     for row in rows:
         assert len(row["questions"]) == 3
-        assert [question["correct"] for question in row["questions"]] == ["b", "c", "a"]
-        assert {choice["id"] for choice in row["questions"][0]["choices"]} == {"a", "b", "c"}
-        for question in row["questions"]:
+        keys = [question["correct"] for question in row["questions"]]
+        assert len(set(keys)) == 3
+        for index, question in enumerate(row["questions"]):
+            assert question["correct"] in letters
+            assert sum(1 for choice in question["choices"] if choice["id"] == question["correct"]) == 1
+            assert {choice["id"] for choice in question["choices"]} == letters
+            assert question["family"] in families
+            assert question["family"] == families[index]
             texts.append(question["text"])
             blob = question["text"] + "".join(choice["text"] for choice in question["choices"])
             assert "вариант a про" not in blob
@@ -132,6 +139,10 @@ def test_pair_templates_are_stable_and_offline():
             assert len(found) == 3
             covered += len(found)
             assert [row["template_id"] for row in found] == sorted(row["template_id"] for row in found)
+            triples = [tuple(question["correct"] for question in row["questions"]) for row in found]
+            assert len(set(triples)) == 3
+            for slot in range(3):
+                assert {row["questions"][slot]["correct"] for row in found} == letters
     assert len(rows) == covered == 72
     chosen = {select_template(profile_id, "backend", "middle", "v1") for profile_id in range(1, 31)}
     assert len(chosen) >= 2
@@ -164,7 +175,12 @@ def test_recorded_attempt_confirms_without_moving_grade(client):
     started = client.post("/api/candidate/tests/start", json={})
     assert started.status_code == 201, started.text
     body = started.json()
-    assert "correct" not in json.dumps(body)
+    dumped = json.dumps(body)
+    assert "correct" not in dumped
+    assert "family" not in dumped
+    assert "refusal_contract" not in dumped
+    assert "close_cause" not in dumped
+    assert "offline_check" not in dumped
     assert body["declared_grade"] == "middle"
     assert body["template_id"] == select_template(profile_id, "backend", "middle", "v1")
     explicit = client.post("/api/candidate/tests/start", json={"grade": "middle"})

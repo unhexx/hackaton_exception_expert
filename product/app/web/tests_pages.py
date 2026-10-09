@@ -53,6 +53,84 @@ def _parse_step(raw: str) -> int | None:
     return value
 
 
+def _empty_marks() -> dict[int, dict[str, str]]:
+    return {q: {"a": "", "b": "", "c": ""} for q in range(3)}
+
+
+def _empty_answers() -> dict[int, str]:
+    return {0: "", 1: "", 2: ""}
+
+
+def _coerce_step(raw: object) -> int | None:
+    if isinstance(raw, bool) or not isinstance(raw, int):
+        return None
+    if raw < 0 or raw > 12:
+        return None
+    return raw
+
+
+def _coerce_marks(raw: object) -> dict[int, dict[str, str]]:
+    marks = _empty_marks()
+    if not isinstance(raw, dict):
+        return marks
+    for q in range(3):
+        item = raw.get(str(q), raw.get(q))
+        if not isinstance(item, dict):
+            continue
+        for cid in _CHOICE_IDS:
+            value = item.get(cid, "")
+            marks[q][cid] = value if isinstance(value, str) else ""
+    return marks
+
+
+def _coerce_answers(raw: object) -> dict[int, str]:
+    answers = _empty_answers()
+    if isinstance(raw, list):
+        for q in range(3):
+            if q < len(raw) and isinstance(raw[q], str):
+                answers[q] = raw[q]
+        return answers
+    if isinstance(raw, dict):
+        for q in range(3):
+            value = raw.get(str(q), raw.get(q, ""))
+            if isinstance(value, str):
+                answers[q] = value
+    return answers
+
+
+def _load_progress(
+    draft: TestAttempt,
+) -> tuple[int, dict[int, dict[str, str]], dict[int, str]]:
+    raw = draft.answers_json
+    if not raw:
+        return 0, _empty_marks(), _empty_answers()
+    try:
+        payload = json.loads(raw)
+    except (TypeError, ValueError):
+        return 0, _empty_marks(), _empty_answers()
+    if not isinstance(payload, dict):
+        return 0, _empty_marks(), _empty_answers()
+    step = _coerce_step(payload.get("step"))
+    if step is None:
+        step = 0
+    return step, _coerce_marks(payload.get("marks")), _coerce_answers(payload.get("answers"))
+
+
+def _dump_progress(
+    step: int,
+    marks: dict[int, dict[str, str]],
+    answers: dict[int, str],
+) -> str:
+    return json.dumps(
+        {
+            "step": step,
+            "marks": {str(q): dict(marks[q]) for q in range(3)},
+            "answers": [answers.get(q, "") for q in range(3)],
+        },
+        ensure_ascii=False,
+    )
+
+
 def _marks_from_fields(
     mark_0_a: str,
     mark_0_b: str,
@@ -382,10 +460,16 @@ def step_page(
         if draft is None:
             fail(404, "not_found", "not_found_attempt")
         questions = public_questions(load_template(draft.template_id))
+        saved_step, marks, answers = _load_progress(draft)
         hint = ""
-        display = 0
-        if posted is not None:
-            display, hint = _advance_step(posted, advance, mark, marks, answers)
+        display = saved_step
+        acting = posted is not None and posted == saved_step and (
+            advance == "1" or mark in _MARKS
+        )
+        if acting:
+            display, hint = _advance_step(saved_step, advance, mark, marks, answers)
+            draft.answers_json = _dump_progress(display, marks, answers)
+            db.commit()
         return _render_step(
             request,
             step=display,

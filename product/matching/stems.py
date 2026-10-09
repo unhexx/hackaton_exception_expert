@@ -1,14 +1,27 @@
 """Каталог испытаний собирается из стемов. Отдельных JSON на пару нет.
 
-Ключи correct в v1 — b, c, a: золотые ответы в cases.json остаются теми же.
-Тексты вопросов уникальны на весь каталог.
+Семейства слотов: refusal_contract, close_cause, offline_check.
+Ключи трёх шаблонов пары разводит латинский квадрат по букве шаблона.
+Живые тройки букв в записку не копировать. Тексты вопросов уникальны на весь каталог.
 """
 
 from __future__ import annotations
 
 from functools import lru_cache
 
-# (text, a, b, c, correct) — три вопроса на шаблон, ключи a/b/c.
+_FAMILIES: tuple[str, str, str] = (
+    "refusal_contract",
+    "close_cause",
+    "offline_check",
+)
+_KEY_SQUARE: dict[str, tuple[str, str, str]] = {
+    "a": ("b", "c", "a"),
+    "b": ("c", "a", "b"),
+    "c": ("a", "b", "c"),
+}
+_LETTERS = ("a", "b", "c")
+
+# (text, a, b, c, stem_correct) — пятое поле: какая из трёх строк семантически верна.
 _STEMS: dict[tuple[str, str, str], list[tuple[str, str, str, str, str]]] = {
     ('backend', 'junior', 'a'): [
         ('Клиент прислал JSON без обязательного поля. Что вернуть, чтобы вызывающая сторона увидела отказ?', '200 и пустое тело', '400 или 422 и поле ошибки по схеме', 'HTML 500', 'b'),
@@ -373,22 +386,33 @@ _STEMS: dict[tuple[str, str, str], list[tuple[str, str, str, str, str]]] = {
 }
 
 
+def _place(a_text: str, b_text: str, c_text: str, old_correct: str, new_correct: str) -> tuple[dict[str, str], str]:
+    old = {"a": a_text, "b": b_text, "c": c_text}
+    ordered = [old[letter] for letter in _LETTERS]
+    shift = (_LETTERS.index(new_correct) - _LETTERS.index(old_correct)) % 3
+    placed = [ordered[(i - shift) % 3] for i in range(3)]
+    return {letter: placed[i] for i, letter in enumerate(_LETTERS)}, new_correct
+
+
 @lru_cache(maxsize=1)
 def catalog() -> tuple[dict, ...]:
     rows = []
     for (specialization, grade, letter), questions in sorted(_STEMS.items()):
         items = []
-        for index, (text, a_text, b_text, c_text, correct) in enumerate(questions, start=1):
+        square = _KEY_SQUARE[letter]
+        for index, (text, a_text, b_text, c_text, old_correct) in enumerate(questions, start=1):
+            placed, correct = _place(a_text, b_text, c_text, old_correct, square[index - 1])
             items.append(
                 {
                     "id": f"q{index}",
                     "text": text,
                     "choices": [
-                        {"id": "a", "text": a_text},
-                        {"id": "b", "text": b_text},
-                        {"id": "c", "text": c_text},
+                        {"id": "a", "text": placed["a"]},
+                        {"id": "b", "text": placed["b"]},
+                        {"id": "c", "text": placed["c"]},
                     ],
                     "correct": correct,
+                    "family": _FAMILIES[index - 1],
                 }
             )
         rows.append(

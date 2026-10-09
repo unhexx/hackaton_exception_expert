@@ -3,7 +3,7 @@
   "info": {
     "title": "Агрегатор ИТ-вакансий ФСП",
     "description": "Кабинеты соискателя и работодателя, API и один файл SQLite.",
-    "version": "0.1.0"
+    "version": "1.2.11"
   },
   "paths": {
     "/api/auth/register": {
@@ -59,6 +59,7 @@
             "description": "Conflict"
           },
           "422": {
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "example": {
@@ -66,8 +67,7 @@
                   "message": "Что случилось. Нет явного согласия на обработку.\nПочему. Для учётки соискателя согласие — отдельный признак, его нельзя оставить пустым.\nЧто сделать. Поставьте галочку согласия на форме регистрации и отправьте ещё раз."
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           }
         }
       }
@@ -443,6 +443,7 @@
             "description": "Conflict"
           },
           "422": {
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "example": {
@@ -450,8 +451,7 @@
                   "message": "Что случилось. Значение поля «поле» не из списка.\nПочему. Правила v1 принимают только закрытый перечень: закрытый список правил v1.\nЧто сделать. Выберите значение из списка на форме. Свои строки и опечатки стенд не сохраняет."
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           }
         },
         "security": [
@@ -618,15 +618,15 @@
             }
           },
           "422": {
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "example": {
                   "error": "extra_forbidden",
-                  "message": "Что случилось. В теле есть лишнее поле.\nПочему. Сервис принимает только известный набор ключей. Лишнее поле отсекается, чтобы не писать в базу то, чего нет в правилах.\nЧто сделать. Уберите поля вне формы. Для приглашения допустимы profile_id, category_id, company_name, message, salary_min, salary_max, salary_currency, contact_channel. Для карточки компании — name, description, direction, contact."
+                  "message": "Что случилось. В теле есть лишнее поле.\nПочему. Сервис принимает только известный набор ключей. Лишнее поле отсекается, чтобы не писать в базу то, чего нет в правилах.\nЧто сделать. Уберите поля вне формы. Для приглашения допустимы profile_id, category_id, company_name, message, salary_min, salary_max, salary_currency, contact_channel. Для вакансии — title, description, category_id, company_name, contact_channel, salary_min, salary_max, salary_currency и необязательный task_prompt. Для отклика — message и, если у вакансии есть задание, task_answer. Для карточки компании — name, description, direction, contact."
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           }
         },
         "security": [
@@ -837,6 +837,7 @@
             "description": "Forbidden"
           },
           "422": {
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "example": {
@@ -844,8 +845,7 @@
                   "message": "Что случилось. Нужна категория из специализации и грейда.\nПочему. Формат — specialization:grade, например backend:middle. Отрасль it в идентификатор не входит. Без категории подборка и приглашение не адресуются.\nЧто сделать. Выберите категорию на форме подборки. Для приглашения она приходит скрытым полем с кнопки «Пригласить»."
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           }
         },
         "security": [
@@ -1064,6 +1064,7 @@
             "description": "Conflict"
           },
           "422": {
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "example": {
@@ -1071,8 +1072,7 @@
                   "message": "Что случилось. Ответ не из вариантов вопроса.\nПочему. У каждого вопроса три ключа a, b, c. Любая другая строка, пустое значение или неверный набор длины ответы не считает.\nЧто сделать. Отметьте один вариант в каждом из трёх вопросов и сдайте форму ещё раз. Черновик при этом не закрывается."
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           }
         },
         "security": [
@@ -1239,6 +1239,7 @@
             "description": "Conflict"
           },
           "422": {
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "example": {
@@ -1246,8 +1247,7 @@
                   "message": "Что случилось. Вилка зарплаты не принята.\nПочему. Нужны две целые границы в рублях, и верхняя строго больше нижней. Одна сумма и формулировка «по договорённости» не подходят.\nЧто сделать. Введите целые числа, например от 180000 до 250000. Валюта всегда RUB."
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           }
         },
         "security": [
@@ -1748,6 +1748,894 @@
         ]
       }
     },
+    "/api/employer/vacancies": {
+      "post": {
+        "tags": [
+          "vacancies"
+        ],
+        "summary": "Publish Vacancy",
+        "operationId": "publish_vacancy_api_employer_vacancies_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "vacancy": {
+                    "value": {
+                      "title": "Backend middle",
+                      "description": "Платежи, без дежурств",
+                      "category_id": "backend:middle",
+                      "company_name": "Синтетика",
+                      "contact_channel": "telegram: @sintetika",
+                      "salary_min": 180000,
+                      "salary_max": 250000,
+                      "salary_currency": "RUB",
+                      "task_prompt": "Назовите один заголовок идемпотентного POST."
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "category_id": "backend:middle",
+                  "title": "Backend middle",
+                  "description": "Платежи, без дежурств",
+                  "company_name": "Синтетика",
+                  "contact_channel": "telegram: @sintetika",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "task_prompt": "Назовите один заголовок идемпотентного POST.",
+                  "status": "published",
+                  "created_at": "2026-10-07T12:00:00Z",
+                  "updated_at": "2026-10-07T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Что случилось. Нужен вход.\nПочему. Запрос без cookie сессии product_session. Гостю кабинет и API не открывают.\nЧто сделать. Откройте /auth/login, войдите почтой и паролем и повторите действие."
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Что случилось. Это кабинет работодателя.\nПочему. Учётка соискателя не читает карточку компании, подборку и отправку приглашений.\nЧто сделать. Выйдите и войдите почтой работодателя либо зарегистрируйте отдельную учётку с ролью employer."
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "salary_range",
+                  "message": "Что случилось. Вилка зарплаты не принята.\nПочему. Нужны две целые границы в рублях, и верхняя строго больше нижней. Одна сумма и формулировка «по договорённости» не подходят.\nЧто сделать. Введите целые числа, например от 180000 до 250000. Валюта всегда RUB."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "vacancies"
+        ],
+        "summary": "Employer Vacancies",
+        "operationId": "employer_vacancies_api_employer_vacancies_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "id": 1,
+                    "category_id": "backend:middle",
+                    "title": "Backend middle",
+                    "description": "Платежи, без дежурств",
+                    "company_name": "Синтетика",
+                    "contact_channel": "telegram: @sintetika",
+                    "salary_min": 180000,
+                    "salary_max": 250000,
+                    "salary_currency": "RUB",
+                    "task_prompt": "Назовите один заголовок идемпотентного POST.",
+                    "status": "published",
+                    "created_at": "2026-10-07T12:00:00Z",
+                    "updated_at": "2026-10-07T12:00:00Z"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Что случилось. Нужен вход.\nПочему. Запрос без cookie сессии product_session. Гостю кабинет и API не открывают.\nЧто сделать. Откройте /auth/login, войдите почтой и паролем и повторите действие."
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Что случилось. Это кабинет работодателя.\nПочему. Учётка соискателя не читает карточку компании, подборку и отправку приглашений.\nЧто сделать. Выйдите и войдите почтой работодателя либо зарегистрируйте отдельную учётку с ролью employer."
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/employer/applications": {
+      "get": {
+        "tags": [
+          "vacancies"
+        ],
+        "summary": "Employer Applications",
+        "operationId": "employer_applications_api_employer_applications_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "id": 1,
+                    "vacancy_id": 1,
+                    "profile_id": 12,
+                    "title": "Backend middle",
+                    "company_name": "Синтетика",
+                    "contact_channel": "telegram: @sintetika",
+                    "salary_min": 180000,
+                    "salary_max": 250000,
+                    "salary_currency": "RUB",
+                    "message": "Готов обсудить платежи",
+                    "task_answer": "Idempotency-Key",
+                    "status": "accepted",
+                    "created_at": "2026-10-07T12:00:00Z",
+                    "updated_at": "2026-10-07T12:00:00Z",
+                    "candidate_email": "seeker@example.com"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Что случилось. Нужен вход.\nПочему. Запрос без cookie сессии product_session. Гостю кабинет и API не открывают.\nЧто сделать. Откройте /auth/login, войдите почтой и паролем и повторите действие."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Что случилось. Это кабинет работодателя.\nПочему. Учётка соискателя не читает карточку компании, подборку и отправку приглашений.\nЧто сделать. Выйдите и войдите почтой работодателя либо зарегистрируйте отдельную учётку с ролью employer."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/employer/applications/{application_id}/open": {
+      "post": {
+        "tags": [
+          "vacancies"
+        ],
+        "summary": "Read Application",
+        "operationId": "read_application_api_employer_applications__application_id__open_post",
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Application Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "vacancy_id": 1,
+                  "profile_id": 12,
+                  "title": "Backend middle",
+                  "company_name": "Синтетика",
+                  "contact_channel": "telegram: @sintetika",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "message": "Готов обсудить платежи",
+                  "task_answer": "Idempotency-Key",
+                  "status": "seen",
+                  "created_at": "2026-10-07T12:00:00Z",
+                  "updated_at": "2026-10-07T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Что случилось. Нужен вход.\nПочему. Запрос без cookie сессии product_session. Гостю кабинет и API не открывают.\nЧто сделать. Откройте /auth/login, войдите почтой и паролем и повторите действие."
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Что случилось. Это кабинет работодателя.\nПочему. Учётка соискателя не читает карточку компании, подборку и отправку приглашений.\nЧто сделать. Выйдите и войдите почтой работодателя либо зарегистрируйте отдельную учётку с ролью employer."
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Что случилось. Отклик не найден.\nПочему. Либо номера нет, либо отклик принадлежит другому кабинету. Чужой объект отвечает тем же кодом.\nЧто сделать. Откройте список своих откликов или откликов на свои вакансии. Чужой номер не подставляйте."
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/employer/applications/{application_id}/accept": {
+      "post": {
+        "tags": [
+          "vacancies"
+        ],
+        "summary": "Accept Application",
+        "operationId": "accept_application_api_employer_applications__application_id__accept_post",
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Application Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "vacancy_id": 1,
+                  "profile_id": 12,
+                  "title": "Backend middle",
+                  "company_name": "Синтетика",
+                  "contact_channel": "telegram: @sintetika",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "message": "Готов обсудить платежи",
+                  "task_answer": "Idempotency-Key",
+                  "status": "accepted",
+                  "created_at": "2026-10-07T12:00:00Z",
+                  "updated_at": "2026-10-07T12:00:00Z",
+                  "candidate_email": "seeker@example.com"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Что случилось. Нужен вход.\nПочему. Запрос без cookie сессии product_session. Гостю кабинет и API не открывают.\nЧто сделать. Откройте /auth/login, войдите почтой и паролем и повторите действие."
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Что случилось. Это кабинет работодателя.\nПочему. Учётка соискателя не читает карточку компании, подборку и отправку приглашений.\nЧто сделать. Выйдите и войдите почтой работодателя либо зарегистрируйте отдельную учётку с ролью employer."
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Что случилось. Отклик не найден.\nПочему. Либо номера нет, либо отклик принадлежит другому кабинету. Чужой объект отвечает тем же кодом.\nЧто сделать. Откройте список своих откликов или откликов на свои вакансии. Чужой номер не подставляйте."
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "application_closed",
+                  "message": "Что случилось. Отклик уже закрыт.\nПочему. Статусы accepted и declined обратно не откатываются.\nЧто сделать. Откройте список откликов: там виден текущий статус. Новый отклик можно отправить, когда предыдущий закрыт."
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/employer/applications/{application_id}/decline": {
+      "post": {
+        "tags": [
+          "vacancies"
+        ],
+        "summary": "Decline For Employer",
+        "operationId": "decline_for_employer_api_employer_applications__application_id__decline_post",
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Application Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "vacancy_id": 1,
+                  "profile_id": 12,
+                  "title": "Backend middle",
+                  "company_name": "Синтетика",
+                  "contact_channel": "telegram: @sintetika",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "message": "Готов обсудить платежи",
+                  "task_answer": "Idempotency-Key",
+                  "status": "declined",
+                  "created_at": "2026-10-07T12:00:00Z",
+                  "updated_at": "2026-10-07T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Что случилось. Нужен вход.\nПочему. Запрос без cookie сессии product_session. Гостю кабинет и API не открывают.\nЧто сделать. Откройте /auth/login, войдите почтой и паролем и повторите действие."
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Что случилось. Это кабинет работодателя.\nПочему. Учётка соискателя не читает карточку компании, подборку и отправку приглашений.\nЧто сделать. Выйдите и войдите почтой работодателя либо зарегистрируйте отдельную учётку с ролью employer."
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Что случилось. Отклик не найден.\nПочему. Либо номера нет, либо отклик принадлежит другому кабинету. Чужой объект отвечает тем же кодом.\nЧто сделать. Откройте список своих откликов или откликов на свои вакансии. Чужой номер не подставляйте."
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "application_closed",
+                  "message": "Что случилось. Отклик уже закрыт.\nПочему. Статусы accepted и declined обратно не откатываются.\nЧто сделать. Откройте список откликов: там виден текущий статус. Новый отклик можно отправить, когда предыдущий закрыт."
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/vacancies": {
+      "get": {
+        "tags": [
+          "vacancies"
+        ],
+        "summary": "Published Vacancies",
+        "operationId": "published_vacancies_api_vacancies_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "id": 1,
+                    "category_id": "backend:middle",
+                    "title": "Backend middle",
+                    "description": "Платежи, без дежурств",
+                    "company_name": "Синтетика",
+                    "contact_channel": "telegram: @sintetika",
+                    "salary_min": 180000,
+                    "salary_max": 250000,
+                    "salary_currency": "RUB",
+                    "task_prompt": "Назовите один заголовок идемпотентного POST.",
+                    "status": "published",
+                    "created_at": "2026-10-07T12:00:00Z",
+                    "updated_at": "2026-10-07T12:00:00Z"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Что случилось. Нужен вход.\nПочему. Запрос без cookie сессии product_session. Гостю кабинет и API не открывают.\nЧто сделать. Откройте /auth/login, войдите почтой и паролем и повторите действие."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Что случилось. Это кабинет соискателя.\nПочему. Учётка работодателя не читает анкету, тест и приглашения соискателя.\nЧто сделать. Выйдите и войдите почтой соискателя либо зарегистрируйте отдельную учётку с ролью candidate."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/vacancies/{vacancy_id}/apply": {
+      "post": {
+        "tags": [
+          "vacancies"
+        ],
+        "summary": "Apply",
+        "operationId": "apply_api_vacancies__vacancy_id__apply_post",
+        "parameters": [
+          {
+            "name": "vacancy_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Vacancy Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "examples": {
+                  "apply": {
+                    "value": {
+                      "message": "Готов обсудить платежи",
+                      "task_answer": "Idempotency-Key"
+                    }
+                  }
+                },
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "vacancy_id": 1,
+                  "profile_id": 12,
+                  "title": "Backend middle",
+                  "company_name": "Синтетика",
+                  "contact_channel": "telegram: @sintetika",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "message": "Готов обсудить платежи",
+                  "task_answer": "Idempotency-Key",
+                  "status": "sent",
+                  "created_at": "2026-10-07T12:00:00Z",
+                  "updated_at": "2026-10-07T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Что случилось. Нужен вход.\nПочему. Запрос без cookie сессии product_session. Гостю кабинет и API не открывают.\nЧто сделать. Откройте /auth/login, войдите почтой и паролем и повторите действие."
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Что случилось. Это кабинет соискателя.\nПочему. Учётка работодателя не читает анкету, тест и приглашения соискателя.\nЧто сделать. Выйдите и войдите почтой соискателя либо зарегистрируйте отдельную учётку с ролью candidate."
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Что случилось. Вакансия не найдена.\nПочему. Номера нет или вакансия не опубликована. Чужую закрытую строку стенд не отличает от отсутствующей.\nЧто сделать. Откройте список вакансий в кабинете соискателя и откликнитесь оттуда."
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "application_open",
+                  "message": "Что случилось. На эту вакансию уже есть открытый отклик.\nПочему. Пока статус sent или seen, второй отклик того же профиля не создаётся. Иначе работодатель видел бы две заявки.\nЧто сделать. Дождитесь принятия или отклонения либо отзовите текущий отклик."
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "task_answer",
+                  "message": "Что случилось. Ответ на задание не принят.\nПочему. У вакансии есть одно короткое задание. Пустой ответ и текст длиннее 2000 символов не записываются. Балл грейда от этого не меняется.\nЧто сделать. Ответьте на формулировку со страницы вакансии и отправьте отклик ещё раз."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/applications": {
+      "get": {
+        "tags": [
+          "vacancies"
+        ],
+        "summary": "Candidate Applications",
+        "operationId": "candidate_applications_api_candidate_applications_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": [
+                  {
+                    "id": 1,
+                    "vacancy_id": 1,
+                    "profile_id": 12,
+                    "title": "Backend middle",
+                    "company_name": "Синтетика",
+                    "contact_channel": "telegram: @sintetika",
+                    "salary_min": 180000,
+                    "salary_max": 250000,
+                    "salary_currency": "RUB",
+                    "message": "Готов обсудить платежи",
+                    "task_answer": "Idempotency-Key",
+                    "status": "sent",
+                    "created_at": "2026-10-07T12:00:00Z",
+                    "updated_at": "2026-10-07T12:00:00Z"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Что случилось. Нужен вход.\nПочему. Запрос без cookie сессии product_session. Гостю кабинет и API не открывают.\nЧто сделать. Откройте /auth/login, войдите почтой и паролем и повторите действие."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Что случилось. Это кабинет соискателя.\nПочему. Учётка работодателя не читает анкету, тест и приглашения соискателя.\nЧто сделать. Выйдите и войдите почтой соискателя либо зарегистрируйте отдельную учётку с ролью candidate."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
+    "/api/candidate/applications/{application_id}/decline": {
+      "post": {
+        "tags": [
+          "vacancies"
+        ],
+        "summary": "Withdraw",
+        "operationId": "withdraw_api_candidate_applications__application_id__decline_post",
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Application Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "id": 1,
+                  "vacancy_id": 1,
+                  "profile_id": 12,
+                  "title": "Backend middle",
+                  "company_name": "Синтетика",
+                  "contact_channel": "telegram: @sintetika",
+                  "salary_min": 180000,
+                  "salary_max": 250000,
+                  "salary_currency": "RUB",
+                  "message": "Готов обсудить платежи",
+                  "task_answer": "Idempotency-Key",
+                  "status": "declined",
+                  "created_at": "2026-10-07T12:00:00Z",
+                  "updated_at": "2026-10-07T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Что случилось. Нужен вход.\nПочему. Запрос без cookie сессии product_session. Гостю кабинет и API не открывают.\nЧто сделать. Откройте /auth/login, войдите почтой и паролем и повторите действие."
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Что случилось. Это кабинет соискателя.\nПочему. Учётка работодателя не читает анкету, тест и приглашения соискателя.\nЧто сделать. Выйдите и войдите почтой соискателя либо зарегистрируйте отдельную учётку с ролью candidate."
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "not_found",
+                  "message": "Что случилось. Отклик не найден.\nПочему. Либо номера нет, либо отклик принадлежит другому кабинету. Чужой объект отвечает тем же кодом.\nЧто сделать. Откройте список своих откликов или откликов на свои вакансии. Чужой номер не подставляйте."
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "application_closed",
+                  "message": "Что случилось. Отклик уже закрыт.\nПочему. Статусы accepted и declined обратно не откатываются.\nЧто сделать. Откройте список откликов: там виден текущий статус. Новый отклик можно отправить, когда предыдущий закрыт."
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "product_session": []
+          }
+        ]
+      }
+    },
     "/api/candidate/resume": {
       "post": {
         "tags": [
@@ -1918,7 +2806,7 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "category_match 0 0\noutcome_match 0 0\ntemplate_stable 0 0\nrelevant_in_top 0 0\nresume_ok 0 0\n"
+                "example": "category_match 0 0\noutcome_match 0 0\ntemplate_stable 0 0\nrelevant_in_top 0 0\nresume_ok 0 0\ngrade_separation 0 0\nsim_competent 0 0\nsim_key_leak 0 0\nsim_adjacent 0 0\n"
               }
             }
           },

@@ -1,4 +1,4 @@
-"""Прогон золотого набора. Печатает пять строк и ничего не скачивает.
+"""Прогон золотого набора. Печатает пять строк, grade_separation и три CPU-персоны, ничего не скачивает.
 
 Пока в кейсе нет expected_outcome и template_pairs, знаменатели итога и
 шаблона нулевые. resumes.json подхватывается, когда его положит разбор PDF.
@@ -10,16 +10,114 @@ read_resume_bytes принимает байты и отдаёт словарь; 
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
 from product.matching.category import assign_category
 from product.matching.need import evaluate_need, haystack_text
-from product.matching.rules import rule_version
+from product.matching.rules import load_rules, rule_version
+from product.matching.stems import catalog
 from product.matching.types import Need, ProfileView
 
 _GOLDEN = Path(__file__).resolve().parent / "golden"
 _CASES = _GOLDEN / "cases.json"
+
+# Поверхность, не ошибка по оси: цвет, логотип, лайки, имя дашборда и то же семейство.
+_DRIFT_PARTS = (
+    "логотип",
+    "лайк",
+    "звезд",
+    "бренд",
+    "красот",
+    "красив",
+    "иконк",
+    "figma",
+    "артборд",
+    "эмодзи",
+    "пиксел",
+    "lighthouse",
+    "любим",
+    "сторипоинт",
+    "имя дашборда",
+    "яркость",
+    "жест шторки",
+    "звук чужого",
+    "скриншот",
+    "язык анимации",
+    "длину анимации",
+    "в обзоре",
+    "кто последний заходил",
+    "число строк в файле",
+    "лицензи",
+    "раскладк",
+)
+_DRIFT_SPEEDS = (
+    "пинг ",
+    "скорость lte",
+    "скорость dns",
+    "скорость капчи",
+    "скорость брутфорса",
+    "скорость tls",
+    "скорость пальца",
+    "скорость вставки",
+    "скорость склада",
+)
+_NAME_DRIFT = re.compile(
+    r"^(?:название |имя (?:кластера|ветки|темы|дизайнера|алгоритма|сканера|облака|ca |from))"
+)
+_COUNT_DRIFT = re.compile(
+    r"^число (?:дашбордов|ноутбуков|чартов|подов|узлов|пайплайнов|ведер|экранов)\b"
+)
+_LENGTH_DRIFT = re.compile(r"^длин[ауи] (?:base64|токена|ключа)\b")
+_COLOR_WORD = re.compile(r"(?<![а-яa-z])цвет(?![а-яa-z])")
+_TOKEN = re.compile(r"(?<![a-z])(?:stars|fps|splash)(?![a-z])")
+
+
+def _folded(text: str) -> str:
+    return text.casefold().replace("ё", "е")
+
+
+def is_drift(text: str) -> bool:
+    """Уход в сторону: цвет, логотип, число лайков, имя дашборда и то же семейство."""
+    folded = _folded(text)
+    if _COLOR_WORD.search(folded) or folded.startswith("оттенок"):
+        return True
+    if any(part in folded for part in _DRIFT_PARTS) or any(part in folded for part in _DRIFT_SPEEDS):
+        return True
+    if _TOKEN.search(folded) or _NAME_DRIFT.search(folded) or _COUNT_DRIFT.search(folded):
+        return True
+    return _LENGTH_DRIFT.search(folded) is not None
+
+
+def item_separates(question: dict, grade: str) -> bool:
+    """Оба неверных — не уход в сторону.
+
+    На junior нижнего соседа нет, оба неверных остаются на той же оси.
+    Выше junior те же неверные — ошибка соседнего нижнего грейда.
+    """
+    grades = [str(item) for item in load_rules()["grades"]]
+    if grade not in grades:
+        return False
+    wrong = [str(choice["text"]) for choice in question["choices"] if choice["id"] != question["correct"]]
+    if len(wrong) != 2 or any(is_drift(text) for text in wrong):
+        return False
+    return True
+
+
+def grade_separation_counts() -> tuple[int, int]:
+    """Сколько пунктов v1 разделяют грейды, и сколько пунктов всего. Порога нет."""
+    separated = 0
+    total = 0
+    for row in catalog():
+        if row.get("rule_version") != "v1":
+            continue
+        grade = str(row["grade"])
+        for question in row["questions"]:
+            total += 1
+            if item_separates(question, grade):
+                separated += 1
+    return separated, total
 
 
 def load_cases() -> dict:
@@ -183,6 +281,14 @@ def render_report(cases: dict | None = None) -> str:
         "resume_ok",
     )
     lines = [f"{name} {counts[name][0]} {counts[name][1]}" for name in order]
+    separated, total = grade_separation_counts()
+    lines.append(f"grade_separation {separated} {total}")
+    from product.matching.simulate import simulation_counts
+
+    sim = simulation_counts()
+    for name in ("sim_competent", "sim_key_leak", "sim_adjacent"):
+        hit, n = sim[name]
+        lines.append(f"{name} {hit} {n}")
     return "\n".join(lines) + "\n"
 
 

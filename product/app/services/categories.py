@@ -1,6 +1,8 @@
 """Сохраняет назначение категории и собирает выдачу работодателя.
 
 Правила живут в product.matching. Здесь только запись и фильтр чтения.
+Пересчёт вставляет новую строку, `latest_assignment` берёт max(id) той же
+`rule_version`. Без `publication` карточки в выдаче нет.
 """
 
 from __future__ import annotations
@@ -22,6 +24,10 @@ from product.matching.types import Need, NeedFit, ProfileView
 
 
 def recompute(session: Session, profile_id: int) -> None:
+    """Балл в назначение берётся с последней сдачи той же пары специализация×записанный грейд.
+
+    PDF без такой сдачи оставляет `test_score` пустым.
+    """
     session.flush()
     profile = session.get(Profile, profile_id)
     if profile is None:
@@ -179,6 +185,7 @@ def _profile_matches(
 
 
 def visible_in_category(session: Session, profile_id: int, category_id: str) -> bool:
+    """Та же потребность без уточнений стека: карточка либо в категории, либо нет."""
     category_id = require_category(category_id)
     if sqlite_int(profile_id) is None:
         return False
@@ -217,6 +224,7 @@ def employer_candidates(
     has_fsp: bool | None,
     q: str,
 ) -> list[dict]:
+    """Фильтр — `evaluate_need`; порядок — `NeedFit.sort_key`. Согласие publication проверяется до подбора, не внутри matching."""
     rules = load_rules()
     category_id = require_category(category_id)
     for item in stack:

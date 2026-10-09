@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import sqlite3
 
@@ -62,6 +63,17 @@ def _outside_noscript(html: str) -> str:
 def _status(client, attempt_id: int) -> str:
     with sqlite3.connect(client.db_path) as db:
         return db.execute("select status from test_attempts where id = ?", (attempt_id,)).fetchone()[0]
+
+
+def _draft_progress(client, attempt_id: int):
+    with sqlite3.connect(client.db_path) as db:
+        raw = db.execute(
+            "select answers_json from test_attempts where id = ?",
+            (attempt_id,),
+        ).fetchone()[0]
+    if not raw:
+        return None
+    return json.loads(raw)
 
 
 def _set_stamp(client, profile_id: int, stamp: str) -> None:
@@ -239,54 +251,9 @@ def test_step_walks_question_one_and_assembles_letter(client):
     assert template["questions"][1]["text"] in next_stem.text
     for text in texts.values():
         assert text not in next_stem.text
-
-    phase_c = _post_step(
-        client,
-        csrf,
-        attempt_id,
-        step="3",
-        mark="true",
-        mark_0_a="false",
-        mark_0_b="false",
-        mark_0_c="",
-        mark_1_a="",
-        mark_1_b="",
-        mark_1_c="",
-        mark_2_a="",
-        mark_2_b="",
-        mark_2_c="",
-        answer_0="",
-        answer_1="",
-        answer_2="",
-    )
-    assert _hidden(phase_c.text, "answer_0") == "c"
-    assert _hidden(phase_c.text, "step") == "4"
-
-    retry = _post_step(
-        client,
-        csrf,
-        attempt_id,
-        step="3",
-        mark="true",
-        mark_0_a="true",
-        mark_0_b="false",
-        mark_0_c="",
-        mark_1_a="",
-        mark_1_b="",
-        mark_1_c="",
-        mark_2_a="",
-        mark_2_b="",
-        mark_2_c="",
-        answer_0="",
-        answer_1="",
-        answer_2="",
-    )
-    assert "вопрос 1 из 3" in retry.text
-    assert ", вариант" not in retry.text
-    assert _hidden(retry.text, "answer_0") == ""
-    assert _hidden(retry.text, "step") == "0"
-    assert "Нужна ровно одна отметка «истинен»." in retry.text
-    assert 'class="hint"' in retry.text
+    progress = _draft_progress(client, attempt_id)
+    assert progress["step"] == 4
+    assert progress["answers"][0] == "a"
 
 
 def test_three_trues_repeat_same_question(client):
@@ -312,6 +279,119 @@ def test_three_trues_repeat_same_question(client):
     shown = sum(1 for text in texts if text in again.text)
     assert shown == 0
     assert q1["text"] in again.text
+
+
+def test_step_load_after_mark_resumes_next_choice(client):
+    body, page, template = _open_draft(client, "ux-resume-choice@example.com")
+    csrf = _csrf(page.text)
+    attempt_id = body["attempt_id"]
+    q1 = template["questions"][0]
+    texts = {choice["id"]: choice["text"] for choice in q1["choices"]}
+    load = _post_step(client, csrf, attempt_id)
+    opt_a = _post_step(client, csrf, attempt_id, load.text, step="0", advance="1")
+    opt_b = _post_step(client, csrf, attempt_id, opt_a.text, step="1", mark="true")
+    assert _hidden(opt_b.text, "step") == "2"
+    again = client.get("/candidate/test")
+    resumed = _post_step(client, _csrf(again.text), attempt_id)
+    assert resumed.status_code == 200
+    assert _hidden(resumed.text, "step") == "2"
+    assert "вариант 2 из 3" in resumed.text
+    assert q1["text"] in resumed.text
+    assert texts["b"] in resumed.text
+    assert texts["a"] not in resumed.text
+    assert texts["c"] not in resumed.text
+    assert _draft_progress(client, attempt_id)["step"] == 2
+
+
+def test_step_load_after_question_one_resumes_question_two(client):
+    body, page, template = _open_draft(client, "ux-resume-q2@example.com")
+    csrf = _csrf(page.text)
+    attempt_id = body["attempt_id"]
+    q1 = template["questions"][0]
+    load = _post_step(client, csrf, attempt_id)
+    opt_a = _post_step(client, csrf, attempt_id, load.text, step="0", advance="1")
+    opt_b = _post_step(client, csrf, attempt_id, opt_a.text, step="1", mark="true")
+    opt_c = _post_step(client, csrf, attempt_id, opt_b.text, step="2", mark="false")
+    next_stem = _post_step(client, csrf, attempt_id, opt_c.text, step="3", mark="false")
+    assert _hidden(next_stem.text, "step") == "4"
+    again = client.get("/candidate/test")
+    resumed = _post_step(client, _csrf(again.text), attempt_id)
+    assert _hidden(resumed.text, "step") == "4"
+    assert "вопрос 2 из 3" in resumed.text
+    assert ", вариант" not in resumed.text
+    assert template["questions"][1]["text"] in resumed.text
+    assert q1["text"] not in resumed.text
+    assert _hidden(resumed.text, "answer_0") == "a"
+    progress = _draft_progress(client, attempt_id)
+    assert progress["step"] == 4
+    assert progress["answers"][0] == "a"
+
+
+def test_step_rewind_keeps_saved_frame(client):
+    body, page, template = _open_draft(client, "ux-norewind@example.com")
+    csrf = _csrf(page.text)
+    attempt_id = body["attempt_id"]
+    q1 = template["questions"][0]
+    texts = {choice["id"]: choice["text"] for choice in q1["choices"]}
+    load = _post_step(client, csrf, attempt_id)
+    opt_a = _post_step(client, csrf, attempt_id, load.text, step="0", advance="1")
+    opt_b = _post_step(client, csrf, attempt_id, opt_a.text, step="1", mark="true")
+    opt_c = _post_step(client, csrf, attempt_id, opt_b.text, step="2", mark="false")
+    next_stem = _post_step(client, csrf, attempt_id, opt_c.text, step="3", mark="false")
+    rewind = _post_step(
+        client,
+        csrf,
+        attempt_id,
+        next_stem.text,
+        step="0",
+        advance="1",
+        answer_0="",
+        mark_0_a="",
+        mark_0_b="",
+        mark_0_c="",
+    )
+    assert _hidden(rewind.text, "step") == "4"
+    assert _hidden(rewind.text, "answer_0") == "a"
+    assert "вопрос 2 из 3" in rewind.text
+    assert texts["a"] not in rewind.text
+    assert q1["text"] not in rewind.text
+    progress = _draft_progress(client, attempt_id)
+    assert progress["step"] == 4
+    assert progress["answers"][0] == "a"
+
+
+def test_step_skip_ahead_on_empty_draft_stays_at_zero(client):
+    body, page, template = _open_draft(client, "ux-noskip@example.com")
+    csrf = _csrf(page.text)
+    attempt_id = body["attempt_id"]
+    q1 = template["questions"][0]
+    jumped = _post_step(
+        client,
+        csrf,
+        attempt_id,
+        step="3",
+        mark="true",
+        mark_0_a="false",
+        mark_0_b="false",
+        mark_0_c="",
+        mark_1_a="",
+        mark_1_b="",
+        mark_1_c="",
+        mark_2_a="",
+        mark_2_b="",
+        mark_2_c="",
+        answer_0="",
+        answer_1="",
+        answer_2="",
+    )
+    assert _hidden(jumped.text, "step") == "0"
+    assert _hidden(jumped.text, "answer_0") == ""
+    assert "вопрос 1 из 3" in jumped.text
+    assert ", вариант" not in jumped.text
+    assert q1["text"] in jumped.text
+    for choice in q1["choices"]:
+        assert choice["text"] not in jumped.text
+    assert _draft_progress(client, attempt_id) is None
 
 
 def test_step_hx_errors_are_fragments(client):

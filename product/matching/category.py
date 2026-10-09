@@ -1,4 +1,8 @@
-"""Категория v1: специализация и записанный грейд. Балл только ранжирует."""
+"""Категория v1: специализация и записанный грейд. Балл только ранжирует.
+
+`category_id` не содержит отрасль и не содержит балл; `rank_key`
+лексикографически кодирует confirmed-score-count-prize-id.
+"""
 
 from __future__ import annotations
 
@@ -26,6 +30,10 @@ def rank_key(
     confirmed: bool,
     has_prize: bool,
 ) -> str:
+    """Порядок полей фиксирован, чтобы сортировка выдачи совпала у прогона и кабинета.
+
+    Балл сюда входит, в `category_id` — нет.
+    """
     return (
         f"{int(confirmed)}-{test_score:03d}-"
         f"{fsp_confirmed_count:04d}-{int(has_prize)}-{profile_id:08d}"
@@ -33,6 +41,10 @@ def rank_key(
 
 
 def assign_category(profile: ProfileView, rule_version: str) -> CategoryAssignment:
+    """Назначение читает опрос и итог теста; отсутствие сдачи оставляет `test_score` пустым, но категорию всё равно пишет.
+
+    Чужой `rule_version` — ошибка, не тихое v1.
+    """
     current = str(load_rules()["rule_version"])
     if rule_version != current:
         raise CategoryError("rule_version")

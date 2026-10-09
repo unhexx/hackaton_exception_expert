@@ -32,7 +32,7 @@ _SAMPLES = Path(__file__).resolve().parents[2] / "matching" / "vacancies" / "sam
 _TRUE = {"true"}
 _MARKS = {"true", "false"}
 _CHOICE_IDS = ("a", "b", "c")
-_RETRY_HINT = "Нужна ровно одна отметка «истинен». Пройдите этот вопрос ещё раз."
+_RETRY_HINT = "В каждом вопросе может быть только 1 верный ответ. Пройдите этот вопрос ещё раз."
 
 
 def assemble_letter(marks: dict[str, str]) -> str:

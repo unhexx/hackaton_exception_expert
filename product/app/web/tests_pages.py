@@ -43,30 +43,14 @@ def assemble_letter(marks: dict[str, str]) -> str:
     return ""
 
 
-def _parse_step(raw: str) -> int:
-    try:
-        value = int(raw)
-    except (TypeError, ValueError):
-        return 0
-    if value < 0 or value > 12:
-        return 0
-    return value
-
-
-def _parse_attempt_id(raw: str) -> int | None:
+def _parse_step(raw: str) -> int | None:
     try:
         value = int(raw)
     except (TypeError, ValueError):
         return None
-    return sqlite_int(value)
-
-
-def _step_posted(raw: str) -> bool:
-    try:
-        value = int(raw)
-    except (TypeError, ValueError):
-        return False
-    return 0 <= value <= 12
+    if value < 0 or value > 12:
+        return None
+    return value
 
 
 def _marks_from_fields(
@@ -145,15 +129,6 @@ def _station_classes(step: int) -> list[str]:
     return classes
 
 
-def _echo_fields(step: int, marks: dict[int, dict[str, str]], answers: dict[int, str]) -> dict:
-    fields = {"step": step}
-    for question in range(3):
-        for cid in _CHOICE_IDS:
-            fields[f"mark_{question}_{cid}"] = marks[question][cid]
-        fields[f"answer_{question}"] = answers[question]
-    return fields
-
-
 def _step_error_text(exc: ApiError) -> str:
     line = exc.message.split("\n", 1)[0]
     return line.removeprefix("Что случилось. ").strip() or exc.message
@@ -182,6 +157,7 @@ def _render_step(
             if phase - 1 < len(choices):
                 choice = choices[phase - 1]
     ctx = {
+        "step": step,
         "n": n,
         "k": k,
         "phase": phase,
@@ -190,7 +166,8 @@ def _render_step(
         "choice": choice,
         "hint": hint,
         "error": error,
-        **_echo_fields(step, marks, answers),
+        "marks": marks,
+        "answers": answers,
     }
     return render(request, "candidate/_test_step.html", ctx)
 
@@ -230,10 +207,6 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
         outcome_view = {
             "score": recorded.score,
             "outcome": recorded.outcome,
-            "outcome_label": next(
-                (row["outcome_label"] for row in history if row["attempt_id"] == recorded.id),
-                "",
-            ),
             "declared_grade": recorded.declared_grade,
             "proposed_grade": recorded.proposed_grade,
             "confirm_min": int(template["confirm_min"]),
@@ -371,6 +344,8 @@ def step_page(
         mark_2_c,
     )
     answers = {0: answer_0, 1: answer_1, 2: answer_2}
+    posted = _parse_step(step)
+    echo_step = posted if posted is not None else 0
     # htmx 2.0.4 не свапает 4xx — любой HX-ответ шага это 200 и фрагмент.
     try:
         assert_csrf(request, csrf)
@@ -378,7 +353,7 @@ def step_page(
         if hx:
             return _render_step(
                 request,
-                step=_parse_step(step),
+                step=echo_step,
                 questions=[],
                 marks=marks,
                 answers=answers,
@@ -388,7 +363,10 @@ def step_page(
     if not hx:
         return RedirectResponse("/candidate/test", status_code=303)
     try:
-        parsed_id = _parse_attempt_id(attempt_id)
+        try:
+            parsed_id = sqlite_int(int(attempt_id))
+        except (TypeError, ValueError):
+            parsed_id = None
         if parsed_id is None:
             fail(404, "not_found", "not_found_attempt")
         profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
@@ -406,8 +384,8 @@ def step_page(
         questions = public_questions(load_template(draft.template_id))
         hint = ""
         display = 0
-        if _step_posted(step):
-            display, hint = _advance_step(_parse_step(step), advance, mark, marks, answers)
+        if posted is not None:
+            display, hint = _advance_step(posted, advance, mark, marks, answers)
         return _render_step(
             request,
             step=display,
@@ -419,7 +397,7 @@ def step_page(
     except ApiError as exc:
         return _render_step(
             request,
-            step=_parse_step(step),
+            step=echo_step,
             questions=[],
             marks=marks,
             answers=answers,

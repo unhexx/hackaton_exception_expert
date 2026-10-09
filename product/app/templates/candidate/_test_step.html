@@ -1,17 +1,11 @@
 <div class="test-step-inner" hx-disinherit="hx-post hx-target hx-swap hx-include hx-trigger">
   <input type="hidden" name="step" value="{{ step }}">
-  <input type="hidden" name="mark_0_a" value="{{ mark_0_a }}">
-  <input type="hidden" name="mark_0_b" value="{{ mark_0_b }}">
-  <input type="hidden" name="mark_0_c" value="{{ mark_0_c }}">
-  <input type="hidden" name="mark_1_a" value="{{ mark_1_a }}">
-  <input type="hidden" name="mark_1_b" value="{{ mark_1_b }}">
-  <input type="hidden" name="mark_1_c" value="{{ mark_1_c }}">
-  <input type="hidden" name="mark_2_a" value="{{ mark_2_a }}">
-  <input type="hidden" name="mark_2_b" value="{{ mark_2_b }}">
-  <input type="hidden" name="mark_2_c" value="{{ mark_2_c }}">
-  <input type="hidden" name="answer_0" value="{{ answer_0 }}">
-  <input type="hidden" name="answer_1" value="{{ answer_1 }}">
-  <input type="hidden" name="answer_2" value="{{ answer_2 }}">
+  {% for q in range(3) %}
+  {% for cid in ['a', 'b', 'c'] %}
+  <input type="hidden" name="mark_{{ q }}_{{ cid }}" value="{{ marks[q][cid] }}">
+  {% endfor %}
+  <input type="hidden" name="answer_{{ q }}" value="{{ answers[q] }}">
+  {% endfor %}
   {% if error %}
   <p class="error" role="alert">{{ error }}</p>
   <p><a href="/candidate/test">Открыть тест</a></p>

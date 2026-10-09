@@ -1,15 +1,15 @@
 # Агрегатор ИТ-вакансий ФСП
 
-[![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?style=flat-square&logo=python&logoColor=white)](pyproject.toml)
-[![JavaScript](https://img.shields.io/badge/javascript-htmx_2.0.4-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](app/static/htmx.min.js)
-[![HTML](https://img.shields.io/badge/html-Jinja2-E34F26?style=flat-square&logo=html5&logoColor=white)](app/templates)
-[![CSS](https://img.shields.io/badge/css-brand-1572B6?style=flat-square&logo=css3&logoColor=white)](app/static/brand.css)
-[![SQL](https://img.shields.io/badge/sql-SQLite_WAL-003B57?style=flat-square&logo=sqlite&logoColor=white)](app/db)
-[![Shell](https://img.shields.io/badge/shell-POSIX-4EAA25?style=flat-square&logo=gnubash&logoColor=white)](../deploy/fsp/entrypoint.sh)
-[![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)](pyproject.toml)
-[![Docker Compose](https://img.shields.io/badge/stand-Docker_Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](../deploy/fsp/compose.yaml)
+[![Python 3.12](docs/badges/python.svg)](pyproject.toml)
+[![JavaScript](docs/badges/javascript.svg)](app/static/htmx.min.js)
+[![HTML](docs/badges/html.svg)](app/templates)
+[![CSS](docs/badges/css.svg)](app/static/brand.css)
+[![SQL](docs/badges/sql.svg)](app/db)
+[![Shell](docs/badges/shell.svg)](../deploy/fsp/entrypoint.sh)
+[![FastAPI](docs/badges/fastapi.svg)](pyproject.toml)
+[![Docker Compose](docs/badges/docker.svg)](../deploy/fsp/compose.yaml)
 [![Тесты](docs/badges/tests.svg)](../deploy/fsp/compose.yaml)
-[![Шрифт OFL](https://img.shields.io/badge/font-OFL_1.1-lightgrey?style=flat-square)](static/fonts/OFL.txt)
+[![Шрифт OFL](docs/badges/ofl.svg)](static/fonts/OFL.txt)
 
 Прототип спецтрека ЛЦТ: работодатель открывает категорию людей с записанным грейдом и профилем достижений Федерации спортивного программирования, затем сам шлёт приглашение с вилкой в рублях.
 

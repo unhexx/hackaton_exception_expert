@@ -1,7 +1,7 @@
 # Agentic Loop — Operations Guide
 
-[![Version](https://img.shields.io/badge/version-3.4.0-blue.svg)](CHANGELOG.md)
-[![Main README](https://img.shields.io/badge/Main-README-blue)](README.md)
+[![Version](docs/badges/version-3.4.0.svg)](CHANGELOG.md)
+[![Main README](docs/badges/main-readme-plain.svg)](README.md)
 
 > **Start here:** [README.md](README.md) — quick start, examples, badges, full documentation map.
 

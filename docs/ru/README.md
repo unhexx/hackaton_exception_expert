@@ -2,8 +2,8 @@
 
 **Language:** [English](../README.md) · [Русский](README.md)
 
-[![Version](https://img.shields.io/badge/version-3.13.0-blue?style=flat-square)](../../CHANGELOG.md)
-[![Main README](https://img.shields.io/badge/Main-README-blue?style=flat-square)](../../README.ru.md)
+[![Version](../badges/version-3.13.0.svg)](../../CHANGELOG.md)
+[![Main README](../badges/main-readme.svg)](../../README.ru.md)
 
 Каноническая документация шаблона агентного цикла разработки Agentix.
 

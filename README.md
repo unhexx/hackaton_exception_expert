@@ -2,29 +2,29 @@
 
 > **Спецтрек ЛЦТ / ФСП.** Прототип агрегатора ИТ-вакансий — каталог [`product/`](product/README.md).
 >
-> [![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB?style=flat-square&logo=python&logoColor=white)](product/pyproject.toml)
-> [![JavaScript](https://img.shields.io/badge/javascript-htmx_2.0.4-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](product/app/static/htmx.min.js)
-> [![HTML](https://img.shields.io/badge/html-Jinja2-E34F26?style=flat-square&logo=html5&logoColor=white)](product/app/templates)
-> [![CSS](https://img.shields.io/badge/css-brand-1572B6?style=flat-square&logo=css3&logoColor=white)](product/app/static/brand.css)
-> [![SQL](https://img.shields.io/badge/sql-SQLite_WAL-003B57?style=flat-square&logo=sqlite&logoColor=white)](product/app/db)
-> [![Shell](https://img.shields.io/badge/shell-POSIX-4EAA25?style=flat-square&logo=gnubash&logoColor=white)](deploy/fsp/entrypoint.sh)
-> [![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)](product/pyproject.toml)
-> [![Docker Compose](https://img.shields.io/badge/stand-Docker_Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](deploy/fsp/compose.yaml)
+> [![Python 3.12](product/docs/badges/python.svg)](product/pyproject.toml)
+> [![JavaScript](product/docs/badges/javascript.svg)](product/app/static/htmx.min.js)
+> [![HTML](product/docs/badges/html.svg)](product/app/templates)
+> [![CSS](product/docs/badges/css.svg)](product/app/static/brand.css)
+> [![SQL](product/docs/badges/sql.svg)](product/app/db)
+> [![Shell](product/docs/badges/shell.svg)](deploy/fsp/entrypoint.sh)
+> [![FastAPI](product/docs/badges/fastapi.svg)](product/pyproject.toml)
+> [![Docker Compose](product/docs/badges/docker.svg)](deploy/fsp/compose.yaml)
 > [![Тесты](product/docs/badges/tests.svg)](deploy/fsp/compose.yaml)
-> [![Шрифт OFL](https://img.shields.io/badge/font-OFL_1.1-lightgrey?style=flat-square)](product/static/fonts/OFL.txt)
+> [![Шрифт OFL](product/docs/badges/ofl.svg)](product/static/fonts/OFL.txt)
 >
 > **Быстрый старт.** `docker compose -f deploy/fsp/compose.yaml up --build` → <http://127.0.0.1:8000>.  
 > Тесты: `docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests`. Подробности — в [`product/README.md`](product/README.md).
 
-[![Version](https://img.shields.io/badge/version-3.13.0-blue?style=flat-square)](CHANGELOG.md)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](docs/getting-started.md)
-[![Platform](https://img.shields.io/badge/platform-Linux_%7C_macOS_%7C_Windows-lightgrey?style=flat-square)](docs/cross-platform.md)
-[![Frontend](https://img.shields.io/badge/frontend-Grok_CLI-black?style=flat-square)](docs/multi-frontend.md)
-[![pxpipe](https://img.shields.io/badge/pxpipe-default-informational?style=flat-square)](docs/proxy.md)
-[![CI](https://github.com/unhexx/agentic_loop_template/actions/workflows/agentix-loop.yml/badge.svg?branch=main)](https://github.com/unhexx/agentic_loop_template/actions/workflows/agentix-loop.yml)
-[![Docs](https://img.shields.io/badge/docs-available-brightgreen?style=flat-square)](docs/README.md)
-[![Maintained](https://img.shields.io/badge/maintained-yes-success?style=flat-square)](https://github.com/unhexx/agentic_loop_template)
+[![Version](docs/badges/version-3.13.0.svg)](CHANGELOG.md)
+[![License: MIT](docs/badges/license-mit.svg)](LICENSE)
+[![Python](docs/badges/python-3.10.svg)](docs/getting-started.md)
+[![Platform](docs/badges/platform.svg)](docs/cross-platform.md)
+[![Frontend](docs/badges/frontend.svg)](docs/multi-frontend.md)
+[![pxpipe](docs/badges/pxpipe.svg)](docs/proxy.md)
+[![CI](docs/badges/ci.svg)](https://github.com/unhexx/agentic_loop_template/actions/workflows/agentix-loop.yml)
+[![Docs](docs/badges/docs.svg)](docs/README.md)
+[![Maintained](docs/badges/maintained.svg)](https://github.com/unhexx/agentic_loop_template)
 
 **Language:** [English](README.md) · [Русский](README.ru.md)
 

@@ -1,7 +1,7 @@
 # Consumer Starter Template
 
-[![Main README](https://img.shields.io/badge/Main-README-blue?style=flat-square)](../../README.md)
-[![Getting Started](https://img.shields.io/badge/docs-getting_started-green?style=flat-square)](../../docs/getting-started.md)
+[![Main README](../../docs/badges/main-readme.svg)](../../README.md)
+[![Getting Started](../../docs/badges/docs-getting-started.svg)](../../docs/getting-started.md)
 
 Two adoption tiers. **Do not copy the whole `agentic_loop_template/` tree** into a product — that is how `classifier` drifted to a stale Windows `LOOP_STATE` and lost Linux `Agent-Init.sh`.
 

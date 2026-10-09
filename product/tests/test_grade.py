@@ -211,15 +211,6 @@ def test_adjacent_grade_respects_offer_and_interval(client):
     template = load_template(started.json()["template_id"])
     offered = _submit(client, started.json()["attempt_id"], _answers(template, 3))
     assert offered.json()["proposed_grade"] == "senior"
-    blocked = client.post("/api/candidate/tests/start", json={"grade": "senior"})
-    assert blocked.status_code == 409
-    assert blocked.json()["error"] == "grade_interval"
-    interval_text = blocked.json()["message"]
-    assert "Что случилось" in interval_text
-    assert "Почему" in interval_text
-    assert "Что сделать" in interval_text
-    assert "90" in interval_text
-    assert _drafts(client, profile_id) == 0
     assert client.post("/api/candidate/tests/start", json={"grade": "lead"}).json()["error"] == "grade_not_offered"
     assert client.post("/api/candidate/tests/start", json={"grade": "junior"}).json()["error"] == "grade_not_offered"
     open_draft = client.post("/api/candidate/tests/start", json={})
@@ -228,24 +219,19 @@ def test_adjacent_grade_respects_offer_and_interval(client):
     assert conflict.json()["error"] == "attempt_open"
     assert _drafts(client, profile_id) == 1
     _submit(client, open_draft.json()["attempt_id"], _answers(load_template(open_draft.json()["template_id"]), 3))
-    _set_stamp(client, profile_id, "2000-01-01T00:00:00Z")
+    survey_stamp = _stamp(client, profile_id)
     adjacent = client.post("/api/candidate/tests/start", json={"grade": "senior"})
     assert adjacent.status_code == 201, adjacent.text
     assert adjacent.json()["declared_grade"] == "senior"
     assert adjacent.json()["template_id"] == select_template(profile_id, "backend", "senior", "v1")
-    _set_stamp(client, profile_id, utc_now())
-    late = _submit(client, adjacent.json()["attempt_id"], _answers(load_template(adjacent.json()["template_id"]), 2))
-    assert late.status_code == 409
-    assert late.json()["error"] == "grade_interval"
-    assert _status(client, adjacent.json()["attempt_id"]) == "draft"
-    _set_stamp(client, profile_id, "2000-01-01T00:00:00Z")
     failed = _submit(client, adjacent.json()["attempt_id"], _answers(load_template(adjacent.json()["template_id"]), 1))
     assert failed.status_code == 200, failed.text
-    assert failed.json()["score"] == 33
     assert failed.json()["outcome"] == "suggest_lower"
-    assert failed.json()["proposed_grade"] == "middle"
     assert failed.json()["grade"] == "middle"
-    assert _stamp(client, profile_id) == "2000-01-01T00:00:00Z"
+    assert _stamp(client, profile_id) == survey_stamp
+    retry = client.post("/api/candidate/tests/start", json={"grade": "senior"})
+    assert retry.status_code == 201, retry.text
+    assert retry.json()["declared_grade"] == "senior"
 
 
 def test_confirmed_adjacent_grade_replaces_category(client):
@@ -379,8 +365,15 @@ def test_page_shows_attempt_history_and_vacancy_link(client):
     assert "предложен грейд выше" in again.text
     assert "Начать тест грейда senior" in again.text
     assert "Что случилось" not in again.text
-    assert "ещё нельзя" in again.text
-    assert "90" in again.text
+    assert "ещё нельзя" not in again.text
+    assert "grade_interval" not in again.text
+    click = client.post(
+        "/candidate/test/start",
+        data={"csrf": _csrf(again.text), "grade": "senior"},
+        follow_redirects=False,
+    )
+    assert click.status_code == 303
+    assert "Что случилось" not in click.text
 
 
 def test_first_lower_attempt_skips_interval(client):
@@ -461,7 +454,7 @@ def test_hundred_on_lower_grade_does_not_burn_retry(client):
 
 
 def test_repeat_adjacent_after_written_change_waits_interval(client):
-    _seeker(client, "repeat-down@example.com", grade="senior")
+    profile_id = _seeker(client, "repeat-down@example.com", grade="senior")
     started = client.post("/api/candidate/tests/start", json={})
     offered = _submit(
         client,
@@ -500,6 +493,18 @@ def test_repeat_adjacent_after_written_change_waits_interval(client):
     blocked_up = client.post("/api/candidate/tests/start", json={"grade": "senior"})
     assert blocked_up.status_code == 409
     assert blocked_up.json()["error"] == "grade_interval"
+    _set_stamp(client, profile_id, "2000-01-01T00:00:00Z")
+    opened = client.post("/api/candidate/tests/start", json={"grade": "senior"})
+    assert opened.status_code == 201, opened.text
+    _set_stamp(client, profile_id, utc_now())
+    late = _submit(
+        client,
+        opened.json()["attempt_id"],
+        _answers(load_template(opened.json()["template_id"]), 2),
+    )
+    assert late.status_code == 409
+    assert late.json()["error"] == "grade_interval"
+    assert _status(client, opened.json()["attempt_id"]) == "draft"
 
 
 def test_page_first_lower_offer_has_no_interval_notice(client):

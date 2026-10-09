@@ -15,7 +15,6 @@ from product.app.services.errors import explain, fail
 from product.matching.grade import (
     GradeError,
     is_adjacent_grade,
-    is_lower_grade,
     load_template,
     public_questions,
     score_attempt,
@@ -79,9 +78,7 @@ def interval_blocks(db: Session, profile: Profile, requested: str) -> bool:
         return False
     if interval_open(profile.grade_changed_at):
         return False
-    if not grade_written_by_test(db, profile) and is_lower_grade(profile.grade, requested):
-        return False
-    return True
+    return grade_written_by_test(db, profile)
 
 
 def _profile(db: Session, user: User) -> Profile | None:

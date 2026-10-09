@@ -207,20 +207,36 @@ def test_step_walks_question_one_and_assembles_letter(client):
         assert text not in load.text
     opt_a = _post_step(client, csrf, attempt_id, load.text, step="0", advance="1")
     assert "вариант 1 из 3" in opt_a.text
+    assert q1["text"] in opt_a.text
     assert texts["a"] in opt_a.text
     assert texts["b"] not in opt_a.text
     assert texts["c"] not in opt_a.text
+    assert "Верно" in opt_a.text
+    assert "Не верно" in opt_a.text
+    assert ">истинен<" not in opt_a.text
+    assert ">ложен<" not in opt_a.text
     opt_b = _post_step(client, csrf, attempt_id, opt_a.text, step="1", mark="true")
+    assert q1["text"] in opt_b.text
     assert texts["b"] in opt_b.text
     assert texts["a"] not in opt_b.text
     assert texts["c"] not in opt_b.text
+    assert "Верно" in opt_b.text
+    assert "Не верно" in opt_b.text
+    assert ">истинен<" not in opt_b.text
+    assert ">ложен<" not in opt_b.text
     opt_c = _post_step(client, csrf, attempt_id, opt_b.text, step="2", mark="false")
+    assert q1["text"] in opt_c.text
     assert texts["c"] in opt_c.text
+    assert "Верно" in opt_c.text
+    assert "Не верно" in opt_c.text
+    assert ">истинен<" not in opt_c.text
+    assert ">ложен<" not in opt_c.text
     next_stem = _post_step(client, csrf, attempt_id, opt_c.text, step="3", mark="false")
     assert _hidden(next_stem.text, "answer_0") == "a"
     assert _hidden(next_stem.text, "step") == "4"
     assert "вопрос 2 из 3" in next_stem.text
     assert ", вариант" not in next_stem.text
+    assert template["questions"][1]["text"] in next_stem.text
     for text in texts.values():
         assert text not in next_stem.text
 
@@ -281,8 +297,11 @@ def test_three_trues_repeat_same_question(client):
     texts = [choice["text"] for choice in q1["choices"]]
     load = _post_step(client, csrf, attempt_id)
     opt_a = _post_step(client, csrf, attempt_id, load.text, step="0", advance="1")
+    assert q1["text"] in opt_a.text
     opt_b = _post_step(client, csrf, attempt_id, opt_a.text, step="1", mark="true")
+    assert q1["text"] in opt_b.text
     opt_c = _post_step(client, csrf, attempt_id, opt_b.text, step="2", mark="true")
+    assert q1["text"] in opt_c.text
     again = _post_step(client, csrf, attempt_id, opt_c.text, step="3", mark="true")
     assert "вопрос 1 из 3" in again.text
     assert ", вариант" not in again.text

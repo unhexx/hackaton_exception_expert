@@ -125,7 +125,7 @@ def test_draft_page_keeps_nine_mark_pairs_inside_noscript(client):
         assert 'value="false"' in noscript
     assert 'type="radio"' not in outside
     assert body["questions"][0]["text"] in noscript
-    assert "На вопрос нужна ровно одна отметка «истинен»." in page.text
+    assert "В каждом вопросе может быть только 1 верный ответ" in page.text
 
 
 def test_submit_nine_key_marks_scores_100(client):
@@ -285,7 +285,7 @@ def test_step_walks_question_one_and_assembles_letter(client):
     assert ", вариант" not in retry.text
     assert _hidden(retry.text, "answer_0") == ""
     assert _hidden(retry.text, "step") == "0"
-    assert "Нужна ровно одна отметка «истинен»." in retry.text
+    assert "В каждом вопросе может быть только 1 верный ответ" in retry.text
     assert 'class="hint"' in retry.text
 
 
@@ -307,7 +307,7 @@ def test_three_trues_repeat_same_question(client):
     assert ", вариант" not in again.text
     assert _hidden(again.text, "answer_0") == ""
     assert _hidden(again.text, "step") == "0"
-    assert "Нужна ровно одна отметка «истинен»." in again.text
+    assert "В каждом вопросе может быть только 1 верный ответ" in again.text
     assert 'class="hint"' in again.text
     shown = sum(1 for text in texts if text in again.text)
     assert shown == 0

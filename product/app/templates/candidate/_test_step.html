@@ -20,10 +20,12 @@
     <div class="test-station {{ stations[2] }}">3</div>
   </div>
   {% if hint %}<p class="hint">{{ hint }}</p>{% endif %}
+  {% if step != 12 %}
+  <p>{{ question.text }}</p>
+  {% endif %}
   {% if step == 12 %}
   <p><button type="submit">Сдать тест</button></p>
   {% elif phase == 0 %}
-  <p>{{ question.text }}</p>
   <p><button type="button"
              hx-post="/candidate/test/step"
              hx-target="#test-step"
@@ -40,14 +42,14 @@
             hx-swap="innerHTML"
             hx-include="closest form"
             hx-vals='{"mark":"true"}'
-            hx-push-url="false">истинен</button>
+            hx-push-url="false">Верно</button>
     <button type="button"
             hx-post="/candidate/test/step"
             hx-target="#test-step"
             hx-swap="innerHTML"
             hx-include="closest form"
             hx-vals='{"mark":"false"}'
-            hx-push-url="false">ложен</button>
+            hx-push-url="false">Не верно</button>
   </p>
   {% endif %}
   {% endif %}

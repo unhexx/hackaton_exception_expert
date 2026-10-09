@@ -64,7 +64,7 @@
 <p><a href="/candidate/offers">Есть приглашения</a></p>
 {% else %}
 <p>Приглашений нет.</p>
-{% if offers_hint %}<p class="hint">{{ offers_hint }}</p>{% endif %}
+{% if offers_hint %}<p class="hint">{{ offers_hint | cabinet_links }}</p>{% endif %}
 {% endif %}
 {% include "candidate/achievements.html" %}
 {% include "candidate/resume_status.html" %}

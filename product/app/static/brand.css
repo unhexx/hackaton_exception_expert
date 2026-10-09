@@ -88,6 +88,12 @@ button, .button {
   border: 1px solid var(--fsp-blue);
 }
 
+.hint a,
+.hint a:visited {
+  color: var(--fsp-blue);
+  text-decoration: underline;
+}
+
 a.button { display: inline-block; text-decoration: none; }
 
 input[type="number"] {

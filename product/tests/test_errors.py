@@ -79,3 +79,71 @@ def test_cabinet_without_profile_shows_hint(client):
     assert "Что случилось. Анкеты ещё нет." in page.text
     assert "Приглашений нет" in page.text
     assert "Тест ещё не сдан" in page.text
+
+
+def test_candidate_cabinet_hint_links_test(client):
+    register_and_confirm(client)
+    saved = client.put(
+        "/api/candidate/profile",
+        json={
+            "full_name": "Иван Синтетиков",
+            "industry": "it",
+            "specialization": "backend",
+            "grade": "middle",
+            "stack": ["python"],
+            "team_role": "разработчик",
+            "work_format": "удалённо",
+            "experience": "синтетический стаж",
+            "soft_skills": ["коммуникация"],
+            "publication": True,
+        },
+    )
+    assert saved.status_code == 200, saved.text
+    page = client.get("/candidate")
+    assert page.status_code == 200
+    assert "Тест ещё не сдан." in page.text
+    assert '<a href="/candidate/test">/candidate/test</a>' in page.text
+
+
+def test_hint_catalog_stays_plain_text():
+    text = explain("hint_no_invites_employer")
+    assert "/employer/shortlist" in text
+    assert "<a " not in text
+    assert "href" not in text
+
+
+def test_cabinet_links_wraps_lk_paths_and_escapes():
+    from product.app.web.render import cabinet_links
+
+    html = str(cabinet_links("Откройте /employer/shortlist и /employer/vacancies."))
+    assert '<a href="/employer/shortlist">/employer/shortlist</a>' in html
+    assert '<a href="/employer/vacancies">/employer/vacancies</a>' in html
+    assert str(cabinet_links("Откройте /auth/login, войдите.")).count('<a href="/auth/login">') == 1
+    escaped = str(cabinet_links("<script>/employer</script>"))
+    assert "<script>" not in escaped
+    assert "&lt;script&gt;" in escaped
+    assert '<a href="/employer">/employer</a>' in escaped
+    api = str(cabinet_links("/api/candidate/tests"))
+    assert api == "/api/candidate/tests"
+    assert "<a " not in api
+
+
+def test_employer_cabinet_hint_links_shortlist(client):
+    register_and_confirm(client, email="boss-hint@example.com", role="employer")
+    saved = client.put(
+        "/api/employer/company",
+        json={
+            "name": "FSP",
+            "description": "Федерация спортивного программирования",
+            "direction": "it",
+            "contact": "fsp@example.com",
+        },
+    )
+    assert saved.status_code == 200, saved.text
+    page = client.get("/employer")
+    assert page.status_code == 200
+    assert "Приглашений ещё нет." in page.text
+    assert '<a href="/employer/shortlist">/employer/shortlist</a>' in page.text
+    assert "Откройте /employer/shortlist" not in page.text.replace(
+        '<a href="/employer/shortlist">/employer/shortlist</a>', ""
+    )

@@ -14,7 +14,7 @@
   <button type="submit">Начать тест записанного грейда</button>
 </form>
 {% if offer %}
-{% if interval_notice %}<p class="hint">{{ interval_notice }}</p>{% endif %}
+{% if interval_notice %}<p class="hint">{{ interval_notice | cabinet_links }}</p>{% endif %}
 <form method="post" action="/candidate/test/start">
   <input type="hidden" name="csrf" value="{{ csrf }}">
   <input type="hidden" name="grade" value="{{ offer }}">

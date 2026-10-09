@@ -90,6 +90,12 @@ button, .button {
   padding: 0.9rem 1.1rem;
 }
 
+.hint a,
+.hint a:visited {
+  color: var(--fsp-light);
+  text-decoration: underline;
+}
+
 a.button { display: inline-block; text-decoration: none; }
 
 input[type="number"] {

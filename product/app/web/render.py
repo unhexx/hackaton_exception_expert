@@ -2,17 +2,43 @@
 
 from __future__ import annotations
 
+import re
 import secrets
 from pathlib import Path
 
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
+from markupsafe import Markup, escape
 
 from product.app.services.errors import ApiError, fail
 
 _TEMPLATES = Path(__file__).resolve().parent.parent / "templates"
 templates = Jinja2Templates(directory=str(_TEMPLATES))
+
+# Пути кабинетов в готовой строке каталога; HTML в errors.py не кладём.
+_CABINET_PATH = re.compile(
+    r"(?<![A-Za-z0-9_-])(/(?:employer|candidate|auth)(?:/[A-Za-z0-9_-]+)*)"
+)
+
+
+def cabinet_links(text: object) -> Markup:
+    """Экранирует текст и делает пути /employer, /candidate, /auth ссылками."""
+    if text is None:
+        return Markup("")
+    raw = str(text)
+    if not raw:
+        return Markup("")
+    escaped = str(escape(raw))
+
+    def wrap(match: re.Match[str]) -> str:
+        path = match.group(1)
+        return f'<a href="{path}">{path}</a>'
+
+    return Markup(_CABINET_PATH.sub(wrap, escaped))
+
+
+templates.env.filters["cabinet_links"] = cabinet_links
 
 
 def ensure_csrf(request: Request) -> str:

@@ -1,2 +1,2 @@
-{% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
-{% if hint %}<p class="hint">{{ hint }}</p>{% endif %}
+{% if error %}<p class="error" role="alert">{{ error | cabinet_links }}</p>{% endif %}
+{% if hint %}<p class="hint">{{ hint | cabinet_links }}</p>{% endif %}

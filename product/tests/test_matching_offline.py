@@ -25,7 +25,7 @@ def test_golden_report_prints_this_run_only():
     text = render_report()
     assert path.read_bytes() == before
     lines = text.strip().splitlines()
-    assert len(lines) == 6
+    assert len(lines) == 9
     assert "%" not in text
     separated, total = grade_separation_counts()
     assert lines[5] == f"grade_separation {separated} {total}"
@@ -55,6 +55,25 @@ def test_golden_report_prints_this_run_only():
         per_spec[spec] = per_spec.get(spec, 0) + 1
     assert set(per_spec) == set(load_rules()["specializations"])
     assert all(1 <= count <= 2 for count in per_spec.values())
+    assert lines[6].startswith("sim_competent ")
+    assert lines[7].startswith("sim_key_leak ")
+    assert lines[8].startswith("sim_adjacent ")
+    competent_hit, competent_n = (int(part) for part in lines[6].split()[1:])
+    leak_hit, leak_n = (int(part) for part in lines[7].split()[1:])
+    adjacent_hit, adjacent_n = (int(part) for part in lines[8].split()[1:])
+    assert competent_n == leak_n == adjacent_n == 72
+    assert competent_hit == 72
+    assert adjacent_hit < competent_hit
+    if _pair_has_three_key_triples():
+        assert leak_hit < competent_hit
+
+
+def _pair_has_three_key_triples() -> bool:
+    grouped: dict[tuple[str, str], set[tuple[str, ...]]] = {}
+    for row in catalog():
+        triple = tuple(str(question["correct"]) for question in row["questions"])
+        grouped.setdefault((str(row["specialization"]), str(row["grade"])), set()).add(triple)
+    return any(len(triples) == 3 for triples in grouped.values())
 
 
 def _stem(template_id: str, question_id: str) -> tuple[dict, dict]:
@@ -203,7 +222,10 @@ def test_matching_package_does_not_call_network():
                 names = [node.module or ""]
             else:
                 continue
-            assert all(name.split(".")[0] not in {"httpx", "urllib", "requests", "socket"} for name in names)
+            assert all(
+                name.split(".")[0] not in {"httpx", "urllib", "requests", "socket", "torch", "transformers"}
+                for name in names
+            )
 
 
 def test_validation_action_is_plain_text(client):

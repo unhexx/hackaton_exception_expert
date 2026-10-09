@@ -1,4 +1,4 @@
-"""Один запуск прогона на стенде. Пять строк и grade_separation, без порога."""
+"""Один запуск прогона на стенде. Пять строк, grade_separation и три CPU-персоны, без порога."""
 
 from __future__ import annotations
 
@@ -19,6 +19,9 @@ _SAMPLE = (
     "relevant_in_top 0 0\n"
     "resume_ok 0 0\n"
     "grade_separation 0 0\n"
+    "sim_competent 0 0\n"
+    "sim_key_leak 0 0\n"
+    "sim_adjacent 0 0\n"
 )
 
 

@@ -7,7 +7,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from product.matching.synth_eval import collect_counts, load_shards
+from product.matching.synth_eval import load_shards
+from product.matching.synth_eval_run import collect_counts
 
 _DOCS = Path(__file__).resolve().parent.parent / "docs"
 _FONT = Path(__file__).resolve().parent.parent / "static" / "fonts" / "JetBrainsMono-Regular.ttf"

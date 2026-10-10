@@ -64,16 +64,7 @@ def test_golden_report_prints_this_run_only():
     assert competent_n == leak_n == adjacent_n == 72
     assert competent_hit == 72
     assert adjacent_hit < competent_hit
-    if _pair_has_three_key_triples():
-        assert leak_hit < competent_hit
-
-
-def _pair_has_three_key_triples() -> bool:
-    grouped: dict[tuple[str, str], set[tuple[str, ...]]] = {}
-    for row in catalog():
-        triple = tuple(str(question["correct"]) for question in row["questions"])
-        grouped.setdefault((str(row["specialization"]), str(row["grade"])), set()).add(triple)
-    return any(len(triples) == 3 for triples in grouped.values())
+    assert leak_hit < competent_hit
 
 
 def _stem(template_id: str, question_id: str) -> tuple[dict, dict]:

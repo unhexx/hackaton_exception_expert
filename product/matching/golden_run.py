@@ -17,6 +17,7 @@ from pathlib import Path
 from product.matching.category import assign_category
 from product.matching.need import evaluate_need, haystack_text
 from product.matching.rules import load_rules, rule_version
+from product.matching.simulate import simulation_counts
 from product.matching.stems import catalog
 from product.matching.types import Need, ProfileView
 
@@ -283,8 +284,6 @@ def render_report(cases: dict | None = None) -> str:
     lines = [f"{name} {counts[name][0]} {counts[name][1]}" for name in order]
     separated, total = grade_separation_counts()
     lines.append(f"grade_separation {separated} {total}")
-    from product.matching.simulate import simulation_counts
-
     sim = simulation_counts()
     for name in ("sim_competent", "sim_key_leak", "sim_adjacent"):
         hit, n = sim[name]

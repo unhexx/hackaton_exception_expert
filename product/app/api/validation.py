@@ -1,4 +1,9 @@
-"""Один запуск прогона на стенде. Пять строк, grade_separation и три CPU-персоны, без порога."""
+"""Один запуск прогона на стенде. Пять строк, grade_separation и три CPU-персоны, без порога.
+
+ТЗ §2 и §3.4: «собственная процедура валидации решения и её результаты».
+Строки описаны в ``product/matching/golden_run.py``; подробная симуляция теста
+на 500 кандидатах — ``product/validation_sim`` (отчёт out/report.md).
+"""
 
 from __future__ import annotations
 
@@ -15,7 +20,7 @@ router = APIRouter(tags=["validation"])
 _SAMPLE = (
     "category_match 0 0\n"
     "outcome_match 0 0\n"
-    "template_stable 0 0\n"
+    "form_stable 0 0\n"
     "relevant_in_top 0 0\n"
     "resume_ok 0 0\n"
     "grade_separation 0 0\n"

@@ -2,6 +2,8 @@
 
 Повтор не удаляет строки тома. Нарушение уникального ключа пишется в журнал
 и не останавливает процесс. Другая ошибка — останавливает.
+
+ТЗ §3.3 «воспроизводимый запуск»: схема, догоняющие колонки и мок ФСП при старте.
 """
 
 from __future__ import annotations
@@ -12,7 +14,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
 from product.app.db.models import Base, User
-from product.app.db.session import get_engine, open_session
+from product.app.db.session import ensure_columns, get_engine, open_session
 from product.app.log import log_event
 from product.app.services.clock import utc_now
 from product.app.services.passwords import hash_secret
@@ -51,6 +53,7 @@ def init_db() -> None:
         path = sqlite_path()
         path.parent.mkdir(parents=True, exist_ok=True)
         Base.metadata.create_all(get_engine())
+        ensure_columns(get_engine())  # старый том: добавить колонки механики v2
         db = open_session()
         try:
             load_into(db)

@@ -38,7 +38,7 @@ def test_golden_report_prints_this_run_only():
     outcome_hit, outcome_total = counts["outcome_match"]
     assert outcome_total > 0
     assert outcome_hit == outcome_total
-    stable_hit, stable_total = counts["template_stable"]
+    stable_hit, stable_total = counts["form_stable"]
     assert stable_total > 0
     assert stable_hit == stable_total
     resume_hit, resume_total = counts["resume_ok"]

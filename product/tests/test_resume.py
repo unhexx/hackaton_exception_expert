@@ -9,7 +9,7 @@ from pathlib import Path
 import product
 from product.matching.pdf_profile import render_profile_pdf
 from product.matching.resume import read_resume_bytes
-from product.tests.conftest import register_and_confirm
+from product.tests.conftest import register_and_confirm, take_test
 
 _PROFILE = {
     "full_name": "Иван Синтетиков",
@@ -50,14 +50,6 @@ def _csrf(html: str) -> str:
     return html[start : html.index('"', start)]
 
 
-def _answers(template: dict, correct_n: int) -> list[str]:
-    chosen = []
-    for index, question in enumerate(template["questions"]):
-        if index < correct_n:
-            chosen.append(question["correct"])
-        else:
-            chosen.append(next(choice["id"] for choice in question["choices"] if choice["id"] != question["correct"]))
-    return chosen
 
 
 def test_reader_keeps_known_fields_and_reports_bad_files():
@@ -176,15 +168,9 @@ def test_upload_writes_resume_source_without_category_or_fsp(client):
 
 
 def test_pdf_grade_stops_after_the_test_and_profile_pdf_stays_separate(client):
-    from product.matching.grade import load_template
-
     profile_id = _seeker(client, "tested@example.com")
     started = client.post("/api/candidate/tests/start", json={})
-    template = load_template(started.json()["template_id"])
-    submitted = client.post(
-        f"/api/candidate/tests/{started.json()['attempt_id']}/submit",
-        json={"answers": _answers(template, 2)},
-    )
+    submitted = take_test(client, started.json(), "confirm")
     assert submitted.status_code == 200, submitted.text
     assert submitted.json()["grade"] == "middle"
     stored = client.post(
@@ -227,15 +213,9 @@ def test_pdf_grade_stops_after_the_test_and_profile_pdf_stays_separate(client):
 
 
 def test_same_grade_pdf_does_not_rewrite_source(client):
-    from product.matching.grade import load_template
-
     profile_id = _seeker(client, "same-grade@example.com")
     started = client.post("/api/candidate/tests/start", json={})
-    template = load_template(started.json()["template_id"])
-    submitted = client.post(
-        f"/api/candidate/tests/{started.json()['attempt_id']}/submit",
-        json={"answers": _answers(template, 2)},
-    )
+    submitted = take_test(client, started.json(), "confirm")
     assert submitted.status_code == 200, submitted.text
     assert submitted.json()["grade"] == "middle"
     stamp = _stamp(client, profile_id)

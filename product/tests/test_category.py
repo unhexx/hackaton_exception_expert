@@ -63,8 +63,12 @@ def test_category_is_spec_and_grade_without_fsp_or_industry():
     )
     assert plain.rank_key == rank_key(0, 0, 1, confirmed=False, has_prize=False)
     assert plain.rank_key == "0-000-0000-0-00000001"
-    assert taken.rank_key == rank_key(0, 4, 1, confirmed=True, has_prize=False)
-    assert taken.rank_key == "1-000-0004-0-00000001"
+    # Провал (suggest_lower) грейд не понижает, но и не подтверждает (Q&A):
+    # такая карточка стоит среди неподтверждённых.
+    assert taken.rank_key == rank_key(0, 4, 1, confirmed=False, has_prize=False)
+    assert taken.rank_key == "0-000-0004-0-00000001"
+    passed = assign_category(_view(test_score=75, test_outcome="confirm"), "v1")
+    assert passed.rank_key == "1-075-0000-0-00000001"
     try:
         assign_category(_view(), "v2")
     except CategoryError as exc:
@@ -206,7 +210,9 @@ def test_employer_sees_scored_profiles_without_email(client):
     assert hidden not in ids
     assert zero in ids
     assert ids[0] == high
-    assert ids.index(zero) < ids.index(fresh)
+    # zero провалил тест: грейд не подтверждён, как и у fresh без теста (Q&A) —
+    # обе карточки в выдаче, ниже подтверждённых.
+    assert ids.index(high) < ids.index(zero) and ids.index(high) < ids.index(fresh)
     assert ids.index(many) < ids.index(one)
     assert ids.index(one) < ids.index(tie_low)
     assert ids.index(one) < ids.index(tie_high)
@@ -226,13 +232,13 @@ def test_employer_sees_scored_profiles_without_email(client):
     assert "Программирование алгоритмическое" in {row["discipline"] for row in many_card["achievements"]}
     zero_card = next(card for card in cards if card["profile_id"] == zero)
     assert zero_card["test_score"] == 0
-    assert zero_card["grade_status"] == "подтверждён"
+    assert zero_card["grade_status"] == "не подтверждён тестом"
     assert "балл 0" in zero_card["explanation"]
     fresh_card = next(card for card in cards if card["profile_id"] == fresh)
     assert fresh_card["test_score"] is None
     assert fresh_card["grade_status"] == "не подтверждён"
     assert fresh_card["rank_key"].startswith("0-")
-    assert zero_card["rank_key"].startswith("1-")
+    assert zero_card["rank_key"].startswith("0-")
     assert "Грейд не подтверждён, потребность без уточнений" in fresh_card["list_reason"]
 
     only_python = client.get(

@@ -253,12 +253,9 @@ def employer_candidates(
         fit, labels, achievements, rank = _profile_matches(session, profile, assignment, need)
         if not fit.matched:
             continue
-        ranked.append(
-            (
-                fit.sort_key,
-                _card(profile, assignment, labels, achievements, rank, reason=fit.reason),
-            )
-        )
+        card = _card(profile, assignment, labels, achievements, rank, reason=fit.reason)
+        card.update(_test_view(session, assignment.test_attempt_id))
+        ranked.append((fit.sort_key, card))
     ranked.sort(key=lambda item: item[0], reverse=True)
     cards = []
     for index, (key, card) in enumerate(ranked):
@@ -268,6 +265,33 @@ def employer_candidates(
             card["list_reason"] = f"{card['list_reason']} {phrase}".strip()
         cards.append(card)
     return cards
+
+
+def _test_view(session: Session, attempt_id: int | None) -> dict:
+    """Статус грейда на карточке работодателя (ТЗ §2.1 «обоснование попадания
+    кандидата в подборку»; Q&A: неподтверждённый грейд показывать со статусом).
+
+    Тест v2 сообщает уверенность и положение в грейде: «подтверждён уверенно»,
+    «подтверждён, у границы» или «не подтверждён тестом».
+    """
+    attempt = session.get(TestAttempt, attempt_id) if attempt_id else None
+    if attempt is None:
+        return {"grade_status": "не подтверждён", "test_confidence": None, "test_position": None}
+    result = json.loads(attempt.result_json) if attempt.result_json else {}
+    if attempt.outcome not in ("confirm", "suggest_higher"):
+        status = "не подтверждён тестом"
+    elif result.get("status") == "уверенно":
+        status = "подтверждён уверенно"
+    elif result.get("status"):
+        status = "подтверждён, у границы"
+    else:
+        status = "подтверждён"
+    confidence = result.get("confidence")
+    return {
+        "grade_status": status,
+        "test_confidence": None if confidence is None else round(100 * confidence),
+        "test_position": result.get("position"),
+    }
 
 
 def _card(

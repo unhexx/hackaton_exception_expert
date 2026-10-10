@@ -1,13 +1,12 @@
 <section>
   <h2>Итог попытки</h2>
   <p>Грейд попытки: {{ outcome_view.declared_grade }}.</p>
-  <p>{{ outcome_view.score }} из 100</p>
+  <p>Верных ответов: {{ outcome_view.score }}% из {{ outcome_view.n_items }} вопросов.</p>
   <ul class="test-paths">
     <li class="test-path{% if outcome_view.outcome == 'suggest_lower' %} test-path-current{% endif %}">Ниже заявленного</li>
     <li class="test-path{% if outcome_view.outcome == 'confirm' %} test-path-current{% endif %}">Подтвердить</li>
     <li class="test-path{% if outcome_view.outcome == 'suggest_higher' %} test-path-current{% endif %}">Выше</li>
   </ul>
-  <p>Порог подтверждения {{ outcome_view.confirm_min }}. Порог предложения выше {{ outcome_view.suggest_higher_min }}.</p>
   {% if outcome_view.outcome == 'suggest_lower' %}
   <p>предложен грейд ниже</p>
   <p>Записанный грейд этой попыткой не понижен.</p>
@@ -15,6 +14,12 @@
   <p>заявленный грейд подтверждён</p>
   {% elif outcome_view.outcome == 'suggest_higher' %}
   <p>предложен грейд выше{% if outcome_view.proposed_grade %} {{ outcome_view.proposed_grade }}{% endif %}</p>
+  {% endif %}
+  {% if outcome_view.test_status %}
+  <p>Оценка по всем ответам: {{ outcome_view.grade_estimate or 'ниже junior' }}{% if outcome_view.position %}, {{ outcome_view.position }} треть грейда{% endif %}. Уверенность {{ outcome_view.confidence_pct }}% — статус «{{ outcome_view.test_status }}».</p>
+  {% if outcome_view.test_status == 'у границы' %}
+  <p class="hint">Результат у границы грейдов: работодатель увидит его с этим статусом. Следующая попытка учтёт уже данные ответы и уточнит оценку.</p>
+  {% endif %}
   {% endif %}
   {% if offer %}
   {% if interval_notice %}<p class="hint">{{ interval_notice | cabinet_links }}</p>{% endif %}

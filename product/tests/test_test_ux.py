@@ -1,13 +1,13 @@
-"""HTML сдачи теста: поочерёдный T/F, дорожка шага и панель итога."""
+"""HTML сдачи теста v2: вопросы по одному, оценка каждого варианта, без возврата
+назад, панель итога с уверенностью. ТЗ §2.1 «Прохождение тестирования»,
+критерий оценки 3 «понятность сквозного пути»."""
 
 from __future__ import annotations
 
-import json
 import re
 import sqlite3
 
-from product.matching.grade import load_template
-from product.tests.conftest import register_and_confirm
+from product.tests.conftest import register_and_confirm, stored_form
 
 _PROFILE = {
     "full_name": "Иван Синтетиков",
@@ -21,10 +21,7 @@ _PROFILE = {
     "soft_skills": ["коммуникация"],
     "publication": True,
 }
-
-_HX = {"HX-Request": "true"}
-_MARK_NAMES = tuple(f"mark_{q}_{cid}" for q in range(3) for cid in "abc")
-_ECHO_NAMES = ("step", *_MARK_NAMES, "answer_0", "answer_1", "answer_2")
+_LEVELS = ("junior", "middle", "senior", "lead")
 
 
 def _seeker(client, email: str = "ux@example.com", **extra) -> int:
@@ -40,413 +37,151 @@ def _csrf(html: str) -> str:
     return html[start : html.index('"', start)]
 
 
-def _hidden(html: str, name: str) -> str:
-    match = re.search(rf'name="{re.escape(name)}" value="([^"]*)"', html)
-    assert match is not None, name
-    return match.group(1)
-
-
-def _echo(html: str) -> dict[str, str]:
-    return {name: _hidden(html, name) for name in _ECHO_NAMES}
-
-
-def _noscript(html: str) -> str:
-    match = re.search(r"<noscript>(.*?)</noscript>", html, flags=re.S | re.I)
-    assert match is not None
-    return match.group(1)
-
-
-def _outside_noscript(html: str) -> str:
-    return re.sub(r"<noscript>.*?</noscript>", "", html, flags=re.S | re.I)
-
-
 def _status(client, attempt_id: int) -> str:
     with sqlite3.connect(client.db_path) as db:
         return db.execute("select status from test_attempts where id = ?", (attempt_id,)).fetchone()[0]
 
 
-def _draft_progress(client, attempt_id: int):
+def _start_page(client) -> int:
+    page = client.get("/candidate/test")
+    sent = client.post("/candidate/test/start", data={"csrf": _csrf(page.text)}, follow_redirects=False)
+    assert sent.status_code == 303
     with sqlite3.connect(client.db_path) as db:
-        raw = db.execute(
-            "select answers_json from test_attempts where id = ?",
-            (attempt_id,),
-        ).fetchone()[0]
-    if not raw:
-        return None
-    return json.loads(raw)
+        return db.execute("select max(id) from test_attempts").fetchone()[0]
 
 
-def _set_stamp(client, profile_id: int, stamp: str) -> None:
-    with sqlite3.connect(client.db_path) as db:
-        db.execute("update profiles set grade_changed_at = ? where id = ?", (stamp, profile_id))
-        db.commit()
+def _current(client, attempt_id: int) -> dict:
+    form = stored_form(client, attempt_id)
+    done = form.get("answers") or {}
+    return next(item for item in form["items"] if item["qid"] not in done)
 
 
-def _answers(template: dict, correct_n: int) -> list[str]:
-    chosen = []
-    for index, question in enumerate(template["questions"]):
-        if index < correct_n:
-            chosen.append(question["correct"])
-        else:
-            chosen.append(next(choice["id"] for choice in question["choices"] if choice["id"] != question["correct"]))
-    return chosen
+def _marks(item: dict, correct: bool) -> dict[str, str]:
+    marks = {}
+    for option in item["options"]:
+        right = option["id"] == item["key"]
+        marks[f"mark_{option['id']}"] = "true" if right == correct else "false"
+    return marks
 
 
-def _submit(client, attempt_id: int, answers: list[str]):
-    return client.post(f"/api/candidate/tests/{attempt_id}/submit", json={"answers": answers})
+def _answer(client, attempt_id: int, item: dict, marks: dict[str, str]):
+    page = client.get("/candidate/test")
+    data = {"csrf": _csrf(page.text), "attempt_id": str(attempt_id), "qid": item["qid"], **marks}
+    return client.post("/candidate/test/answer", data=data, follow_redirects=False)
 
 
-def _key_marks(template: dict) -> dict[str, str]:
-    data = {}
-    for question_index, question in enumerate(template["questions"]):
-        correct = question["correct"]
-        for cid in "abc":
-            data[f"mark_{question_index}_{cid}"] = "true" if cid == correct else "false"
-    return data
-
-
-def _open_draft(client, email: str):
-    _seeker(client, email)
-    started = client.post("/api/candidate/tests/start", json={})
-    assert started.status_code == 201, started.text
+def test_draft_page_shows_one_question_with_true_false_for_each_choice(client):
+    _seeker(client)
+    attempt_id = _start_page(client)
+    item = _current(client, attempt_id)
     page = client.get("/candidate/test")
     assert page.status_code == 200
-    body = started.json()
-    return body, page, load_template(body["template_id"])
+    assert "Вопрос 1 из 12" in page.text
+    assert item["text"] in page.text
+    assert "Оцените каждый вариант." in page.text
+    radios = re.findall(r'type="radio" name="mark_([0-9a-f]+)" value="(true|false)"', page.text)
+    assert len(radios) == 6
+    assert {choice for choice, _ in radios} == {opt["id"] for opt in item["options"]}
+    assert "correct" not in page.text and '"key"' not in page.text
+    assert "<noscript>" not in page.text  # форма работает и без JavaScript
 
 
-def _post_step(client, csrf: str, attempt_id: int, html: str | None = None, **extra):
-    data = {"csrf": csrf, "attempt_id": str(attempt_id)}
-    if html is not None:
-        data.update(_echo(html))
-    data.update(extra)
-    return client.post("/candidate/test/step", data=data, headers=_HX)
-
-
-def test_draft_page_keeps_nine_mark_pairs_inside_noscript(client):
-    body, page, _template = _open_draft(client, "ux-noscript@example.com")
-    noscript = _noscript(page.text)
-    outside = _outside_noscript(page.text)
-    assert 'id="test-step"' in page.text
-    assert "Загрузка шага…" not in page.text
-    assert 'name="mark_0_a"' in noscript
-    for name in _MARK_NAMES:
-        assert f'name="{name}"' in noscript
-        assert f'name="{name}"' not in outside
-        assert f'name="{name}"' in noscript and 'value="true"' in noscript
-        assert 'value="false"' in noscript
-    assert 'type="radio"' not in outside
-    assert body["questions"][0]["text"] in noscript
-    assert "В каждом вопросе может быть только 1 верный ответ" in page.text
-
-
-def test_submit_nine_key_marks_scores_100(client):
-    body, page, template = _open_draft(client, "ux-marks-ok@example.com")
-    sent = client.post(
-        "/candidate/test/submit",
-        data={
-            "csrf": _csrf(page.text),
-            "attempt_id": str(body["attempt_id"]),
-            **_key_marks(template),
-        },
-        follow_redirects=False,
-    )
+def test_answer_advances_and_answered_question_cannot_be_reopened(client):
+    _seeker(client, "advance@example.com")
+    attempt_id = _start_page(client)
+    first = _current(client, attempt_id)
+    sent = _answer(client, attempt_id, first, _marks(first, True))
     assert sent.status_code == 303
-    again = client.get("/candidate/test")
-    assert "балл 100" in again.text
-    assert _status(client, body["attempt_id"]) == "submitted"
+    page = client.get("/candidate/test")
+    assert "Вопрос 2 из 12" in page.text
+    assert first["text"] not in page.text
+    again = _answer(client, attempt_id, first, _marks(first, False))
+    assert again.status_code == 422
+    assert stored_form(client, attempt_id)["answers"][first["qid"]] == [first["key"]]
 
 
-def test_submit_all_false_keeps_draft(client):
-    body, page, _template = _open_draft(client, "ux-all-false@example.com")
-    sent = client.post(
-        "/candidate/test/submit",
-        data={
-            "csrf": _csrf(page.text),
-            "attempt_id": str(body["attempt_id"]),
-            **{name: "false" for name in _MARK_NAMES},
-        },
+def test_incomplete_or_bad_marks_keep_the_question(client):
+    _seeker(client, "marks@example.com")
+    attempt_id = _start_page(client)
+    item = _current(client, attempt_id)
+    marks = _marks(item, True)
+    partial = dict(list(marks.items())[:2])
+    short = _answer(client, attempt_id, item, partial)
+    assert short.status_code == 422
+    assert "Что случилось" in short.text
+    bad = _answer(client, attempt_id, item, {key: "maybe" for key in marks})
+    assert bad.status_code == 422
+    foreign = _answer(client, attempt_id, item, {"mark_deadbeef": "true", **marks})
+    assert foreign.status_code == 422
+    assert not stored_form(client, attempt_id).get("answers")
+    no_csrf = client.post(
+        "/candidate/test/answer",
+        data={"csrf": "wrong", "attempt_id": str(attempt_id), "qid": item["qid"], **marks},
         follow_redirects=False,
     )
-    assert sent.status_code == 422
-    assert "answer_unknown" in sent.text or "Ответ не из вариантов" in sent.text
-    assert _status(client, body["attempt_id"]) == "draft"
+    assert no_csrf.status_code in (400, 403)
+    assert not stored_form(client, attempt_id).get("answers")
 
 
-def test_submit_two_trues_on_first_keeps_draft(client):
-    body, page, template = _open_draft(client, "ux-two-true@example.com")
-    marks = _key_marks(template)
-    marks["mark_0_a"] = "true"
-    marks["mark_0_b"] = "true"
-    sent = client.post(
-        "/candidate/test/submit",
-        data={
-            "csrf": _csrf(page.text),
-            "attempt_id": str(body["attempt_id"]),
-            **marks,
-        },
-        follow_redirects=False,
-    )
-    assert sent.status_code == 422
-    assert "answer_unknown" in sent.text or "Ответ не из вариантов" in sent.text
-    assert _status(client, body["attempt_id"]) == "draft"
+def test_all_false_marks_count_as_wrong_answer(client):
+    _seeker(client, "false@example.com")
+    attempt_id = _start_page(client)
+    item = _current(client, attempt_id)
+    sent = _answer(client, attempt_id, item, {f"mark_{o['id']}": "false" for o in item["options"]})
+    assert sent.status_code == 303
+    assert stored_form(client, attempt_id)["answers"][item["qid"]] == []
 
 
-def test_step_load_without_step_shows_first_stem(client):
-    body, page, template = _open_draft(client, "ux-load@example.com")
-    frag = _post_step(client, _csrf(page.text), body["attempt_id"])
-    assert frag.status_code == 200
-    assert "История" not in frag.text
-    assert "<h1>Тест грейда</h1>" not in frag.text
-    assert "вопрос 1 из 3" in frag.text
-    assert ", вариант" not in frag.text
-    assert _hidden(frag.text, "step") == "0"
-    stem = template["questions"][0]["text"]
-    assert stem in frag.text
-    for choice in template["questions"][0]["choices"]:
-        assert choice["text"] not in frag.text
-
-
-def test_step_walks_question_one_and_assembles_letter(client):
-    body, page, template = _open_draft(client, "ux-walk@example.com")
-    csrf = _csrf(page.text)
-    attempt_id = body["attempt_id"]
-    q1 = template["questions"][0]
-    texts = {choice["id"]: choice["text"] for choice in q1["choices"]}
-    load = _post_step(client, csrf, attempt_id)
-    assert q1["text"] in load.text
-    for text in texts.values():
-        assert text not in load.text
-    opt_a = _post_step(client, csrf, attempt_id, load.text, step="0", advance="1")
-    assert "вариант 1 из 3" in opt_a.text
-    assert q1["text"] in opt_a.text
-    assert texts["a"] in opt_a.text
-    assert texts["b"] not in opt_a.text
-    assert texts["c"] not in opt_a.text
-    assert "Верно" in opt_a.text
-    assert "Не верно" in opt_a.text
-    assert ">истинен<" not in opt_a.text
-    assert ">ложен<" not in opt_a.text
-    opt_b = _post_step(client, csrf, attempt_id, opt_a.text, step="1", mark="true")
-    assert q1["text"] in opt_b.text
-    assert texts["b"] in opt_b.text
-    assert texts["a"] not in opt_b.text
-    assert texts["c"] not in opt_b.text
-    assert "Верно" in opt_b.text
-    assert "Не верно" in opt_b.text
-    assert ">истинен<" not in opt_b.text
-    assert ">ложен<" not in opt_b.text
-    opt_c = _post_step(client, csrf, attempt_id, opt_b.text, step="2", mark="false")
-    assert q1["text"] in opt_c.text
-    assert texts["c"] in opt_c.text
-    assert "Верно" in opt_c.text
-    assert "Не верно" in opt_c.text
-    assert ">истинен<" not in opt_c.text
-    assert ">ложен<" not in opt_c.text
-    next_stem = _post_step(client, csrf, attempt_id, opt_c.text, step="3", mark="false")
-    assert _hidden(next_stem.text, "answer_0") == "a"
-    assert _hidden(next_stem.text, "step") == "4"
-    assert "вопрос 2 из 3" in next_stem.text
-    assert ", вариант" not in next_stem.text
-    assert template["questions"][1]["text"] in next_stem.text
-    for text in texts.values():
-        assert text not in next_stem.text
-    progress = _draft_progress(client, attempt_id)
-    assert progress["step"] == 4
-    assert progress["answers"][0] == "a"
-
-
-def test_three_trues_repeat_same_question(client):
-    body, page, template = _open_draft(client, "ux-repeat@example.com")
-    csrf = _csrf(page.text)
-    attempt_id = body["attempt_id"]
-    q1 = template["questions"][0]
-    texts = [choice["text"] for choice in q1["choices"]]
-    load = _post_step(client, csrf, attempt_id)
-    opt_a = _post_step(client, csrf, attempt_id, load.text, step="0", advance="1")
-    assert q1["text"] in opt_a.text
-    opt_b = _post_step(client, csrf, attempt_id, opt_a.text, step="1", mark="true")
-    assert q1["text"] in opt_b.text
-    opt_c = _post_step(client, csrf, attempt_id, opt_b.text, step="2", mark="true")
-    assert q1["text"] in opt_c.text
-    again = _post_step(client, csrf, attempt_id, opt_c.text, step="3", mark="true")
-    assert "вопрос 1 из 3" in again.text
-    assert ", вариант" not in again.text
-    assert _hidden(again.text, "answer_0") == ""
-    assert _hidden(again.text, "step") == "0"
-    assert "В каждом вопросе может быть только 1 верный ответ" in again.text
-    assert 'class="hint"' in again.text
-    shown = sum(1 for text in texts if text in again.text)
-    assert shown == 0
-    assert q1["text"] in again.text
-
-
-def test_step_load_after_mark_resumes_next_choice(client):
-    body, page, template = _open_draft(client, "ux-resume-choice@example.com")
-    csrf = _csrf(page.text)
-    attempt_id = body["attempt_id"]
-    q1 = template["questions"][0]
-    texts = {choice["id"]: choice["text"] for choice in q1["choices"]}
-    load = _post_step(client, csrf, attempt_id)
-    opt_a = _post_step(client, csrf, attempt_id, load.text, step="0", advance="1")
-    opt_b = _post_step(client, csrf, attempt_id, opt_a.text, step="1", mark="true")
-    assert _hidden(opt_b.text, "step") == "2"
-    again = client.get("/candidate/test")
-    resumed = _post_step(client, _csrf(again.text), attempt_id)
-    assert resumed.status_code == 200
-    assert _hidden(resumed.text, "step") == "2"
-    assert "вариант 2 из 3" in resumed.text
-    assert q1["text"] in resumed.text
-    assert texts["b"] in resumed.text
-    assert texts["a"] not in resumed.text
-    assert texts["c"] not in resumed.text
-    assert _draft_progress(client, attempt_id)["step"] == 2
-
-
-def test_step_load_after_question_one_resumes_question_two(client):
-    body, page, template = _open_draft(client, "ux-resume-q2@example.com")
-    csrf = _csrf(page.text)
-    attempt_id = body["attempt_id"]
-    q1 = template["questions"][0]
-    load = _post_step(client, csrf, attempt_id)
-    opt_a = _post_step(client, csrf, attempt_id, load.text, step="0", advance="1")
-    opt_b = _post_step(client, csrf, attempt_id, opt_a.text, step="1", mark="true")
-    opt_c = _post_step(client, csrf, attempt_id, opt_b.text, step="2", mark="false")
-    next_stem = _post_step(client, csrf, attempt_id, opt_c.text, step="3", mark="false")
-    assert _hidden(next_stem.text, "step") == "4"
-    again = client.get("/candidate/test")
-    resumed = _post_step(client, _csrf(again.text), attempt_id)
-    assert _hidden(resumed.text, "step") == "4"
-    assert "вопрос 2 из 3" in resumed.text
-    assert ", вариант" not in resumed.text
-    assert template["questions"][1]["text"] in resumed.text
-    assert q1["text"] not in resumed.text
-    assert _hidden(resumed.text, "answer_0") == "a"
-    progress = _draft_progress(client, attempt_id)
-    assert progress["step"] == 4
-    assert progress["answers"][0] == "a"
-
-
-def test_step_rewind_keeps_saved_frame(client):
-    body, page, template = _open_draft(client, "ux-norewind@example.com")
-    csrf = _csrf(page.text)
-    attempt_id = body["attempt_id"]
-    q1 = template["questions"][0]
-    texts = {choice["id"]: choice["text"] for choice in q1["choices"]}
-    load = _post_step(client, csrf, attempt_id)
-    opt_a = _post_step(client, csrf, attempt_id, load.text, step="0", advance="1")
-    opt_b = _post_step(client, csrf, attempt_id, opt_a.text, step="1", mark="true")
-    opt_c = _post_step(client, csrf, attempt_id, opt_b.text, step="2", mark="false")
-    next_stem = _post_step(client, csrf, attempt_id, opt_c.text, step="3", mark="false")
-    rewind = _post_step(
-        client,
-        csrf,
-        attempt_id,
-        next_stem.text,
-        step="0",
-        advance="1",
-        answer_0="",
-        mark_0_a="",
-        mark_0_b="",
-        mark_0_c="",
-    )
-    assert _hidden(rewind.text, "step") == "4"
-    assert _hidden(rewind.text, "answer_0") == "a"
-    assert "вопрос 2 из 3" in rewind.text
-    assert texts["a"] not in rewind.text
-    assert q1["text"] not in rewind.text
-    progress = _draft_progress(client, attempt_id)
-    assert progress["step"] == 4
-    assert progress["answers"][0] == "a"
-
-
-def test_step_skip_ahead_on_empty_draft_stays_at_zero(client):
-    body, page, template = _open_draft(client, "ux-noskip@example.com")
-    csrf = _csrf(page.text)
-    attempt_id = body["attempt_id"]
-    q1 = template["questions"][0]
-    jumped = _post_step(
-        client,
-        csrf,
-        attempt_id,
-        step="3",
-        mark="true",
-        mark_0_a="false",
-        mark_0_b="false",
-        mark_0_c="",
-        mark_1_a="",
-        mark_1_b="",
-        mark_1_c="",
-        mark_2_a="",
-        mark_2_b="",
-        mark_2_c="",
-        answer_0="",
-        answer_1="",
-        answer_2="",
-    )
-    assert _hidden(jumped.text, "step") == "0"
-    assert _hidden(jumped.text, "answer_0") == ""
-    assert "вопрос 1 из 3" in jumped.text
-    assert ", вариант" not in jumped.text
-    assert q1["text"] in jumped.text
-    for choice in q1["choices"]:
-        assert choice["text"] not in jumped.text
-    assert _draft_progress(client, attempt_id) is None
-
-
-def test_step_hx_errors_are_fragments(client):
-    body, page, _template = _open_draft(client, "ux-csrf@example.com")
-    missing = client.post(
-        "/candidate/test/step",
-        data={"attempt_id": str(body["attempt_id"])},
-        headers=_HX,
-    )
-    assert missing.status_code == 200
-    assert "<h1>Тест грейда</h1>" not in missing.text
-    assert not missing.text.lstrip().startswith("{")
-    assert 'class="error"' in missing.text
-    assert "Открыть тест" in missing.text
-    foreign = client.post(
-        "/candidate/test/step",
-        data={"csrf": _csrf(page.text), "attempt_id": "999999"},
-        headers=_HX,
-    )
-    assert foreign.status_code == 200
-    assert "<h1>Тест грейда</h1>" not in foreign.text
-    assert not foreign.text.lstrip().startswith("{")
-    assert 'class="error"' in foreign.text
-    assert foreign.status_code != 404
+def test_page_walk_with_extra_blocks_ends_in_outcome_panel(client):
+    _seeker(client, "walk@example.com")
+    attempt_id = _start_page(client)
+    totals = set()
+    for _ in range(40):
+        if _status(client, attempt_id) == "submitted":
+            break
+        item = _current(client, attempt_id)
+        totals.add(len(stored_form(client, attempt_id)["items"]))
+        ok = _LEVELS.index(item["level"]) <= _LEVELS.index("middle")
+        assert _answer(client, attempt_id, item, _marks(item, ok)).status_code == 303
+    assert _status(client, attempt_id) == "submitted"
+    page = client.get("/candidate/test")
+    assert "Итог попытки" in page.text
+    assert "Верных ответов:" in page.text
+    assert "Уверенность" in page.text
+    assert re.search(r"статус «(уверенно|у границы)»", page.text)
+    assert "заявленный грейд подтверждён" in page.text
+    assert min(totals) == 12
 
 
 def test_outcome_panel_uses_recorded_pair(client):
-    profile_id = _seeker(client, "ux-outcome@example.com")
-    started = client.post("/api/candidate/tests/start", json={})
-    template = load_template(started.json()["template_id"])
-    scored = _submit(client, started.json()["attempt_id"], _answers(template, 3))
-    assert scored.json()["outcome"] == "suggest_higher"
+    _seeker(client, "panel@example.com")
+    attempt_id = _start_page(client)
+    for _ in range(40):
+        if _status(client, attempt_id) == "submitted":
+            break
+        item = _current(client, attempt_id)
+        assert _answer(client, attempt_id, item, _marks(item, True)).status_code == 303
     page = client.get("/candidate/test")
-    assert "Порог подтверждения 50" in page.text
-    assert "Порог предложения выше 80" in page.text
-    assert "Ниже заявленного" in page.text
-    assert "Подтвердить" in page.text
-    assert "Выше" in page.text
-    assert 'test-path test-path-current">Выше' in page.text
-    assert page.text.count("Начать тест грейда senior") == 1
-    assert "Начать тест грейда junior" not in page.text
-    _set_stamp(client, profile_id, "2000-01-01T00:00:00Z")
-    neighbor = client.post("/api/candidate/tests/start", json={"grade": "senior"})
-    assert neighbor.status_code == 201, neighbor.text
-    failed = _submit(
-        client,
-        neighbor.json()["attempt_id"],
-        _answers(load_template(neighbor.json()["template_id"]), 1),
-    )
-    assert failed.json()["outcome"] == "suggest_lower"
-    after = client.get("/candidate/test")
-    assert "Итог попытки" in after.text
-    assert "Грейд попытки: middle." in after.text
-    assert 'test-path test-path-current">Выше' in after.text
-    assert 'test-path test-path-current">Ниже заявленного' not in after.text
-    assert after.text.count("Начать тест грейда senior") == 1
-    assert "Начать тест грейда junior" not in after.text
-    assert "Записанный грейд этой попыткой не понижен." not in after.text
+    assert "Грейд попытки: middle." in page.text
+    assert "Верных ответов: 100%" in page.text
+    assert "test-path-current" in page.text
+    assert "предложен грейд выше senior" in page.text
+    cabinet = client.get("/candidate")
+    assert "верных 100%" in cabinet.text
+
+
+def test_legacy_draft_from_old_volume_is_rebuilt(client):
+    """Старый том: черновик механики до v2 (без form_json) не блокирует новый тест."""
+    profile_id = _seeker(client, "legacy@example.com")
+    with sqlite3.connect(client.db_path) as db:
+        db.execute(
+            "insert into test_attempts (profile_id, specialization, declared_grade, template_id, rule_version,"
+            " status, created_at) values (?, 'backend', 'middle', 'backend-middle-a', 'v1', 'draft', '2026-10-01T00:00:00Z')",
+            (profile_id,),
+        )
+        db.commit()
+    page = client.get("/candidate/test")
+    assert "Начать тест записанного грейда" in page.text
+    attempt_id = _start_page(client)
+    assert stored_form(client, attempt_id)["items"]
+    assert "Вопрос 1 из 12" in client.get("/candidate/test").text

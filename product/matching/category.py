@@ -2,6 +2,8 @@
 
 `category_id` не содержит отрасль и не содержит балл; `rank_key`
 лексикографически кодирует confirmed-score-count-prize-id.
+
+ТЗ §2 «Категория… связка специализации и грейда; внутри категории выше те, у кого сильнее подтверждённый профиль и есть опыт ФСП»; Q&A: грейд только по тесту, ФСП — ранжирование.
 """
 
 from __future__ import annotations
@@ -75,7 +77,10 @@ def assign_category(profile: ProfileView, rule_version: str) -> CategoryAssignme
             points,
             profile.fsp_confirmed_count,
             profile.profile_id,
-            confirmed=profile.test_score is not None,
+            # Q&A: неподтверждённый грейд показываем, но ниже подтверждённых.
+            # Подтверждён — тест сдан с итогом confirm или suggest_higher; провал
+            # (suggest_lower) грейд не понижает (ТЗ §2), но и не подтверждает.
+            confirmed=profile.test_outcome in ("confirm", "suggest_higher"),
             has_prize=profile.fsp_has_prize,
         ),
     )

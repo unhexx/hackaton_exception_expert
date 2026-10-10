@@ -1,28 +1,33 @@
 {
+  "note": "Описания вакансий для страницы теста (ТЗ §2: «несколько описаний вакансий… как система формирует задания и тесты»). Вакансия задаёт специализацию и грейд; по ним тест собирается по плану 3/6/3 (product/matching/assessment.py). Текст вакансии вопросы не выбирает.",
   "vacancies": [
     {
       "id": "vac-backend-middle",
       "title": "Синтетическая вакансия backend middle",
-      "text": "Платежи на python. Текст не выбирает шаблон, пара backend middle открывает backend-middle-a, backend-middle-b или backend-middle-c по profile_id.",
-      "shows_template": "backend-middle-a"
+      "text": "Платежи на python: идемпотентность, очереди, контракты API.",
+      "specialization": "backend",
+      "grade": "middle"
     },
     {
       "id": "vac-frontend-junior",
       "title": "Синтетическая вакансия frontend junior",
-      "text": "Экран списка. Текст не выбирает шаблон.",
-      "shows_template": "frontend-junior-b"
+      "text": "Экран списка заказов и формы с ошибками у полей.",
+      "specialization": "frontend",
+      "grade": "junior"
     },
     {
       "id": "vac-data-senior",
       "title": "Синтетическая вакансия data senior",
-      "text": "Витрина заказов. Текст не выбирает шаблон.",
-      "shows_template": "data-senior-a"
+      "text": "Витрина заказов: инкрементальная загрузка, единые определения метрик.",
+      "specialization": "data",
+      "grade": "senior"
     },
     {
       "id": "vac-devops-lead",
       "title": "Синтетическая вакансия devops lead",
-      "text": "Поставка сервиса. Текст не выбирает шаблон.",
-      "shows_template": "devops-lead-b"
+      "text": "Платформа поставки для трёх команд: золотой путь, SLO, квоты.",
+      "specialization": "devops",
+      "grade": "lead"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "info": {
     "title": "Агрегатор ИТ-вакансий ФСП",
     "description": "Кабинеты соискателя и работодателя, API и один файл SQLite.",
-    "version": "1.2.12"
+    "version": "1.3.0"
   },
   "paths": {
     "/api/auth/register": {
@@ -898,21 +898,28 @@
                 "schema": {},
                 "example": {
                   "attempt_id": 1,
-                  "template_id": "backend-middle-a",
+                  "template_id": "bank-v2",
                   "specialization": "backend",
                   "declared_grade": "middle",
+                  "answered": 0,
+                  "total": 12,
                   "questions": [
                     {
                       "id": "q1",
-                      "text": "Синтетический вопрос",
+                      "type": "judge",
+                      "text": "Синтетический вопрос: оцените каждый вариант",
                       "choices": [
                         {
-                          "id": "a",
+                          "id": "3f9a1c07",
                           "text": "первый"
                         },
                         {
-                          "id": "b",
+                          "id": "b41e9d22",
                           "text": "второй"
+                        },
+                        {
+                          "id": "0c7d5e18",
+                          "text": "третий"
                         }
                       ]
                     }
@@ -998,12 +1005,27 @@
                 "type": "object",
                 "additionalProperties": true,
                 "examples": {
-                  "answers": {
+                  "by_id": {
+                    "value": {
+                      "answers": {
+                        "q1": [
+                          "b41e9d22"
+                        ],
+                        "q2": [
+                          "0c7d5e18"
+                        ]
+                      }
+                    }
+                  },
+                  "in_order": {
                     "value": {
                       "answers": [
-                        "a",
-                        "b",
-                        "c"
+                        [
+                          "b41e9d22"
+                        ],
+                        [
+                          "0c7d5e18"
+                        ]
                       ]
                     }
                   }
@@ -1019,13 +1041,54 @@
             "content": {
               "application/json": {
                 "schema": {},
-                "example": {
-                  "attempt_id": 1,
-                  "score": 67,
-                  "outcome": "confirm",
-                  "proposed_grade": "middle",
-                  "category_id": "backend:middle",
-                  "grade": "middle"
+                "examples": {
+                  "submitted": {
+                    "value": {
+                      "attempt_id": 1,
+                      "status": "submitted",
+                      "score": 67,
+                      "outcome": "confirm",
+                      "proposed_grade": "middle",
+                      "category_id": "backend:middle",
+                      "grade": "middle",
+                      "confidence": 0.91,
+                      "test_status": "уверенно",
+                      "position": "средняя",
+                      "n_items": 12
+                    }
+                  },
+                  "extra": {
+                    "value": {
+                      "attempt_id": 1,
+                      "template_id": "bank-v2",
+                      "specialization": "backend",
+                      "declared_grade": "middle",
+                      "answered": 12,
+                      "total": 18,
+                      "questions": [
+                        {
+                          "id": "q1",
+                          "type": "judge",
+                          "text": "Синтетический вопрос: оцените каждый вариант",
+                          "choices": [
+                            {
+                              "id": "3f9a1c07",
+                              "text": "первый"
+                            },
+                            {
+                              "id": "b41e9d22",
+                              "text": "второй"
+                            },
+                            {
+                              "id": "0c7d5e18",
+                              "text": "третий"
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "extra"
+                    }
+                  }
                 }
               }
             }
@@ -1098,11 +1161,16 @@
                 "example": [
                   {
                     "attempt_id": 1,
+                    "status": "submitted",
                     "score": 67,
                     "outcome": "confirm",
                     "proposed_grade": "middle",
                     "category_id": "backend:middle",
-                    "grade": "middle"
+                    "grade": "middle",
+                    "confidence": 0.91,
+                    "test_status": "уверенно",
+                    "position": "средняя",
+                    "n_items": 12
                   }
                 ]
               }
@@ -2806,7 +2874,7 @@
                 "schema": {
                   "type": "string"
                 },
-                "example": "category_match 0 0\noutcome_match 0 0\ntemplate_stable 0 0\nrelevant_in_top 0 0\nresume_ok 0 0\ngrade_separation 0 0\nsim_competent 0 0\nsim_key_leak 0 0\nsim_adjacent 0 0\n"
+                "example": "category_match 0 0\noutcome_match 0 0\nform_stable 0 0\nrelevant_in_top 0 0\nresume_ok 0 0\ngrade_separation 0 0\nsim_competent 0 0\nsim_key_leak 0 0\nsim_adjacent 0 0\n"
               }
             }
           },

@@ -1,0 +1,8445 @@
+{
+ "schema_version": 1,
+ "seed": 2026,
+ "count": 500,
+ "note": "Синтетические профили для валидации теста. true_grade и theta — эталон, не показывать в продукте.",
+ "fields": [
+  "candidate_id",
+  "display_name",
+  "email",
+  "industry",
+  "specialization",
+  "true_grade",
+  "theta",
+  "declared_grade",
+  "team_role",
+  "work_format",
+  "stack",
+  "fsp_external_id"
+ ],
+ "candidates": [
+  {
+   "candidate_id": "sim-0001",
+   "display_name": "Синтетический кандидат 0001",
+   "email": "sim-0001@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.197,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "java",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0002",
+   "display_name": "Синтетический кандидат 0002",
+   "email": "sim-0002@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.257,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0003",
+   "display_name": "Синтетический кандидат 0003",
+   "email": "sim-0003@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.82,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0004",
+   "display_name": "Синтетический кандидат 0004",
+   "email": "sim-0004@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": -0.183,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0005",
+   "display_name": "Синтетический кандидат 0005",
+   "email": "sim-0005@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.249,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0006",
+   "display_name": "Синтетический кандидат 0006",
+   "email": "sim-0006@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.047,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0007",
+   "display_name": "Синтетический кандидат 0007",
+   "email": "sim-0007@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.46,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "java",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0008",
+   "display_name": "Синтетический кандидат 0008",
+   "email": "sim-0008@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.277,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0009",
+   "display_name": "Синтетический кандидат 0009",
+   "email": "sim-0009@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 2.428,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0010",
+   "display_name": "Синтетический кандидат 0010",
+   "email": "sim-0010@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "lead",
+   "theta": 2.82,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0011",
+   "display_name": "Синтетический кандидат 0011",
+   "email": "sim-0011@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "lead",
+   "theta": 2.985,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0012",
+   "display_name": "Синтетический кандидат 0012",
+   "email": "sim-0012@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.025,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0013",
+   "display_name": "Синтетический кандидат 0013",
+   "email": "sim-0013@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.62,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "java",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0014",
+   "display_name": "Синтетический кандидат 0014",
+   "email": "sim-0014@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.16,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0015",
+   "display_name": "Синтетический кандидат 0015",
+   "email": "sim-0015@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.374,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0016",
+   "display_name": "Синтетический кандидат 0016",
+   "email": "sim-0016@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "lead",
+   "theta": 2.811,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0017",
+   "display_name": "Синтетический кандидат 0017",
+   "email": "sim-0017@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -0.903,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0018",
+   "display_name": "Синтетический кандидат 0018",
+   "email": "sim-0018@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.103,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0019",
+   "display_name": "Синтетический кандидат 0019",
+   "email": "sim-0019@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.144,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "java"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0020",
+   "display_name": "Синтетический кандидат 0020",
+   "email": "sim-0020@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.323,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0021",
+   "display_name": "Синтетический кандидат 0021",
+   "email": "sim-0021@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 2.851,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0022",
+   "display_name": "Синтетический кандидат 0022",
+   "email": "sim-0022@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "lead",
+   "theta": 2.74,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0023",
+   "display_name": "Синтетический кандидат 0023",
+   "email": "sim-0023@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.364,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0024",
+   "display_name": "Синтетический кандидат 0024",
+   "email": "sim-0024@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.384,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0025",
+   "display_name": "Синтетический кандидат 0025",
+   "email": "sim-0025@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.14,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "java",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0026",
+   "display_name": "Синтетический кандидат 0026",
+   "email": "sim-0026@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -1.052,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0027",
+   "display_name": "Синтетический кандидат 0027",
+   "email": "sim-0027@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.694,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0028",
+   "display_name": "Синтетический кандидат 0028",
+   "email": "sim-0028@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.947,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0029",
+   "display_name": "Синтетический кандидат 0029",
+   "email": "sim-0029@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "lead",
+   "theta": 1.965,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0030",
+   "display_name": "Синтетический кандидат 0030",
+   "email": "sim-0030@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.06,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0031",
+   "display_name": "Синтетический кандидат 0031",
+   "email": "sim-0031@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.588,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0032",
+   "display_name": "Синтетический кандидат 0032",
+   "email": "sim-0032@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.579,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0033",
+   "display_name": "Синтетический кандидат 0033",
+   "email": "sim-0033@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.11,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0034",
+   "display_name": "Синтетический кандидат 0034",
+   "email": "sim-0034@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": 0.225,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0035",
+   "display_name": "Синтетический кандидат 0035",
+   "email": "sim-0035@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.082,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0036",
+   "display_name": "Синтетический кандидат 0036",
+   "email": "sim-0036@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 0.759,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0037",
+   "display_name": "Синтетический кандидат 0037",
+   "email": "sim-0037@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.372,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0038",
+   "display_name": "Синтетический кандидат 0038",
+   "email": "sim-0038@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.523,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0039",
+   "display_name": "Синтетический кандидат 0039",
+   "email": "sim-0039@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.478,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0040",
+   "display_name": "Синтетический кандидат 0040",
+   "email": "sim-0040@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.652,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0041",
+   "display_name": "Синтетический кандидат 0041",
+   "email": "sim-0041@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.257,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0042",
+   "display_name": "Синтетический кандидат 0042",
+   "email": "sim-0042@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.089,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0043",
+   "display_name": "Синтетический кандидат 0043",
+   "email": "sim-0043@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "lead",
+   "theta": 2.102,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0044",
+   "display_name": "Синтетический кандидат 0044",
+   "email": "sim-0044@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "lead",
+   "theta": 2.138,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0045",
+   "display_name": "Синтетический кандидат 0045",
+   "email": "sim-0045@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.716,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0046",
+   "display_name": "Синтетический кандидат 0046",
+   "email": "sim-0046@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "lead",
+   "theta": 1.995,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0047",
+   "display_name": "Синтетический кандидат 0047",
+   "email": "sim-0047@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.177,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0048",
+   "display_name": "Синтетический кандидат 0048",
+   "email": "sim-0048@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.147,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0049",
+   "display_name": "Синтетический кандидат 0049",
+   "email": "sim-0049@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.722,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "java"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0050",
+   "display_name": "Синтетический кандидат 0050",
+   "email": "sim-0050@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -1.225,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0051",
+   "display_name": "Синтетический кандидат 0051",
+   "email": "sim-0051@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.585,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0052",
+   "display_name": "Синтетический кандидат 0052",
+   "email": "sim-0052@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 0.981,
+   "declared_grade": "lead",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0053",
+   "display_name": "Синтетический кандидат 0053",
+   "email": "sim-0053@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.635,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0054",
+   "display_name": "Синтетический кандидат 0054",
+   "email": "sim-0054@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.269,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0055",
+   "display_name": "Синтетический кандидат 0055",
+   "email": "sim-0055@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": 0.374,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0056",
+   "display_name": "Синтетический кандидат 0056",
+   "email": "sim-0056@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -0.727,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0057",
+   "display_name": "Синтетический кандидат 0057",
+   "email": "sim-0057@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.144,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0058",
+   "display_name": "Синтетический кандидат 0058",
+   "email": "sim-0058@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": 0.42,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0059",
+   "display_name": "Синтетический кандидат 0059",
+   "email": "sim-0059@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.394,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0060",
+   "display_name": "Синтетический кандидат 0060",
+   "email": "sim-0060@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.486,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0061",
+   "display_name": "Синтетический кандидат 0061",
+   "email": "sim-0061@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.457,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0062",
+   "display_name": "Синтетический кандидат 0062",
+   "email": "sim-0062@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.417,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0063",
+   "display_name": "Синтетический кандидат 0063",
+   "email": "sim-0063@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.181,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0064",
+   "display_name": "Синтетический кандидат 0064",
+   "email": "sim-0064@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.66,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0065",
+   "display_name": "Синтетический кандидат 0065",
+   "email": "sim-0065@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.615,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0066",
+   "display_name": "Синтетический кандидат 0066",
+   "email": "sim-0066@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -0.795,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0067",
+   "display_name": "Синтетический кандидат 0067",
+   "email": "sim-0067@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.183,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "java",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0068",
+   "display_name": "Синтетический кандидат 0068",
+   "email": "sim-0068@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.701,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0069",
+   "display_name": "Синтетический кандидат 0069",
+   "email": "sim-0069@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.005,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0070",
+   "display_name": "Синтетический кандидат 0070",
+   "email": "sim-0070@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.711,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0071",
+   "display_name": "Синтетический кандидат 0071",
+   "email": "sim-0071@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -0.973,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0072",
+   "display_name": "Синтетический кандидат 0072",
+   "email": "sim-0072@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.415,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0073",
+   "display_name": "Синтетический кандидат 0073",
+   "email": "sim-0073@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -0.791,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "java"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0074",
+   "display_name": "Синтетический кандидат 0074",
+   "email": "sim-0074@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -0.633,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0075",
+   "display_name": "Синтетический кандидат 0075",
+   "email": "sim-0075@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.121,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0076",
+   "display_name": "Синтетический кандидат 0076",
+   "email": "sim-0076@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 1.194,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0077",
+   "display_name": "Синтетический кандидат 0077",
+   "email": "sim-0077@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.32,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0078",
+   "display_name": "Синтетический кандидат 0078",
+   "email": "sim-0078@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.399,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0079",
+   "display_name": "Синтетический кандидат 0079",
+   "email": "sim-0079@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.364,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0080",
+   "display_name": "Синтетический кандидат 0080",
+   "email": "sim-0080@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.147,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0081",
+   "display_name": "Синтетический кандидат 0081",
+   "email": "sim-0081@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 1.987,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0082",
+   "display_name": "Синтетический кандидат 0082",
+   "email": "sim-0082@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.429,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0083",
+   "display_name": "Синтетический кандидат 0083",
+   "email": "sim-0083@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.14,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0084",
+   "display_name": "Синтетический кандидат 0084",
+   "email": "sim-0084@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.294,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0085",
+   "display_name": "Синтетический кандидат 0085",
+   "email": "sim-0085@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -0.829,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "java",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0086",
+   "display_name": "Синтетический кандидат 0086",
+   "email": "sim-0086@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.08,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0087",
+   "display_name": "Синтетический кандидат 0087",
+   "email": "sim-0087@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "senior",
+   "theta": 1.393,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0088",
+   "display_name": "Синтетический кандидат 0088",
+   "email": "sim-0088@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": -0.013,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0089",
+   "display_name": "Синтетический кандидат 0089",
+   "email": "sim-0089@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.757,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0090",
+   "display_name": "Синтетический кандидат 0090",
+   "email": "sim-0090@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.511,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0091",
+   "display_name": "Синтетический кандидат 0091",
+   "email": "sim-0091@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.46,
+   "declared_grade": "middle",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "go",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0092",
+   "display_name": "Синтетический кандидат 0092",
+   "email": "sim-0092@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 0.827,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0093",
+   "display_name": "Синтетический кандидат 0093",
+   "email": "sim-0093@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.362,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0094",
+   "display_name": "Синтетический кандидат 0094",
+   "email": "sim-0094@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.644,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0095",
+   "display_name": "Синтетический кандидат 0095",
+   "email": "sim-0095@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.577,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0096",
+   "display_name": "Синтетический кандидат 0096",
+   "email": "sim-0096@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "lead",
+   "theta": 2.949,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0097",
+   "display_name": "Синтетический кандидат 0097",
+   "email": "sim-0097@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -0.984,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "java"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0098",
+   "display_name": "Синтетический кандидат 0098",
+   "email": "sim-0098@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -1.791,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0099",
+   "display_name": "Синтетический кандидат 0099",
+   "email": "sim-0099@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "senior",
+   "theta": 1.58,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0100",
+   "display_name": "Синтетический кандидат 0100",
+   "email": "sim-0100@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": -0.08,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0101",
+   "display_name": "Синтетический кандидат 0101",
+   "email": "sim-0101@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.61,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0102",
+   "display_name": "Синтетический кандидат 0102",
+   "email": "sim-0102@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.762,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0103",
+   "display_name": "Синтетический кандидат 0103",
+   "email": "sim-0103@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 0.739,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "java",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0104",
+   "display_name": "Синтетический кандидат 0104",
+   "email": "sim-0104@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.479,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0105",
+   "display_name": "Синтетический кандидат 0105",
+   "email": "sim-0105@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "senior",
+   "theta": 0.945,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0106",
+   "display_name": "Синтетический кандидат 0106",
+   "email": "sim-0106@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 1.186,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0107",
+   "display_name": "Синтетический кандидат 0107",
+   "email": "sim-0107@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.16,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0108",
+   "display_name": "Синтетический кандидат 0108",
+   "email": "sim-0108@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.761,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0109",
+   "display_name": "Синтетический кандидат 0109",
+   "email": "sim-0109@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.736,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0110",
+   "display_name": "Синтетический кандидат 0110",
+   "email": "sim-0110@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.057,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0111",
+   "display_name": "Синтетический кандидат 0111",
+   "email": "sim-0111@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 2.536,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0112",
+   "display_name": "Синтетический кандидат 0112",
+   "email": "sim-0112@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.33,
+   "declared_grade": "junior",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0113",
+   "display_name": "Синтетический кандидат 0113",
+   "email": "sim-0113@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.225,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0114",
+   "display_name": "Синтетический кандидат 0114",
+   "email": "sim-0114@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -0.94,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0115",
+   "display_name": "Синтетический кандидат 0115",
+   "email": "sim-0115@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.013,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "java",
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0116",
+   "display_name": "Синтетический кандидат 0116",
+   "email": "sim-0116@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.142,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0117",
+   "display_name": "Синтетический кандидат 0117",
+   "email": "sim-0117@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "senior",
+   "theta": 1.235,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0118",
+   "display_name": "Синтетический кандидат 0118",
+   "email": "sim-0118@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 1.296,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0119",
+   "display_name": "Синтетический кандидат 0119",
+   "email": "sim-0119@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.066,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0120",
+   "display_name": "Синтетический кандидат 0120",
+   "email": "sim-0120@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.593,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0121",
+   "display_name": "Синтетический кандидат 0121",
+   "email": "sim-0121@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": 0.495,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0122",
+   "display_name": "Синтетический кандидат 0122",
+   "email": "sim-0122@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -0.789,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0123",
+   "display_name": "Синтетический кандидат 0123",
+   "email": "sim-0123@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.459,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0124",
+   "display_name": "Синтетический кандидат 0124",
+   "email": "sim-0124@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 1.765,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0125",
+   "display_name": "Синтетический кандидат 0125",
+   "email": "sim-0125@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.456,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0126",
+   "display_name": "Синтетический кандидат 0126",
+   "email": "sim-0126@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 0.801,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0127",
+   "display_name": "Синтетический кандидат 0127",
+   "email": "sim-0127@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.043,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0128",
+   "display_name": "Синтетический кандидат 0128",
+   "email": "sim-0128@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.071,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0129",
+   "display_name": "Синтетический кандидат 0129",
+   "email": "sim-0129@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.892,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0130",
+   "display_name": "Синтетический кандидат 0130",
+   "email": "sim-0130@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.903,
+   "declared_grade": "junior",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0131",
+   "display_name": "Синтетический кандидат 0131",
+   "email": "sim-0131@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 0.987,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0132",
+   "display_name": "Синтетический кандидат 0132",
+   "email": "sim-0132@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -0.962,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0133",
+   "display_name": "Синтетический кандидат 0133",
+   "email": "sim-0133@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -0.982,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0134",
+   "display_name": "Синтетический кандидат 0134",
+   "email": "sim-0134@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "lead",
+   "theta": 2.932,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0135",
+   "display_name": "Синтетический кандидат 0135",
+   "email": "sim-0135@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 2.211,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0136",
+   "display_name": "Синтетический кандидат 0136",
+   "email": "sim-0136@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 1.501,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0137",
+   "display_name": "Синтетический кандидат 0137",
+   "email": "sim-0137@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.227,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0138",
+   "display_name": "Синтетический кандидат 0138",
+   "email": "sim-0138@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "lead",
+   "theta": 2.257,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0139",
+   "display_name": "Синтетический кандидат 0139",
+   "email": "sim-0139@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.518,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0140",
+   "display_name": "Синтетический кандидат 0140",
+   "email": "sim-0140@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "lead",
+   "theta": 2.157,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0141",
+   "display_name": "Синтетический кандидат 0141",
+   "email": "sim-0141@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "senior",
+   "theta": 0.722,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0142",
+   "display_name": "Синтетический кандидат 0142",
+   "email": "sim-0142@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 1.512,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0143",
+   "display_name": "Синтетический кандидат 0143",
+   "email": "sim-0143@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.122,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0144",
+   "display_name": "Синтетический кандидат 0144",
+   "email": "sim-0144@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "lead",
+   "theta": 2.446,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0145",
+   "display_name": "Синтетический кандидат 0145",
+   "email": "sim-0145@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.19,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0146",
+   "display_name": "Синтетический кандидат 0146",
+   "email": "sim-0146@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -1.283,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0147",
+   "display_name": "Синтетический кандидат 0147",
+   "email": "sim-0147@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.529,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0148",
+   "display_name": "Синтетический кандидат 0148",
+   "email": "sim-0148@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.971,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0149",
+   "display_name": "Синтетический кандидат 0149",
+   "email": "sim-0149@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.231,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0150",
+   "display_name": "Синтетический кандидат 0150",
+   "email": "sim-0150@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.147,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0151",
+   "display_name": "Синтетический кандидат 0151",
+   "email": "sim-0151@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.033,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0152",
+   "display_name": "Синтетический кандидат 0152",
+   "email": "sim-0152@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -1.699,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0153",
+   "display_name": "Синтетический кандидат 0153",
+   "email": "sim-0153@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.184,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0154",
+   "display_name": "Синтетический кандидат 0154",
+   "email": "sim-0154@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "lead",
+   "theta": 1.916,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0155",
+   "display_name": "Синтетический кандидат 0155",
+   "email": "sim-0155@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.481,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0156",
+   "display_name": "Синтетический кандидат 0156",
+   "email": "sim-0156@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.009,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0157",
+   "display_name": "Синтетический кандидат 0157",
+   "email": "sim-0157@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": 0.426,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0158",
+   "display_name": "Синтетический кандидат 0158",
+   "email": "sim-0158@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 0.757,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0159",
+   "display_name": "Синтетический кандидат 0159",
+   "email": "sim-0159@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.178,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0160",
+   "display_name": "Синтетический кандидат 0160",
+   "email": "sim-0160@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": -0.293,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0161",
+   "display_name": "Синтетический кандидат 0161",
+   "email": "sim-0161@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.63,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0162",
+   "display_name": "Синтетический кандидат 0162",
+   "email": "sim-0162@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -0.681,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0163",
+   "display_name": "Синтетический кандидат 0163",
+   "email": "sim-0163@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": 0.141,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0164",
+   "display_name": "Синтетический кандидат 0164",
+   "email": "sim-0164@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.033,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0165",
+   "display_name": "Синтетический кандидат 0165",
+   "email": "sim-0165@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.423,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0166",
+   "display_name": "Синтетический кандидат 0166",
+   "email": "sim-0166@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.481,
+   "declared_grade": "junior",
+   "team_role": "аналитик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0167",
+   "display_name": "Синтетический кандидат 0167",
+   "email": "sim-0167@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.237,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0168",
+   "display_name": "Синтетический кандидат 0168",
+   "email": "sim-0168@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": 0.13,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0169",
+   "display_name": "Синтетический кандидат 0169",
+   "email": "sim-0169@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": 0.083,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0170",
+   "display_name": "Синтетический кандидат 0170",
+   "email": "sim-0170@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.539,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0171",
+   "display_name": "Синтетический кандидат 0171",
+   "email": "sim-0171@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.629,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0172",
+   "display_name": "Синтетический кандидат 0172",
+   "email": "sim-0172@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.44,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0173",
+   "display_name": "Синтетический кандидат 0173",
+   "email": "sim-0173@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.588,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0174",
+   "display_name": "Синтетический кандидат 0174",
+   "email": "sim-0174@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": 0.141,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0175",
+   "display_name": "Синтетический кандидат 0175",
+   "email": "sim-0175@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -0.602,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0176",
+   "display_name": "Синтетический кандидат 0176",
+   "email": "sim-0176@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 0.644,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0177",
+   "display_name": "Синтетический кандидат 0177",
+   "email": "sim-0177@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.402,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0178",
+   "display_name": "Синтетический кандидат 0178",
+   "email": "sim-0178@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.683,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0179",
+   "display_name": "Синтетический кандидат 0179",
+   "email": "sim-0179@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.026,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0180",
+   "display_name": "Синтетический кандидат 0180",
+   "email": "sim-0180@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.116,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0181",
+   "display_name": "Синтетический кандидат 0181",
+   "email": "sim-0181@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.428,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "java"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0182",
+   "display_name": "Синтетический кандидат 0182",
+   "email": "sim-0182@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.561,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0183",
+   "display_name": "Синтетический кандидат 0183",
+   "email": "sim-0183@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.537,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0184",
+   "display_name": "Синтетический кандидат 0184",
+   "email": "sim-0184@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.148,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0185",
+   "display_name": "Синтетический кандидат 0185",
+   "email": "sim-0185@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.22,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0186",
+   "display_name": "Синтетический кандидат 0186",
+   "email": "sim-0186@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.726,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0187",
+   "display_name": "Синтетический кандидат 0187",
+   "email": "sim-0187@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.134,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0188",
+   "display_name": "Синтетический кандидат 0188",
+   "email": "sim-0188@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "lead",
+   "theta": 1.982,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0189",
+   "display_name": "Синтетический кандидат 0189",
+   "email": "sim-0189@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.987,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0190",
+   "display_name": "Синтетический кандидат 0190",
+   "email": "sim-0190@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.67,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0191",
+   "display_name": "Синтетический кандидат 0191",
+   "email": "sim-0191@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.558,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0192",
+   "display_name": "Синтетический кандидат 0192",
+   "email": "sim-0192@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.049,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0193",
+   "display_name": "Синтетический кандидат 0193",
+   "email": "sim-0193@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.42,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "java",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0194",
+   "display_name": "Синтетический кандидат 0194",
+   "email": "sim-0194@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.724,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0195",
+   "display_name": "Синтетический кандидат 0195",
+   "email": "sim-0195@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.295,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0196",
+   "display_name": "Синтетический кандидат 0196",
+   "email": "sim-0196@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": 0.464,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0197",
+   "display_name": "Синтетический кандидат 0197",
+   "email": "sim-0197@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.441,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0198",
+   "display_name": "Синтетический кандидат 0198",
+   "email": "sim-0198@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.749,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0199",
+   "display_name": "Синтетический кандидат 0199",
+   "email": "sim-0199@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.544,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0200",
+   "display_name": "Синтетический кандидат 0200",
+   "email": "sim-0200@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.393,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0201",
+   "display_name": "Синтетический кандидат 0201",
+   "email": "sim-0201@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.899,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0202",
+   "display_name": "Синтетический кандидат 0202",
+   "email": "sim-0202@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.349,
+   "declared_grade": "junior",
+   "team_role": "аналитик",
+   "work_format": "удалённо",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0203",
+   "display_name": "Синтетический кандидат 0203",
+   "email": "sim-0203@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "lead",
+   "theta": 2.087,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0204",
+   "display_name": "Синтетический кандидат 0204",
+   "email": "sim-0204@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.589,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0205",
+   "display_name": "Синтетический кандидат 0205",
+   "email": "sim-0205@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.471,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0206",
+   "display_name": "Синтетический кандидат 0206",
+   "email": "sim-0206@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -0.829,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0207",
+   "display_name": "Синтетический кандидат 0207",
+   "email": "sim-0207@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "senior",
+   "theta": 0.936,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0208",
+   "display_name": "Синтетический кандидат 0208",
+   "email": "sim-0208@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "lead",
+   "theta": 2.939,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0209",
+   "display_name": "Синтетический кандидат 0209",
+   "email": "sim-0209@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.271,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0210",
+   "display_name": "Синтетический кандидат 0210",
+   "email": "sim-0210@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "lead",
+   "theta": 1.889,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0211",
+   "display_name": "Синтетический кандидат 0211",
+   "email": "sim-0211@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.489,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0212",
+   "display_name": "Синтетический кандидат 0212",
+   "email": "sim-0212@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -0.739,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0213",
+   "display_name": "Синтетический кандидат 0213",
+   "email": "sim-0213@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.738,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0214",
+   "display_name": "Синтетический кандидат 0214",
+   "email": "sim-0214@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.836,
+   "declared_grade": "middle",
+   "team_role": "аналитик",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0215",
+   "display_name": "Синтетический кандидат 0215",
+   "email": "sim-0215@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.757,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0216",
+   "display_name": "Синтетический кандидат 0216",
+   "email": "sim-0216@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.676,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0217",
+   "display_name": "Синтетический кандидат 0217",
+   "email": "sim-0217@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.504,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0218",
+   "display_name": "Синтетический кандидат 0218",
+   "email": "sim-0218@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "lead",
+   "theta": 1.86,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0219",
+   "display_name": "Синтетический кандидат 0219",
+   "email": "sim-0219@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.332,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0220",
+   "display_name": "Синтетический кандидат 0220",
+   "email": "sim-0220@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "lead",
+   "theta": 2.014,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0221",
+   "display_name": "Синтетический кандидат 0221",
+   "email": "sim-0221@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.549,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0222",
+   "display_name": "Синтетический кандидат 0222",
+   "email": "sim-0222@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.324,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0223",
+   "display_name": "Синтетический кандидат 0223",
+   "email": "sim-0223@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.726,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0224",
+   "display_name": "Синтетический кандидат 0224",
+   "email": "sim-0224@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.452,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0225",
+   "display_name": "Синтетический кандидат 0225",
+   "email": "sim-0225@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.498,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0226",
+   "display_name": "Синтетический кандидат 0226",
+   "email": "sim-0226@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.146,
+   "declared_grade": "junior",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0227",
+   "display_name": "Синтетический кандидат 0227",
+   "email": "sim-0227@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.102,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0228",
+   "display_name": "Синтетический кандидат 0228",
+   "email": "sim-0228@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 0.766,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0229",
+   "display_name": "Синтетический кандидат 0229",
+   "email": "sim-0229@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "lead",
+   "theta": 2.275,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "docker"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0230",
+   "display_name": "Синтетический кандидат 0230",
+   "email": "sim-0230@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -1.009,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0231",
+   "display_name": "Синтетический кандидат 0231",
+   "email": "sim-0231@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 2.645,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0232",
+   "display_name": "Синтетический кандидат 0232",
+   "email": "sim-0232@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.604,
+   "declared_grade": "middle",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0233",
+   "display_name": "Синтетический кандидат 0233",
+   "email": "sim-0233@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "lead",
+   "theta": 2.577,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0234",
+   "display_name": "Синтетический кандидат 0234",
+   "email": "sim-0234@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -0.708,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0235",
+   "display_name": "Синтетический кандидат 0235",
+   "email": "sim-0235@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.188,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0236",
+   "display_name": "Синтетический кандидат 0236",
+   "email": "sim-0236@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.535,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0237",
+   "display_name": "Синтетический кандидат 0237",
+   "email": "sim-0237@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "senior",
+   "theta": 1.372,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0238",
+   "display_name": "Синтетический кандидат 0238",
+   "email": "sim-0238@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": -0.185,
+   "declared_grade": "senior",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0239",
+   "display_name": "Синтетический кандидат 0239",
+   "email": "sim-0239@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.595,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0240",
+   "display_name": "Синтетический кандидат 0240",
+   "email": "sim-0240@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.445,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0241",
+   "display_name": "Синтетический кандидат 0241",
+   "email": "sim-0241@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.495,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0242",
+   "display_name": "Синтетический кандидат 0242",
+   "email": "sim-0242@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.515,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0243",
+   "display_name": "Синтетический кандидат 0243",
+   "email": "sim-0243@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.711,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0244",
+   "display_name": "Синтетический кандидат 0244",
+   "email": "sim-0244@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": 0.065,
+   "declared_grade": "middle",
+   "team_role": "аналитик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0245",
+   "display_name": "Синтетический кандидат 0245",
+   "email": "sim-0245@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.67,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0246",
+   "display_name": "Синтетический кандидат 0246",
+   "email": "sim-0246@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "lead",
+   "theta": 1.974,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0247",
+   "display_name": "Синтетический кандидат 0247",
+   "email": "sim-0247@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -0.627,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0248",
+   "display_name": "Синтетический кандидат 0248",
+   "email": "sim-0248@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.299,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0249",
+   "display_name": "Синтетический кандидат 0249",
+   "email": "sim-0249@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.166,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0250",
+   "display_name": "Синтетический кандидат 0250",
+   "email": "sim-0250@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 1.05,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0251",
+   "display_name": "Синтетический кандидат 0251",
+   "email": "sim-0251@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.563,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0252",
+   "display_name": "Синтетический кандидат 0252",
+   "email": "sim-0252@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.125,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0253",
+   "display_name": "Синтетический кандидат 0253",
+   "email": "sim-0253@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.335,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0254",
+   "display_name": "Синтетический кандидат 0254",
+   "email": "sim-0254@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.117,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0255",
+   "display_name": "Синтетический кандидат 0255",
+   "email": "sim-0255@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 2.173,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0256",
+   "display_name": "Синтетический кандидат 0256",
+   "email": "sim-0256@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 1.705,
+   "declared_grade": "senior",
+   "team_role": "аналитик",
+   "work_format": "гибрид",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0257",
+   "display_name": "Синтетический кандидат 0257",
+   "email": "sim-0257@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.575,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0258",
+   "display_name": "Синтетический кандидат 0258",
+   "email": "sim-0258@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.287,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0259",
+   "display_name": "Синтетический кандидат 0259",
+   "email": "sim-0259@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.134,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0260",
+   "display_name": "Синтетический кандидат 0260",
+   "email": "sim-0260@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.294,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0261",
+   "display_name": "Синтетический кандидат 0261",
+   "email": "sim-0261@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.424,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0262",
+   "display_name": "Синтетический кандидат 0262",
+   "email": "sim-0262@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "lead",
+   "theta": 2.902,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0263",
+   "display_name": "Синтетический кандидат 0263",
+   "email": "sim-0263@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.109,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0264",
+   "display_name": "Синтетический кандидат 0264",
+   "email": "sim-0264@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.006,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0265",
+   "display_name": "Синтетический кандидат 0265",
+   "email": "sim-0265@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.049,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0266",
+   "display_name": "Синтетический кандидат 0266",
+   "email": "sim-0266@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.494,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0267",
+   "display_name": "Синтетический кандидат 0267",
+   "email": "sim-0267@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.0,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0268",
+   "display_name": "Синтетический кандидат 0268",
+   "email": "sim-0268@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 0.801,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0269",
+   "display_name": "Синтетический кандидат 0269",
+   "email": "sim-0269@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "lead",
+   "theta": 1.974,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0270",
+   "display_name": "Синтетический кандидат 0270",
+   "email": "sim-0270@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.539,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0271",
+   "display_name": "Синтетический кандидат 0271",
+   "email": "sim-0271@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.24,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0272",
+   "display_name": "Синтетический кандидат 0272",
+   "email": "sim-0272@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -1.601,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0273",
+   "display_name": "Синтетический кандидат 0273",
+   "email": "sim-0273@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 2.337,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0274",
+   "display_name": "Синтетический кандидат 0274",
+   "email": "sim-0274@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": 0.546,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0275",
+   "display_name": "Синтетический кандидат 0275",
+   "email": "sim-0275@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "lead",
+   "theta": 2.273,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0276",
+   "display_name": "Синтетический кандидат 0276",
+   "email": "sim-0276@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -0.695,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0277",
+   "display_name": "Синтетический кандидат 0277",
+   "email": "sim-0277@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.447,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "java",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0278",
+   "display_name": "Синтетический кандидат 0278",
+   "email": "sim-0278@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.555,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0279",
+   "display_name": "Синтетический кандидат 0279",
+   "email": "sim-0279@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "senior",
+   "theta": 1.187,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0280",
+   "display_name": "Синтетический кандидат 0280",
+   "email": "sim-0280@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": 0.139,
+   "declared_grade": "junior",
+   "team_role": "аналитик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0281",
+   "display_name": "Синтетический кандидат 0281",
+   "email": "sim-0281@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.001,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0282",
+   "display_name": "Синтетический кандидат 0282",
+   "email": "sim-0282@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.619,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0283",
+   "display_name": "Синтетический кандидат 0283",
+   "email": "sim-0283@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -0.604,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0284",
+   "display_name": "Синтетический кандидат 0284",
+   "email": "sim-0284@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "lead",
+   "theta": 2.144,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0285",
+   "display_name": "Синтетический кандидат 0285",
+   "email": "sim-0285@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.205,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0286",
+   "display_name": "Синтетический кандидат 0286",
+   "email": "sim-0286@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 0.988,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0287",
+   "display_name": "Синтетический кандидат 0287",
+   "email": "sim-0287@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -0.862,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0288",
+   "display_name": "Синтетический кандидат 0288",
+   "email": "sim-0288@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": 0.4,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0289",
+   "display_name": "Синтетический кандидат 0289",
+   "email": "sim-0289@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.715,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0290",
+   "display_name": "Синтетический кандидат 0290",
+   "email": "sim-0290@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.69,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0291",
+   "display_name": "Синтетический кандидат 0291",
+   "email": "sim-0291@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.374,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0292",
+   "display_name": "Синтетический кандидат 0292",
+   "email": "sim-0292@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.717,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0293",
+   "display_name": "Синтетический кандидат 0293",
+   "email": "sim-0293@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 0.797,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0294",
+   "display_name": "Синтетический кандидат 0294",
+   "email": "sim-0294@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.485,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0295",
+   "display_name": "Синтетический кандидат 0295",
+   "email": "sim-0295@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.049,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0296",
+   "display_name": "Синтетический кандидат 0296",
+   "email": "sim-0296@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.425,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0297",
+   "display_name": "Синтетический кандидат 0297",
+   "email": "sim-0297@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.246,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0298",
+   "display_name": "Синтетический кандидат 0298",
+   "email": "sim-0298@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": 0.279,
+   "declared_grade": "middle",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0299",
+   "display_name": "Синтетический кандидат 0299",
+   "email": "sim-0299@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 0.818,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0300",
+   "display_name": "Синтетический кандидат 0300",
+   "email": "sim-0300@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.387,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0301",
+   "display_name": "Синтетический кандидат 0301",
+   "email": "sim-0301@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.097,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "java",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0302",
+   "display_name": "Синтетический кандидат 0302",
+   "email": "sim-0302@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.19,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0303",
+   "display_name": "Синтетический кандидат 0303",
+   "email": "sim-0303@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.493,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0304",
+   "display_name": "Синтетический кандидат 0304",
+   "email": "sim-0304@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": -0.137,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0305",
+   "display_name": "Синтетический кандидат 0305",
+   "email": "sim-0305@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.631,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0306",
+   "display_name": "Синтетический кандидат 0306",
+   "email": "sim-0306@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -0.624,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0307",
+   "display_name": "Синтетический кандидат 0307",
+   "email": "sim-0307@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "lead",
+   "theta": 2.026,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0308",
+   "display_name": "Синтетический кандидат 0308",
+   "email": "sim-0308@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.275,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0309",
+   "display_name": "Синтетический кандидат 0309",
+   "email": "sim-0309@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.972,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0310",
+   "display_name": "Синтетический кандидат 0310",
+   "email": "sim-0310@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 1.792,
+   "declared_grade": "lead",
+   "team_role": "аналитик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0311",
+   "display_name": "Синтетический кандидат 0311",
+   "email": "sim-0311@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 0.627,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0312",
+   "display_name": "Синтетический кандидат 0312",
+   "email": "sim-0312@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.524,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0313",
+   "display_name": "Синтетический кандидат 0313",
+   "email": "sim-0313@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.11,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0314",
+   "display_name": "Синтетический кандидат 0314",
+   "email": "sim-0314@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.377,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0315",
+   "display_name": "Синтетический кандидат 0315",
+   "email": "sim-0315@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.315,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0316",
+   "display_name": "Синтетический кандидат 0316",
+   "email": "sim-0316@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": -0.007,
+   "declared_grade": "middle",
+   "team_role": "аналитик",
+   "work_format": "удалённо",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0317",
+   "display_name": "Синтетический кандидат 0317",
+   "email": "sim-0317@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.655,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0318",
+   "display_name": "Синтетический кандидат 0318",
+   "email": "sim-0318@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.266,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0319",
+   "display_name": "Синтетический кандидат 0319",
+   "email": "sim-0319@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.595,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0320",
+   "display_name": "Синтетический кандидат 0320",
+   "email": "sim-0320@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.562,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0321",
+   "display_name": "Синтетический кандидат 0321",
+   "email": "sim-0321@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.596,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0322",
+   "display_name": "Синтетический кандидат 0322",
+   "email": "sim-0322@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.628,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0323",
+   "display_name": "Синтетический кандидат 0323",
+   "email": "sim-0323@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.265,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0324",
+   "display_name": "Синтетический кандидат 0324",
+   "email": "sim-0324@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.417,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0325",
+   "display_name": "Синтетический кандидат 0325",
+   "email": "sim-0325@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": 0.017,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0326",
+   "display_name": "Синтетический кандидат 0326",
+   "email": "sim-0326@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "lead",
+   "theta": 2.38,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0327",
+   "display_name": "Синтетический кандидат 0327",
+   "email": "sim-0327@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.893,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0328",
+   "display_name": "Синтетический кандидат 0328",
+   "email": "sim-0328@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.263,
+   "declared_grade": "middle",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0329",
+   "display_name": "Синтетический кандидат 0329",
+   "email": "sim-0329@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.101,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0330",
+   "display_name": "Синтетический кандидат 0330",
+   "email": "sim-0330@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.748,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0331",
+   "display_name": "Синтетический кандидат 0331",
+   "email": "sim-0331@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "lead",
+   "theta": 2.048,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0332",
+   "display_name": "Синтетический кандидат 0332",
+   "email": "sim-0332@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 0.939,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0333",
+   "display_name": "Синтетический кандидат 0333",
+   "email": "sim-0333@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.42,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0334",
+   "display_name": "Синтетический кандидат 0334",
+   "email": "sim-0334@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.935,
+   "declared_grade": "junior",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0335",
+   "display_name": "Синтетический кандидат 0335",
+   "email": "sim-0335@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -0.986,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0336",
+   "display_name": "Синтетический кандидат 0336",
+   "email": "sim-0336@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "lead",
+   "theta": 2.207,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0337",
+   "display_name": "Синтетический кандидат 0337",
+   "email": "sim-0337@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.529,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0338",
+   "display_name": "Синтетический кандидат 0338",
+   "email": "sim-0338@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -0.79,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0339",
+   "display_name": "Синтетический кандидат 0339",
+   "email": "sim-0339@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.633,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0340",
+   "display_name": "Синтетический кандидат 0340",
+   "email": "sim-0340@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.718,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0341",
+   "display_name": "Синтетический кандидат 0341",
+   "email": "sim-0341@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 0.847,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0342",
+   "display_name": "Синтетический кандидат 0342",
+   "email": "sim-0342@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -0.939,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0343",
+   "display_name": "Синтетический кандидат 0343",
+   "email": "sim-0343@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.197,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "java",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0344",
+   "display_name": "Синтетический кандидат 0344",
+   "email": "sim-0344@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.311,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0345",
+   "display_name": "Синтетический кандидат 0345",
+   "email": "sim-0345@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.271,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0346",
+   "display_name": "Синтетический кандидат 0346",
+   "email": "sim-0346@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 0.94,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0347",
+   "display_name": "Синтетический кандидат 0347",
+   "email": "sim-0347@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -0.677,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0348",
+   "display_name": "Синтетический кандидат 0348",
+   "email": "sim-0348@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.746,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0349",
+   "display_name": "Синтетический кандидат 0349",
+   "email": "sim-0349@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.132,
+   "declared_grade": "middle",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0350",
+   "display_name": "Синтетический кандидат 0350",
+   "email": "sim-0350@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.221,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0351",
+   "display_name": "Синтетический кандидат 0351",
+   "email": "sim-0351@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 2.765,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0352",
+   "display_name": "Синтетический кандидат 0352",
+   "email": "sim-0352@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.103,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0353",
+   "display_name": "Синтетический кандидат 0353",
+   "email": "sim-0353@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.757,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0354",
+   "display_name": "Синтетический кандидат 0354",
+   "email": "sim-0354@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.339,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0355",
+   "display_name": "Синтетический кандидат 0355",
+   "email": "sim-0355@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": 0.384,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "java",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0356",
+   "display_name": "Синтетический кандидат 0356",
+   "email": "sim-0356@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.062,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0357",
+   "display_name": "Синтетический кандидат 0357",
+   "email": "sim-0357@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.969,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0358",
+   "display_name": "Синтетический кандидат 0358",
+   "email": "sim-0358@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 0.802,
+   "declared_grade": "middle",
+   "team_role": "аналитик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0359",
+   "display_name": "Синтетический кандидат 0359",
+   "email": "sim-0359@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.321,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0360",
+   "display_name": "Синтетический кандидат 0360",
+   "email": "sim-0360@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.454,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0361",
+   "display_name": "Синтетический кандидат 0361",
+   "email": "sim-0361@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": 0.282,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0362",
+   "display_name": "Синтетический кандидат 0362",
+   "email": "sim-0362@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "lead",
+   "theta": 2.338,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0363",
+   "display_name": "Синтетический кандидат 0363",
+   "email": "sim-0363@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.457,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0364",
+   "display_name": "Синтетический кандидат 0364",
+   "email": "sim-0364@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": 0.013,
+   "declared_grade": "middle",
+   "team_role": "аналитик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0365",
+   "display_name": "Синтетический кандидат 0365",
+   "email": "sim-0365@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.525,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0366",
+   "display_name": "Синтетический кандидат 0366",
+   "email": "sim-0366@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": 0.55,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0367",
+   "display_name": "Синтетический кандидат 0367",
+   "email": "sim-0367@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.273,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0368",
+   "display_name": "Синтетический кандидат 0368",
+   "email": "sim-0368@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.199,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0369",
+   "display_name": "Синтетический кандидат 0369",
+   "email": "sim-0369@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "senior",
+   "theta": 1.106,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0370",
+   "display_name": "Синтетический кандидат 0370",
+   "email": "sim-0370@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.686,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0371",
+   "display_name": "Синтетический кандидат 0371",
+   "email": "sim-0371@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.484,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0372",
+   "display_name": "Синтетический кандидат 0372",
+   "email": "sim-0372@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.666,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0373",
+   "display_name": "Синтетический кандидат 0373",
+   "email": "sim-0373@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.574,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0374",
+   "display_name": "Синтетический кандидат 0374",
+   "email": "sim-0374@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "lead",
+   "theta": 2.575,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0375",
+   "display_name": "Синтетический кандидат 0375",
+   "email": "sim-0375@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.359,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0376",
+   "display_name": "Синтетический кандидат 0376",
+   "email": "sim-0376@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 1.416,
+   "declared_grade": "senior",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0377",
+   "display_name": "Синтетический кандидат 0377",
+   "email": "sim-0377@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "lead",
+   "theta": 1.967,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0378",
+   "display_name": "Синтетический кандидат 0378",
+   "email": "sim-0378@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": -0.35,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0379",
+   "display_name": "Синтетический кандидат 0379",
+   "email": "sim-0379@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": 0.537,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "java",
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0380",
+   "display_name": "Синтетический кандидат 0380",
+   "email": "sim-0380@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.481,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0381",
+   "display_name": "Синтетический кандидат 0381",
+   "email": "sim-0381@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -0.906,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0382",
+   "display_name": "Синтетический кандидат 0382",
+   "email": "sim-0382@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.37,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0383",
+   "display_name": "Синтетический кандидат 0383",
+   "email": "sim-0383@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "lead",
+   "theta": 2.461,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0384",
+   "display_name": "Синтетический кандидат 0384",
+   "email": "sim-0384@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": 0.572,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0385",
+   "display_name": "Синтетический кандидат 0385",
+   "email": "sim-0385@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.195,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0386",
+   "display_name": "Синтетический кандидат 0386",
+   "email": "sim-0386@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -1.117,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0387",
+   "display_name": "Синтетический кандидат 0387",
+   "email": "sim-0387@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.092,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0388",
+   "display_name": "Синтетический кандидат 0388",
+   "email": "sim-0388@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "lead",
+   "theta": 2.147,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0389",
+   "display_name": "Синтетический кандидат 0389",
+   "email": "sim-0389@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.177,
+   "declared_grade": "middle",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0390",
+   "display_name": "Синтетический кандидат 0390",
+   "email": "sim-0390@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.333,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0391",
+   "display_name": "Синтетический кандидат 0391",
+   "email": "sim-0391@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.54,
+   "declared_grade": "middle",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "java",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0392",
+   "display_name": "Синтетический кандидат 0392",
+   "email": "sim-0392@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.412,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0393",
+   "display_name": "Синтетический кандидат 0393",
+   "email": "sim-0393@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 2.211,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0394",
+   "display_name": "Синтетический кандидат 0394",
+   "email": "sim-0394@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.738,
+   "declared_grade": "middle",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0395",
+   "display_name": "Синтетический кандидат 0395",
+   "email": "sim-0395@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.375,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0396",
+   "display_name": "Синтетический кандидат 0396",
+   "email": "sim-0396@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.052,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0397",
+   "display_name": "Синтетический кандидат 0397",
+   "email": "sim-0397@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.792,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0398",
+   "display_name": "Синтетический кандидат 0398",
+   "email": "sim-0398@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -0.701,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0399",
+   "display_name": "Синтетический кандидат 0399",
+   "email": "sim-0399@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.555,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0400",
+   "display_name": "Синтетический кандидат 0400",
+   "email": "sim-0400@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": 0.153,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0401",
+   "display_name": "Синтетический кандидат 0401",
+   "email": "sim-0401@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": -0.501,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0402",
+   "display_name": "Синтетический кандидат 0402",
+   "email": "sim-0402@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.066,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0403",
+   "display_name": "Синтетический кандидат 0403",
+   "email": "sim-0403@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "lead",
+   "theta": 2.399,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "java",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0404",
+   "display_name": "Синтетический кандидат 0404",
+   "email": "sim-0404@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 0.792,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0405",
+   "display_name": "Синтетический кандидат 0405",
+   "email": "sim-0405@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.393,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0406",
+   "display_name": "Синтетический кандидат 0406",
+   "email": "sim-0406@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": -0.285,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0407",
+   "display_name": "Синтетический кандидат 0407",
+   "email": "sim-0407@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.691,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0408",
+   "display_name": "Синтетический кандидат 0408",
+   "email": "sim-0408@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.345,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0409",
+   "display_name": "Синтетический кандидат 0409",
+   "email": "sim-0409@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.398,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go",
+    "java"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0410",
+   "display_name": "Синтетический кандидат 0410",
+   "email": "sim-0410@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.297,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0411",
+   "display_name": "Синтетический кандидат 0411",
+   "email": "sim-0411@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.523,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0412",
+   "display_name": "Синтетический кандидат 0412",
+   "email": "sim-0412@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.018,
+   "declared_grade": "middle",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0413",
+   "display_name": "Синтетический кандидат 0413",
+   "email": "sim-0413@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.005,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0414",
+   "display_name": "Синтетический кандидат 0414",
+   "email": "sim-0414@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "lead",
+   "theta": 2.695,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "docker"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0415",
+   "display_name": "Синтетический кандидат 0415",
+   "email": "sim-0415@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": -0.469,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "java"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0416",
+   "display_name": "Синтетический кандидат 0416",
+   "email": "sim-0416@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.598,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0417",
+   "display_name": "Синтетический кандидат 0417",
+   "email": "sim-0417@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.525,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0418",
+   "display_name": "Синтетический кандидат 0418",
+   "email": "sim-0418@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "lead",
+   "theta": 2.093,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0419",
+   "display_name": "Синтетический кандидат 0419",
+   "email": "sim-0419@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.31,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0420",
+   "display_name": "Синтетический кандидат 0420",
+   "email": "sim-0420@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.082,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0421",
+   "display_name": "Синтетический кандидат 0421",
+   "email": "sim-0421@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.701,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0422",
+   "display_name": "Синтетический кандидат 0422",
+   "email": "sim-0422@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -1.039,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0423",
+   "display_name": "Синтетический кандидат 0423",
+   "email": "sim-0423@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.473,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0424",
+   "display_name": "Синтетический кандидат 0424",
+   "email": "sim-0424@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.862,
+   "declared_grade": "junior",
+   "team_role": "аналитик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0425",
+   "display_name": "Синтетический кандидат 0425",
+   "email": "sim-0425@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.235,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0426",
+   "display_name": "Синтетический кандидат 0426",
+   "email": "sim-0426@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -0.868,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0427",
+   "display_name": "Синтетический кандидат 0427",
+   "email": "sim-0427@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "lead",
+   "theta": 2.845,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "java"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0428",
+   "display_name": "Синтетический кандидат 0428",
+   "email": "sim-0428@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.688,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0429",
+   "display_name": "Синтетический кандидат 0429",
+   "email": "sim-0429@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.106,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0430",
+   "display_name": "Синтетический кандидат 0430",
+   "email": "sim-0430@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 1.52,
+   "declared_grade": "middle",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0431",
+   "display_name": "Синтетический кандидат 0431",
+   "email": "sim-0431@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -0.903,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0432",
+   "display_name": "Синтетический кандидат 0432",
+   "email": "sim-0432@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 0.979,
+   "declared_grade": "middle",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0433",
+   "display_name": "Синтетический кандидат 0433",
+   "email": "sim-0433@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -0.702,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0434",
+   "display_name": "Синтетический кандидат 0434",
+   "email": "sim-0434@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.241,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0435",
+   "display_name": "Синтетический кандидат 0435",
+   "email": "sim-0435@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.146,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0436",
+   "display_name": "Синтетический кандидат 0436",
+   "email": "sim-0436@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.773,
+   "declared_grade": "junior",
+   "team_role": "аналитик",
+   "work_format": "офис",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0437",
+   "display_name": "Синтетический кандидат 0437",
+   "email": "sim-0437@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.544,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0438",
+   "display_name": "Синтетический кандидат 0438",
+   "email": "sim-0438@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.257,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0439",
+   "display_name": "Синтетический кандидат 0439",
+   "email": "sim-0439@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "senior",
+   "theta": 1.595,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0440",
+   "display_name": "Синтетический кандидат 0440",
+   "email": "sim-0440@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.306,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0441",
+   "display_name": "Синтетический кандидат 0441",
+   "email": "sim-0441@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 1.806,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0442",
+   "display_name": "Синтетический кандидат 0442",
+   "email": "sim-0442@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.126,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0443",
+   "display_name": "Синтетический кандидат 0443",
+   "email": "sim-0443@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.523,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0444",
+   "display_name": "Синтетический кандидат 0444",
+   "email": "sim-0444@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": 0.47,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0445",
+   "display_name": "Синтетический кандидат 0445",
+   "email": "sim-0445@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.121,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "java"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0446",
+   "display_name": "Синтетический кандидат 0446",
+   "email": "sim-0446@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 1.199,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0447",
+   "display_name": "Синтетический кандидат 0447",
+   "email": "sim-0447@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "senior",
+   "theta": 1.782,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0448",
+   "display_name": "Синтетический кандидат 0448",
+   "email": "sim-0448@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.681,
+   "declared_grade": "middle",
+   "team_role": "аналитик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0449",
+   "display_name": "Синтетический кандидат 0449",
+   "email": "sim-0449@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "lead",
+   "theta": 1.851,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0450",
+   "display_name": "Синтетический кандидат 0450",
+   "email": "sim-0450@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.779,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0451",
+   "display_name": "Синтетический кандидат 0451",
+   "email": "sim-0451@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.106,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0452",
+   "display_name": "Синтетический кандидат 0452",
+   "email": "sim-0452@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "lead",
+   "theta": 1.843,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0453",
+   "display_name": "Синтетический кандидат 0453",
+   "email": "sim-0453@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.034,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0454",
+   "display_name": "Синтетический кандидат 0454",
+   "email": "sim-0454@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 0.945,
+   "declared_grade": "senior",
+   "team_role": "аналитик",
+   "work_format": "удалённо",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0455",
+   "display_name": "Синтетический кандидат 0455",
+   "email": "sim-0455@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "senior",
+   "theta": 1.389,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0456",
+   "display_name": "Синтетический кандидат 0456",
+   "email": "sim-0456@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": 0.491,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0457",
+   "display_name": "Синтетический кандидат 0457",
+   "email": "sim-0457@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -0.951,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0458",
+   "display_name": "Синтетический кандидат 0458",
+   "email": "sim-0458@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -1.02,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0459",
+   "display_name": "Синтетический кандидат 0459",
+   "email": "sim-0459@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.638,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0460",
+   "display_name": "Синтетический кандидат 0460",
+   "email": "sim-0460@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "lead",
+   "theta": 2.143,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0461",
+   "display_name": "Синтетический кандидат 0461",
+   "email": "sim-0461@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.324,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0462",
+   "display_name": "Синтетический кандидат 0462",
+   "email": "sim-0462@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -0.674,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0463",
+   "display_name": "Синтетический кандидат 0463",
+   "email": "sim-0463@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "lead",
+   "theta": 2.529,
+   "declared_grade": "lead",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "java",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0464",
+   "display_name": "Синтетический кандидат 0464",
+   "email": "sim-0464@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.508,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0465",
+   "display_name": "Синтетический кандидат 0465",
+   "email": "sim-0465@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.184,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0466",
+   "display_name": "Синтетический кандидат 0466",
+   "email": "sim-0466@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 0.764,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0467",
+   "display_name": "Синтетический кандидат 0467",
+   "email": "sim-0467@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -1.347,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0468",
+   "display_name": "Синтетический кандидат 0468",
+   "email": "sim-0468@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.716,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0469",
+   "display_name": "Синтетический кандидат 0469",
+   "email": "sim-0469@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "lead",
+   "theta": 1.969,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "java",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0470",
+   "display_name": "Синтетический кандидат 0470",
+   "email": "sim-0470@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "senior",
+   "theta": 0.717,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0471",
+   "display_name": "Синтетический кандидат 0471",
+   "email": "sim-0471@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.493,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0472",
+   "display_name": "Синтетический кандидат 0472",
+   "email": "sim-0472@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": 0.471,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0473",
+   "display_name": "Синтетический кандидат 0473",
+   "email": "sim-0473@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -0.919,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0474",
+   "display_name": "Синтетический кандидат 0474",
+   "email": "sim-0474@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "junior",
+   "theta": -1.113,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker",
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0475",
+   "display_name": "Синтетический кандидат 0475",
+   "email": "sim-0475@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "lead",
+   "theta": 2.719,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0476",
+   "display_name": "Синтетический кандидат 0476",
+   "email": "sim-0476@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.302,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0477",
+   "display_name": "Синтетический кандидат 0477",
+   "email": "sim-0477@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": 0.482,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "kotlin"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0478",
+   "display_name": "Синтетический кандидат 0478",
+   "email": "sim-0478@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "middle",
+   "theta": 0.172,
+   "declared_grade": "senior",
+   "team_role": "аналитик",
+   "work_format": "гибрид",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0479",
+   "display_name": "Синтетический кандидат 0479",
+   "email": "sim-0479@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "middle",
+   "theta": 0.212,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "go",
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0480",
+   "display_name": "Синтетический кандидат 0480",
+   "email": "sim-0480@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 0.69,
+   "declared_grade": "lead",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0481",
+   "display_name": "Синтетический кандидат 0481",
+   "email": "sim-0481@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -0.823,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "java",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0482",
+   "display_name": "Синтетический кандидат 0482",
+   "email": "sim-0482@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "junior",
+   "theta": -0.718,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0483",
+   "display_name": "Синтетический кандидат 0483",
+   "email": "sim-0483@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "lead",
+   "theta": 1.906,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "kotlin",
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0484",
+   "display_name": "Синтетический кандидат 0484",
+   "email": "sim-0484@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "senior",
+   "theta": 0.954,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0485",
+   "display_name": "Синтетический кандидат 0485",
+   "email": "sim-0485@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "lead",
+   "theta": 2.264,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "удалённо",
+   "stack": [
+    "linux",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0486",
+   "display_name": "Синтетический кандидат 0486",
+   "email": "sim-0486@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "middle",
+   "theta": 0.282,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "docker",
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0487",
+   "display_name": "Синтетический кандидат 0487",
+   "email": "sim-0487@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -1.436,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "java"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0488",
+   "display_name": "Синтетический кандидат 0488",
+   "email": "sim-0488@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.306,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0489",
+   "display_name": "Синтетический кандидат 0489",
+   "email": "sim-0489@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "middle",
+   "theta": -0.414,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0490",
+   "display_name": "Синтетический кандидат 0490",
+   "email": "sim-0490@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -1.16,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0491",
+   "display_name": "Синтетический кандидат 0491",
+   "email": "sim-0491@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "junior",
+   "theta": -0.975,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "go",
+    "python"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0492",
+   "display_name": "Синтетический кандидат 0492",
+   "email": "sim-0492@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.203,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "docker"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0493",
+   "display_name": "Синтетический кандидат 0493",
+   "email": "sim-0493@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "junior",
+   "theta": -0.9,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0494",
+   "display_name": "Синтетический кандидат 0494",
+   "email": "sim-0494@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": 0.022,
+   "declared_grade": "senior",
+   "team_role": "разработчик",
+   "work_format": "удалённо",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0495",
+   "display_name": "Синтетический кандидат 0495",
+   "email": "sim-0495@example.com",
+   "industry": "it",
+   "specialization": "mobile",
+   "true_grade": "junior",
+   "theta": -1.05,
+   "declared_grade": "junior",
+   "team_role": "разработчик",
+   "work_format": "офис",
+   "stack": [
+    "swift"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0496",
+   "display_name": "Синтетический кандидат 0496",
+   "email": "sim-0496@example.com",
+   "industry": "it",
+   "specialization": "data",
+   "true_grade": "junior",
+   "theta": -0.925,
+   "declared_grade": "junior",
+   "team_role": "аналитик",
+   "work_format": "удалённо",
+   "stack": [
+    "python",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0497",
+   "display_name": "Синтетический кандидат 0497",
+   "email": "sim-0497@example.com",
+   "industry": "it",
+   "specialization": "security",
+   "true_grade": "lead",
+   "theta": 2.634,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "go"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0498",
+   "display_name": "Синтетический кандидат 0498",
+   "email": "sim-0498@example.com",
+   "industry": "it",
+   "specialization": "devops",
+   "true_grade": "senior",
+   "theta": 1.227,
+   "declared_grade": "senior",
+   "team_role": "тимлид",
+   "work_format": "офис",
+   "stack": [
+    "go",
+    "linux"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0499",
+   "display_name": "Синтетический кандидат 0499",
+   "email": "sim-0499@example.com",
+   "industry": "it",
+   "specialization": "backend",
+   "true_grade": "middle",
+   "theta": 0.485,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "docker",
+    "sql"
+   ],
+   "fsp_external_id": ""
+  },
+  {
+   "candidate_id": "sim-0500",
+   "display_name": "Синтетический кандидат 0500",
+   "email": "sim-0500@example.com",
+   "industry": "it",
+   "specialization": "frontend",
+   "true_grade": "middle",
+   "theta": -0.274,
+   "declared_grade": "middle",
+   "team_role": "разработчик",
+   "work_format": "гибрид",
+   "stack": [
+    "javascript",
+    "typescript"
+   ],
+   "fsp_external_id": ""
+  }
+ ]
+}

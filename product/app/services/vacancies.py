@@ -1,4 +1,7 @@
-"""Своя вакансия и отклик. Почта соискателя появляется только после accepted."""
+"""Своя вакансия и отклик. Почта соискателя появляется только после accepted.
+
+ТЗ §2.1 «Просмотр вакансий и отклик», «Регулярные задания» (одно короткое задание работодателя); ТЗ §2.2 п.2–3.
+"""
 
 from __future__ import annotations
 
@@ -83,6 +86,7 @@ def application_payload(db: Session, row: Application, *, viewer: str) -> dict:
         "created_at": row.created_at,
         "updated_at": row.updated_at,
     }
+    # ТЗ §2.1 / §2.2 п.2: контакт откликнувшегося открывается работодателю после «принято».
     if viewer == "employer" and row.status == "accepted":
         body["candidate_email"] = candidate_email(db, row.profile_id)
     return body
@@ -99,6 +103,7 @@ def create_vacancy(db: Session, user: User, payload: dict) -> dict:
     if not isinstance(category_id, str):
         _fail(422, "category_id")
     category_id = require_category(category_id)
+    # ТЗ §2.2 п.1: вилка в рублях обязательна и в вакансии.
     salary_min, salary_max = parse_fork(payload.get("salary_min"), payload.get("salary_max"), _fail)
     if payload.get("salary_currency") != "RUB":
         _fail(422, "currency")

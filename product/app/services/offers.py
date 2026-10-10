@@ -1,4 +1,7 @@
-"""Приглашение из категории. Почта соискателя в строку не копируется."""
+"""Приглашение из категории. Почта соискателя в строку не копируется.
+
+ТЗ §2 — главная механика: работодатель сам выходит на кандидата; ТЗ §2.2 п.1–3.
+"""
 
 from __future__ import annotations
 
@@ -48,6 +51,7 @@ def offer_payload(db: Session, row: Offer, *, viewer: str) -> dict:
         "created_at": row.created_at,
         "updated_at": row.updated_at,
     }
+    # ТЗ §2.2 п.2: почта кандидата раскрывается работодателю только после «принято».
     if viewer == "employer" and row.status == "accepted":
         body["candidate_email"] = candidate_email(db, row.profile_id)
     return body
@@ -85,6 +89,7 @@ def create_offer(db: Session, user: User, payload: dict) -> dict:
     message = payload.get("message")
     if not isinstance(message, str) or not message.strip():
         _fail(422, "offer_incomplete", "offer_incomplete_message")
+    # ТЗ §2.2 п.1: вилка «от–до» в рублях обязательна в каждом приглашении.
     salary_min, salary_max = parse_fork(payload.get("salary_min"), payload.get("salary_max"), _fail)
     if payload.get("salary_currency") != "RUB":
         _fail(422, "currency")
@@ -138,6 +143,7 @@ def get_offer(db: Session, user: User, offer_id: int) -> dict:
 
 
 def open_offer(db: Session, user: User, offer_id: int) -> dict:
+    # ТЗ §2.2 п.3: статусы отражают ход взаимодействия — открытие переводит sent → seen.
     row = _candidate_offer(db, user, offer_id)
     if row.status == "sent":
         now = utc_now()
@@ -154,6 +160,8 @@ def open_offer(db: Session, user: User, offer_id: int) -> dict:
 
 
 def set_offer_status(db: Session, user: User, offer_id: int, status: str) -> dict:
+    # ТЗ §2.1 «принять или отклонить». Условный UPDATE по текущему статусу:
+    # два одновременных ответа не перезапишут друг друга.
     row = _candidate_offer(db, user, offer_id)
     now = utc_now()
     result = db.execute(

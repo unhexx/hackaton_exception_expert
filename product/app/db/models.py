@@ -2,6 +2,8 @@
 
 Колонка offers.vacancy_id по-прежнему пустая у приглашения из подборки.
 Внешний ключ на vacancies есть: опубликованная вакансия больше не «таблица потом».
+
+ТЗ §2.2 «Данные и правила видимости»: вилка в рублях, статусы приглашений и откликов — ограничениями схемы.
 """
 
 from __future__ import annotations
@@ -146,6 +148,12 @@ class TestAttempt(Base):
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="draft")
     created_at: Mapped[str] = mapped_column(String(40), nullable=False)
     submitted_at: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    # Механика v2 (product/matching/assessment.py). form_json — состав попытки:
+    # вопросы, порядок вариантов, ключ (только на сервере, ТЗ §2 — устойчивость
+    # к распространению заданий) и ответы. result_json — уровень, уверенность,
+    # статус «уверенно / у границы», положение в грейде.
+    form_json: Mapped[str | None] = mapped_column(Text, nullable=True)
+    result_json: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 
 class CategoryAssignment(Base):

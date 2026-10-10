@@ -94,8 +94,8 @@ def test_handover_note_quotes_stand_run():
     readme = (root / "README.md").read_text(encoding="utf-8")
     report = (
         "category_match 38 38\n"
-        "outcome_match 32 32\n"
-        "template_stable 4 4\n"
+        "outcome_match 72 72\n"
+        "form_stable 24 24\n"
         "relevant_in_top 23 24\n"
         "resume_ok 4 4\n"
     )

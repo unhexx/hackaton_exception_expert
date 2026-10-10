@@ -1,4 +1,7 @@
-"""Сборка страниц. main подключает этот роутер одной строкой."""
+"""Сборка страниц. main подключает этот роутер одной строкой.
+
+ТЗ §3.5 «Архитектура»: веб-приложение для обеих ролей.
+"""
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse

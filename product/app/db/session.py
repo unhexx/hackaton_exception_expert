@@ -2,6 +2,8 @@
 
 NullPool не держит соединение между запросами. timeout и busy_timeout
 совпадают и не короче пяти секунд.
+
+ТЗ §3.5 «Производительность»: десятки одновременных пользователей — SQLite в режиме WAL, одно соединение на запрос.
 """
 
 from __future__ import annotations
@@ -76,3 +78,22 @@ def session_scope() -> Iterator[Session]:
         yield db
     finally:
         db.close()
+
+
+# Колонки, добавленные после первой версии схемы. create_all не меняет
+# существующие таблицы, поэтому старый том SQLite догоняем ALTER TABLE ADD COLUMN.
+# Только добавление nullable-колонок: данные тома не трогаются.
+_ADDED_COLUMNS: dict[str, dict[str, str]] = {
+    "test_attempts": {"form_json": "TEXT", "result_json": "TEXT"},
+}
+
+
+def ensure_columns(engine: Engine) -> None:
+    with engine.begin() as conn:
+        for table, columns in _ADDED_COLUMNS.items():
+            present = {row[1] for row in conn.exec_driver_sql(f"PRAGMA table_info({table})")}
+            if not present:
+                continue
+            for name, kind in columns.items():
+                if name not in present:
+                    conn.exec_driver_sql(f"ALTER TABLE {table} ADD COLUMN {name} {kind}")

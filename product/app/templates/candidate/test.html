@@ -9,6 +9,12 @@
 {% else %}
 <p>Записанный грейд: {{ profile.grade }}. Специализация: {{ profile.specialization }}.</p>
 {% if not draft %}
+<section>
+  <h2>Как устроен тест</h2>
+  <p>12 вопросов: 3 уровня ниже заявленного, 6 заявленного и 3 уровня выше. У каждого кандидата свой набор вопросов одинаковой сложности.</p>
+  <p>В каждом вопросе оцените все три варианта ответа: «верно» или «неверно». Вопрос засчитывается, только если все три оценки правильные.</p>
+  <p>Если результат окажется у границы грейдов, тест добавит ещё до трёх коротких блоков по 6 вопросов. Вернуться к отвеченному вопросу нельзя.</p>
+</section>
 <form method="post" action="/candidate/test/start">
   <input type="hidden" name="csrf" value="{{ csrf }}">
   <button type="submit">Начать тест записанного грейда</button>
@@ -16,40 +22,8 @@
 {% if outcome_view %}
 {% include "candidate/_test_outcome.html" %}
 {% endif %}
-{% else %}
-<p>Открыт шаблон {{ draft.template_id }} на грейд {{ draft.declared_grade }}.</p>
-<form method="post" action="/candidate/test/submit">
-  <input type="hidden" name="csrf" value="{{ csrf }}">
-  <input type="hidden" name="attempt_id" value="{{ draft.id }}">
-  <p>В каждом вопросе может быть только 1 верный ответ</p>
-  <noscript>
-    {% for question in questions %}
-    {% set question_index = loop.index0 %}
-    <fieldset>
-      <legend>{{ question.text }}</legend>
-      {% for choice in question.choices %}
-      <p>{{ choice.text }}</p>
-      <label>
-        <input type="radio" name="mark_{{ question_index }}_{{ choice.id }}"
-               value="true" required> истинен
-      </label>
-      <label>
-        <input type="radio" name="mark_{{ question_index }}_{{ choice.id }}"
-               value="false" required> ложен
-      </label>
-      {% endfor %}
-    </fieldset>
-    {% endfor %}
-    <p><button type="submit">Сдать тест</button></p>
-  </noscript>
-  <div id="test-step"
-       hx-post="/candidate/test/step"
-       hx-trigger="load"
-       hx-target="this"
-       hx-swap="innerHTML"
-       hx-include="closest form"
-       hx-push-url="false"></div>
-</form>
+{% elif question %}
+{% include "candidate/_test_question.html" %}
 {% endif %}
 {% endif %}
 <section>
@@ -58,8 +32,8 @@
   <ul>
     {% for row in history %}
     <li>
-      {{ row.declared_grade }}, {{ row.template_id }}, {{ row.status }}
-      {% if row.status == 'submitted' %}: балл {{ row.score }}, {{ row.outcome_label }}{% if row.proposed_grade %}, предложен {{ row.proposed_grade }}{% endif %}{% endif %}
+      {{ row.declared_grade }}, {{ row.status }}
+      {% if row.status == 'submitted' %}: верных {{ row.score }}% из {{ row.n_items }} вопросов, {{ row.outcome_label }}{% if row.proposed_grade %}, предложен {{ row.proposed_grade }}{% endif %}{% if row.test_status %}, статус «{{ row.test_status }}»{% endif %}{% endif %}
     </li>
     {% endfor %}
   </ul>
@@ -68,10 +42,11 @@
   {% endif %}
 </section>
 <section>
-  <h2>Какой шаблон показывает описание вакансии</h2>
+  <h2>Как описание вакансии превращается в тест</h2>
+  <p>Вакансия задаёт специализацию и грейд. Тест строится по одному плану для всех кандидатов этой пары; конкретные вопросы у каждого свои.</p>
   <ul>
     {% for item in samples %}
-    <li>{{ item.title }} показывает шаблон {{ item.shows_template }}</li>
+    <li>{{ item.title }}: {% for part in item.plan %}{{ part.count }} — {{ part.slot }} ({{ part.level }}){% if not loop.last %}, {% endif %}{% endfor %}.</li>
     {% endfor %}
   </ul>
 </section>

@@ -1,8 +1,17 @@
 """Прогон золотого набора. Печатает пять строк, grade_separation и три CPU-персоны, ничего не скачивает.
 
-Пока в кейсе нет expected_outcome и template_pairs, знаменатели итога и
-шаблона нулевые. resumes.json подхватывается, когда его положит разбор PDF.
-score_attempt возвращает словари с ключами outcome и proposed_grade.
+ТЗ §2: «команда предлагает собственную процедуру оценки своего решения,
+описывает её и приводит результаты»; ТЗ §6, критерии 1 и 2.
+
+Строки отчёта:
+- category_match — категория по анкете и тесту совпала с разметкой (38 профилей);
+- outcome_match — тест v2 на вариантах из банка: ответы «уровень выше / свой /
+  ниже» дают ожидаемый итог (suggest_higher / confirm / suggest_lower), 72 случая;
+- form_stable — тот же вариант и те же ответы дают тот же итог и ту же оценку;
+- relevant_in_top — отмеченные релевантными попали в топ подборки;
+- resume_ok — PDF разобран без падения.
+grade_separation — сколько вопросов каталога разделяют грейды (порога нет).
+Подробная симуляция на 500 кандидатах — ``python -m product.validation_sim.run``.
 read_resume_bytes принимает байты и отдаёт словарь; код resume_no_text в
 ключе error — успешный разбор пустого слоя, не падение.
 """
@@ -160,7 +169,8 @@ def _fit(row: dict, category_id: str, rank_key: str, need: dict):
     )
 
 
-def _scores_match_answers(cases: dict) -> None:
+def _legacy_scores_match_answers(cases: dict) -> None:
+    """Не вызывается: проверяла ответы старых шаблонов (механика до v2)."""
     from product.matching.grade import load_template, score_attempt
 
     for row in cases["profiles"]:
@@ -179,34 +189,75 @@ def _scores_match_answers(cases: dict) -> None:
             )
 
 
+_MODES = {"higher": "suggest_higher", "confirm": "confirm", "lower": "suggest_lower"}
+
+
+def _engine_cases():
+    """Варианты теста v2 на каждую пару «специализация × грейд» с фиксированным
+    seed: прогон воспроизводим и не зависит от случайности кабинета."""
+    import random
+
+    from product.matching import assessment
+    from product.validation_sim.form import Exposure, History, assemble_form
+
+    grades = [str(g) for g in load_rules()["grades"]]
+    for n, spec in enumerate(load_rules()["specializations"]):
+        for k, grade in enumerate(grades):
+            form = assemble_form(assessment.bank_index(), spec, grade, random.Random(1000 + 10 * n + k),
+                                 History(), Exposure(), frozenset(assessment.pilot()["retired"]))
+            stored = {"items": assessment._stored(form, 0), "answers": {}}
+            yield spec, grade, stored
+
+
+def _answered(stored: dict, grade: str, mode: str) -> dict:
+    grades = [str(g) for g in load_rules()["grades"]]
+    answers = {}
+    for item in stored["items"]:
+        if mode == "higher":
+            ok = True
+        elif mode == "confirm":
+            ok = grades.index(item["level"]) <= grades.index(grade)
+        else:
+            ok = grades.index(item["level"]) < grades.index(grade)
+        answers[item["qid"]] = [item["key"]] if ok else []
+    return {**stored, "answers": answers}
+
+
+def _expected(grade: str, mode: str) -> str:
+    grades = [str(g) for g in load_rules()["grades"]]
+    if mode == "higher" and grade == grades[-1]:
+        return "confirm"  # выше lead некуда
+    return _MODES[mode]
+
+
 def _outcome_counts(cases: dict) -> tuple[int, int]:
-    rows = [row for row in cases["profiles"] if "expected_outcome" in row]
-    if not rows:
-        return 0, 0
-    from product.matching.grade import load_template, score_attempt
+    """Ответы с известным уровнем → ожидаемый итог теста v2 (72 случая)."""
+    from product.matching import assessment
 
-    hit = 0
-    for row in rows:
-        scored = score_attempt(load_template(row["template_id"]), row["answers"])
-        if scored["outcome"] == row["expected_outcome"]:
-            hit += 1
-    return hit, len(rows)
+    hit = total = 0
+    for _spec, grade, stored in _engine_cases():
+        for mode in _MODES:
+            weights = assessment.update_weights(None, _answered(stored, grade, mode))
+            outcome, _proposed = assessment.decide(weights, grade)
+            total += 1
+            hit += outcome == _expected(grade, mode)
+    return hit, total
 
 
-def _template_counts(cases: dict) -> tuple[int, int]:
-    pairs = list(cases.get("template_pairs") or [])
-    if not pairs:
-        return 0, 0
-    from product.matching.grade import load_template, score_attempt
+def _form_counts() -> tuple[int, int]:
+    """Тот же вариант и те же ответы → тот же итог и та же оценка (24 пары)."""
+    from product.matching import assessment
 
-    hit = 0
-    for pair in pairs:
-        template = load_template(pair["template_id"])
-        first = score_attempt(template, pair["answers"])
-        second = score_attempt(template, pair["answers_repeat"])
-        if first["proposed_grade"] == second["proposed_grade"]:
-            hit += 1
-    return hit, len(pairs)
+    hit = total = 0
+    for _spec, grade, stored in _engine_cases():
+        answered = _answered(stored, grade, "confirm")
+        first = assessment.update_weights(None, answered)
+        second = assessment.update_weights(None, json.loads(json.dumps(answered)))
+        same = assessment.decide(first, grade) == assessment.decide(second, grade)
+        same = same and assessment.summary(first) == assessment.summary(second)
+        total += 1
+        hit += same
+    return hit, total
 
 
 def _resume_counts() -> tuple[int, int]:
@@ -236,7 +287,6 @@ def _resume_counts() -> tuple[int, int]:
 
 def summarize(cases: dict | None = None) -> dict:
     data = cases if cases is not None else load_cases()
-    _scores_match_answers(data)
     version = rule_version()
     matched = 0
     ranked = []
@@ -260,12 +310,12 @@ def summarize(cases: dict | None = None) -> dict:
         marked = set(need["relevant_profile_ids"])
         relevant_hit += sum(1 for row, _decision in taken if row["profile_id"] in marked)
     outcome_hit, outcome_total = _outcome_counts(data)
-    stable_hit, stable_total = _template_counts(data)
+    stable_hit, stable_total = _form_counts()
     resume_hit, resume_total = _resume_counts()
     return {
         "category_match": (matched, len(data["profiles"])),
         "outcome_match": (outcome_hit, outcome_total),
-        "template_stable": (stable_hit, stable_total),
+        "form_stable": (stable_hit, stable_total),
         "relevant_in_top": (relevant_hit, slots),
         "resume_ok": (resume_hit, resume_total),
     }
@@ -276,7 +326,7 @@ def render_report(cases: dict | None = None) -> str:
     order = (
         "category_match",
         "outcome_match",
-        "template_stable",
+        "form_stable",
         "relevant_in_top",
         "resume_ok",
     )

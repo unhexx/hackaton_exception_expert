@@ -52,8 +52,8 @@
   <ul>
     {% for row in history %}
     <li>
-      {{ row.declared_grade }}, {{ row.template_id }}, {{ row.status }}
-      {% if row.status == 'submitted' %}: балл {{ row.score }}, {{ row.outcome_label }}{% if row.proposed_grade %}, предложен {{ row.proposed_grade }}{% endif %}{% endif %}
+      {{ row.declared_grade }}, {{ row.status }}
+      {% if row.status == 'submitted' %}: верных {{ row.score }}%, {{ row.outcome_label }}{% if row.proposed_grade %}, предложен {{ row.proposed_grade }}{% endif %}{% if row.test_status %}, статус «{{ row.test_status }}»{% endif %}{% endif %}
     </li>
     {% endfor %}
   </ul>

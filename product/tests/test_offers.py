@@ -3,8 +3,7 @@
 from __future__ import annotations
 
 from product.app.web.forms import form_int
-from product.matching.grade import load_template
-from product.tests.conftest import register_and_confirm
+from product.tests.conftest import register_and_confirm, take_test
 
 _PROFILE = {
     "full_name": "Иван Синтетиков",
@@ -31,16 +30,6 @@ def _login(client, email: str) -> None:
     assert logged.status_code == 200, logged.text
 
 
-def _answers(template: dict, correct_n: int) -> list[str]:
-    chosen = []
-    for index, question in enumerate(template["questions"]):
-        if index < correct_n:
-            chosen.append(question["correct"])
-        else:
-            chosen.append(next(item["id"] for item in question["choices"] if item["id"] != question["correct"]))
-    return chosen
-
-
 def _candidate(client, email: str, **extra) -> int:
     register_and_confirm(client, email=email, role="candidate")
     saved = client.put("/api/candidate/profile", json={**_PROFILE, **extra})
@@ -52,11 +41,9 @@ def _scored(client, email: str, *, correct_n: int = 2, **extra) -> int:
     profile_id = _candidate(client, email, **extra)
     started = client.post("/api/candidate/tests/start", json={})
     assert started.status_code == 201, started.text
-    template = load_template(started.json()["template_id"])
-    submitted = client.post(
-        f"/api/candidate/tests/{started.json()['attempt_id']}/submit",
-        json={"answers": _answers(template, correct_n)},
-    )
+    # correct_n — сколько «уровней» сдано: 3 — все верно, 2 — свой уровень, 1 — провал
+    mode = {3: "higher", 2: "confirm", 1: "lower"}[correct_n]
+    submitted = take_test(client, started.json(), mode)
     assert submitted.status_code == 200, submitted.text
     return profile_id
 
@@ -324,21 +311,21 @@ def test_shortlist_card_compares_neighbor_instead_of_raw_rank_key(client):
     listed = client.get("/employer/shortlist", params={"category_id": "backend:middle"})
     assert listed.status_code == 200
     assert "порядок" not in listed.text
-    assert "Выше соседней карточки по полю балл: 67 против 33." in listed.text
+    assert "Выше соседней карточки по полю подтверждён: да против нет." in listed.text
     assert "Ниже этой карточки в подборке никого нет." in listed.text
     assert "подтверждён" in listed.text
     cards = client.get("/api/employer/candidates", params={"category_id": "backend:middle"}).json()
     assert [card["profile_id"] for card in cards] == [higher, lower]
-    assert cards[0]["rank_key"].startswith("1-067-")
-    assert cards[1]["rank_key"].startswith("1-033-")
+    assert cards[0]["rank_key"].startswith("1-")  # подтверждён (confirm)
+    assert cards[1]["rank_key"].startswith("0-")  # провал: не подтверждён
     assert cards[0]["rank_key"] not in listed.text
     assert cards[1]["rank_key"] not in listed.text
     assert cards[0]["list_reason"].startswith("Категория backend:middle")
     assert "Тест сдан, потребность без уточнений" in cards[0]["list_reason"]
-    assert cards[0]["list_reason"].endswith("Выше соседней карточки по полю балл: 67 против 33.")
+    assert cards[0]["list_reason"].endswith("Выше соседней карточки по полю подтверждён: да против нет.")
     assert cards[1]["list_reason"].endswith("Ниже этой карточки в подборке никого нет.")
-    assert cards[0]["test_score"] == 67
-    assert cards[1]["test_score"] == 33
+    assert 0 < cards[0]["test_score"] < 100
+    assert cards[1]["test_score"] < cards[0]["test_score"]
 
 
 def test_offer_form_double_minus_is_rejected_not_crashed(client):

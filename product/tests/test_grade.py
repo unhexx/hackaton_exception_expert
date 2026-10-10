@@ -1,4 +1,5 @@
-"""Испытание грейда: шаблон, интервал и смена только после confirm."""
+"""Испытание грейда (механика v2): вариант, ключ на сервере, интервал и смена
+грейда только после confirm. ТЗ §2, §2.1 «Категория и грейд»."""
 
 from __future__ import annotations
 
@@ -8,17 +9,12 @@ from pathlib import Path
 
 import product
 from product.app.services.clock import utc_now
-from product.matching.grade import (
-    is_adjacent_grade,
-    is_lower_grade,
-    load_template,
-    score_attempt,
-    select_template,
-    templates_for,
-)
-from product.matching.rules import load_rules
+from product.app.services.tests import is_adjacent_grade, is_lower_grade
+from product.matching import assessment
+from product.matching.grade import load_template, score_attempt, select_template, templates_for
 from product.matching.stems import catalog
-from product.tests.conftest import register_and_confirm
+from product.matching.rules import load_rules
+from product.tests.conftest import answers_by_mode, register_and_confirm, stored_form, take_test
 
 _PROFILE = {
     "full_name": "Иван Синтетиков",
@@ -47,6 +43,7 @@ def _login(client, email: str) -> None:
 
 
 def _answers(template: dict, correct_n: int) -> list[str]:
+    """Прежний шаблон: первые correct_n ответов верны, остальные — нет."""
     chosen = []
     for index, question in enumerate(template["questions"]):
         if index < correct_n:
@@ -104,12 +101,48 @@ def test_lower_grade_follows_scale_not_adjacency():
     assert is_adjacent_grade("ghost", "junior") is False
 
 
-def test_pair_templates_are_stable_and_offline():
+def test_forms_follow_plan_and_stay_offline():
+    """ТЗ §2: план одинаков для всех, конкретные вопросы — разные; ключа нет в публичном виде."""
     rules = load_rules()
-    root = Path(product.matching.grade.__file__).resolve().parent
-    source = (root / "grade.py").read_text(encoding="utf-8")
+    root = Path(product.__file__).resolve().parent / "matching"
+    source = (root / "assessment.py").read_text(encoding="utf-8")
     assert "sqlalchemy" not in source
-    assert "samples.json" not in source
+    seen_sets = []
+    for spec in rules["specializations"]:
+        for grade in rules["grades"]:
+            plan = {part["level"]: part["count"] for part in assessment.blueprint(grade)}
+            assert sum(plan.values()) == 12
+            form = assessment.new_form(spec, grade, assessment.History(), assessment.Exposure())
+            assert len(form["items"]) == 12
+            levels = {}
+            for item in form["items"]:
+                levels[item["level"]] = levels.get(item["level"], 0) + 1
+            assert levels == plan
+            texts = [item["text"] for item in form["items"]]
+            assert len(texts) == len(set(texts))
+            public = assessment.public_questions(form["items"])
+            blob = json.dumps(public, ensure_ascii=False)
+            for item in form["items"]:
+                assert item["key"] in {c["id"] for c in item["options"]}
+            assert '"key"' not in blob and '"b":' not in blob and "family" not in blob
+            for question in public:
+                assert {c["id"] for c in question["choices"]}.isdisjoint({"a", "b", "c"})
+            seen_sets.append(frozenset(item["item_id"] for item in form["items"]))
+    again = assessment.new_form("backend", "middle", assessment.History(), assessment.Exposure())
+    first = assessment.new_form("backend", "middle", assessment.History(), assessment.Exposure())
+    assert [i["key"] for i in again["items"]] != [i["key"] for i in first["items"]]
+    samples = json.loads((root / "vacancies" / "samples.json").read_text(encoding="utf-8"))
+    assert samples["vacancies"]
+    for item in samples["vacancies"]:
+        assert item["grade"] in rules["grades"] and item["specialization"] in rules["specializations"]
+
+
+def test_catalog_families_and_latin_square():
+    """Каталог-источник банка: семейства слотов и латинский квадрат ключей (ТЗ §2,
+    «Содержание и формат заданий команда определяет сама»). Прежняя выдача шаблона
+    нужна золотому прогону и CPU-персонам."""
+    rules = load_rules()
+    root = Path(product.__file__).resolve().parent / "matching"
     assert not list((root / "templates").glob("*.json"))
     rows = catalog()
     ids = [row["template_id"] for row in rows]
@@ -156,11 +189,15 @@ def test_pair_templates_are_stable_and_offline():
     assert first["score"] == 67
     assert first["outcome"] == "confirm"
     assert json.dumps(template, ensure_ascii=False) == before
-    samples = json.loads((root / "vacancies" / "samples.json").read_text(encoding="utf-8"))
-    shown = [item["shows_template"] for item in samples["vacancies"]]
-    assert shown
-    for template_id in shown:
-        load_template(template_id)
+
+
+def test_retake_uses_other_families():
+    first = assessment.new_form("data", "senior", assessment.History(), assessment.Exposure())
+    seen = assessment.history_from([first])
+    second = assessment.new_form("data", "senior", seen, assessment.exposure_from([first]))
+    at_first = {i["family_id"] for i in first["items"] if i["slot"] == "at"}
+    at_second = {i["family_id"] for i in second["items"] if i["slot"] == "at"}
+    assert len(at_first & at_second) <= 3  # в банке кабинета 9 тем на уровень, в варианте — 6
 
 
 def test_recorded_attempt_confirms_without_moving_grade(client):
@@ -175,37 +212,48 @@ def test_recorded_attempt_confirms_without_moving_grade(client):
     started = client.post("/api/candidate/tests/start", json={})
     assert started.status_code == 201, started.text
     body = started.json()
+    assert "correct" not in json.dumps(body) and '"key"' not in json.dumps(body)
     dumped = json.dumps(body)
-    assert "correct" not in dumped
     assert "family" not in dumped
     assert "refusal_contract" not in dumped
     assert "close_cause" not in dumped
     assert "offline_check" not in dumped
     assert body["declared_grade"] == "middle"
-    assert body["template_id"] == select_template(profile_id, "backend", "middle", "v1")
+    assert body["template_id"] == "bank-v2"
+    assert body["total"] == 12 and len(body["questions"]) == 12
     explicit = client.post("/api/candidate/tests/start", json={"grade": "middle"})
     assert explicit.status_code == 201
     assert explicit.json()["attempt_id"] == body["attempt_id"]
-    template = load_template(body["template_id"])
-    unknown = _submit(client, body["attempt_id"], ["nope", "b", "c"])
+    unknown = _submit(client, body["attempt_id"], [["nope"]] + [[] for _ in range(11)])
     assert unknown.status_code == 422
     assert unknown.json()["error"] == "answer_unknown"
     assert _status(client, body["attempt_id"]) == "draft"
-    confirmed = _submit(client, body["attempt_id"], _answers(template, 2))
+    short = _submit(client, body["attempt_id"], [[]])
+    assert short.status_code == 422
+    confirmed = take_test(client, body, "confirm")
     assert confirmed.status_code == 200, confirmed.text
-    assert confirmed.json()["score"] == 67
+    assert confirmed.json()["status"] == "submitted"
+    assert 0 < confirmed.json()["score"] < 100
+    assert confirmed.json()["test_status"] in {"уверенно", "у границы"}
+    assert 0 <= confirmed.json()["confidence"] <= 1
+    assert confirmed.json()["n_items"] >= 12
     assert confirmed.json()["outcome"] == "confirm"
     assert confirmed.json()["proposed_grade"] == "middle"
     assert confirmed.json()["grade"] == "middle"
     assert confirmed.json()["category_id"] == "backend:middle"
-    assert client.get("/api/candidate/category").json()["test_score"] == 67
+    assert client.get("/api/candidate/category").json()["test_score"] == confirmed.json()["score"]
     assert _stamp(client, profile_id) == stamp
-    closed = _submit(client, body["attempt_id"], _answers(template, 2))
+    closed = _submit(client, body["attempt_id"], [])
     assert closed.status_code == 409
     assert closed.json()["error"] == "attempt_closed"
-    again = client.post("/api/candidate/tests/start", json={})
-    assert again.status_code == 201
-    higher = _submit(client, again.json()["attempt_id"], _answers(load_template(again.json()["template_id"]), 3))
+    # Прошлые ответы учитываются (накопление): после confirm одна сильная
+    # попытка может снова дать confirm; повторяем, пока тест не предложит выше.
+    for _ in range(4):
+        again = client.post("/api/candidate/tests/start", json={})
+        assert again.status_code == 201
+        higher = take_test(client, again.json(), "higher")
+        if higher.json()["outcome"] == "suggest_higher":
+            break
     assert higher.status_code == 200, higher.text
     assert higher.json()["score"] == 100
     assert higher.json()["outcome"] == "suggest_higher"
@@ -213,7 +261,9 @@ def test_recorded_attempt_confirms_without_moving_grade(client):
     assert higher.json()["grade"] == "middle"
     assert _stamp(client, profile_id) == stamp
     history = client.get("/api/candidate/tests").json()
-    assert [row["attempt_id"] for row in history[:2]] == [again.json()["attempt_id"], body["attempt_id"]]
+    assert history[0]["attempt_id"] == again.json()["attempt_id"]
+    assert history[-1]["attempt_id"] == body["attempt_id"]
+    assert history[0]["test_status"] in {"уверенно", "у границы"}
     assert "correct" not in json.dumps(history)
 
 
@@ -224,8 +274,7 @@ def test_adjacent_grade_respects_offer_and_interval(client):
     assert early.json()["error"] == "grade_not_offered"
     assert _drafts(client, profile_id) == 0
     started = client.post("/api/candidate/tests/start", json={})
-    template = load_template(started.json()["template_id"])
-    offered = _submit(client, started.json()["attempt_id"], _answers(template, 3))
+    offered = take_test(client, started.json(), "higher")
     assert offered.json()["proposed_grade"] == "senior"
     assert client.post("/api/candidate/tests/start", json={"grade": "lead"}).json()["error"] == "grade_not_offered"
     assert client.post("/api/candidate/tests/start", json={"grade": "junior"}).json()["error"] == "grade_not_offered"
@@ -234,14 +283,15 @@ def test_adjacent_grade_respects_offer_and_interval(client):
     assert conflict.status_code == 409
     assert conflict.json()["error"] == "attempt_open"
     assert _drafts(client, profile_id) == 1
-    _submit(client, open_draft.json()["attempt_id"], _answers(load_template(open_draft.json()["template_id"]), 3))
+    take_test(client, open_draft.json(), "higher")
     survey_stamp = _stamp(client, profile_id)
     adjacent = client.post("/api/candidate/tests/start", json={"grade": "senior"})
     assert adjacent.status_code == 201, adjacent.text
     assert adjacent.json()["declared_grade"] == "senior"
-    assert adjacent.json()["template_id"] == select_template(profile_id, "backend", "senior", "v1")
-    failed = _submit(client, adjacent.json()["attempt_id"], _answers(load_template(adjacent.json()["template_id"]), 1))
+    assert adjacent.json()["template_id"] == "bank-v2"
+    failed = take_test(client, adjacent.json(), "lower")
     assert failed.status_code == 200, failed.text
+    assert failed.json()["score"] < 50
     assert failed.json()["outcome"] == "suggest_lower"
     assert failed.json()["grade"] == "middle"
     assert _stamp(client, profile_id) == survey_stamp
@@ -253,11 +303,7 @@ def test_adjacent_grade_respects_offer_and_interval(client):
 def test_confirmed_adjacent_grade_replaces_category(client):
     profile_id = _seeker(client, "move-grade@example.com")
     started = client.post("/api/candidate/tests/start", json={})
-    recorded = _submit(
-        client,
-        started.json()["attempt_id"],
-        _answers(load_template(started.json()["template_id"]), 3),
-    )
+    recorded = take_test(client, started.json(), "higher")
     assert recorded.json()["category_id"] == "backend:middle"
     register_and_confirm(client, email="boss-grade@example.com", role="employer")
 
@@ -276,10 +322,10 @@ def test_confirmed_adjacent_grade_replaces_category(client):
     assert profile_id in {card["profile_id"] for card in listed("backend:middle")}
     assert profile_id not in {card["profile_id"] for card in listed("backend:senior")}
     _login(client, "move-grade@example.com")
-    done = _submit(client, adjacent.json()["attempt_id"], _answers(load_template(adjacent.json()["template_id"]), 2))
+    done = take_test(client, adjacent.json(), "confirm")
     assert done.status_code == 200, done.text
     assert done.json()["outcome"] == "confirm"
-    assert done.json()["score"] == 67
+    assert 0 < done.json()["score"] < 100
     assert done.json()["grade"] == "senior"
     assert done.json()["category_id"] == "backend:senior"
     assert _stamp(client, profile_id) != "2000-01-01T00:00:00Z"
@@ -288,22 +334,24 @@ def test_confirmed_adjacent_grade_replaces_category(client):
     senior = listed("backend:senior")
     assert profile_id not in {card["profile_id"] for card in middle}
     card = next(item for item in senior if item["profile_id"] == profile_id)
-    assert card["test_score"] == 67
+    assert card["test_score"] == done.json()["score"]
+    assert card["grade_status"].startswith("подтверждён")
     assert "email" not in card
 
 
 def test_edges_keep_recorded_grade(client):
     junior_id = _seeker(client, "jun@example.com", grade="junior")
     started = client.post("/api/candidate/tests/start", json={})
-    done = _submit(client, started.json()["attempt_id"], _answers(load_template(started.json()["template_id"]), 1))
+    done = take_test(client, started.json(), "lower")
     assert done.json()["outcome"] == "suggest_lower"
-    assert done.json()["proposed_grade"] == "junior"
+    # ниже junior грейда нет: предложения «ниже» нет, грейд не понижается
+    assert done.json()["proposed_grade"] is None
     assert done.json()["grade"] == "junior"
     assert _stamp(client, junior_id)
 
     _seeker(client, "lead@example.com", grade="lead")
     started = client.post("/api/candidate/tests/start", json={})
-    done = _submit(client, started.json()["attempt_id"], _answers(load_template(started.json()["template_id"]), 3))
+    done = take_test(client, started.json(), "higher")
     assert done.json()["score"] == 100
     assert done.json()["outcome"] == "confirm"
     assert done.json()["proposed_grade"] == "lead"
@@ -311,36 +359,38 @@ def test_edges_keep_recorded_grade(client):
 
     senior_id = _seeker(client, "sen@example.com", grade="senior")
     started = client.post("/api/candidate/tests/start", json={})
-    done = _submit(client, started.json()["attempt_id"], _answers(load_template(started.json()["template_id"]), 1))
+    done = take_test(client, started.json(), "lower")
     assert done.json()["proposed_grade"] == "middle"
     assert done.json()["grade"] == "senior"
     _set_stamp(client, senior_id, "2000-01-01T00:00:00Z")
     adjacent = client.post("/api/candidate/tests/start", json={"grade": "middle"})
     assert adjacent.status_code == 201, adjacent.text
-    higher = _submit(
-        client,
-        adjacent.json()["attempt_id"],
-        _answers(load_template(adjacent.json()["template_id"]), 3),
-    )
-    assert higher.json()["outcome"] == "suggest_higher"
-    assert higher.json()["proposed_grade"] == "senior"
-    assert higher.json()["grade"] == "senior"
-    assert _stamp(client, senior_id) == "2000-01-01T00:00:00Z"
+    higher = take_test(client, adjacent.json(), "higher")
+    # Ответы провальной попытки senior учитываются, поэтому итог — confirm
+    # (грейд записывается как middle) или suggest_higher (грейд остаётся senior).
+    if higher.json()["outcome"] == "suggest_higher":
+        assert higher.json()["proposed_grade"] == "senior"
+        assert higher.json()["grade"] == "senior"
+        assert _stamp(client, senior_id) == "2000-01-01T00:00:00Z"
+    else:
+        assert higher.json()["outcome"] == "confirm"
+        assert higher.json()["grade"] == "middle"
+        assert _stamp(client, senior_id) != "2000-01-01T00:00:00Z"
 
     _seeker(client, "own@example.com")
     attempt_id = client.post("/api/candidate/tests/start", json={}).json()["attempt_id"]
     _seeker(client, "other@example.com")
-    foreign = _submit(client, attempt_id, ["a", "b", "c"])
+    foreign = _submit(client, attempt_id, [])
     assert foreign.status_code == 404
     assert foreign.json()["error"] == "not_found"
-    missing = _submit(client, 999999, ["a", "b", "c"])
+    missing = _submit(client, 999999, [])
     assert missing.status_code == 404
     assert missing.json()["error"] == "not_found"
-    overflow = _submit(client, 10**30, ["a", "b", "c"])
+    overflow = _submit(client, 10**30, [])
     assert overflow.status_code == 404
     assert overflow.json()["error"] == "not_found"
     register_and_confirm(client, email="bare@example.com")
-    bare = client.post("/api/candidate/tests/1/submit", json={"answers": ["a", "b", "c"]})
+    bare = client.post("/api/candidate/tests/1/submit", json={"answers": []})
     assert bare.status_code == 404
     assert bare.json()["error"] == "not_found"
     register_and_confirm(client, email="boss-edge@example.com", role="employer")
@@ -356,29 +406,33 @@ def test_page_shows_attempt_history_and_vacancy_link(client):
     _seeker(client, "page@example.com")
     started = client.post("/api/candidate/tests/start", json={})
     body = started.json()
-    template = load_template(body["template_id"])
     page = client.get("/candidate/test")
     assert page.status_code == 200
-    assert template["questions"][0]["text"] in page.text
+    assert body["questions"][0]["text"] in page.text
+    assert "Вопрос 1 из 12" in page.text
     assert "принять грейд" not in page.text.casefold()
     assert "Синтетическая вакансия backend middle" in page.text
-    assert "показывает шаблон backend-middle-a" in page.text
-    answers = _answers(template, 3)
-    sent = client.post(
-        "/candidate/test/submit",
-        data={
-            "csrf": _csrf(page.text),
-            "attempt_id": str(body["attempt_id"]),
-            "answer_0": answers[0],
-            "answer_1": answers[1],
-            "answer_2": answers[2],
-        },
-        follow_redirects=False,
-    )
-    assert sent.status_code == 303
+    assert "3 — уровень ниже (junior), 6 — заявленный уровень (middle), 3 — уровень выше (senior)" in page.text
+    # Ответы по одному через страницу: все верно → предложен грейд выше
+    for _ in range(40):
+        form = stored_form(client, body["attempt_id"])
+        open_items = [i for i in form["items"] if i["qid"] not in (form.get("answers") or {})]
+        if not open_items:
+            break
+        item = open_items[0]
+        page = client.get("/candidate/test")
+        data = {"csrf": _csrf(page.text), "attempt_id": str(body["attempt_id"]), "qid": item["qid"]}
+        for option in item["options"]:
+            data[f"mark_{option['id']}"] = "true" if option["id"] == item["key"] else "false"
+        sent = client.post("/candidate/test/answer", data=data, follow_redirects=False)
+        assert sent.status_code == 303
+        if _status(client, body["attempt_id"]) == "submitted":
+            break
+    assert _status(client, body["attempt_id"]) == "submitted"
     again = client.get("/candidate/test")
-    assert "балл 100" in again.text
+    assert "Верных ответов: 100%" in again.text
     assert "предложен грейд выше" in again.text
+    assert "Уверенность" in again.text
     assert "Начать тест грейда senior" in again.text
     assert "Что случилось" not in again.text
     assert "ещё нельзя" not in again.text
@@ -395,11 +449,7 @@ def test_page_shows_attempt_history_and_vacancy_link(client):
 def test_first_lower_attempt_skips_interval(client):
     _seeker(client, "first-down@example.com")
     started = client.post("/api/candidate/tests/start", json={})
-    failed = _submit(
-        client,
-        started.json()["attempt_id"],
-        _answers(load_template(started.json()["template_id"]), 1),
-    )
+    failed = take_test(client, started.json(), "lower")
     assert failed.json()["outcome"] == "suggest_lower"
     assert failed.json()["proposed_grade"] == "junior"
     assert failed.json()["grade"] == "middle"
@@ -421,11 +471,7 @@ def test_resume_grade_does_not_burn_first_lower_attempt(client):
     assert _stamp(client, profile_id) == stamp
     started = client.post("/api/candidate/tests/start", json={})
     assert started.json()["declared_grade"] == "senior"
-    failed = _submit(
-        client,
-        started.json()["attempt_id"],
-        _answers(load_template(started.json()["template_id"]), 1),
-    )
+    failed = take_test(client, started.json(), "lower")
     assert failed.json()["outcome"] == "suggest_lower"
     assert failed.json()["proposed_grade"] == "middle"
     assert failed.json()["grade"] == "senior"
@@ -438,32 +484,25 @@ def test_resume_grade_does_not_burn_first_lower_attempt(client):
 def test_hundred_on_lower_grade_does_not_burn_retry(client):
     _seeker(client, "retry-down@example.com")
     recorded = client.post("/api/candidate/tests/start", json={})
-    confirmed = _submit(
-        client,
-        recorded.json()["attempt_id"],
-        _answers(load_template(recorded.json()["template_id"]), 2),
-    )
+    confirmed = take_test(client, recorded.json(), "confirm")
     assert confirmed.json()["outcome"] == "confirm"
-    failed = client.post("/api/candidate/tests/start", json={})
-    lowered = _submit(
-        client,
-        failed.json()["attempt_id"],
-        _answers(load_template(failed.json()["template_id"]), 1),
-    )
+    for _ in range(3):  # накопление: после confirm провал может понадобиться не один
+        failed = client.post("/api/candidate/tests/start", json={})
+        lowered = take_test(client, failed.json(), "lower")
+        if lowered.json()["outcome"] == "suggest_lower":
+            break
     assert lowered.json()["outcome"] == "suggest_lower"
     assert lowered.json()["proposed_grade"] == "junior"
     assert lowered.json()["grade"] == "middle"
     first = client.post("/api/candidate/tests/start", json={"grade": "junior"})
     assert first.status_code == 201, first.text
-    hundred = _submit(
-        client,
-        first.json()["attempt_id"],
-        _answers(load_template(first.json()["template_id"]), 3),
-    )
+    hundred = take_test(client, first.json(), "higher")
     assert hundred.status_code == 200, hundred.text
-    assert hundred.json()["outcome"] == "suggest_higher"
-    assert hundred.json()["proposed_grade"] == "middle"
-    assert hundred.json()["grade"] == "middle"
+    assert hundred.json()["score"] == 100
+    assert hundred.json()["outcome"] in {"suggest_higher", "confirm"}
+    if hundred.json()["outcome"] == "suggest_higher":
+        assert hundred.json()["proposed_grade"] == "middle"
+        assert hundred.json()["grade"] == "middle"
     retry = client.post("/api/candidate/tests/start", json={"grade": "junior"})
     assert retry.status_code == 201, retry.text
     assert retry.json()["declared_grade"] == "junior"
@@ -472,39 +511,28 @@ def test_hundred_on_lower_grade_does_not_burn_retry(client):
 def test_repeat_adjacent_after_written_change_waits_interval(client):
     profile_id = _seeker(client, "repeat-down@example.com", grade="senior")
     started = client.post("/api/candidate/tests/start", json={})
-    offered = _submit(
-        client,
-        started.json()["attempt_id"],
-        _answers(load_template(started.json()["template_id"]), 1),
-    )
+    offered = take_test(client, started.json(), "lower")
     assert offered.json()["proposed_grade"] == "middle"
     first_down = client.post("/api/candidate/tests/start", json={"grade": "middle"})
     assert first_down.status_code == 201, first_down.text
-    moved = _submit(
-        client,
-        first_down.json()["attempt_id"],
-        _answers(load_template(first_down.json()["template_id"]), 2),
-    )
+    moved = take_test(client, first_down.json(), "confirm")
     assert moved.json()["outcome"] == "confirm"
     assert moved.json()["grade"] == "middle"
     assert client.post("/api/candidate/tests/start", json={"grade": "junior"}).json()["error"] == "grade_not_offered"
     assert client.post("/api/candidate/tests/start", json={"grade": "senior"}).json()["error"] == "grade_not_offered"
     recorded = client.post("/api/candidate/tests/start", json={})
-    lowered = _submit(
-        client,
-        recorded.json()["attempt_id"],
-        _answers(load_template(recorded.json()["template_id"]), 1),
-    )
+    lowered = take_test(client, recorded.json(), "lower")
     assert lowered.json()["proposed_grade"] == "junior"
     blocked_down = client.post("/api/candidate/tests/start", json={"grade": "junior"})
     assert blocked_down.status_code == 409
     assert blocked_down.json()["error"] == "grade_interval"
-    higher = client.post("/api/candidate/tests/start", json={})
-    offered_up = _submit(
-        client,
-        higher.json()["attempt_id"],
-        _answers(load_template(higher.json()["template_id"]), 3),
-    )
+    # Ответы прошлых попыток учитываются (накопление), поэтому после провала
+    # нужна не одна сильная попытка, чтобы тест предложил грейд выше.
+    for _ in range(5):
+        higher = client.post("/api/candidate/tests/start", json={})
+        offered_up = take_test(client, higher.json(), "higher")
+        if offered_up.json()["proposed_grade"] == "senior":
+            break
     assert offered_up.json()["proposed_grade"] == "senior"
     blocked_up = client.post("/api/candidate/tests/start", json={"grade": "senior"})
     assert blocked_up.status_code == 409
@@ -513,11 +541,7 @@ def test_repeat_adjacent_after_written_change_waits_interval(client):
     opened = client.post("/api/candidate/tests/start", json={"grade": "senior"})
     assert opened.status_code == 201, opened.text
     _set_stamp(client, profile_id, utc_now())
-    late = _submit(
-        client,
-        opened.json()["attempt_id"],
-        _answers(load_template(opened.json()["template_id"]), 2),
-    )
+    late = take_test(client, opened.json(), "confirm")
     assert late.status_code == 409
     assert late.json()["error"] == "grade_interval"
     assert _status(client, opened.json()["attempt_id"]) == "draft"
@@ -526,11 +550,7 @@ def test_repeat_adjacent_after_written_change_waits_interval(client):
 def test_page_first_lower_offer_has_no_interval_notice(client):
     _seeker(client, "html-down@example.com")
     started = client.post("/api/candidate/tests/start", json={})
-    failed = _submit(
-        client,
-        started.json()["attempt_id"],
-        _answers(load_template(started.json()["template_id"]), 1),
-    )
+    failed = take_test(client, started.json(), "lower")
     assert failed.json()["proposed_grade"] == "junior"
     page = client.get("/candidate/test")
     assert page.status_code == 200

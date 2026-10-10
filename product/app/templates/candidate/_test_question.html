@@ -1,0 +1,23 @@
+<section class="test-question">
+  <p class="test-caption">Вопрос {{ draft_view.answered + 1 }} из {{ draft_view.total }}</p>
+  <div class="test-track">
+    <div class="test-track-bar" style="width: calc(100% * {{ draft_view.answered }} / {{ draft_view.total }})"></div>
+  </div>
+  <form method="post" action="/candidate/test/answer">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="hidden" name="attempt_id" value="{{ draft_view.attempt_id }}">
+    <input type="hidden" name="qid" value="{{ question.id }}">
+    <fieldset>
+      <legend>{{ question.text }}</legend>
+      <p class="hint">Оцените каждый вариант.</p>
+      {% for choice in question.choices %}
+      <div class="test-choice">
+        <p>{{ choice.text }}</p>
+        <label><input type="radio" name="mark_{{ choice.id }}" value="true" required> верно</label>
+        <label><input type="radio" name="mark_{{ choice.id }}" value="false" required> неверно</label>
+      </div>
+      {% endfor %}
+    </fieldset>
+    <p><button type="submit">Ответить</button></p>
+  </form>
+</section>

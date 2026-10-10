@@ -1,4 +1,7 @@
-"""Сборка процесса. После каркаса файл не переписывают."""
+"""Сборка процесса. После каркаса файл не переписывают.
+
+ТЗ §3.5 «Архитектура», «API (OpenAPI/Swagger)», «Безопасность»; ТЗ §3.3 — стенд работает без сети.
+"""
 
 from __future__ import annotations
 
@@ -26,7 +29,7 @@ def create_app() -> FastAPI:
     secret = product_secret()
     application = FastAPI(
         title="Агрегатор ИТ-вакансий ФСП",
-        version="1.2.12",
+        version="1.3.0",
         description="Кабинеты соискателя и работодателя, API и один файл SQLite.",
         docs_url=None,
         redoc_url=None,

@@ -53,7 +53,7 @@ def init_db() -> None:
         path = sqlite_path()
         path.parent.mkdir(parents=True, exist_ok=True)
         Base.metadata.create_all(get_engine())
-        ensure_columns(get_engine())  # старый том: добавить колонки механики v2
+        ensure_columns(get_engine())  # том, созданный до появления колонок: добавить их
         db = open_session()
         try:
             load_into(db)

@@ -3,6 +3,8 @@
 Открытый код в базу не пишется. Сравнение — через Argon2, не по строке хэша.
 
 ТЗ §2.2 п.4 «регистрация по почте с подтверждением адреса»; ТЗ §3.5 «Безопасность».
+ТЗ §3.5 «защита от несанкционированного доступа»: код подтверждения сбрасывается
+после 5 ошибок, вход по паролю блокируется на 15 минут после 5 ошибок подряд.
 """
 
 from __future__ import annotations
@@ -14,7 +16,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from product.app.db.models import User
+from product.app.db.models import LoginThrottle, User
 from product.app.log import log_event
 from product.app.services.clock import utc_after, utc_now, is_past
 from product.app.services.errors import ApiError, fail
@@ -23,6 +25,8 @@ from product.app.services.passwords import hash_secret, verify_secret
 _EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 _CODE_ATTEMPTS = 5
 _CODE_TTL_MINUTES = 30
+_LOGIN_ATTEMPTS = 5
+_LOGIN_LOCK_MINUTES = 15
 
 
 def _clean_email(email: object) -> str:
@@ -137,12 +141,40 @@ def resend_code(db: Session, *, email: object) -> str:
 
 
 def authenticate(db: Session, *, email: object, password: object) -> User:
+    """Вход по почте и паролю с защитой от подбора пароля.
+
+    Пять неверных паролей подряд для одного адреса — вход по нему закрыт на
+    15 минут (ответ 429), даже с верным паролем. Счётчик ведётся и для
+    незарегистрированных адресов, поэтому ответ не раскрывает, есть ли учётка.
+    Удачный вход счётчик сбрасывает.
+    """
     cleaned = email.strip().lower() if isinstance(email, str) else ""
+    throttle = db.get(LoginThrottle, cleaned) if cleaned and len(cleaned) <= 254 else None
+    if throttle is not None and throttle.locked_until and not is_past(throttle.locked_until):
+        log_event("login_failed", "login_locked")
+        fail(429, "login_locked", attempts=_LOGIN_ATTEMPTS, minutes=_LOGIN_LOCK_MINUTES)
     user = db.scalar(select(User).where(User.email == cleaned)) if cleaned else None
     if user is None or not isinstance(password, str) or not verify_secret(user.password_hash, password):
+        if cleaned and len(cleaned) <= 254:
+            _count_failure(db, throttle, cleaned)
         log_event("login_failed", "credentials")
         fail(401, "credentials")
+    if throttle is not None:
+        db.delete(throttle)
+        db.commit()
     if not user.email_verified:
         log_event("login_failed", "email_unverified")
         fail(403, "email_unverified")
     return user
+
+
+def _count_failure(db: Session, throttle: LoginThrottle | None, email: str) -> None:
+    """+1 к неудачным входам; на пятой — блокировка и обнуление счётчика."""
+    if throttle is None:
+        throttle = LoginThrottle(email=email, failures=0, locked_until=None)
+        db.add(throttle)
+    throttle.failures += 1
+    if throttle.failures >= _LOGIN_ATTEMPTS:
+        throttle.failures = 0
+        throttle.locked_until = utc_after(_LOGIN_LOCK_MINUTES)
+    db.commit()

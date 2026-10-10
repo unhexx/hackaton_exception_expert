@@ -1,4 +1,7 @@
-"""Золотой прогон офлайн: числа только из этого запуска, порога нет."""
+"""Золотой прогон офлайн: числа только из этого запуска, порога нет.
+
+ТЗ §2 «собственная процедура оценки решения»; ТЗ §3.4; ТЗ §3.3 — стенд работает без сети.
+"""
 
 from __future__ import annotations
 
@@ -64,20 +67,12 @@ def test_golden_report_prints_this_run_only():
     assert competent_n == leak_n == adjacent_n == 72
     assert competent_hit == 72
     assert adjacent_hit < competent_hit
-    if _pair_has_three_key_triples():
-        assert leak_hit < competent_hit
+    # Перемешанные варианты: выученный по позициям ключ почти не проходит.
+    assert leak_hit * 4 < competent_hit
 
 
-def _pair_has_three_key_triples() -> bool:
-    grouped: dict[tuple[str, str], set[tuple[str, ...]]] = {}
-    for row in catalog():
-        triple = tuple(str(question["correct"]) for question in row["questions"])
-        grouped.setdefault((str(row["specialization"]), str(row["grade"])), set()).add(triple)
-    return any(len(triples) == 3 for triples in grouped.values())
-
-
-def _stem(template_id: str, question_id: str) -> tuple[dict, dict]:
-    row = next(item for item in catalog() if item["template_id"] == template_id)
+def _stem(set_id: str, question_id: str) -> tuple[dict, dict]:
+    row = next(item for item in catalog() if item["set_id"] == set_id)
     question = next(item for item in row["questions"] if item["id"] == question_id)
     return row, question
 
@@ -141,12 +136,12 @@ def test_grade_separation_is_not_a_threshold():
         ("frontend-junior-a", "q3"),
         ("security-lead-a", "q1"),
     )
-    for template_id, question_id in separated_ids:
-        row, question = _stem(template_id, question_id)
+    for set_id, question_id in separated_ids:
+        row, question = _stem(set_id, question_id)
         assert item_separates(question, row["grade"]) is True
     drifted_ids = ()
-    for template_id, question_id in drifted_ids:
-        row, question = _stem(template_id, question_id)
+    for set_id, question_id in drifted_ids:
+        row, question = _stem(set_id, question_id)
         assert item_separates(question, row["grade"]) is False
     assert "grade_separation" not in summarize()
 
@@ -255,3 +250,7 @@ def test_validation_action_is_plain_text(client):
     assert "frontend:middle" not in first.text
     assert "Подборка frontend:middle" in second.text
     assert "backend:middle" not in second.text
+    whole = client.get("/employer/shortlist", params={"grade": "middle"}, headers={"HX-Request": "true"})
+    assert "Поиск по базе: middle" in whole.text
+    every = client.get("/employer/shortlist", params={"q": ""}, headers={"HX-Request": "true"})
+    assert "Поиск по всей базе" in every.text

@@ -134,7 +134,7 @@ def _submit(profile_id: int, score: int, outcome: str, spec: str = "backend", gr
                 profile_id=profile_id,
                 specialization=spec,
                 declared_grade=grade,
-                template_id=f"{spec}-{grade}-a",
+                template_id="bank",
                 rule_version="v1",
                 answers_json="[]",
                 score=score,
@@ -189,9 +189,20 @@ def test_employer_sees_scored_profiles_without_email(client):
     register_and_confirm(client, email="boss@example.com", role="employer")
     denied = client.get("/api/candidate/category")
     assert denied.status_code == 403
+    # ТЗ §2.1 «Поиск по банку кандидатов»: без категории — вся опубликованная база.
     naked = client.get("/api/employer/candidates")
-    assert naked.status_code == 422
-    assert naked.json()["error"] == "category_id"
+    assert naked.status_code == 200
+    whole = [card["profile_id"] for card in naked.json()]
+    assert fresh in whole and high in whole and hidden not in whole
+    by_spec = client.get("/api/employer/candidates", params={"specialization": "backend", "grade": "middle"})
+    assert by_spec.status_code == 200
+    assert {card["category_id"] for card in by_spec.json()} <= {"backend:middle"}
+    wrong = client.get("/api/employer/candidates", params={"specialization": "cobol"})
+    assert wrong.status_code == 422 and wrong.json()["error"] == "closed_list"
+    clash = client.get(
+        "/api/employer/candidates", params={"category_id": "backend:middle", "grade": "senior"}
+    )
+    assert clash.status_code == 422 and clash.json()["error"] == "category_id"
     bad = client.get("/api/employer/candidates", params={"category_id": "it:middle"})
     assert bad.status_code == 422
     assert bad.json()["error"] == "category_id"

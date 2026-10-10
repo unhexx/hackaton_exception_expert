@@ -1,4 +1,7 @@
-"""PKCE и обмен кода без Keycloak: сеть подменяется."""
+"""PKCE и обмен кода без Keycloak: сеть подменяется.
+
+ТЗ §2 и §3.5 «Аутентификация: совместимость с Keycloak (ФСП ID)».
+"""
 
 from __future__ import annotations
 

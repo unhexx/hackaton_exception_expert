@@ -1,4 +1,4 @@
-"""Испытание грейда (механика v2): вариант, ключ на сервере, интервал и смена
+"""Испытание грейда: вариант, ключ на сервере, интервал и смена
 грейда только после confirm. ТЗ §2, §2.1 «Категория и грейд»."""
 
 from __future__ import annotations
@@ -11,7 +11,6 @@ import product
 from product.app.services.clock import utc_now
 from product.app.services.tests import is_adjacent_grade, is_lower_grade
 from product.matching import assessment
-from product.matching.grade import load_template, score_attempt, select_template, templates_for
 from product.matching.stems import catalog
 from product.matching.rules import load_rules
 from product.tests.conftest import answers_by_mode, register_and_confirm, stored_form, take_test
@@ -40,17 +39,6 @@ def _seeker(client, email: str = "seeker@example.com", **extra) -> int:
 def _login(client, email: str) -> None:
     logged = client.post("/api/auth/login", json={"email": email, "password": "password-ok"})
     assert logged.status_code == 200, logged.text
-
-
-def _answers(template: dict, correct_n: int) -> list[str]:
-    """Прежний шаблон: первые correct_n ответов верны, остальные — нет."""
-    chosen = []
-    for index, question in enumerate(template["questions"]):
-        if index < correct_n:
-            chosen.append(question["correct"])
-        else:
-            chosen.append(next(choice["id"] for choice in question["choices"] if choice["id"] != question["correct"]))
-    return chosen
 
 
 def _submit(client, attempt_id: int, answers: list[str]):
@@ -137,59 +125,30 @@ def test_forms_follow_plan_and_stay_offline():
         assert item["grade"] in rules["grades"] and item["specialization"] in rules["specializations"]
 
 
-def test_catalog_families_and_latin_square():
-    """Каталог-источник банка: семейства слотов и латинский квадрат ключей (ТЗ §2,
-    «Содержание и формат заданий команда определяет сама»). Прежняя выдача шаблона
-    нужна золотому прогону и CPU-персонам."""
+def test_catalog_is_unique_and_feeds_the_bank():
+    """Каталог вопросов — источник банка (ТЗ §2 «Содержание и формат заданий
+    команда определяет сама»): 72 набора по 3 вопроса, у каждого вопроса один
+    верный вариант из трёх, тексты уникальны, слоты набора — три темы."""
     rules = load_rules()
     root = Path(product.__file__).resolve().parent / "matching"
     assert not list((root / "templates").glob("*.json"))
+    assert not (root / "grade.py").exists()
     rows = catalog()
-    ids = [row["template_id"] for row in rows]
-    assert len(ids) == len(set(ids))
-    texts = []
+    ids = [row["set_id"] for row in rows]
+    assert len(ids) == len(set(ids)) == 72
     families = ("refusal_contract", "close_cause", "offline_check")
-    letters = {"a", "b", "c"}
+    texts = []
     for row in rows:
+        assert row["specialization"] in rules["specializations"] and row["grade"] in rules["grades"]
         assert len(row["questions"]) == 3
-        keys = [question["correct"] for question in row["questions"]]
-        assert len(set(keys)) == 3
         for index, question in enumerate(row["questions"]):
-            assert question["correct"] in letters
-            assert sum(1 for choice in question["choices"] if choice["id"] == question["correct"]) == 1
-            assert {choice["id"] for choice in question["choices"]} == letters
-            assert question["family"] in families
+            assert {choice["id"] for choice in question["choices"]} == {"a", "b", "c"}
+            assert question["correct"] in {"a", "b", "c"}
             assert question["family"] == families[index]
             texts.append(question["text"])
-            blob = question["text"] + "".join(choice["text"] for choice in question["choices"])
-            assert "вариант a про" not in blob
-            assert "Пара " not in blob
-    assert len(texts) == len(set(texts))
-    covered = 0
-    for spec in rules["specializations"]:
-        for grade in rules["grades"]:
-            found = templates_for(spec, grade, "v1")
-            assert len(found) == 3
-            covered += len(found)
-            assert [row["template_id"] for row in found] == sorted(row["template_id"] for row in found)
-            triples = [tuple(question["correct"] for question in row["questions"]) for row in found]
-            assert len(set(triples)) == 3
-            for slot in range(3):
-                assert {row["questions"][slot]["correct"] for row in found} == letters
-    assert len(rows) == covered == 72
-    chosen = {select_template(profile_id, "backend", "middle", "v1") for profile_id in range(1, 31)}
-    assert len(chosen) >= 2
-    assert select_template(7, "backend", "middle", "v1") == select_template(7, "backend", "middle", "v1")
-    template = load_template("backend-middle-a")
-    before = json.dumps(template, ensure_ascii=False)
-    answers = _answers(template, 2)
-    first = score_attempt(template, answers)
-    second = score_attempt(template, answers)
-    assert first == second
-    assert first["score"] == 67
-    assert first["outcome"] == "confirm"
-    assert json.dumps(template, ensure_ascii=False) == before
-
+    assert len(texts) == len(set(texts)) == 216
+    pairs = {(row["specialization"], row["grade"]) for row in rows}
+    assert len(pairs) == len(rules["specializations"]) * len(rules["grades"])
 
 def test_retake_uses_other_families():
     first = assessment.new_form("data", "senior", assessment.History(), assessment.Exposure())
@@ -219,7 +178,7 @@ def test_recorded_attempt_confirms_without_moving_grade(client):
     assert "close_cause" not in dumped
     assert "offline_check" not in dumped
     assert body["declared_grade"] == "middle"
-    assert body["template_id"] == "bank-v2"
+    assert body["template_id"] == assessment.ENGINE
     assert body["total"] == 12 and len(body["questions"]) == 12
     explicit = client.post("/api/candidate/tests/start", json={"grade": "middle"})
     assert explicit.status_code == 201
@@ -288,7 +247,7 @@ def test_adjacent_grade_respects_offer_and_interval(client):
     adjacent = client.post("/api/candidate/tests/start", json={"grade": "senior"})
     assert adjacent.status_code == 201, adjacent.text
     assert adjacent.json()["declared_grade"] == "senior"
-    assert adjacent.json()["template_id"] == "bank-v2"
+    assert adjacent.json()["template_id"] == assessment.ENGINE
     failed = take_test(client, adjacent.json(), "lower")
     assert failed.status_code == 200, failed.text
     assert failed.json()["score"] < 50

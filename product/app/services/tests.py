@@ -1,4 +1,4 @@
-"""Старт, ответы, сдача и история испытания грейда (механика v2).
+"""Старт, ответы, сдача и история испытания грейда.
 
 ТЗ §2: категория определяется «обязательным путём при регистрации: опрос по
 отрасли и специализации, самостоятельный выбор предполагаемого грейда и
@@ -275,8 +275,9 @@ def start_attempt(db: Session, user: User, payload: dict | None) -> dict:
         adjacent = True
     draft = _draft(db, profile.id)
     if draft is not None and not draft.form_json:
-        # Черновик прежней механики (до v2) в старом томе: вопросов v2 у него нет.
-        # Переиспользуем строку (в базе может быть только один черновик) под новый вариант.
+        # Черновик без сохранённого варианта (form_json пуст — например, строка
+        # из тома до добавления колонки): в базе может быть только один черновик,
+        # поэтому строка переиспользуется под новый вариант.
         spec = profile.specialization
         seen = assessment.history_from(_previous_forms(db, profile, spec))
         draft.specialization, draft.declared_grade = spec, target
@@ -288,7 +289,7 @@ def start_attempt(db: Session, user: User, payload: dict | None) -> dict:
     if draft is not None:
         same = draft.specialization == profile.specialization and draft.declared_grade == target
         if not same:
-            fail(409, "attempt_open", draft_grade=draft.declared_grade, template_id=draft.template_id)
+            fail(409, "attempt_open", draft_grade=draft.declared_grade)
         return _public_attempt(draft)
     if adjacent and interval_blocks(db, profile, target):
         fail(409, "grade_interval", **interval_parts(profile, target))
@@ -297,7 +298,7 @@ def start_attempt(db: Session, user: User, payload: dict | None) -> dict:
     seen = assessment.history_from(_previous_forms(db, profile, spec))
     stored = assessment.new_form(spec, target, seen, _exposure(db))
     if not stored["items"]:
-        fail(409, "template_missing", "template_pair", specialization=spec, grade=target)
+        fail(409, "bank_empty", specialization=spec, grade=target)
     row = TestAttempt(
         profile_id=profile.id,
         specialization=spec,

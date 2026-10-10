@@ -1,8 +1,21 @@
-"""CPU-персоны для прогона жюри. Четыре правила без GPU и без сети.
+"""CPU-персоны для прогона жюри: три правила поведения кандидата на тесте грейда.
 
-Множество — все 72 шаблона, каждый через наименьший profile_id.
-Печатаются competent, key_leak и adjacent; random реализован и в отчёт не входит.
-Персоны поле family не читают.
+ТЗ §2 «Команда предлагает собственную процедуру оценки своего решения» и
+ТЗ §2 «устойчивость к распространению заданий»; ТЗ §6, критерий 2.
+
+Персоны проходят тот же тест, что и кабинет (``product.matching.assessment``):
+на каждую пару «специализация × грейд» — три варианта с фиксированным seed,
+всего 72 попытки. Без GPU, без сети и без инференса.
+
+- ``sim_competent`` — знает всё до заявленного уровня включительно; «сдал» =
+  тест подтвердил грейд или предложил выше. Ожидается 72 из 72.
+- ``sim_key_leak`` — выучил чужой ключ по позициям: в каждом вопросе отмечает
+  «верно» вариант на той же позиции, где он был верным у другого кандидата
+  (повтор шаблона b, c, a). Перемешивание вариантов делает такой ключ бесполезным.
+- ``sim_adjacent`` — истинный уровень на ступень ниже заявленного: знает только
+  вопросы уровней ниже. Тест не должен его подтверждать.
+
+Порога нет: строки показывают, как ведёт себя тест на этом запуске.
 """
 
 from __future__ import annotations
@@ -10,98 +23,68 @@ from __future__ import annotations
 import random
 from functools import lru_cache
 
-from product.matching.golden_run import is_drift
-from product.matching.grade import load_template, score_attempt, select_template
 from product.matching.rules import load_rules
-from product.matching.stems import catalog
 
-SIM_PROFILE_ID_LIMIT = 10000
-
-_LETTERS = ("a", "b", "c")
+_VARIANTS_PER_PAIR = 3
 _HIT = frozenset({"confirm", "suggest_higher"})
-_RANDOM_SEED = 20261010
-_KEY_MEMORIZER = ["b", "c", "a"]
-
-
-def _is_hit(scored: dict) -> bool:
-    return scored["outcome"] in _HIT
-
-
-def _answers_competent(template: dict) -> list[str]:
-    return [str(question["correct"]) for question in template["questions"]]
-
-
-def _answers_key_memorizer(_template: dict) -> list[str]:
-    return list(_KEY_MEMORIZER)
-
-
-def _adjacent_letter(question: dict) -> str:
-    incorrect = [choice for choice in question["choices"] if choice["id"] != question["correct"]]
-    non_drift = [choice for choice in incorrect if not is_drift(str(choice["text"]))]
-    if not non_drift:
-        return str(incorrect[0]["id"])
-    return min(str(choice["id"]) for choice in non_drift)
-
-
-def _answers_adjacent(template: dict) -> list[str]:
-    return [_adjacent_letter(question) for question in template["questions"]]
-
-
-def _answers_random(template: dict, rng: random.Random) -> list[str]:
-    return [rng.choice(_LETTERS) for _question in template["questions"]]
+_LEAKED_POSITIONS = (1, 2, 0)  # «b, c, a» — позиции, а не одноразовые id вариантов
 
 
 @lru_cache(maxsize=1)
-def _simulation_slots() -> tuple[tuple[int, str, str, str], ...]:
-    """(profile_id, specialization, grade, template_id) на каждый из 72 шаблонов."""
-    known = {str(row["template_id"]) for row in catalog()}
+def _forms() -> tuple[tuple[str, dict], ...]:
+    """(заявленный грейд, вариант в формате хранения) — 24 пары × 3 варианта."""
+    from product.matching import assessment
+    from product.validation_sim.form import Exposure, History, assemble_form
+
     rules = load_rules()
-    slots: list[tuple[int, str, str, str]] = []
-    for specialization in rules["specializations"]:
-        for grade in rules["grades"]:
-            wanted = {f"{specialization}-{grade}-{letter}": None for letter in _LETTERS}
-            remaining = set(wanted)
-            missing = remaining - known
-            if missing:
-                raise RuntimeError(f"в каталоге нет шаблона {sorted(missing)[0]}")
-            for profile_id in range(1, SIM_PROFILE_ID_LIMIT + 1):
-                template_id = select_template(profile_id, specialization, grade, "v1")
-                if template_id in remaining:
-                    wanted[template_id] = profile_id
-                    remaining.remove(template_id)
-                    if not remaining:
-                        break
-            for letter in _LETTERS:
-                template_id = f"{specialization}-{grade}-{letter}"
-                profile_id = wanted[template_id]
-                if profile_id is None:
-                    raise RuntimeError(
-                        f"для шаблона {template_id} нет profile_id в диапазоне 1..{SIM_PROFILE_ID_LIMIT}"
-                    )
-                slots.append((profile_id, specialization, grade, template_id))
-    return tuple(slots)
+    forms = []
+    for n, spec in enumerate(rules["specializations"]):
+        for k, grade in enumerate(rules["grades"]):
+            for v in range(_VARIANTS_PER_PAIR):
+                rng = random.Random(20261010 + 1000 * n + 10 * k + v)
+                form = assemble_form(assessment.bank_index(), spec, grade, rng, History(), Exposure(),
+                                     frozenset(assessment.pilot()["retired"]))
+                forms.append((str(grade), {"items": assessment._stored(form, 0), "answers": {}}))
+    return tuple(forms)
+
+
+def _knows_up_to(stored: dict, level: int) -> dict:
+    grades = [str(g) for g in load_rules()["grades"]]
+    answers = {}
+    for item in stored["items"]:
+        ok = grades.index(item["level"]) <= level
+        answers[item["qid"]] = [item["key"]] if ok else []
+    return {**stored, "answers": answers}
+
+
+def _leaked_key(stored: dict) -> dict:
+    answers = {}
+    for index, item in enumerate(stored["items"]):
+        position = _LEAKED_POSITIONS[index % len(_LEAKED_POSITIONS)]
+        option = item["options"][position % len(item["options"])]
+        answers[item["qid"]] = [option["id"]]
+    return {**stored, "answers": answers}
+
+
+def _passed(answered: dict, grade: str) -> bool:
+    from product.matching import assessment
+
+    weights = assessment.update_weights(None, answered)
+    outcome, _proposed = assessment.decide(weights, grade)
+    return outcome in _HIT
 
 
 def simulation_counts() -> dict[str, tuple[int, int]]:
-    """Три пары (hit, n) для отчёта. Random считается правилом, в счётчики не входит."""
-    slots = _simulation_slots()
-    n = len(slots)
-    competent = 0
-    leak = 0
-    adjacent = 0
-    rng = random.Random(_RANDOM_SEED)
-    for profile_id, specialization, grade, expected_id in slots:
-        template_id = select_template(profile_id, specialization, grade, "v1")
-        if template_id != expected_id:
-            raise RuntimeError(f"select_template({profile_id}) дал {template_id}, ждали {expected_id}")
-        template = load_template(template_id)
-        if _is_hit(score_attempt(template, _answers_competent(template))):
-            competent += 1
-        if _is_hit(score_attempt(template, _answers_key_memorizer(template))):
-            leak += 1
-        if _is_hit(score_attempt(template, _answers_adjacent(template))):
-            adjacent += 1
-        score_attempt(template, _answers_random(template, rng))
+    """Три пары (сдали, всего) для отчёта ``GET /validation``."""
+    grades = [str(g) for g in load_rules()["grades"]]
+    competent = leak = adjacent = 0
+    forms = _forms()
+    for grade, stored in forms:
+        level = grades.index(grade)
+        competent += _passed(_knows_up_to(stored, level), grade)
+        leak += _passed(_leaked_key(stored), grade)
+        adjacent += _passed(_knows_up_to(stored, level - 1), grade)
+    n = len(forms)
     return {
         "sim_competent": (competent, n),
         "sim_key_leak": (leak, n),

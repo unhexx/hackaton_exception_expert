@@ -1,4 +1,4 @@
-"""Графики «было / v1 / v2» по ``out/results.json``.
+"""Графики валидации теста по ``out/results.json``.
 
 Нужен matplotlib (в образ продукта не входит, ставится отдельно):
 
@@ -6,9 +6,9 @@
     python -m product.validation_sim.plot            # перерисовать по готовому results.json
 
 Цвета — первые четыре слота проверенной категориальной палитры (различимы при
-дальтонизме): «Было» оранжевый, v1 синий, v2 в кабинете бирюзовый, v2 прогноз
-жёлтый. Значения подписаны на столбцах — график читается и без цвета.
-Значения подписаны на столбцах — график читается и без цвета.
+дальтонизме): «Единый набор» оранжевый, «Банк без доборов» синий, «Платформа»
+бирюзовый, «Платформа + форматы» жёлтый. Значения подписаны на столбцах —
+график читается и без цвета.
 
 ТЗ §3.4 «собственная процедура валидации решения и её результаты».
 """
@@ -80,19 +80,19 @@ def plot(results: dict, out_dir: Path = OUT_DIR) -> Path:
     target = 100 * live["pilot"]["target_accuracy"]
     ax.axhline(target, color=MUTED, linewidth=1, linestyle="--")
     ax.text(103, target + 0.3, f"цель {target:g}%", fontsize=8, color=MUTED, va="bottom", ha="right")
-    for block, summary, color, name, dy in ((live, lm, LIVE, "в кабинете", -78), (full, fm, V2, "прогноз", 18)):
+    for block, summary, color, name, dy in ((live, lm, LIVE, "Платформа", -78), (full, fm, V2, "Платформа + форматы", 18)):
         curve = block["main"]["curve"]
         ax.plot([p["coverage_pct"] for p in curve], [p["accuracy_pct"] for p in curve], color=color, linewidth=2)
         cov, acc = summary["confident_share_pct"]["mean"], summary["confident_accuracy_pct"]["mean"]
         ax.scatter([cov], [acc], s=90, color=color, edgecolor="#fcfcfb", linewidth=2, zorder=3)
-        ax.annotate(f"v2 {name}: порог {block['pilot']['confident_threshold']}\n«уверенно» {cov:.0f}% кандидатов,"
+        ax.annotate(f"{name}: порог {block['pilot']['confident_threshold']}\n«уверенно» {cov:.0f}% кандидатов,"
                     f" верно {acc:.1f}%\n(5 прогонов: {summary['confident_accuracy_pct']['min']:.0f}–"
                     f"{summary['confident_accuracy_pct']['max']:.0f}%)",
                     (cov, acc), textcoords="offset points", xytext=(14, dy), fontsize=8, color=INK,
                     arrowprops={"arrowstyle": "-", "color": MUTED, "linewidth": 0.8})
     v1_exact = new["accuracy"]["exact_pct"]
     ax.scatter([100], [v1_exact], s=60, color=NEW, zorder=3)
-    ax.annotate(f"v1: грейд всем,\nверно {v1_exact:g}%", (100, v1_exact), textcoords="offset points",
+    ax.annotate(f"Банк без доборов: грейд всем,\nверно {v1_exact:g}%", (100, v1_exact), textcoords="offset points",
                 xytext=(-78, -30), fontsize=8, color=INK)
     ax.set_xlim(0, 105)
     ax.set_ylim(75, 100)
@@ -119,10 +119,10 @@ def plot(results: dict, out_dir: Path = OUT_DIR) -> Path:
         ys = [block["leakage"]["pass_pct_by_share"][s] for s in shares]
         ax.plot(xs, ys, color=color, linewidth=2, marker="o", markersize=6)
     ax.scatter([0], [old["key_known_pass_pct"]], marker="X", s=80, color=OLD, zorder=3)
-    ax.annotate("старый тест: знают ключ b-c-a", (0, old["key_known_pass_pct"]), textcoords="offset points",
+    ax.annotate("единый набор: известен ключ b-c-a", (0, old["key_known_pass_pct"]), textcoords="offset points",
                 xytext=(8, -4), fontsize=8, color=MUTED)
-    ax.annotate(f"без утечки: было {old['leakage']['pass_pct_by_share'][shares[0]]:.0f}%, "
-                f"v2 в кабинете {live['leakage']['pass_pct_by_share'][shares[0]]:.0f}%",
+    ax.annotate(f"без утечки: единый набор {old['leakage']['pass_pct_by_share'][shares[0]]:.0f}%, "
+                f"платформа {live['leakage']['pass_pct_by_share'][shares[0]]:.0f}%",
                 (0, 3), fontsize=8, color=INK)
     ax.set_xticks(xs)
     ax.set_xticklabels([f"{x:.0f}%" for x in xs], fontsize=9)
@@ -140,7 +140,7 @@ def plot(results: dict, out_dir: Path = OUT_DIR) -> Path:
     ])
     _style(ax, "Грейд = истинный, по истинному грейду")
 
-    # 6. Матрица ошибок v2 в кабинете (одна последовательная шкала)
+    # 6. Матрица ошибок теста платформы (одна последовательная шкала)
     ax = axes[1][2]
     conf = live["main"]["confusion"]
     cols = [*GRADES, "none"]
@@ -157,19 +157,19 @@ def plot(results: dict, out_dir: Path = OUT_DIR) -> Path:
     ax.set_yticklabels(GRADES, fontsize=9)
     ax.set_xlabel("присвоенный грейд", color=MUTED, fontsize=9)
     ax.set_ylabel("истинный грейд", color=MUTED, fontsize=9)
-    ax.set_title("v2 в кабинете: истинный × присвоенный грейд", loc="left", fontsize=11, color=INK, pad=10)
+    ax.set_title("Платформа: истинный × присвоенный грейд", loc="left", fontsize=11, color=INK, pad=10)
     ax.tick_params(colors=MUTED, length=0)
     for spine in ax.spines.values():
         spine.set_visible(False)
 
     handles = [plt.Rectangle((0, 0), 1, 1, color=c) for c in (OLD, NEW, LIVE, V2)]
-    fig.legend(handles, ["Было: 3 вопроса, ключ b-c-a",
-                         "v1: банк семейств, 12 вопросов, IRT",
-                         "v2 в кабинете: 216 вопросов, «оцените каждый вариант»",
-                         "v2 прогноз: + форматы multi / order / numeric"],
+    fig.legend(handles, ["Единый набор: 3 вопроса, общий ключ",
+                         "Банк без доборов: 12 вопросов, IRT",
+                         "Платформа: 216 вопросов, «оцените каждый вариант»",
+                         "Платформа + форматы multi / order / numeric"],
                loc="upper left", bbox_to_anchor=(0.01, 0.995), ncol=4, frameon=False, fontsize=9.5)
     fig.suptitle(f"{results['candidates']} синтетических кандидатов, seed {results['seed']}; "
-                 f"v2 — среднее 5 прогонов", x=0.99, y=0.962, ha="right", fontsize=9, color=MUTED)
+                 f"«Платформа» — среднее 5 прогонов", x=0.99, y=0.962, ha="right", fontsize=9, color=MUTED)
     fig.tight_layout(rect=(0, 0, 1, 0.94), h_pad=3, w_pad=2.5)
     out_dir.mkdir(parents=True, exist_ok=True)
     path = out_dir / "validation_charts.png"

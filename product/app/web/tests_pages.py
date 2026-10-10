@@ -1,4 +1,4 @@
-"""Страница испытания грейда в кабинете кандидата (механика v2).
+"""Страница испытания грейда в кабинете кандидата.
 
 ТЗ §2.1 «Прохождение тестирования: опрос по отрасли и специализации, выбор
 предполагаемого грейда, прохождение теста; результат автоматически определяет
@@ -64,7 +64,7 @@ def _context(request: Request, db: Session, user, error: str = "") -> dict:
             select(TestAttempt).where(TestAttempt.profile_id == profile.id, TestAttempt.status == "draft")
         )
         if draft is not None and not draft.form_json:
-            draft = None  # черновик прежней механики: кнопка «Начать» пересоберёт его под v2
+            draft = None  # черновик без варианта: кнопка «Начать» соберёт вариант заново
         if draft is not None:
             draft_view = public_draft(draft)
     history = list_attempts(db, user)

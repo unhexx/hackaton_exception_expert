@@ -35,6 +35,18 @@ class User(Base):
     created_at: Mapped[str] = mapped_column(String(40), nullable=False)
 
 
+
+class LoginThrottle(Base):
+    """Счётчик неудачных входов по адресу почты (ТЗ §3.5 «защита от
+    несанкционированного доступа»). Ключ — нормализованная почта, в том числе
+    незарегистрированная: так блокировка не выдаёт, есть ли учётная запись."""
+
+    __tablename__ = "login_throttle"
+
+    email: Mapped[str] = mapped_column(String(254), primary_key=True)
+    failures: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    locked_until: Mapped[str | None] = mapped_column(String(40), nullable=True)
+
 class Company(Base):
     __tablename__ = "companies"
 
@@ -148,7 +160,8 @@ class TestAttempt(Base):
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="draft")
     created_at: Mapped[str] = mapped_column(String(40), nullable=False)
     submitted_at: Mapped[str | None] = mapped_column(String(40), nullable=True)
-    # Механика v2 (product/matching/assessment.py). form_json — состав попытки:
+    # Механика теста — product/matching/assessment.py; template_id хранит её
+    # идентификатор (assessment.ENGINE). form_json — состав попытки:
     # вопросы, порядок вариантов, ключ (только на сервере, ТЗ §2 — устойчивость
     # к распространению заданий) и ответы. result_json — уровень, уверенность,
     # статус «уверенно / у границы», положение в грейде.

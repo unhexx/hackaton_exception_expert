@@ -1,4 +1,4 @@
-"""Испытание грейда в кабинете: механика v2 поверх банка семейств вопросов.
+"""Испытание грейда в кабинете: механика теста поверх банка семейств вопросов.
 
 ТЗ §2: «Единый набор заданий для всех кандидатов не подходит — задания и ответы
 быстро разойдутся… генерация уникальных заданий нейросетью не гарантирует
@@ -39,7 +39,7 @@ from product.validation_sim.form import Exposure, History, assemble_form, assemb
 from product.validation_sim.scale import LOWER, next_grade, prev_grade
 from product.validation_sim.scoring import is_correct
 
-ENGINE = "bank-v2"  # значение template_id у попыток новой механики
+ENGINE = "bank"  # идентификатор механики: поле template_id попытки и API
 
 # Порядок полей вопроса в записи попытки (form_json). Ключ — только здесь.
 _ITEM_FIELDS = ("qid", "item_id", "family_id", "slot", "level", "type", "a", "b", "c", "text", "options", "key")

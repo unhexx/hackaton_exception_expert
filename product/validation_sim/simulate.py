@@ -227,8 +227,8 @@ def exp_leakage(make_system, candidates: list[dict], universe: list[str], seed: 
                 shares=LEAK_SHARES) -> dict:
     """Кандидат идёт на ступень ВЫШЕ своего истинного грейда (где должен
     провалиться), но знает ответы на долю ``share`` банка. Насколько растёт
-    доля «сдал»? ``universe`` — что может утечь: варианты (новый тест) или
-    шаблоны (текущий тест)."""
+    доля «сдал»? ``universe`` — что может утечь: варианты банка или наборы
+    эталона «единый набор»."""
     rng = random.Random(seed)
     targets = [c for c in candidates if next_grade(c["true_grade"])]
     out = {}
@@ -292,7 +292,7 @@ def exposure_stats(system: NewSystem, total_variants: int) -> dict:
 def longest_is_correct_share(index: BankIndex) -> dict:
     """Проверка текстов: как часто верный ответ — самый длинный.
     Для выбора из трёх «нейтральная» доля — 33%. Выше — тексты подсказывают ответ."""
-    from product.validation_sim.baseline import _grade_module
+    from product.validation_sim.baseline import question_sets
 
     def share(questions: list[tuple[list[str], int]]) -> float:
         hits = sum(max(range(len(opts)), key=lambda i: len(opts[i])) == ci for opts, ci in questions)
@@ -304,8 +304,8 @@ def longest_is_correct_share(index: BankIndex) -> dict:
         if f["type"] == "single" and f.get("sample")
     ]
     old = []
-    for template in _grade_module()._catalog():
-        for q in template["questions"]:
+    for qset in question_sets():
+        for q in qset["questions"]:
             ids = [c["id"] for c in q["choices"]]
             old.append(([c["text"] for c in q["choices"]], ids.index(q["correct"])))
     return {"old_pct": share(old), "new_single_samples_pct": share(new)}

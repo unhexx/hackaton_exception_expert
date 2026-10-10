@@ -1,6 +1,8 @@
 """Подборка работодателя. Новый фильтр не стирает уже показанный блок.
 
 ТЗ §2.1 «Работа с подборкой… обоснование попадания», «фильтрация и уточнение запроса без потери ранее полученной подборки».
+ТЗ §2.1 «Поиск по банку кандидатов»: без категории форма ищет по всей базе
+с фильтрами по специализации и грейду.
 """
 
 from __future__ import annotations
@@ -26,6 +28,8 @@ def shortlist_page(request: Request, db: Session = Depends(db_session)):
     rules = load_rules()
     params = request.query_params
     category_id = params.get("category_id") or ""
+    specialization = params.get("specialization") or ""
+    grade = params.get("grade") or ""
     partial = request.headers.get("hx-request") == "true"
     ctx = {
         "csrf": ensure_csrf(request),
@@ -37,18 +41,21 @@ def shortlist_page(request: Request, db: Session = Depends(db_session)):
         "hint": "",
         "show_block": False,
     }
-    if category_id or partial:
+    # Отправленная форма (любой параметр) — уже запрос; пустая категория = вся база.
+    if category_id or partial or len(params):
         try:
             cards = employer_candidates(
                 db,
                 category_id=category_id,
+                specialization=specialization,
+                grade=grade,
                 stack=params.getlist("stack"),
                 team_role=params.get("team_role") or "",
                 work_format=params.get("work_format") or "",
                 has_fsp=parse_has_fsp(params.get("has_fsp")),
                 q=params.get("q") or "",
             )
-            ctx["title"] = f"Подборка {category_id}"
+            ctx["title"] = _title(category_id, specialization, grade)
             ctx["cards"] = cards
             if not cards:
                 ctx["hint"] = catalog_hint("hint_shortlist_empty")
@@ -59,3 +66,11 @@ def shortlist_page(request: Request, db: Session = Depends(db_session)):
         if partial:
             return render(request, "employer/_shortlist_block.html", ctx)
     return render(request, "employer/shortlist.html", ctx)
+
+
+def _title(category_id: str, specialization: str, grade: str) -> str:
+    """Заголовок блока: подборка категории или поиск по базе с его фильтрами."""
+    if category_id:
+        return f"Подборка {category_id}"
+    scope = " · ".join(part for part in (specialization, grade) if part)
+    return f"Поиск по базе: {scope}" if scope else "Поиск по всей базе"

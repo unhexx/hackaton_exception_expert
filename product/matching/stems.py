@@ -1,10 +1,15 @@
-"""Каталог испытаний собирается из стемов. Отдельных JSON на пару нет.
+"""Каталог вопросов теста грейда: 216 вопросов, по 9 на пару «специализация × грейд».
 
-Семейства слотов: refusal_contract, close_cause, offline_check.
-Ключи трёх шаблонов пары разводит латинский квадрат по букве шаблона.
-Живые тройки букв в записку не копировать. Тексты вопросов уникальны на весь каталог.
+ТЗ §2 «Содержание и формат заданий команда определяет сама». Каталог — источник
+текстов банка ``product/validation_sim/data/bank.json``: банк группирует вопросы
+в семейства одной сложности, а вариант кандидату собирает
+``product.matching.assessment`` (ключ хранится только на сервере, варианты
+ответа перемешиваются). После правки текстов банк пересобирают:
+``python -m product.validation_sim.generate``.
 
-ТЗ §2 «Содержание и формат заданий команда определяет сама». Тексты 216 вопросов — источник банка product/validation_sim/data/bank.json (после правки — пересобрать: python -m product.validation_sim.generate). Длины вариантов ответа выровнены, чтобы длина не подсказывала ответ.
+Набор — три вопроса пары с буквой a, b или c; слоты набора относятся к темам
+refusal_contract, close_cause и offline_check. Тексты вопросов уникальны на весь
+каталог, длины вариантов ответа выровнены, чтобы длина не подсказывала ответ.
 """
 
 from __future__ import annotations
@@ -16,14 +21,8 @@ _FAMILIES: tuple[str, str, str] = (
     "close_cause",
     "offline_check",
 )
-_KEY_SQUARE: dict[str, tuple[str, str, str]] = {
-    "a": ("b", "c", "a"),
-    "b": ("c", "a", "b"),
-    "c": ("a", "b", "c"),
-}
-_LETTERS = ("a", "b", "c")
 
-# (text, a, b, c, stem_correct) — пятое поле: какая из трёх строк семантически верна.
+# (text, a, b, c, correct) — пятое поле: какая из трёх строк верна.
 _STEMS: dict[tuple[str, str, str], list[tuple[str, str, str, str, str]]] = {
     ('backend', 'junior', 'a'): [
         ('Клиент прислал JSON без обязательного поля. Что вернуть, чтобы вызывающая сторона увидела отказ?', '200 и пустое тело, чтобы клиент не падал на ошибке разбора', '400 или 422 и поле ошибки по схеме', 'HTML 500', 'b'),
@@ -388,30 +387,21 @@ _STEMS: dict[tuple[str, str, str], list[tuple[str, str, str, str, str]]] = {
 }
 
 
-def _place(a_text: str, b_text: str, c_text: str, old_correct: str, new_correct: str) -> tuple[dict[str, str], str]:
-    old = {"a": a_text, "b": b_text, "c": c_text}
-    ordered = [old[letter] for letter in _LETTERS]
-    shift = (_LETTERS.index(new_correct) - _LETTERS.index(old_correct)) % 3
-    placed = [ordered[(i - shift) % 3] for i in range(3)]
-    return {letter: placed[i] for i, letter in enumerate(_LETTERS)}, new_correct
-
-
 @lru_cache(maxsize=1)
 def catalog() -> tuple[dict, ...]:
+    """Наборы вопросов в стабильном порядке; ``correct`` — буква верного текста."""
     rows = []
     for (specialization, grade, letter), questions in sorted(_STEMS.items()):
         items = []
-        square = _KEY_SQUARE[letter]
-        for index, (text, a_text, b_text, c_text, old_correct) in enumerate(questions, start=1):
-            placed, correct = _place(a_text, b_text, c_text, old_correct, square[index - 1])
+        for index, (text, a_text, b_text, c_text, correct) in enumerate(questions, start=1):
             items.append(
                 {
                     "id": f"q{index}",
                     "text": text,
                     "choices": [
-                        {"id": "a", "text": placed["a"]},
-                        {"id": "b", "text": placed["b"]},
-                        {"id": "c", "text": placed["c"]},
+                        {"id": "a", "text": a_text},
+                        {"id": "b", "text": b_text},
+                        {"id": "c", "text": c_text},
                     ],
                     "correct": correct,
                     "family": _FAMILIES[index - 1],
@@ -419,12 +409,9 @@ def catalog() -> tuple[dict, ...]:
             )
         rows.append(
             {
-                "template_id": f"{specialization}-{grade}-{letter}",
-                "rule_version": "v1",
+                "set_id": f"{specialization}-{grade}-{letter}",
                 "specialization": specialization,
                 "grade": grade,
-                "suggest_higher_min": 80,
-                "confirm_min": 50,
                 "questions": items,
             }
         )

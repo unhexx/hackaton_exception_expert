@@ -14,14 +14,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "платежи и очереди",
-      "expected_category_id": "backend:middle",
-      "template_id": "backend-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "a"
-      ],
-      "expected_outcome": "suggest_higher"
+      "expected_category_id": "backend:middle"
     },
     {
       "profile_id": 2,
@@ -37,14 +30,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "backend:middle",
-      "template_id": "backend-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "a"
-      ],
-      "expected_outcome": "suggest_higher"
+      "expected_category_id": "backend:middle"
     },
     {
       "profile_id": 3,
@@ -59,14 +45,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "backend:middle",
-      "template_id": "backend-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "a"
-      ],
-      "expected_outcome": "suggest_higher"
+      "expected_category_id": "backend:middle"
     },
     {
       "profile_id": 4,
@@ -81,14 +60,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "backend:middle",
-      "template_id": "backend-middle-a",
-      "answers": [
-        "b",
-        "a",
-        "b"
-      ],
-      "expected_outcome": "suggest_lower"
+      "expected_category_id": "backend:middle"
     },
     {
       "profile_id": 5,
@@ -103,14 +75,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "backend:middle",
-      "template_id": "backend-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "a"
-      ],
-      "expected_outcome": "suggest_higher"
+      "expected_category_id": "backend:middle"
     },
     {
       "profile_id": 6,
@@ -125,14 +90,7 @@
       "team_role": "тимлид",
       "work_format": "гибрид",
       "experience": "платформа",
-      "expected_category_id": "backend:senior",
-      "template_id": "backend-senior-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "backend:senior"
     },
     {
       "profile_id": 7,
@@ -162,14 +120,7 @@
       "team_role": "тимлид",
       "work_format": "офис",
       "experience": "синтетический стаж",
-      "expected_category_id": "backend:lead",
-      "template_id": "backend-lead-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "backend:lead"
     },
     {
       "profile_id": 9,
@@ -184,14 +135,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "frontend:middle",
-      "template_id": "frontend-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "frontend:middle"
     },
     {
       "profile_id": 10,
@@ -206,14 +150,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "frontend:middle",
-      "template_id": "frontend-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "frontend:middle"
     },
     {
       "profile_id": 11,
@@ -228,14 +165,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "frontend:middle",
-      "template_id": "frontend-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "a"
-      ],
-      "expected_outcome": "suggest_higher"
+      "expected_category_id": "frontend:middle"
     },
     {
       "profile_id": 12,
@@ -250,14 +180,7 @@
       "team_role": "аналитик",
       "work_format": "офис",
       "experience": "синтетический стаж",
-      "expected_category_id": "frontend:senior",
-      "template_id": "frontend-senior-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "frontend:senior"
     },
     {
       "profile_id": 13,
@@ -287,14 +210,7 @@
       "team_role": "тимлид",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "frontend:lead",
-      "template_id": "frontend-lead-a",
-      "answers": [
-        "b",
-        "a",
-        "b"
-      ],
-      "expected_outcome": "suggest_lower"
+      "expected_category_id": "frontend:lead"
     },
     {
       "profile_id": 15,
@@ -309,14 +225,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "mobile:middle",
-      "template_id": "mobile-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "mobile:middle"
     },
     {
       "profile_id": 16,
@@ -331,14 +240,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "mobile:middle",
-      "template_id": "mobile-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "mobile:middle"
     },
     {
       "profile_id": 17,
@@ -353,14 +255,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "mobile:middle",
-      "template_id": "mobile-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "a"
-      ],
-      "expected_outcome": "suggest_higher"
+      "expected_category_id": "mobile:middle"
     },
     {
       "profile_id": 18,
@@ -375,14 +270,7 @@
       "team_role": "аналитик",
       "work_format": "офис",
       "experience": "синтетический стаж",
-      "expected_category_id": "mobile:senior",
-      "template_id": "mobile-senior-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "mobile:senior"
     },
     {
       "profile_id": 19,
@@ -412,14 +300,7 @@
       "team_role": "тимлид",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "mobile:lead",
-      "template_id": "mobile-lead-a",
-      "answers": [
-        "b",
-        "a",
-        "b"
-      ],
-      "expected_outcome": "suggest_lower"
+      "expected_category_id": "mobile:lead"
     },
     {
       "profile_id": 21,
@@ -434,14 +315,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "data:middle",
-      "template_id": "data-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "data:middle"
     },
     {
       "profile_id": 22,
@@ -456,14 +330,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "data:middle",
-      "template_id": "data-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "data:middle"
     },
     {
       "profile_id": 23,
@@ -478,14 +345,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "data:middle",
-      "template_id": "data-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "a"
-      ],
-      "expected_outcome": "suggest_higher"
+      "expected_category_id": "data:middle"
     },
     {
       "profile_id": 24,
@@ -500,14 +360,7 @@
       "team_role": "аналитик",
       "work_format": "офис",
       "experience": "синтетический стаж",
-      "expected_category_id": "data:senior",
-      "template_id": "data-senior-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "data:senior"
     },
     {
       "profile_id": 25,
@@ -537,14 +390,7 @@
       "team_role": "тимлид",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "data:lead",
-      "template_id": "data-lead-a",
-      "answers": [
-        "b",
-        "a",
-        "b"
-      ],
-      "expected_outcome": "suggest_lower"
+      "expected_category_id": "data:lead"
     },
     {
       "profile_id": 27,
@@ -559,14 +405,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "security:middle",
-      "template_id": "security-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "security:middle"
     },
     {
       "profile_id": 28,
@@ -581,14 +420,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "security:middle",
-      "template_id": "security-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "security:middle"
     },
     {
       "profile_id": 29,
@@ -603,14 +435,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "security:middle",
-      "template_id": "security-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "a"
-      ],
-      "expected_outcome": "suggest_higher"
+      "expected_category_id": "security:middle"
     },
     {
       "profile_id": 30,
@@ -625,14 +450,7 @@
       "team_role": "аналитик",
       "work_format": "офис",
       "experience": "синтетический стаж",
-      "expected_category_id": "security:senior",
-      "template_id": "security-senior-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "security:senior"
     },
     {
       "profile_id": 31,
@@ -662,14 +480,7 @@
       "team_role": "тимлид",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "security:lead",
-      "template_id": "security-lead-a",
-      "answers": [
-        "b",
-        "a",
-        "b"
-      ],
-      "expected_outcome": "suggest_lower"
+      "expected_category_id": "security:lead"
     },
     {
       "profile_id": 33,
@@ -684,14 +495,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "devops:middle",
-      "template_id": "devops-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "devops:middle"
     },
     {
       "profile_id": 34,
@@ -706,14 +510,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "devops:middle",
-      "template_id": "devops-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "devops:middle"
     },
     {
       "profile_id": 35,
@@ -728,14 +525,7 @@
       "team_role": "разработчик",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "devops:middle",
-      "template_id": "devops-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "a"
-      ],
-      "expected_outcome": "suggest_higher"
+      "expected_category_id": "devops:middle"
     },
     {
       "profile_id": 36,
@@ -750,14 +540,7 @@
       "team_role": "аналитик",
       "work_format": "офис",
       "experience": "синтетический стаж",
-      "expected_category_id": "devops:senior",
-      "template_id": "devops-senior-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "expected_outcome": "confirm"
+      "expected_category_id": "devops:senior"
     },
     {
       "profile_id": 37,
@@ -787,14 +570,7 @@
       "team_role": "тимлид",
       "work_format": "удалённо",
       "experience": "синтетический стаж",
-      "expected_category_id": "devops:lead",
-      "template_id": "devops-lead-a",
-      "answers": [
-        "b",
-        "a",
-        "b"
-      ],
-      "expected_outcome": "suggest_lower"
+      "expected_category_id": "devops:lead"
     }
   ],
   "needs": [
@@ -952,60 +728,6 @@
       "q": "",
       "relevant_profile_ids": [
         36
-      ]
-    }
-  ],
-  "template_pairs": [
-    {
-      "template_id": "backend-middle-a",
-      "answers": [
-        "b",
-        "c",
-        "b"
-      ],
-      "answers_repeat": [
-        "b",
-        "c",
-        "b"
-      ]
-    },
-    {
-      "template_id": "backend-middle-b",
-      "answers": [
-        "b",
-        "c",
-        "a"
-      ],
-      "answers_repeat": [
-        "b",
-        "c",
-        "a"
-      ]
-    },
-    {
-      "template_id": "frontend-junior-a",
-      "answers": [
-        "a",
-        "a",
-        "b"
-      ],
-      "answers_repeat": [
-        "a",
-        "a",
-        "b"
-      ]
-    },
-    {
-      "template_id": "security-lead-b",
-      "answers": [
-        "b",
-        "a",
-        "b"
-      ],
-      "answers_repeat": [
-        "b",
-        "a",
-        "b"
       ]
     }
   ]

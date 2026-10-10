@@ -1,16 +1,19 @@
-"""Прогон золотого набора. Печатает пять строк, grade_separation и три CPU-персоны, ничего не скачивает.
+"""Прогон золотого набора: пять строк, grade_separation и три CPU-персоны. Сеть не нужна.
 
 ТЗ §2: «команда предлагает собственную процедуру оценки своего решения,
-описывает её и приводит результаты»; ТЗ §6, критерии 1 и 2.
+описывает её и приводит результаты»; ТЗ §3.4 «процедура валидации и её
+результаты»; ТЗ §6, критерии 1 и 2.
 
-Строки отчёта:
+Строки отчёта (первое число — совпало, второе — всего):
 - category_match — категория по анкете и тесту совпала с разметкой (38 профилей);
-- outcome_match — тест v2 на вариантах из банка: ответы «уровень выше / свой /
+- outcome_match — тест на вариантах из банка: ответы «уровень выше / свой /
   ниже» дают ожидаемый итог (suggest_higher / confirm / suggest_lower), 72 случая;
 - form_stable — тот же вариант и те же ответы дают тот же итог и ту же оценку;
 - relevant_in_top — отмеченные релевантными попали в топ подборки;
-- resume_ok — PDF разобран без падения.
-grade_separation — сколько вопросов каталога разделяют грейды (порога нет).
+- resume_ok — PDF разобран без падения;
+- grade_separation — сколько вопросов каталога разделяют грейды (порога нет);
+- sim_competent, sim_key_leak, sim_adjacent — CPU-персоны на том же тесте
+  (``product.matching.simulate``), порога нет.
 Подробная симуляция на 500 кандидатах — ``python -m product.validation_sim.run``.
 read_resume_bytes принимает байты и отдаёт словарь; код resume_no_text в
 ключе error — успешный разбор пустого слоя, не падение.
@@ -115,12 +118,10 @@ def item_separates(question: dict, grade: str) -> bool:
 
 
 def grade_separation_counts() -> tuple[int, int]:
-    """Сколько пунктов v1 разделяют грейды, и сколько пунктов всего. Порога нет."""
+    """Сколько вопросов каталога разделяют грейды, и сколько вопросов всего. Порога нет."""
     separated = 0
     total = 0
     for row in catalog():
-        if row.get("rule_version") != "v1":
-            continue
         grade = str(row["grade"])
         for question in row["questions"]:
             total += 1
@@ -169,31 +170,11 @@ def _fit(row: dict, category_id: str, rank_key: str, need: dict):
     )
 
 
-def _legacy_scores_match_answers(cases: dict) -> None:
-    """Не вызывается: проверяла ответы старых шаблонов (механика до v2)."""
-    from product.matching.grade import load_template, score_attempt
-
-    for row in cases["profiles"]:
-        if "answers" not in row:
-            continue
-        scored = score_attempt(load_template(row["template_id"]), row["answers"])
-        if row.get("expected_outcome") not in (None, scored["outcome"]):
-            raise ValueError(
-                f"profile {row['profile_id']}: expected_outcome {row.get('expected_outcome')} "
-                f"не сходится с ответами {scored['outcome']}"
-            )
-        if row.get("test_score") != scored["score"] or row.get("test_outcome") != scored["outcome"]:
-            raise ValueError(
-                f"profile {row['profile_id']}: балл {row.get('test_score')}/{row.get('test_outcome')} "
-                f"не сходится с ответами {scored['score']}/{scored['outcome']}"
-            )
-
-
 _MODES = {"higher": "suggest_higher", "confirm": "confirm", "lower": "suggest_lower"}
 
 
 def _engine_cases():
-    """Варианты теста v2 на каждую пару «специализация × грейд» с фиксированным
+    """Вариант теста на каждую пару «специализация × грейд» с фиксированным
     seed: прогон воспроизводим и не зависит от случайности кабинета."""
     import random
 
@@ -231,7 +212,7 @@ def _expected(grade: str, mode: str) -> str:
 
 
 def _outcome_counts(cases: dict) -> tuple[int, int]:
-    """Ответы с известным уровнем → ожидаемый итог теста v2 (72 случая)."""
+    """Ответы с известным уровнем → ожидаемый итог теста (72 случая)."""
     from product.matching import assessment
 
     hit = total = 0

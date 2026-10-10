@@ -1,4 +1,6 @@
-"""Прогон валидации: старый тест, новый v1 и улучшенный v2 на одних и тех же кандидатах.
+"""Прогон валидации: тест платформы и эталоны сравнения на одних и тех же кандидатах.
+
+ТЗ §2 и §3.4: «собственная процедура валидации решения и её результаты»; ТЗ §6 критерий 2.
 
 Запуск из корня репозитория (после ``generate``):
 
@@ -8,7 +10,7 @@
 Результаты в ``product/validation_sim/out``:
     results.json    все показатели (машиночитаемо)
     report.md       таблицы для сопроводительной записки (ТЗ §3.4)
-    per_candidate.csv  итог каждого кандидата: истинный грейд / старый / v1 / v2 (статус, уверенность)
+    per_candidate.csv  итог каждого кандидата: истинный грейд / эталоны / платформа (статус, уверенность)
     validation_charts.png  графики, если установлен matplotlib (см. plot.py)
 """
 
@@ -24,7 +26,7 @@ from product.validation_sim import bank as bank_mod
 from product.validation_sim import candidates as cand_mod
 from product.validation_sim import adaptive
 from product.validation_sim import simulate as sim
-from product.validation_sim.baseline import OldSystem
+from product.validation_sim.baseline import BaselineSystem
 from product.validation_sim.scale import GRADES
 
 OUT_DIR = Path(__file__).resolve().parent / "out"
@@ -44,14 +46,14 @@ def run(candidates_path: Path, bank_path: Path, seed: int, out_dir: Path) -> dic
         return lambda: sim.NewSystem(index, seed + offset)
 
     def old_system(offset: int = 0):
-        return lambda: OldSystem(seed + offset)
+        return lambda: BaselineSystem(seed + offset)
 
-    old_templates = [t["template_id"] for t in OldSystem(seed).grade._catalog()]
+    baseline_sets = BaselineSystem.set_ids()
 
     results: dict = {"seed": seed, "candidates": len(cands), "systems": {}}
     per_candidate_finals = {}
     for key, factory, universe in (
-        ("old", old_system, old_templates),
+        ("old", old_system, baseline_sets),
         ("new", new_system, index.all_variant_ids()),
     ):
         acc = sim.exp_accuracy_retest(factory(1), cands)
@@ -71,11 +73,11 @@ def run(candidates_path: Path, bank_path: Path, seed: int, out_dir: Path) -> dic
         system = factory(6)()
         per_candidate_finals[key] = [sim.run_chain(system, c)[0] for c in cands]
 
-    # v2: результат с уверенностью, доп. блоки, накопление, пилот, осторожный порог.
-    # Две конфигурации банка:
-    #   v2_live — как работает кабинет сейчас: 216 существующих вопросов в формате
+    # Тест платформы: результат с уверенностью, доп. блоки, накопление, пилот,
+    # осторожный порог. Две конфигурации банка:
+    #   v2_live — как работает кабинет: 216 вопросов каталога в формате
     #             «оцените каждый вариант» (judge);
-    #   v2      — прогноз, когда команда допишет вопросы форматов multi/order/numeric.
+    #   v2      — тот же тест с вопросами форматов multi/order/numeric.
     v2_first = {}
     for key, view, pilot_path in (
         ("v2_live", bank_mod.live_view(index.bank), adaptive.PILOT_LIVE_PATH),
@@ -129,7 +131,7 @@ def run(candidates_path: Path, bank_path: Path, seed: int, out_dir: Path) -> dic
 
 
 def render_report(r: dict) -> str:
-    """Отчёт для сопроводительной записки: «было / v1 / v2 кабинет / v2 прогноз»."""
+    """Отчёт для сопроводительной записки: эталоны и тест платформы в двух конфигурациях."""
     old, new = r["systems"]["old"], r["systems"]["new"]
     live, full = r["systems"]["v2_live"], r["systems"]["v2"]
 
@@ -137,22 +139,23 @@ def render_report(r: dict) -> str:
         cell = block["main"]["summary"][key]
         return f"{cell['mean']} ({cell['min']}–{cell['max']})"
 
-    head = "| Показатель | Было | v1 | v2 в кабинете | v2 прогноз |"
+    head = "| Показатель | Единый набор | Банк без доборов | Платформа | Платформа + форматы |"
     sep = "| --- | --- | --- | --- | --- |"
     lines = [
         "# Валидация механики тестирования: симуляция",
         "",
         f"Кандидатов: {r['candidates']}, seed {r['seed']}, время прогона {r['seconds']} с.",
         "",
-        "- **Было** — текущий тест до v2: 3 вопроса, ключ b-c-a (настоящий код `product/matching/grade.py`).",
-        "- **v1** — банк семейств, 12 вопросов по плану 3/6/3, оценка уровня (IRT).",
-        "- **v2 в кабинете** — то, что работает в продукте (`product/matching/assessment.py`): 216 вопросов "
+        "- **Единый набор** — эталон «один набор заданий для всех» (ТЗ §2): 3 вопроса, общий ключ b-c-a "
+        "(`product/validation_sim/baseline.py`).",
+        "- **Банк без доборов** — банк семейств, 12 вопросов по плану 3/6/3, оценка уровня (IRT), без доборов и уверенности.",
+        "- **Платформа** — то, что работает в кабинете (`product/matching/assessment.py`): 216 вопросов "
         "каталога в формате «оцените каждый вариант», результат с уверенностью, доп. блоки у границы, "
         "накопление, пилот, осторожный порог.",
-        "- **v2 прогноз** — та же механика, когда команда допишет вопросы форматов multi / order / numeric.",
+        "- **Платформа + форматы** — тот же тест, когда в банк добавят вопросы форматов multi / order / numeric.",
         "",
-        f"Для v2 — среднее по {live['main']['repeats']} прогонам, в скобках мин–макс. Тексты вопросов — после "
-        "выравнивания длины вариантов (у старого теста приём «самый длинный ответ» до правки проходил в 56% случаев).",
+        f"Для «Платформа» — среднее по {live['main']['repeats']} прогонам, в скобках мин–макс. Длины вариантов "
+        "ответа в каталоге выровнены, чтобы длина не подсказывала ответ.",
         "",
         "## Сводка",
         "",
@@ -171,10 +174,10 @@ def render_report(r: dict) -> str:
         f"{mm(live, 'retest_same_pct')} | {mm(full, 'retest_same_pct')} |",
         f"| Вопросов за попытку | 3 | 12 | {mm(live, 'items_per_attempt')} | {mm(full, 'items_per_attempt')} |",
         "",
-        "## Результат с уверенностью (v2)",
+        "## Результат с уверенностью",
         "",
     ]
-    for title, block in (("v2 в кабинете", live), ("v2 прогноз", full)):
+    for title, block in (("Платформа", live), ("Платформа + форматы", full)):
         pilot = block["pilot"]
         lines.append(
             f"- {title}: порог «уверенно» {pilot['confident_threshold']} — наименьший, при котором на ОТДЕЛЬНОЙ "
@@ -184,7 +187,7 @@ def render_report(r: dict) -> str:
         )
     lines += [
         "",
-        "| Порог уверенности | v2 в кабинете: доля / точность, % | v2 прогноз: доля / точность, % |",
+        "| Порог уверенности | Платформа: доля / точность, % | Платформа + форматы: доля / точность, % |",
         "| --- | --- | --- |",
     ]
     live_curve = {round(p["threshold"], 2): p for p in live["main"]["curve"]}
@@ -199,7 +202,7 @@ def render_report(r: dict) -> str:
         "",
         "## Уловки: доля «сдал» на заявленный грейд, %",
         "",
-        "| Стратегия | Было | v1 | v2 в кабинете | v2 прогноз |",
+        "| Стратегия | Единый набор | Банк без доборов | Платформа | Платформа + форматы |",
         sep,
         f"| Должны сдать по истинному уровню (эталон) | {old['tricks']['ideal_pass_pct']} | "
         f"{new['tricks']['ideal_pass_pct']} | {live['tricks']['ideal_pass_pct']} | {full['tricks']['ideal_pass_pct']} |",
@@ -213,7 +216,7 @@ def render_report(r: dict) -> str:
         "",
         "## Утечка: кандидат идёт на ступень выше истинной, доля «сдал», %",
         "",
-        "| Доля утёкшего банка | Было (шаблоны) | v1 | v2 в кабинете | v2 прогноз |",
+        "| Доля утёкшего банка | Единый набор | Банк без доборов | Платформа | Платформа + форматы |",
         sep,
     ]
     for share in old["leakage"]["pass_pct_by_share"]:
@@ -225,7 +228,7 @@ def render_report(r: dict) -> str:
         "",
         "## Точность по истинному грейду, %",
         "",
-        "| Истинный грейд | Было | v1 | v2 в кабинете | v2 прогноз |",
+        "| Истинный грейд | Единый набор | Банк без доборов | Платформа | Платформа + форматы |",
         sep,
     ]
     for g in GRADES:
@@ -235,7 +238,7 @@ def render_report(r: dict) -> str:
         "",
         "## Разделяющая сила: средний % верных на тесте уровня middle по истинному грейду",
         "",
-        "| Истинный грейд | Было | v1 |",
+        "| Истинный грейд | Единый набор | Банк без доборов |",
         "| --- | --- | --- |",
     ]
     for g in GRADES:
@@ -243,15 +246,15 @@ def render_report(r: dict) -> str:
         lines.append(f"| {g} | {o['mean']} ± {o['sd']} | {n['mean']} ± {n['sd']} |")
     lines.append("")
     for pair in old["separation"]["cohen_d"]:
-        lines.append(f"- Cohen's d {pair}: было {old['separation']['cohen_d'][pair]}, v1 {new['separation']['cohen_d'][pair]}")
+        lines.append(f"- Cohen's d {pair}: единый набор {old['separation']['cohen_d'][pair]}, банк без доборов {new['separation']['cohen_d'][pair]}")
     exp = new["exposure"]
     lines += [
         "",
         "## Качество вопросов и расход банка",
         "",
-        f"- Корреляция «вопрос — остальной тест»: v1 {new['items']['mean_rpb']} по {new['items']['items_analysed']} "
-        f"темам, старый тест {old['items']['mean_rpb']} по {old['items']['items_analysed']} вопросам.",
-        f"- Использовано вариантов банка (v1): {exp['variants_used_pct']}%, показов на вариант "
+        f"- Корреляция «вопрос — остальной тест»: банк без доборов {new['items']['mean_rpb']} по {new['items']['items_analysed']} "
+        f"темам, единый набор {old['items']['mean_rpb']} по {old['items']['items_analysed']} вопросам.",
+        f"- Использовано вариантов банка (банк без доборов): {exp['variants_used_pct']}%, показов на вариант "
         f"в среднем {exp['mean_shows']}, максимум {exp['max_shows']}.",
         f"- Верный ответ — самый длинный: {r['texts']['old_pct']}% вопросов каталога (нейтрально ~33%).",
         "",

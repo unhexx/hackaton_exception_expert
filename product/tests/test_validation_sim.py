@@ -1,4 +1,7 @@
-"""Проверки пакета product.validation_sim: данные, сборка варианта, ключ, симуляция."""
+"""Проверки пакета product.validation_sim: данные, сборка варианта, ключ, симуляция.
+
+ТЗ §2 «устойчивость к распространению заданий»; ТЗ §3.4 «процедура валидации»; ТЗ §6 критерий 2.
+"""
 
 from __future__ import annotations
 
@@ -75,7 +78,7 @@ def test_small_simulation_beats_tricks():
     assert acc["within1_pct"] >= 90
 
 
-# --- v2: результат с уверенностью, доп. блоки, накопление, пилот -------------
+# --- Тест платформы: результат с уверенностью, доп. блоки, накопление, пилот -
 
 from product.validation_sim import adaptive, irt  # noqa: E402
 from product.validation_sim.form import assemble_targeted  # noqa: E402
@@ -106,7 +109,7 @@ def test_shipped_pilot_file_loads():
     assert isinstance(pilot["retired"], list)
 
 
-def test_v2_accumulates_and_beats_tricks():
+def test_platform_test_accumulates_and_beats_tricks():
     index = _index()
     cands = cand_mod.generate(n=40, seed=6)
     system = adaptive.AdaptiveSystem(index, 5)
@@ -121,16 +124,13 @@ def test_shipped_bank_matches_catalog_texts():
     from product.matching.stems import catalog
 
     texts = {}
-    for template in catalog():
-        for q in template["questions"]:
-            # Порядок букв в каталоге задаёт латинский квадрат; в v2 варианты
-            # всё равно перемешиваются, поэтому сверяем набор текстов и верный текст.
-            right = next(c["text"] for c in q["choices"] if c["id"] == q["correct"])
-            texts[q["text"]] = (sorted(c["text"] for c in q["choices"]), right)
+    for qset in catalog():
+        for q in qset["questions"]:
+            ids = [c["id"] for c in q["choices"]]
+            texts[q["text"]] = ([c["text"] for c in q["choices"]], ids.index(q["correct"]))
     for family in bank_mod.load_bank()["families"]:
         sample = family["sample"]
-        shipped = (sorted(sample["options"]), sample["options"][sample["correct_index"]])
-        assert texts[sample["text"]] == shipped, family["family_id"]
+        assert texts[sample["text"]] == (sample["options"], sample["correct_index"]), family["family_id"]
 
 
 def test_live_view_is_judge_without_repeats():

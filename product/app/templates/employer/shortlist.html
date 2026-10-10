@@ -1,3 +1,4 @@
+{# ТЗ §2.1 «Работа с подборкой», «Поиск по банку кандидатов», «фильтрация без потери ранее полученной подборки» #}
 {% extends "base.html" %}
 {% block title %}Подборка{% endblock %}
 {% block body %}
@@ -5,12 +6,26 @@
 <p><a href="/validation">Прогон валидации</a></p>
 <form method="get" action="/employer/shortlist" hx-get="/employer/shortlist" hx-target="#shown" hx-swap="afterbegin">
   <label for="category_id">Категория</label>
-  <select id="category_id" name="category_id" required>
-    <option value="">Выберите</option>
+  <select id="category_id" name="category_id">
+    <option value="">вся база</option>
     {% for spec in rules.specializations %}
     {% for grade in rules.grades %}
     <option value="{{ spec }}:{{ grade }}">{{ spec }}:{{ grade }}</option>
     {% endfor %}
+    {% endfor %}
+  </select>
+  <label for="specialization">Специализация (поиск по базе)</label>
+  <select id="specialization" name="specialization">
+    <option value="">любая</option>
+    {% for item in rules.specializations %}
+    <option value="{{ item }}">{{ item }}</option>
+    {% endfor %}
+  </select>
+  <label for="grade">Грейд (поиск по базе)</label>
+  <select id="grade" name="grade">
+    <option value="">любой</option>
+    {% for item in rules.grades %}
+    <option value="{{ item }}">{{ item }}</option>
     {% endfor %}
   </select>
   <p>Стек</p>

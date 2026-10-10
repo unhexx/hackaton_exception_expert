@@ -333,3 +333,30 @@ def test_pages_keep_roles_and_show_code_on_the_page(client):
     )
     assert naked.status_code == 403
     assert naked.json()["error"] == "csrf"
+
+
+def test_login_locks_after_five_wrong_passwords(client):
+    """ТЗ §3.5 «защита от несанкционированного доступа»: подбор пароля упирается
+    в блокировку на 15 минут; верный пароль во время блокировки не пускает."""
+    register_and_confirm(client, email="brute@example.com", password="password-ok")
+    for _ in range(4):
+        wrong = client.post("/api/auth/login", json={"email": "brute@example.com", "password": "nope-nope"})
+        assert wrong.status_code == 401
+    fifth = client.post("/api/auth/login", json={"email": "Brute@example.com ", "password": "nope-nope"})
+    assert fifth.status_code == 401
+    locked = client.post("/api/auth/login", json={"email": "brute@example.com", "password": "password-ok"})
+    assert locked.status_code == 429
+    assert locked.json()["error"] == "login_locked"
+    # Незарегистрированный адрес блокируется так же — ответ не выдаёт, есть ли учётка.
+    for _ in range(5):
+        client.post("/api/auth/login", json={"email": "ghost@example.com", "password": "nope-nope"})
+    ghost = client.post("/api/auth/login", json={"email": "ghost@example.com", "password": "nope-nope"})
+    assert ghost.status_code == 429
+    with sqlite3.connect(client.db_path) as db:
+        db.execute("update login_throttle set locked_until = '2000-01-01T00:00:00Z'")
+        db.commit()
+    opened = client.post("/api/auth/login", json={"email": "brute@example.com", "password": "password-ok"})
+    assert opened.status_code == 200
+    with sqlite3.connect(client.db_path) as db:
+        left = db.execute("select count(*) from login_throttle where email = 'brute@example.com'").fetchone()[0]
+    assert left == 0

@@ -93,6 +93,7 @@ def confirm_resend(
         200: {"content": {"application/json": {"example": {"role": "candidate"}}}},
         401: {"content": {"application/json": {"example": example("credentials")}}},
         403: {"content": {"application/json": {"example": example("email_unverified")}}},
+        429: response_example(429, example("login_locked")),
     },
 )
 def login(

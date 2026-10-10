@@ -1,7 +1,7 @@
 """Старт, сдача и история испытания грейда (ТЗ §2.1 «Прохождение тестирования»;
 ТЗ §3.5 «API: все методы описаны через OpenAPI»).
 
-Механика v2: свой вариант из 12 вопросов, ключ только на сервере, у границы
+Механика теста: свой вариант из 12 вопросов, ключ только на сервере, у границы
 грейдов — доп. блоки (ответ ``status: "extra"``), итог с уверенностью.
 Подробно — ``product/matching/assessment.py``.
 """
@@ -20,7 +20,7 @@ router = APIRouter(tags=["tests"])
 
 _STARTED = {
     "attempt_id": 1,
-    "template_id": "bank-v2",
+    "template_id": "bank",
     "specialization": "backend",
     "declared_grade": "middle",
     "answered": 0,

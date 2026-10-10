@@ -79,7 +79,9 @@ def read_category(user: User = Depends(require_candidate), db: Session = Depends
     },
 )
 def read_candidates(
-    category_id: str | None = Query(default=None),
+    category_id: str | None = Query(default=None, description="Категория specialization:grade; пусто — поиск по всей базе"),
+    specialization: str = Query(default="", description="Фильтр по специализации при поиске по всей базе"),
+    grade: str = Query(default="", description="Фильтр по грейду при поиске по всей базе"),
     stack: list[str] = Query(default=[]),
     team_role: str = Query(default=""),
     work_format: str = Query(default=""),
@@ -88,11 +90,15 @@ def read_candidates(
     _user: User = Depends(require_employer),
     db: Session = Depends(db_session),
 ):
-    if not category_id:
-        fail(422, "category_id")
+    """Подборка по категории или поиск по всему банку кандидатов (ТЗ §2.1
+    «Поиск по банку кандидатов»). Без категории выдаются все опубликованные
+    профили, отфильтрованные по специализации, грейду, стеку, роли, формату и
+    достижениям ФСП, в том же порядке ранжирования."""
     return employer_candidates(
         db,
-        category_id=category_id,
+        category_id=category_id or "",
+        specialization=specialization,
+        grade=grade,
         stack=stack,
         team_role=team_role,
         work_format=work_format,

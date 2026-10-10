@@ -217,30 +217,44 @@ def visible_in_category(session: Session, profile_id: int, category_id: str) -> 
 def employer_candidates(
     session: Session,
     *,
-    category_id: str,
+    category_id: str = "",
+    specialization: str = "",
+    grade: str = "",
     stack: list[str],
     team_role: str,
     work_format: str,
     has_fsp: bool | None,
     q: str,
 ) -> list[dict]:
-    """Фильтр — `evaluate_need`; порядок — `NeedFit.sort_key`. Согласие publication проверяется до подбора, не внутри matching."""
+    """Подборка по категории или поиск по всему банку кандидатов.
+
+    ТЗ §2.1 «Работа с подборкой»: категория задаёт подборку.
+    ТЗ §2.1 «Поиск по банку кандидатов: доступ ко всей базе с фильтрацией по
+    специализации, грейду, категории, стеку и наличию подтверждённых
+    достижений ФСП»: без категории ищем по всем опубликованным профилям,
+    специализация и грейд сужают поиск по отдельности.
+
+    Фильтр — `evaluate_need`; порядок — `NeedFit.sort_key`. Согласие
+    publication проверяется до подбора, не внутри matching (ТЗ §2.1
+    «Настройки: приватность», §3.5 «152-ФЗ»).
+    """
     rules = load_rules()
-    category_id = require_category(category_id)
+    if category_id:
+        category_id = require_category(category_id)
+        spec_of, grade_of = category_id.split(":")
+        if (specialization and specialization != spec_of) or (grade and grade != grade_of):
+            fail(422, "category_id")
+        specialization, grade = spec_of, grade_of
+    if specialization:
+        _closed(specialization, rules["specializations"], "closed_list")
+    if grade:
+        _closed(grade, rules["grades"], "closed_list")
     for item in stack:
         _closed(item, rules["stack"], "closed_list")
     if team_role:
         _closed(team_role, rules["team_roles"], "closed_list")
     if work_format:
         _closed(work_format, rules["work_formats"], "closed_list")
-    need = _need(
-        category_id=category_id,
-        stack=stack,
-        team_role=team_role,
-        work_format=work_format,
-        has_fsp=has_fsp,
-        q=q,
-    )
     ranked: list[tuple[tuple[int, int, int, int, int, str], dict]] = []
     profiles = session.scalars(select(Profile)).all()
     for profile in profiles:
@@ -250,6 +264,19 @@ def employer_candidates(
         assignment = latest_assignment(session, profile.id)
         if assignment is None:
             continue
+        spec_of, _sep, grade_of = assignment.category_id.partition(":")
+        if (specialization and spec_of != specialization) or (grade and grade_of != grade):
+            continue
+        # Одна и та же потребность, адресованная категории этого профиля:
+        # ранжирование внутри категории и по всей базе считает один `evaluate_need`.
+        need = _need(
+            category_id=assignment.category_id,
+            stack=stack,
+            team_role=team_role,
+            work_format=work_format,
+            has_fsp=has_fsp,
+            q=q,
+        )
         fit, labels, achievements, rank = _profile_matches(session, profile, assignment, need)
         if not fit.matched:
             continue
@@ -271,7 +298,7 @@ def _test_view(session: Session, attempt_id: int | None) -> dict:
     """Статус грейда на карточке работодателя (ТЗ §2.1 «обоснование попадания
     кандидата в подборку»; Q&A: неподтверждённый грейд показывать со статусом).
 
-    Тест v2 сообщает уверенность и положение в грейде: «подтверждён уверенно»,
+    Тест сообщает уверенность и положение в грейде: «подтверждён уверенно»,
     «подтверждён, у границы» или «не подтверждён тестом».
     """
     attempt = session.get(TestAttempt, attempt_id) if attempt_id else None

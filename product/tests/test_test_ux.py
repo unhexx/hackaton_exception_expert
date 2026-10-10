@@ -1,4 +1,4 @@
-"""HTML сдачи теста v2: вопросы по одному, оценка каждого варианта, без возврата
+"""HTML сдачи теста: вопросы по одному, оценка каждого варианта, без возврата
 назад, панель итога с уверенностью. ТЗ §2.1 «Прохождение тестирования»,
 критерий оценки 3 «понятность сквозного пути»."""
 
@@ -170,13 +170,14 @@ def test_outcome_panel_uses_recorded_pair(client):
     assert "верных 100%" in cabinet.text
 
 
-def test_legacy_draft_from_old_volume_is_rebuilt(client):
-    """Старый том: черновик механики до v2 (без form_json) не блокирует новый тест."""
-    profile_id = _seeker(client, "legacy@example.com")
+def test_draft_without_form_is_rebuilt(client):
+    """Черновик без сохранённого варианта (form_json пуст) не блокирует тест:
+    кнопка «Начать» собирает вариант в той же строке."""
+    profile_id = _seeker(client, "noform@example.com")
     with sqlite3.connect(client.db_path) as db:
         db.execute(
             "insert into test_attempts (profile_id, specialization, declared_grade, template_id, rule_version,"
-            " status, created_at) values (?, 'backend', 'middle', 'backend-middle-a', 'v1', 'draft', '2026-10-01T00:00:00Z')",
+            " status, created_at) values (?, 'backend', 'middle', 'bank', 'v1', 'draft', '2026-10-01T00:00:00Z')",
             (profile_id,),
         )
         db.commit()

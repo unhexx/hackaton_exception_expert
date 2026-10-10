@@ -22,7 +22,7 @@
           "type": "single",             # single | multi | order | numeric
           "topic": "...",               # короткое название темы
           "a": 1.2, "b": -0.55,          # заявленные параметры семейства
-          "sample": {                   # образец формулировки из текущего каталога
+          "sample": {                   # образец формулировки из каталога
             "text": "...", "options": ["...", "...", "..."],
             "correct_index": 1, "source": "backend-middle-a/q1", "reused": false
           },
@@ -81,7 +81,7 @@ DEFAULT_PATH = Path(__file__).resolve().parent / "data" / "bank.json"
 
 
 def _samples_by_pair() -> dict[tuple[str, str], list[dict]]:
-    """Образцы формулировок из текущего каталога проекта (216 вопросов).
+    """Образцы формулировок из каталога проекта (216 вопросов).
 
     Импорт внутри функции: если пакет переносят в проект без
     ``product.matching.stems``, банк всё равно строится, только без образцов.
@@ -91,9 +91,9 @@ def _samples_by_pair() -> dict[tuple[str, str], list[dict]]:
     except ImportError:  # перенос в другую кодовую базу
         return {}
     pairs: dict[tuple[str, str], list[dict]] = {}
-    for template in catalog():
-        key = (template["specialization"], template["grade"])
-        for question in template["questions"]:
+    for qset in catalog():
+        key = (qset["specialization"], qset["grade"])
+        for question in qset["questions"]:
             options = [choice["text"] for choice in question["choices"]]
             ids = [choice["id"] for choice in question["choices"]]
             pairs.setdefault(key, []).append(
@@ -101,7 +101,7 @@ def _samples_by_pair() -> dict[tuple[str, str], list[dict]]:
                     "text": question["text"],
                     "options": options,
                     "correct_index": ids.index(question["correct"]),
-                    "source": f"{template['template_id']}/{question['id']}",
+                    "source": f"{qset['set_id']}/{question['id']}",
                 }
             )
     return pairs
@@ -190,7 +190,7 @@ def load_bank(path: Path = DEFAULT_PATH) -> dict:
 def live_view(bank: dict) -> dict:
     """Банк в том виде, в каком его сейчас может показать кабинет.
 
-    Готовые тексты есть только у образцов «один из трёх» (216 вопросов текущего
+    Готовые тексты есть только у образцов «один из трёх» (216 вопросов
     каталога). Поэтому в живом тесте:
     - семейство показывается в формате judge («оцените каждый вариант») по своему
       образцу; тип multi/order/numeric включится сам, когда команда допишет

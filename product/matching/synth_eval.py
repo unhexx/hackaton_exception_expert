@@ -13,9 +13,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from product.matching.category import assign_category
-from product.matching.golden_run import grade_separation_counts, summarize
 from product.matching.grade import load_template, score_attempt, select_template
-from product.matching.simulate import simulation_counts
 from product.matching.stems import catalog
 from product.matching.types import ProfileView
 
@@ -129,19 +127,6 @@ _NEEDS_BY_SHARD = {
     3: ("backend-senior", "frontend-senior", "mobile-senior"),
     4: ("data-senior", "security-senior", "devops-senior"),
 }
-
-_REPORT_ORDER = (
-    "category_match",
-    "outcome_match",
-    "template_stable",
-    "relevant_in_top",
-    "resume_ok",
-    "grade_separation",
-    "sim_competent",
-    "sim_key_leak",
-    "sim_adjacent",
-)
-
 
 def _fold(text: str) -> str:
     return text.casefold().replace("ё", "е")
@@ -462,44 +447,6 @@ def as_cases(bundle: dict) -> dict:
         "needs": list(bundle["needs"]),
         "template_pairs": list(bundle["template_pairs"]),
     }
-
-
-def annotate_relevant(bundle: dict) -> dict:
-    order = ("junior", "middle", "senior", "lead")
-    out = dict(bundle)
-    needs = []
-    for need in bundle["needs"]:
-        row = dict(need)
-        spec, need_grade = str(row["category_id"]).split(":", 1)
-        need_rank = order.index(need_grade)
-        ids = []
-        for profile in bundle["profiles"]:
-            if profile["specialization"] != spec:
-                continue
-            if profile["declared_grade"] != need_grade:
-                continue
-            if order.index(profile["true_grade"]) < need_rank:
-                continue
-            ids.append(profile["profile_id"])
-        row["relevant_profile_ids"] = ids
-        needs.append(row)
-    out["needs"] = needs
-    return out
-
-
-def collect_counts(bundle: dict | None = None) -> dict[str, tuple[int, int]]:
-    data = annotate_relevant(load_shards() if bundle is None else bundle)
-    gold = summarize(as_cases(data))
-    separated, total = grade_separation_counts()
-    sim = simulation_counts()
-    values = {**gold, "resume_ok": (0, 0), "grade_separation": (separated, total), **sim}
-    return {name: values[name] for name in _REPORT_ORDER}
-
-
-def render_synth_report(bundle: dict | None = None) -> str:
-    counts = collect_counts(bundle)
-    lines = [f"{name} {counts[name][0]} {counts[name][1]}" for name in _REPORT_ORDER]
-    return "\n".join(lines) + "\n"
 
 
 def write_shard(shard: int, *, root: Path | None = None) -> Path:

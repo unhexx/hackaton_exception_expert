@@ -14,9 +14,9 @@
 <rect x="300" y="162" width="400" height="12" fill="#402FFF"/>
 <text x="16" y="220" font-size="14" font-family="JetBrains Mono" fill="#1B1C21">resume_ok 0 0</text>
 <rect x="300" y="208" width="400" height="12" fill="#EDEDED"/>
-<text x="16" y="266" font-size="14" font-family="JetBrains Mono" fill="#1B1C21">grade_separation 216 216</text>
+<text x="16" y="266" font-size="14" font-family="JetBrains Mono" fill="#1B1C21">grade_separation 215 216</text>
 <rect x="300" y="254" width="400" height="12" fill="#EDEDED"/>
-<rect x="300" y="254" width="400" height="12" fill="#402FFF"/>
+<rect x="300" y="254" width="398" height="12" fill="#402FFF"/>
 <text x="16" y="312" font-size="14" font-family="JetBrains Mono" fill="#1B1C21">sim_competent 72 72</text>
 <rect x="300" y="300" width="400" height="12" fill="#EDEDED"/>
 <rect x="300" y="300" width="400" height="12" fill="#402FFF"/>

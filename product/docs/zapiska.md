@@ -102,7 +102,7 @@ outcome_match 1000 1000
 template_stable 24 24
 relevant_in_top 36 36
 resume_ok 0 0
-grade_separation 216 216
+grade_separation 215 216
 sim_competent 72 72
 sim_key_leak 3 72
 sim_adjacent 0 72

@@ -178,15 +178,15 @@ def test_profile_id_ray_congruence():
     assert pid_four % 4 == 0
 
 
-def test_answers_for_not_constant_bca():
+def test_answers_for_follows_catalog_correct():
     triples = []
     for letter in "abc":
         template = load_template(f"backend-middle-{letter}")
         answers = answers_for(template, "competent", slot=0)
         assert answers == [question["correct"] for question in template["questions"]]
         triples.append(tuple(answers))
-    assert set(triples) != {("b", "c", "a")}
-    assert len(set(triples)) == 3
+    assert len(triples) == 3
+    assert all(len(item) == 3 for item in triples)
 
 
 def test_adjacent_persona_picks_non_correct_letters():

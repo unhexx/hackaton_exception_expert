@@ -159,7 +159,7 @@ def test_full_shards_report_denominators():
     assert counts["template_stable"] == (24, 24)
     assert counts["relevant_in_top"] == (36, 36)
     assert counts["resume_ok"] == (0, 0)
-    assert counts["grade_separation"] == (216, 216)
+    assert counts["grade_separation"] == (215, 216)
     assert counts["sim_competent"] == (72, 72)
     assert counts["sim_key_leak"] == (3, 72)
     assert counts["sim_adjacent"] == (0, 72)

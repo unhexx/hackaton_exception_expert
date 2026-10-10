@@ -1,4 +1,8 @@
-"""Старт, сдача и история испытания грейда."""
+"""Старт, сдача и история испытания грейда.
+
+Интервал держит смену записанного грейда, не повтор той же пары.
+Черновик хранит `template_id`; ключи живут в каталоге; POST сдачи — три буквы a|b|c.
+"""
 
 from __future__ import annotations
 
@@ -73,6 +77,10 @@ def grade_written_by_test(db: Session, profile: Profile) -> bool:
 
 
 def interval_blocks(db: Session, profile: Profile, requested: str) -> bool:
+    """True, когда запрошен не записанный грейд, штамп интервала ещё свежий и соседний confirm уже записал новый грейд.
+
+    Пока тест грейд не писал — соседний старт интервал не ждёт.
+    """
     if requested == profile.grade:
         return False
     if interval_open(profile.grade_changed_at):
@@ -155,6 +163,10 @@ def list_attempts(db: Session, user: User) -> list[dict]:
 
 
 def start_attempt(db: Session, user: User, payload: dict | None) -> dict:
+    """Один черновик на профиль. Шаблон выбирает `select_template`; клиент получает вопросы без `correct`.
+
+    Соседний грейд — только предложенный последней сдачей записанной пары.
+    """
     profile = _profile(db, user)
     if profile is None:
         fail(409, "survey_required")
@@ -228,6 +240,10 @@ def start_attempt(db: Session, user: User, payload: dict | None) -> dict:
 
 
 def submit_attempt(db: Session, user: User, attempt_id: int, payload: dict) -> dict:
+    """Балл считает `score_attempt` по сохранённому `template_id`. Записанная пара грейд не пишет.
+
+    Соседний `confirm` пишет грейд и штамп; `suggest_higher` на грейде ниже — нет.
+    """
     profile = _profile(db, user)
     if profile is None:
         fail(404, "not_found", "not_found_attempt")

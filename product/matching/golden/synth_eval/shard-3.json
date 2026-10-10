@@ -1,0 +1,7126 @@
+{
+  "shard": 3,
+  "n": 250,
+  "seed": 20261010,
+  "rule_version": "v1",
+  "profiles": [
+    {
+      "profile_id": 10003,
+      "display_name": "Тамара Титова",
+      "specialization": "backend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "CRUD и миграции, код-ревью с наставником",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10007,
+      "display_name": "Вадим Беляев",
+      "specialization": "backend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "CRUD и миграции, код-ревью с наставником",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10015,
+      "display_name": "Вячеслав Комаров",
+      "specialization": "backend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "CRUD и миграции, код-ревью с наставником",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10011,
+      "display_name": "Лариса Лебедева",
+      "specialization": "backend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "CRUD и миграции, код-ревью с наставником",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10055,
+      "display_name": "Анна Лебедева",
+      "specialization": "backend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "CRUD и миграции, код-ревью с наставником",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10075,
+      "display_name": "Елизавета Ильина",
+      "specialization": "backend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "CRUD и миграции, код-ревью с наставником",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10023,
+      "display_name": "Степан Попов",
+      "specialization": "backend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "CRUD и миграции, код-ревью с наставником",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10031,
+      "display_name": "Лидия Белова",
+      "specialization": "backend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "CRUD и миграции, код-ревью с наставником",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10035,
+      "display_name": "Станислав Тарасов",
+      "specialization": "backend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "CRUD и миграции, код-ревью с наставником",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10019,
+      "display_name": "Степан Зайцев",
+      "specialization": "backend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "архитектура платёжного контура, найм и менторство бэкенда",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10039,
+      "display_name": "Александр Андреев",
+      "specialization": "backend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "архитектура платёжного контура, найм и менторство бэкенда",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10047,
+      "display_name": "Пётр Фёдоров",
+      "specialization": "backend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "архитектура платёжного контура, найм и менторство бэкенда",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10043,
+      "display_name": "Вячеслав Данилов",
+      "specialization": "backend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "архитектура платёжного контура, найм и менторство бэкенда",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10051,
+      "display_name": "Валентин Козлов",
+      "specialization": "backend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "архитектура платёжного контура, найм и менторство бэкенда",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10087,
+      "display_name": "Геннадий Орлов",
+      "specialization": "backend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "архитектура платёжного контура, найм и менторство бэкенда",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10027,
+      "display_name": "Павел Гусев",
+      "specialization": "backend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "архитектура платёжного контура, найм и менторство бэкенда",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10063,
+      "display_name": "Михаил Ильин",
+      "specialization": "backend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "архитектура платёжного контура, найм и менторство бэкенда",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10067,
+      "display_name": "Анастасия Голубева",
+      "specialization": "backend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "архитектура платёжного контура, найм и менторство бэкенда",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10099,
+      "display_name": "Фёдор Куликов",
+      "specialization": "backend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "платежи и очереди, идемпотентность потребителя",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10115,
+      "display_name": "Валентина Семёнова",
+      "specialization": "backend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "платежи и очереди, идемпотентность потребителя",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10119,
+      "display_name": "Георгий Козлов",
+      "specialization": "backend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "платежи и очереди, идемпотентность потребителя",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10059,
+      "display_name": "Тамара Ильина",
+      "specialization": "backend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "платежи и очереди, идемпотентность потребителя",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10071,
+      "display_name": "Игорь Иванов",
+      "specialization": "backend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "платежи и очереди, идемпотентность потребителя",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10091,
+      "display_name": "Кирилл Зайцев",
+      "specialization": "backend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "платежи и очереди, идемпотентность потребителя",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10079,
+      "display_name": "Валентина Михайлова",
+      "specialization": "backend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "платежи и очереди, идемпотентность потребителя",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10083,
+      "display_name": "Юрий Попов",
+      "specialization": "backend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "платежи и очереди, идемпотентность потребителя",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10139,
+      "display_name": "Артём Козлов",
+      "specialization": "backend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "платежи и очереди, идемпотентность потребителя",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10103,
+      "display_name": "Андрей Козлов",
+      "specialization": "backend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "разбиение монолита, контракты сервисов и SLO",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10111,
+      "display_name": "Виктория Богданова",
+      "specialization": "backend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "разбиение монолита, контракты сервисов и SLO",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10127,
+      "display_name": "Алиса Тарасова",
+      "specialization": "backend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "разбиение монолита, контракты сервисов и SLO",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10095,
+      "display_name": "Любовь Михайлова",
+      "specialization": "backend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "разбиение монолита, контракты сервисов и SLO",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10107,
+      "display_name": "Яна Кузьмина",
+      "specialization": "backend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "разбиение монолита, контракты сервисов и SLO",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10123,
+      "display_name": "Борис Макаров",
+      "specialization": "backend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "разбиение монолита, контракты сервисов и SLO",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10131,
+      "display_name": "Мария Ефимова",
+      "specialization": "backend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "разбиение монолита, контракты сервисов и SLO",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10163,
+      "display_name": "Николай Куликов",
+      "specialization": "backend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "разбиение монолита, контракты сервисов и SLO",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10175,
+      "display_name": "Василий Воробьёв",
+      "specialization": "backend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "разбиение монолита, контракты сервисов и SLO",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10135,
+      "display_name": "Геннадий Михайлов",
+      "specialization": "data",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "витрины и SQL-отчёты, проверка качества витрины",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10159,
+      "display_name": "Вячеслав Волков",
+      "specialization": "data",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "витрины и SQL-отчёты, проверка качества витрины",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10219,
+      "display_name": "Игорь Соколов",
+      "specialization": "data",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "витрины и SQL-отчёты, проверка качества витрины",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10195,
+      "display_name": "Денис Лебедев",
+      "specialization": "data",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "витрины и SQL-отчёты, проверка качества витрины",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10199,
+      "display_name": "Мария Макарова",
+      "specialization": "data",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "витрины и SQL-отчёты, проверка качества витрины",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10211,
+      "display_name": "Александра Иванова",
+      "specialization": "data",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "витрины и SQL-отчёты, проверка качества витрины",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10143,
+      "display_name": "София Белова",
+      "specialization": "data",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "витрины и SQL-отчёты, проверка качества витрины",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10147,
+      "display_name": "Дмитрий Голубев",
+      "specialization": "data",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "витрины и SQL-отчёты, проверка качества витрины",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10151,
+      "display_name": "Александра Зайцева",
+      "specialization": "data",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "витрины и SQL-отчёты, проверка качества витрины",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10187,
+      "display_name": "Светлана Беляева",
+      "specialization": "data",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "платформа данных, стандарты качества и найм аналитиков",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10203,
+      "display_name": "Егор Новиков",
+      "specialization": "data",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "платформа данных, стандарты качества и найм аналитиков",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10227,
+      "display_name": "Антон Жуков",
+      "specialization": "data",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "платформа данных, стандарты качества и найм аналитиков",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10179,
+      "display_name": "Егор Семёнов",
+      "specialization": "data",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "платформа данных, стандарты качества и найм аналитиков",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10183,
+      "display_name": "Тамара Ковалёва",
+      "specialization": "data",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "платформа данных, стандарты качества и найм аналитиков",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10223,
+      "display_name": "Василий Попов",
+      "specialization": "data",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "платформа данных, стандарты качества и найм аналитиков",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10155,
+      "display_name": "Светлана Белова",
+      "specialization": "data",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "платформа данных, стандарты качества и найм аналитиков",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10167,
+      "display_name": "Ульяна Соловьёва",
+      "specialization": "data",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "платформа данных, стандарты качества и найм аналитиков",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10171,
+      "display_name": "Зинаида Богданова",
+      "specialization": "data",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "платформа данных, стандарты качества и найм аналитиков",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10231,
+      "display_name": "Лариса Тарасова",
+      "specialization": "data",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "пайплайны ETL, свежесть витрины и контракт колонок",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10239,
+      "display_name": "Вероника Фёдорова",
+      "specialization": "data",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "пайплайны ETL, свежесть витрины и контракт колонок",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10243,
+      "display_name": "Юрий Новиков",
+      "specialization": "data",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "пайплайны ETL, свежесть витрины и контракт колонок",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10191,
+      "display_name": "Станислав Козлов",
+      "specialization": "data",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "пайплайны ETL, свежесть витрины и контракт колонок",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10235,
+      "display_name": "Ольга Ефимова",
+      "specialization": "data",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "пайплайны ETL, свежесть витрины и контракт колонок",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10251,
+      "display_name": "Вадим Воробьёв",
+      "specialization": "data",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "пайплайны ETL, свежесть витрины и контракт колонок",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10207,
+      "display_name": "Мария Тарасова",
+      "specialization": "data",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "пайплайны ETL, свежесть витрины и контракт колонок",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10215,
+      "display_name": "Григорий Беляев",
+      "specialization": "data",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "пайплайны ETL, свежесть витрины и контракт колонок",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10255,
+      "display_name": "Ярослав Алексеев",
+      "specialization": "data",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "пайплайны ETL, свежесть витрины и контракт колонок",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10267,
+      "display_name": "Андрей Баранов",
+      "specialization": "data",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "оркестрация пайплайнов, контракт витрины и SLO",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10279,
+      "display_name": "Виктор Новиков",
+      "specialization": "data",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "оркестрация пайплайнов, контракт витрины и SLO",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10323,
+      "display_name": "Александра Данилова",
+      "specialization": "data",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "оркестрация пайплайнов, контракт витрины и SLO",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10259,
+      "display_name": "Ульяна Киселёва",
+      "specialization": "data",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "оркестрация пайплайнов, контракт витрины и SLO",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10263,
+      "display_name": "Роман Кузьмин",
+      "specialization": "data",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "оркестрация пайплайнов, контракт витрины и SLO",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10283,
+      "display_name": "Екатерина Киселёва",
+      "specialization": "data",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "оркестрация пайплайнов, контракт витрины и SLO",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10247,
+      "display_name": "Алина Ефимова",
+      "specialization": "data",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "оркестрация пайплайнов, контракт витрины и SLO",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10271,
+      "display_name": "Людмила Павлова",
+      "specialization": "data",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "оркестрация пайплайнов, контракт витрины и SLO",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10275,
+      "display_name": "Елена Ковалёва",
+      "specialization": "data",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "оркестрация пайплайнов, контракт витрины и SLO",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10295,
+      "display_name": "Никита Иванов",
+      "specialization": "devops",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "сборка образов, пайплайн и выкладка стейджа",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10311,
+      "display_name": "Степан Богданов",
+      "specialization": "devops",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "сборка образов, пайплайн и выкладка стейджа",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10315,
+      "display_name": "Вадим Алексеев",
+      "specialization": "devops",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "сборка образов, пайплайн и выкладка стейджа",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10287,
+      "display_name": "Анна Орлова",
+      "specialization": "devops",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "сборка образов, пайплайн и выкладка стейджа",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10299,
+      "display_name": "Леонид Титов",
+      "specialization": "devops",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "сборка образов, пайплайн и выкладка стейджа",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10303,
+      "display_name": "Кирилл Тарасов",
+      "specialization": "devops",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "сборка образов, пайплайн и выкладка стейджа",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10291,
+      "display_name": "Николай Фёдоров",
+      "specialization": "devops",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "сборка образов, пайплайн и выкладка стейджа",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10319,
+      "display_name": "Григорий Баранов",
+      "specialization": "devops",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "сборка образов, пайплайн и выкладка стейджа",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10343,
+      "display_name": "София Тарасова",
+      "specialization": "devops",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "сборка образов, пайплайн и выкладка стейджа",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10331,
+      "display_name": "Валентин Воробьёв",
+      "specialization": "devops",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "платформа выкладки, стандарты и найм эксплуатации",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10347,
+      "display_name": "Станислав Волков",
+      "specialization": "devops",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "платформа выкладки, стандарты и найм эксплуатации",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10355,
+      "display_name": "Фёдор Тарасов",
+      "specialization": "devops",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "платформа выкладки, стандарты и найм эксплуатации",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10307,
+      "display_name": "Никита Волков",
+      "specialization": "devops",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "платформа выкладки, стандарты и найм эксплуатации",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10327,
+      "display_name": "Людмила Попова",
+      "specialization": "devops",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "платформа выкладки, стандарты и найм эксплуатации",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10363,
+      "display_name": "Светлана Титова",
+      "specialization": "devops",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "платформа выкладки, стандарты и найм эксплуатации",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10335,
+      "display_name": "Анна Новикова",
+      "specialization": "devops",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "платформа выкладки, стандарты и найм эксплуатации",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10339,
+      "display_name": "Василий Новиков",
+      "specialization": "devops",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "платформа выкладки, стандарты и найм эксплуатации",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10351,
+      "display_name": "Роман Кузнецов",
+      "specialization": "devops",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "платформа выкладки, стандарты и найм эксплуатации",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10367,
+      "display_name": "Владислав Андреев",
+      "specialization": "devops",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "linux и docker, наблюдаемость и откаты",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10383,
+      "display_name": "Сергей Волков",
+      "specialization": "devops",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "linux и docker, наблюдаемость и откаты",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10395,
+      "display_name": "Марина Воробьёва",
+      "specialization": "devops",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "linux и docker, наблюдаемость и откаты",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10371,
+      "display_name": "Егор Волков",
+      "specialization": "devops",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "linux и docker, наблюдаемость и откаты",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10391,
+      "display_name": "Вадим Орлов",
+      "specialization": "devops",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "linux и docker, наблюдаемость и откаты",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10407,
+      "display_name": "Юлия Соловьёва",
+      "specialization": "devops",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "linux и docker, наблюдаемость и откаты",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10359,
+      "display_name": "Ирина Смирнова",
+      "specialization": "devops",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "linux и docker, наблюдаемость и откаты",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10375,
+      "display_name": "Леонид Козлов",
+      "specialization": "devops",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "linux и docker, наблюдаемость и откаты",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10379,
+      "display_name": "Ирина Данилова",
+      "specialization": "devops",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "linux и docker, наблюдаемость и откаты",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10399,
+      "display_name": "Светлана Макарова",
+      "specialization": "devops",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "кластер и сеть сервисов, бюджет ресурсов",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10403,
+      "display_name": "Мария Кузьмина",
+      "specialization": "devops",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "кластер и сеть сервисов, бюджет ресурсов",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10423,
+      "display_name": "Оксана Лебедева",
+      "specialization": "devops",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "кластер и сеть сервисов, бюджет ресурсов",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10387,
+      "display_name": "Олег Семёнов",
+      "specialization": "devops",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "кластер и сеть сервисов, бюджет ресурсов",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10411,
+      "display_name": "Дарья Козлова",
+      "specialization": "devops",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "кластер и сеть сервисов, бюджет ресурсов",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10439,
+      "display_name": "Кирилл Виноградов",
+      "specialization": "devops",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "кластер и сеть сервисов, бюджет ресурсов",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10415,
+      "display_name": "Антон Морозов",
+      "specialization": "devops",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "кластер и сеть сервисов, бюджет ресурсов",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10419,
+      "display_name": "Яна Ильина",
+      "specialization": "devops",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "кластер и сеть сервисов, бюджет ресурсов",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10435,
+      "display_name": "Ксения Морозова",
+      "specialization": "devops",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "кластер и сеть сервисов, бюджет ресурсов",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10431,
+      "display_name": "Екатерина Петрова",
+      "specialization": "frontend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:junior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "вёрстка форм, доступность и состояния загрузки",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10447,
+      "display_name": "Владислав Новиков",
+      "specialization": "frontend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:junior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "вёрстка форм, доступность и состояния загрузки",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10451,
+      "display_name": "Михаил Гусев",
+      "specialization": "frontend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:junior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "вёрстка форм, доступность и состояния загрузки",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10443,
+      "display_name": "Татьяна Новикова",
+      "specialization": "frontend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:junior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "вёрстка форм, доступность и состояния загрузки",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10459,
+      "display_name": "Андрей Андреев",
+      "specialization": "frontend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:junior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "вёрстка форм, доступность и состояния загрузки",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10467,
+      "display_name": "Геннадий Воробьёв",
+      "specialization": "frontend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:junior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "вёрстка форм, доступность и состояния загрузки",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10427,
+      "display_name": "Александр Петров",
+      "specialization": "frontend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:junior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "вёрстка форм, доступность и состояния загрузки",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10463,
+      "display_name": "Александр Семёнов",
+      "specialization": "frontend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:junior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "вёрстка форм, доступность и состояния загрузки",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10475,
+      "display_name": "Иван Петров",
+      "specialization": "frontend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:junior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "вёрстка форм, доступность и состояния загрузки",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10471,
+      "display_name": "Егор Фёдоров",
+      "specialization": "frontend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:lead",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "стандарт UI-платформы, код-ревью и найм фронтенда",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10479,
+      "display_name": "Юрий Кузнецов",
+      "specialization": "frontend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:lead",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "стандарт UI-платформы, код-ревью и найм фронтенда",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10487,
+      "display_name": "Вероника Иванова",
+      "specialization": "frontend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:lead",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "стандарт UI-платформы, код-ревью и найм фронтенда",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10515,
+      "display_name": "Юрий Смирнов",
+      "specialization": "frontend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:lead",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "стандарт UI-платформы, код-ревью и найм фронтенда",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10519,
+      "display_name": "Егор Орлов",
+      "specialization": "frontend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:lead",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "стандарт UI-платформы, код-ревью и найм фронтенда",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10527,
+      "display_name": "Любовь Соловьёва",
+      "specialization": "frontend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:lead",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "стандарт UI-платформы, код-ревью и найм фронтенда",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10455,
+      "display_name": "Алиса Морозова",
+      "specialization": "frontend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:lead",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "стандарт UI-платформы, код-ревью и найм фронтенда",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10483,
+      "display_name": "Лариса Ильина",
+      "specialization": "frontend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:lead",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "стандарт UI-платформы, код-ревью и найм фронтенда",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10491,
+      "display_name": "Юрий Титов",
+      "specialization": "frontend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:lead",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "стандарт UI-платформы, код-ревью и найм фронтенда",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10503,
+      "display_name": "Василий Фёдоров",
+      "specialization": "frontend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:middle",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "клиентский роутинг, кэш запросов и дизайн-система",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10507,
+      "display_name": "Пётр Титов",
+      "specialization": "frontend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:middle",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "клиентский роутинг, кэш запросов и дизайн-система",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10523,
+      "display_name": "Зинаида Белова",
+      "specialization": "frontend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:middle",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "клиентский роутинг, кэш запросов и дизайн-система",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10495,
+      "display_name": "Анна Голубева",
+      "specialization": "frontend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:middle",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "клиентский роутинг, кэш запросов и дизайн-система",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10499,
+      "display_name": "Николай Воробьёв",
+      "specialization": "frontend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:middle",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "клиентский роутинг, кэш запросов и дизайн-система",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10539,
+      "display_name": "Игорь Соловьёв",
+      "specialization": "frontend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:middle",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "клиентский роутинг, кэш запросов и дизайн-система",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10511,
+      "display_name": "Борис Голубев",
+      "specialization": "frontend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:middle",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "клиентский роутинг, кэш запросов и дизайн-система",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10563,
+      "display_name": "Полина Кузьмина",
+      "specialization": "frontend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:middle",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "клиентский роутинг, кэш запросов и дизайн-система",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10567,
+      "display_name": "Антон Андреев",
+      "specialization": "frontend",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:middle",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "клиентский роутинг, кэш запросов и дизайн-система",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10571,
+      "display_name": "Григорий Морозов",
+      "specialization": "frontend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "сборка микрофронтов, бюджет бандла и SSR",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10575,
+      "display_name": "Анастасия Новикова",
+      "specialization": "frontend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "сборка микрофронтов, бюджет бандла и SSR",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10587,
+      "display_name": "Алексей Воробьёв",
+      "specialization": "frontend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "сборка микрофронтов, бюджет бандла и SSR",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10531,
+      "display_name": "Дарья Фёдорова",
+      "specialization": "frontend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "сборка микрофронтов, бюджет бандла и SSR",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10543,
+      "display_name": "Роман Комаров",
+      "specialization": "frontend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "сборка микрофронтов, бюджет бандла и SSR",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10547,
+      "display_name": "Фёдор Фёдоров",
+      "specialization": "frontend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "сборка микрофронтов, бюджет бандла и SSR",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10535,
+      "display_name": "Ульяна Титова",
+      "specialization": "frontend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "сборка микрофронтов, бюджет бандла и SSR",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10555,
+      "display_name": "Иван Павлов",
+      "specialization": "frontend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "сборка микрофронтов, бюджет бандла и SSR",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10559,
+      "display_name": "Степан Тарасов",
+      "specialization": "frontend",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "сборка микрофронтов, бюджет бандла и SSR",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10551,
+      "display_name": "Анна Кузьмина",
+      "specialization": "mobile",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:junior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "экраны списка и детали, локальный кэш",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10595,
+      "display_name": "Наталья Кузнецова",
+      "specialization": "mobile",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:junior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "экраны списка и детали, локальный кэш",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10619,
+      "display_name": "Фёдор Волков",
+      "specialization": "mobile",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:junior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "экраны списка и детали, локальный кэш",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10583,
+      "display_name": "Георгий Титов",
+      "specialization": "mobile",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:junior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "экраны списка и детали, локальный кэш",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10591,
+      "display_name": "Юрий Киселёв",
+      "specialization": "mobile",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:junior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "экраны списка и детали, локальный кэш",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10603,
+      "display_name": "Павел Михайлов",
+      "specialization": "mobile",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:junior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "экраны списка и детали, локальный кэш",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10579,
+      "display_name": "Роман Павлов",
+      "specialization": "mobile",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:junior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "экраны списка и детали, локальный кэш",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10599,
+      "display_name": "Екатерина Морозова",
+      "specialization": "mobile",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:junior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "экраны списка и детали, локальный кэш",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10607,
+      "display_name": "Фёдор Зайцев",
+      "specialization": "mobile",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:junior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "экраны списка и детали, локальный кэш",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10631,
+      "display_name": "Юрий Фёдоров",
+      "specialization": "mobile",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:lead",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "архитектура клиентских приложений, найм мобильной команды",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10643,
+      "display_name": "Ярослав Тарасов",
+      "specialization": "mobile",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:lead",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "архитектура клиентских приложений, найм мобильной команды",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10647,
+      "display_name": "Вера Тарасова",
+      "specialization": "mobile",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:lead",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "архитектура клиентских приложений, найм мобильной команды",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10611,
+      "display_name": "Михаил Данилов",
+      "specialization": "mobile",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:lead",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "архитектура клиентских приложений, найм мобильной команды",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10615,
+      "display_name": "Иван Гусев",
+      "specialization": "mobile",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:lead",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "архитектура клиентских приложений, найм мобильной команды",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10623,
+      "display_name": "Кристина Зайцева",
+      "specialization": "mobile",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:lead",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "архитектура клиентских приложений, найм мобильной команды",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10627,
+      "display_name": "Дарья Алексеева",
+      "specialization": "mobile",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:lead",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "архитектура клиентских приложений, найм мобильной команды",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10635,
+      "display_name": "Наталья Петрова",
+      "specialization": "mobile",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:lead",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "архитектура клиентских приложений, найм мобильной команды",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10639,
+      "display_name": "Дмитрий Баранов",
+      "specialization": "mobile",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:lead",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "архитектура клиентских приложений, найм мобильной команды",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10651,
+      "display_name": "Анна Ковалёва",
+      "specialization": "mobile",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:middle",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "офлайн-очередь, пуши и навигация между модулями",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10663,
+      "display_name": "Оксана Белова",
+      "specialization": "mobile",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:middle",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "офлайн-очередь, пуши и навигация между модулями",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10667,
+      "display_name": "Маргарита Зайцева",
+      "specialization": "mobile",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:middle",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "офлайн-очередь, пуши и навигация между модулями",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10655,
+      "display_name": "Любовь Смирнова",
+      "specialization": "mobile",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:middle",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "офлайн-очередь, пуши и навигация между модулями",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10703,
+      "display_name": "Ярослав Титов",
+      "specialization": "mobile",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:middle",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "офлайн-очередь, пуши и навигация между модулями",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10715,
+      "display_name": "Марина Смирнова",
+      "specialization": "mobile",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:middle",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "офлайн-очередь, пуши и навигация между модулями",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10659,
+      "display_name": "Лариса Виноградова",
+      "specialization": "mobile",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:middle",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "офлайн-очередь, пуши и навигация между модулями",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10671,
+      "display_name": "Андрей Лебедев",
+      "specialization": "mobile",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:middle",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "офлайн-очередь, пуши и навигация между модулями",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10691,
+      "display_name": "Егор Ильин",
+      "specialization": "mobile",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:middle",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "офлайн-очередь, пуши и навигация между модулями",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10687,
+      "display_name": "Денис Белов",
+      "specialization": "mobile",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "модульный граф фич, релизный пайплайн стора",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10699,
+      "display_name": "Анастасия Семёнова",
+      "specialization": "mobile",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "модульный граф фич, релизный пайплайн стора",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10707,
+      "display_name": "Вадим Ильин",
+      "specialization": "mobile",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "модульный граф фич, релизный пайплайн стора",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10675,
+      "display_name": "Антон Тарасов",
+      "specialization": "mobile",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "модульный граф фич, релизный пайплайн стора",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10683,
+      "display_name": "Фёдор Ильин",
+      "specialization": "mobile",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "модульный граф фич, релизный пайплайн стора",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10695,
+      "display_name": "Алина Морозова",
+      "specialization": "mobile",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "модульный граф фич, релизный пайплайн стора",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10679,
+      "display_name": "Наталья Семёнова",
+      "specialization": "mobile",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "модульный граф фич, релизный пайплайн стора",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10719,
+      "display_name": "Виктор Иванов",
+      "specialization": "mobile",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "модульный граф фич, релизный пайплайн стора",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10739,
+      "display_name": "Леонид Макаров",
+      "specialization": "mobile",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "модульный граф фич, релизный пайплайн стора",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10711,
+      "display_name": "Леонид Ковалёв",
+      "specialization": "security",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "ревью конфигураций, базовые проверки доступа",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10735,
+      "display_name": "Лидия Данилова",
+      "specialization": "security",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "ревью конфигураций, базовые проверки доступа",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10743,
+      "display_name": "Максим Гусев",
+      "specialization": "security",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-junior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "ревью конфигураций, базовые проверки доступа",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10747,
+      "display_name": "Яна Киселёва",
+      "specialization": "security",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "ревью конфигураций, базовые проверки доступа",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10759,
+      "display_name": "Александр Макаров",
+      "specialization": "security",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "ревью конфигураций, базовые проверки доступа",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10763,
+      "display_name": "Юлия Ефимова",
+      "specialization": "security",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "ревью конфигураций, базовые проверки доступа",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10723,
+      "display_name": "Алексей Киселёв",
+      "specialization": "security",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "ревью конфигураций, базовые проверки доступа",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10727,
+      "display_name": "Нина Лебедева",
+      "specialization": "security",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "ревью конфигураций, базовые проверки доступа",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10731,
+      "display_name": "Галина Фёдорова",
+      "specialization": "security",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "ревью конфигураций, базовые проверки доступа",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10771,
+      "display_name": "Галина Попова",
+      "specialization": "security",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "программа безопасности продукта, найм и стандарты",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10783,
+      "display_name": "Антон Макаров",
+      "specialization": "security",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "программа безопасности продукта, найм и стандарты",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10795,
+      "display_name": "Ксения Кузнецова",
+      "specialization": "security",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-lead-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "программа безопасности продукта, найм и стандарты",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10751,
+      "display_name": "Яна Семёнова",
+      "specialization": "security",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "программа безопасности продукта, найм и стандарты",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10755,
+      "display_name": "Борис Андреев",
+      "specialization": "security",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "программа безопасности продукта, найм и стандарты",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10767,
+      "display_name": "Василий Ефимов",
+      "specialization": "security",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-lead-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "программа безопасности продукта, найм и стандарты",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10787,
+      "display_name": "Лариса Ефимова",
+      "specialization": "security",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "программа безопасности продукта, найм и стандарты",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10791,
+      "display_name": "Михаил Кузьмин",
+      "specialization": "security",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "программа безопасности продукта, найм и стандарты",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10815,
+      "display_name": "Лариса Баранова",
+      "specialization": "security",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "программа безопасности продукта, найм и стандарты",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10779,
+      "display_name": "Мария Петрова",
+      "specialization": "security",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "аудит linux-хостов, политики доступа и журналы",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10799,
+      "display_name": "Юрий Воробьёв",
+      "specialization": "security",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "аудит linux-хостов, политики доступа и журналы",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10819,
+      "display_name": "Ксения Зайцева",
+      "specialization": "security",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "аудит linux-хостов, политики доступа и журналы",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10807,
+      "display_name": "Вадим Кузнецов",
+      "specialization": "security",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "аудит linux-хостов, политики доступа и журналы",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10823,
+      "display_name": "Степан Беляев",
+      "specialization": "security",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "аудит linux-хостов, политики доступа и журналы",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10835,
+      "display_name": "Алина Ильина",
+      "specialization": "security",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-middle-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "аудит linux-хостов, политики доступа и журналы",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10775,
+      "display_name": "Дмитрий Алексеев",
+      "specialization": "security",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "аудит linux-хостов, политики доступа и журналы",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10803,
+      "display_name": "Тамара Киселёва",
+      "specialization": "security",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "аудит linux-хостов, политики доступа и журналы",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10811,
+      "display_name": "Ульяна Жукова",
+      "specialization": "security",
+      "true_grade": "middle",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-middle-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "гибрид",
+      "experience": "аудит linux-хостов, политики доступа и журналы",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10847,
+      "display_name": "Ксения Соловьёва",
+      "specialization": "security",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "модель угроз сервиса, разбор инцидентов",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10867,
+      "display_name": "Владислав Зайцев",
+      "specialization": "security",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "модель угроз сервиса, разбор инцидентов",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10871,
+      "display_name": "Тамара Михайлова",
+      "specialization": "security",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "b"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "модель угроз сервиса, разбор инцидентов",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10831,
+      "display_name": "Владимир Ефимов",
+      "specialization": "security",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "модель угроз сервиса, разбор инцидентов",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10863,
+      "display_name": "Нина Волкова",
+      "specialization": "security",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "модель угроз сервиса, разбор инцидентов",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10899,
+      "display_name": "Любовь Баранова",
+      "specialization": "security",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "модель угроз сервиса, разбор инцидентов",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10827,
+      "display_name": "Галина Белова",
+      "specialization": "security",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "офис",
+      "experience": "модель угроз сервиса, разбор инцидентов",
+      "fsp_confirmed_count": 0
+    },
+    {
+      "profile_id": 10839,
+      "display_name": "Кирилл Баранов",
+      "specialization": "security",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "модель угроз сервиса, разбор инцидентов",
+      "fsp_confirmed_count": 1
+    },
+    {
+      "profile_id": 10843,
+      "display_name": "Василий Куликов",
+      "specialization": "security",
+      "true_grade": "senior",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "security-senior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "security:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "гибрид",
+      "experience": "модель угроз сервиса, разбор инцидентов",
+      "fsp_confirmed_count": 2
+    },
+    {
+      "profile_id": 10859,
+      "display_name": "Мария Зайцева",
+      "specialization": "backend",
+      "true_grade": "middle",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "underclaim",
+      "template_id": "backend-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "CRUD и миграции, код-ревью с наставником",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10851,
+      "display_name": "Оксана Комарова",
+      "specialization": "backend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "backend-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "CRUD и миграции, код-ревью с наставником",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10855,
+      "display_name": "Станислав Соколов",
+      "specialization": "backend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "backend-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "a",
+        "c"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "backend:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "архитектура платёжного контура, найм и менторство бэкенда",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10891,
+      "display_name": "Елена Воробьёва",
+      "specialization": "backend",
+      "true_grade": "junior",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "backend-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "a",
+        "b"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "backend:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "платежи и очереди, идемпотентность потребителя",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10879,
+      "display_name": "Андрей Богданов",
+      "specialization": "backend",
+      "true_grade": "lead",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "underclaim",
+      "template_id": "backend-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "разбиение монолита, контракты сервисов и SLO",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10875,
+      "display_name": "Зинаида Павлова",
+      "specialization": "backend",
+      "true_grade": "middle",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "backend-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "разбиение монолита, контракты сервисов и SLO",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10887,
+      "display_name": "Татьяна Виноградова",
+      "specialization": "data",
+      "true_grade": "middle",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "underclaim",
+      "template_id": "data-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "витрины и SQL-отчёты, проверка качества витрины",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10895,
+      "display_name": "Виктор Кузьмин",
+      "specialization": "data",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "data-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:junior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "витрины и SQL-отчёты, проверка качества витрины",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10883,
+      "display_name": "Виктория Кузнецова",
+      "specialization": "data",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "data-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "a",
+        "c"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "data:lead",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "платформа данных, стандарты качества и найм аналитиков",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10911,
+      "display_name": "Никита Орлов",
+      "specialization": "data",
+      "true_grade": "junior",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "data-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "a",
+        "b"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "data:middle",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "пайплайны ETL, свежесть витрины и контракт колонок",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10903,
+      "display_name": "Василий Богданов",
+      "specialization": "data",
+      "true_grade": "lead",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "underclaim",
+      "template_id": "data-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "data:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "оркестрация пайплайнов, контракт витрины и SLO",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10907,
+      "display_name": "Дарья Баранова",
+      "specialization": "data",
+      "true_grade": "middle",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "data-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "data:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "оркестрация пайплайнов, контракт витрины и SLO",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10923,
+      "display_name": "Юлия Фёдорова",
+      "specialization": "devops",
+      "true_grade": "middle",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "underclaim",
+      "template_id": "devops-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "сборка образов, пайплайн и выкладка стейджа",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10915,
+      "display_name": "Кирилл Макаров",
+      "specialization": "devops",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "devops-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "сборка образов, пайплайн и выкладка стейджа",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10947,
+      "display_name": "Сергей Комаров",
+      "specialization": "devops",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "devops-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "a",
+        "c"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "devops:lead",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "платформа выкладки, стандарты и найм эксплуатации",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10927,
+      "display_name": "Юрий Данилов",
+      "specialization": "devops",
+      "true_grade": "junior",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "devops-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "a",
+        "b"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "devops:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "linux и docker, наблюдаемость и откаты",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10931,
+      "display_name": "Алина Титова",
+      "specialization": "devops",
+      "true_grade": "lead",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "underclaim",
+      "template_id": "devops-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "devops:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "кластер и сеть сервисов, бюджет ресурсов",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10919,
+      "display_name": "Роман Зайцев",
+      "specialization": "devops",
+      "true_grade": "middle",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "devops-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "devops:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "кластер и сеть сервисов, бюджет ресурсов",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10939,
+      "display_name": "Виктор Смирнов",
+      "specialization": "frontend",
+      "true_grade": "middle",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "underclaim",
+      "template_id": "frontend-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:junior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "вёрстка форм, доступность и состояния загрузки",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10935,
+      "display_name": "Светлана Алексеева",
+      "specialization": "frontend",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "frontend-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:junior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "вёрстка форм, доступность и состояния загрузки",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10943,
+      "display_name": "Диана Комарова",
+      "specialization": "frontend",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "frontend-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "a",
+        "c"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "frontend:lead",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "стандарт UI-платформы, код-ревью и найм фронтенда",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10951,
+      "display_name": "Кристина Орлова",
+      "specialization": "frontend",
+      "true_grade": "junior",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "frontend-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "a",
+        "b"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "frontend:middle",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "клиентский роутинг, кэш запросов и дизайн-система",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10959,
+      "display_name": "Максим Данилов",
+      "specialization": "frontend",
+      "true_grade": "lead",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "underclaim",
+      "template_id": "frontend-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "сборка микрофронтов, бюджет бандла и SSR",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10955,
+      "display_name": "Наталья Иванова",
+      "specialization": "frontend",
+      "true_grade": "middle",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "frontend-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "сборка микрофронтов, бюджет бандла и SSR",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10983,
+      "display_name": "Елена Гусева",
+      "specialization": "mobile",
+      "true_grade": "middle",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "underclaim",
+      "template_id": "mobile-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:junior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "экраны списка и детали, локальный кэш",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10967,
+      "display_name": "Пётр Данилов",
+      "specialization": "mobile",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "mobile-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:junior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "экраны списка и детали, локальный кэш",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10979,
+      "display_name": "Евгений Данилов",
+      "specialization": "mobile",
+      "true_grade": "lead",
+      "grade": "lead",
+      "declared_grade": "lead",
+      "persona": "confirm",
+      "claim_kind": "aligned",
+      "template_id": "mobile-lead-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "a",
+        "c"
+      ],
+      "test_score": 67,
+      "test_outcome": "confirm",
+      "expected_outcome": "confirm",
+      "expected_category_id": "mobile:lead",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "архитектура клиентских приложений, найм мобильной команды",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10963,
+      "display_name": "Станислав Киселёв",
+      "specialization": "mobile",
+      "true_grade": "junior",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "mobile-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "a",
+        "b"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "mobile:middle",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "офлайн-очередь, пуши и навигация между модулями",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10975,
+      "display_name": "Анна Тарасова",
+      "specialization": "mobile",
+      "true_grade": "lead",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "competent",
+      "claim_kind": "underclaim",
+      "template_id": "mobile-senior-a",
+      "rule_version": "v1",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "тимлид",
+      "work_format": "удалённо",
+      "experience": "модульный граф фич, релизный пайплайн стора",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10987,
+      "display_name": "Кристина Михайлова",
+      "specialization": "mobile",
+      "true_grade": "middle",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "mobile-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "модульный граф фич, релизный пайплайн стора",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 11023,
+      "display_name": "Ксения Новикова",
+      "specialization": "security",
+      "true_grade": "middle",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "underclaim",
+      "template_id": "security-junior-b",
+      "rule_version": "v1",
+      "answers": [
+        "c",
+        "a",
+        "b"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "удалённо",
+      "experience": "ревью конфигураций, базовые проверки доступа",
+      "fsp_confirmed_count": 4
+    },
+    {
+      "profile_id": 10971,
+      "display_name": "Галина Кузнецова",
+      "specialization": "security",
+      "true_grade": "junior",
+      "grade": "junior",
+      "declared_grade": "junior",
+      "persona": "competent",
+      "claim_kind": "aligned",
+      "template_id": "security-junior-c",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "test_score": 100,
+      "test_outcome": "suggest_higher",
+      "expected_outcome": "suggest_higher",
+      "expected_category_id": "security:junior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "ревью конфигураций, базовые проверки доступа",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 11007,
+      "display_name": "Геннадий Петров",
+      "specialization": "security",
+      "true_grade": "junior",
+      "grade": "middle",
+      "declared_grade": "middle",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "security-middle-a",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "a",
+        "b"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "security:middle",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "аудит linux-хостов, политики доступа и журналы",
+      "fsp_confirmed_count": 3
+    },
+    {
+      "profile_id": 10991,
+      "display_name": "Ярослав Куликов",
+      "specialization": "security",
+      "true_grade": "middle",
+      "grade": "senior",
+      "declared_grade": "senior",
+      "persona": "adjacent",
+      "claim_kind": "stretch",
+      "template_id": "security-senior-b",
+      "rule_version": "v1",
+      "answers": [
+        "a",
+        "b",
+        "a"
+      ],
+      "test_score": 0,
+      "test_outcome": "suggest_lower",
+      "expected_outcome": "suggest_lower",
+      "expected_category_id": "security:senior",
+      "stack": [
+        "linux"
+      ],
+      "team_role": "разработчик",
+      "work_format": "офис",
+      "experience": "модель угроз сервиса, разбор инцидентов",
+      "fsp_confirmed_count": 3
+    }
+  ],
+  "needs": [
+    {
+      "id": "backend-senior",
+      "category_id": "backend:senior",
+      "stack": [
+        "python"
+      ],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": []
+    },
+    {
+      "id": "frontend-senior",
+      "category_id": "frontend:senior",
+      "stack": [
+        "javascript"
+      ],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": []
+    },
+    {
+      "id": "mobile-senior",
+      "category_id": "mobile:senior",
+      "stack": [
+        "kotlin"
+      ],
+      "team_role": "",
+      "work_format": "",
+      "has_fsp": null,
+      "q": "",
+      "relevant_profile_ids": []
+    }
+  ],
+  "template_pairs": [
+    {
+      "template_id": "backend-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "answers_repeat": [
+        "b",
+        "c",
+        "a"
+      ]
+    },
+    {
+      "template_id": "data-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "answers_repeat": [
+        "b",
+        "c",
+        "a"
+      ]
+    },
+    {
+      "template_id": "devops-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "answers_repeat": [
+        "b",
+        "c",
+        "a"
+      ]
+    },
+    {
+      "template_id": "frontend-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "answers_repeat": [
+        "b",
+        "c",
+        "a"
+      ]
+    },
+    {
+      "template_id": "mobile-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "answers_repeat": [
+        "b",
+        "c",
+        "a"
+      ]
+    },
+    {
+      "template_id": "security-senior-a",
+      "answers": [
+        "b",
+        "c",
+        "a"
+      ],
+      "answers_repeat": [
+        "b",
+        "c",
+        "a"
+      ]
+    }
+  ]
+}

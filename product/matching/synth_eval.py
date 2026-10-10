@@ -241,18 +241,6 @@ def profile_id_for(spec: str, grade: str, letter: str, used: set[int], shard: in
             raise RuntimeError(f"не нашли id для {wanted}")
 
 
-def _is_latin_token(token: str) -> bool:
-    has_letter = False
-    for ch in token:
-        if "a" <= ch <= "z":
-            has_letter = True
-            continue
-        if ch.isdigit() or ch in "_-":
-            continue
-        return False
-    return has_letter
-
-
 def forbidden_name(display_name: str) -> bool:
     folded = _fold(display_name)
     if "синтетик" in folded:
@@ -261,9 +249,14 @@ def forbidden_name(display_name: str) -> bool:
         return True
     if "fsp-synth-" in folded:
         return True
-    if folded == "кандидат 042" or "кандидат 042" in folded:
+    if "кандидат 042" in folded:
         return True
-    return any(_is_latin_token(token) for token in folded.split())
+    return any(
+        token.isascii()
+        and any(ch.isalpha() for ch in token)
+        and all(ch.isalnum() or ch in "_-" for ch in token)
+        for token in folded.split()
+    )
 
 
 def generate_chosen(first_male, first_female, surnames, seed=20261010) -> list[str]:
@@ -314,12 +307,6 @@ def answers_for(template: dict, persona: str, slot: int = 0) -> list[str]:
             answers.append(correct if index == wrong_i else _adjacent_letter(correct))
         return answers
     raise ValueError(persona)
-
-
-def _display_name(names: list[str], index: int, offset: int) -> str:
-    if len(names) == N:
-        return names[index]
-    return names[offset]
 
 
 def _need_row(need_id: str) -> dict:
@@ -415,7 +402,7 @@ def build_shard(shard: int, *, names: list[str]) -> dict:
             used,
             shard,
         )
-        display_name = _display_name(names, index, offset)
+        display_name = names[offset]
         profiles.append(_profile_row(slot, pid, display_name))
     return {
         "shard": shard,

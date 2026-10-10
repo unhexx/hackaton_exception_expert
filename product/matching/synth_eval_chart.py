@@ -20,20 +20,27 @@ _LABEL_X = 16
 _BAR_X = 300
 _BAR_MAX = 400
 _BAR_H = 12
-_HIT_FILL = "#2f6f9f"
-_TOTAL_FILL = "#c8d7e4"
-_HIT_RGB = (47, 111, 159)
-_TOTAL_RGB = (200, 215, 228)
+_INK = "#1B1C21"
+_BAR = "#402FFF"
+_TRACK = "#EDEDED"
+_INK_RGB = (27, 28, 33)
+_BAR_RGB = (64, 47, 255)
+_TRACK_RGB = (237, 237, 237)
 
 
-def _geometry(counts: dict[str, tuple[int, int]]) -> tuple[int, int, int]:
+def _geometry(counts: dict[str, tuple[int, int]]) -> tuple[int, int]:
     height = _TOP + _ROW * len(counts) + 20
-    max_total = max((total for _hit, total in counts.values()), default=1) or 1
-    return _WIDTH, height, max_total
+    return _WIDTH, height
+
+
+def _hit_width(hit: int, total: int) -> int:
+    if total <= 0:
+        return 0
+    return int(_BAR_MAX * hit / total)
 
 
 def _svg(counts: dict[str, tuple[int, int]]) -> str:
-    width, height, max_total = _geometry(counts)
+    width, height = _geometry(counts)
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
         '<rect width="100%" height="100%" fill="#ffffff"/>',
@@ -41,17 +48,17 @@ def _svg(counts: dict[str, tuple[int, int]]) -> str:
     for index, (name, (hit, total)) in enumerate(counts.items()):
         y = _TOP + index * _ROW
         label = f"{name} {hit} {total}"
-        hit_w = int(_BAR_MAX * hit / max_total)
-        total_w = int(_BAR_MAX * total / max_total)
+        hit_w = _hit_width(hit, total)
         parts.append(
-            f'<text x="{_LABEL_X}" y="{y}" font-size="14" font-family="monospace">{label}</text>'
+            f'<text x="{_LABEL_X}" y="{y}" font-size="14" font-family="JetBrains Mono" fill="{_INK}">{label}</text>'
         )
         parts.append(
-            f'<rect x="{_BAR_X}" y="{y - 12}" width="{hit_w}" height="{_BAR_H}" fill="{_HIT_FILL}"/>'
+            f'<rect x="{_BAR_X}" y="{y - 12}" width="{_BAR_MAX}" height="{_BAR_H}" fill="{_TRACK}"/>'
         )
-        parts.append(
-            f'<rect x="{_BAR_X + hit_w + 8}" y="{y - 12}" width="{total_w}" height="{_BAR_H}" fill="{_TOTAL_FILL}"/>'
-        )
+        if hit_w:
+            parts.append(
+                f'<rect x="{_BAR_X}" y="{y - 12}" width="{hit_w}" height="{_BAR_H}" fill="{_BAR}"/>'
+            )
     parts.append("</svg>")
     return "\n".join(parts) + "\n"
 
@@ -59,25 +66,24 @@ def _svg(counts: dict[str, tuple[int, int]]) -> str:
 def _png(counts: dict[str, tuple[int, int]], path: Path) -> None:
     from PIL import Image, ImageDraw, ImageFont
 
-    width, height, max_total = _geometry(counts)
+    width, height = _geometry(counts)
     image = Image.new("RGB", (width, height), (255, 255, 255))
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype(str(_FONT), 14)
     for index, (name, (hit, total)) in enumerate(counts.items()):
         y = _TOP + index * _ROW
         label = f"{name} {hit} {total}"
-        hit_w = int(_BAR_MAX * hit / max_total)
-        total_w = int(_BAR_MAX * total / max_total)
-        draw.text((_LABEL_X, y - 16), label, fill=(32, 32, 32), font=font)
+        hit_w = _hit_width(hit, total)
+        draw.text((_LABEL_X, y - 16), label, fill=_INK_RGB, font=font)
         draw.rectangle(
-            [_BAR_X, y - 12, _BAR_X + hit_w, y - 12 + _BAR_H],
-            fill=_HIT_RGB,
+            [_BAR_X, y - 12, _BAR_X + _BAR_MAX, y - 12 + _BAR_H],
+            fill=_TRACK_RGB,
         )
-        total_left = _BAR_X + hit_w + 8
-        draw.rectangle(
-            [total_left, y - 12, total_left + total_w, y - 12 + _BAR_H],
-            fill=_TOTAL_RGB,
-        )
+        if hit_w:
+            draw.rectangle(
+                [_BAR_X, y - 12, _BAR_X + hit_w, y - 12 + _BAR_H],
+                fill=_BAR_RGB,
+            )
     image.save(path, format="PNG")
 
 
@@ -85,8 +91,8 @@ def write_chart(directory: Path, bundle: dict | None = None) -> tuple[Path, Path
     directory = Path(directory)
     directory.mkdir(parents=True, exist_ok=True)
     counts = collect_counts(bundle)
-    svg_path = directory / "synth_eval.svg"
-    png_path = directory / "synth_eval.png"
+    svg_path = directory / "synth-eval.svg"
+    png_path = directory / "synth-eval.png"
     svg_path.write_text(_svg(counts), encoding="utf-8")
     _png(counts, png_path)
     return svg_path, png_path

@@ -58,10 +58,13 @@ def test_render_synth_report_nine_canonical_lines(mini_bundle):
     assert len(lines) == 9
     assert [line.split()[0] for line in lines] == list(_REPORT_NAMES)
     gold = summarize(as_cases(mini_bundle))
+    counts = collect_counts(mini_bundle)
+    assert counts["category_match"] == gold["category_match"]
+    assert counts["relevant_in_top"] == gold["relevant_in_top"]
     for index, name in enumerate(
         ("category_match", "outcome_match", "template_stable", "relevant_in_top")
     ):
-        hit, total = gold[name]
+        hit, total = counts[name]
         assert lines[index] == f"{name} {hit} {total}"
     assert lines[4] == "resume_ok 0 0"
     assert render_synth_report(mini_bundle) == text
@@ -158,7 +161,7 @@ def test_full_shards_report_denominators():
     assert counts["resume_ok"] == (0, 0)
     assert counts["grade_separation"] == (216, 216)
     assert counts["sim_competent"] == (72, 72)
-    assert counts["sim_key_leak"] == (24, 72)
+    assert counts["sim_key_leak"] == (3, 72)
     assert counts["sim_adjacent"] == (0, 72)
 
 

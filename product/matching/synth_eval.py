@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import random
 import sys
@@ -13,7 +14,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from product.matching.category import assign_category
-from product.matching.grade import load_template, score_attempt, select_template
+from product.matching.rules import load_rules
 from product.matching.stems import catalog
 from product.matching.types import ProfileView
 
@@ -132,10 +133,73 @@ def _fold(text: str) -> str:
     return text.casefold().replace("ё", "е")
 
 
+def template_id_of(row: dict) -> str:
+    return str(row.get("template_id") or row.get("set_id") or "")
+
+
+def load_template(template_id: str) -> dict:
+    for row in catalog():
+        if template_id_of(row) == template_id:
+            return row
+    raise KeyError(template_id)
+
+
+def templates_for(specialization: str, grade: str, rule_version: str) -> list[dict]:
+    found = [
+        row
+        for row in catalog()
+        if row.get("specialization") == specialization
+        and row.get("grade") == grade
+        and row.get("rule_version", rule_version) == rule_version
+    ]
+    found.sort(key=lambda row: template_id_of(row))
+    return found
+
+
+def select_template(profile_id: int, specialization: str, grade: str, rule_version: str) -> str:
+    found = templates_for(specialization, grade, rule_version)
+    if len(found) < 2 or len(found) > 3:
+        raise RuntimeError("template_pair")
+    digest = hashlib.sha256(f"{rule_version}|{profile_id}|{specialization}|{grade}".encode()).digest()
+    index = int.from_bytes(digest, "big") % len(found)
+    return template_id_of(found[index])
+
+
+def score_attempt(template: dict, answers: list) -> dict:
+    """Балл шарда SYNTH-EVAL по каталогу вопросов; кабинетный тест v2 не вызывает."""
+    questions = template["questions"]
+    if not isinstance(answers, list) or len(answers) != len(questions):
+        raise ValueError("answer_unknown")
+    correct_n = 0
+    for question, answer in zip(questions, answers):
+        if not isinstance(answer, str):
+            raise ValueError("answer_unknown")
+        choice_ids = {str(choice["id"]) for choice in question["choices"]}
+        if answer not in choice_ids:
+            raise ValueError("answer_unknown")
+        if answer == question["correct"]:
+            correct_n += 1
+    score = round(100 * correct_n / len(questions))
+    grades = [str(item) for item in load_rules()["grades"]]
+    grade = str(template["grade"])
+    index = grades.index(grade)
+    confirm_min = int(template.get("confirm_min", 50))
+    higher_min = int(template.get("suggest_higher_min", 80))
+    if score >= higher_min:
+        if index == len(grades) - 1:
+            return {"score": score, "outcome": "confirm", "proposed_grade": grade}
+        return {"score": score, "outcome": "suggest_higher", "proposed_grade": grades[index + 1]}
+    if score >= confirm_min:
+        return {"score": score, "outcome": "confirm", "proposed_grade": grade}
+    if index == 0:
+        return {"score": score, "outcome": "suggest_lower", "proposed_grade": grades[0]}
+    return {"score": score, "outcome": "suggest_lower", "proposed_grade": grades[index - 1]}
+
+
 def _catalog_templates() -> tuple[tuple[str, str, str], ...]:
     rows = []
     for row in catalog():
-        template_id = str(row["template_id"])
+        template_id = template_id_of(row)
         letter = template_id.rsplit("-", 1)[-1]
         rows.append((str(row["specialization"]), str(row["grade"]), letter))
     return tuple(rows)

@@ -44,9 +44,26 @@ def annotate_relevant(bundle: dict) -> dict:
     return out
 
 
+def _synth_case_counts(data: dict) -> dict[str, tuple[int, int]]:
+    """Категория и топ — как golden_run; итог и стабильность — поля шарда, не IRT кабинета."""
+    gold = summarize(as_cases(data))
+    profiles = list(data.get("profiles") or [])
+    outcome_hit = sum(
+        1 for row in profiles if row.get("expected_outcome") == row.get("test_outcome")
+    )
+    pairs = list(data.get("template_pairs") or [])
+    stable_hit = sum(1 for pair in pairs if pair.get("answers") == pair.get("answers_repeat"))
+    return {
+        "category_match": gold["category_match"],
+        "outcome_match": (outcome_hit, len(profiles)),
+        "template_stable": (stable_hit, len(pairs)),
+        "relevant_in_top": gold["relevant_in_top"],
+    }
+
+
 def collect_counts(bundle: dict | None = None) -> dict[str, tuple[int, int]]:
     data = annotate_relevant(load_shards() if bundle is None else bundle)
-    gold = summarize(as_cases(data))
+    gold = _synth_case_counts(data)
     separated, total = grade_separation_counts()
     sim = simulation_counts()
     values = {**gold, "resume_ok": (0, 0), "grade_separation": (separated, total), **sim}

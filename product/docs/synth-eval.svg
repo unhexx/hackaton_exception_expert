@@ -20,9 +20,9 @@
 <text x="16" y="312" font-size="14" font-family="JetBrains Mono" fill="#1B1C21">sim_competent 72 72</text>
 <rect x="300" y="300" width="400" height="12" fill="#EDEDED"/>
 <rect x="300" y="300" width="400" height="12" fill="#402FFF"/>
-<text x="16" y="358" font-size="14" font-family="JetBrains Mono" fill="#1B1C21">sim_key_leak 24 72</text>
+<text x="16" y="358" font-size="14" font-family="JetBrains Mono" fill="#1B1C21">sim_key_leak 3 72</text>
 <rect x="300" y="346" width="400" height="12" fill="#EDEDED"/>
-<rect x="300" y="346" width="133" height="12" fill="#402FFF"/>
+<rect x="300" y="346" width="16" height="12" fill="#402FFF"/>
 <text x="16" y="404" font-size="14" font-family="JetBrains Mono" fill="#1B1C21">sim_adjacent 0 72</text>
 <rect x="300" y="392" width="400" height="12" fill="#EDEDED"/>
 </svg>

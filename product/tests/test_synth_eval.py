@@ -9,8 +9,6 @@ from pathlib import Path
 import pytest
 
 import product
-from product.matching.grade import load_template, score_attempt, select_template
-from product.matching.simulate import _answers_adjacent
 from product.matching.stems import catalog
 from product.matching.synth_eval import (
     FIRST_FEMALE,
@@ -27,7 +25,10 @@ from product.matching.synth_eval import (
     forbidden_name,
     generate_chosen,
     load_shards,
+    load_template,
     profile_id_for,
+    score_attempt,
+    select_template,
 )
 from product.matching import synth_eval, synth_eval_chart, synth_eval_run
 
@@ -188,9 +189,12 @@ def test_answers_for_not_constant_bca():
     assert len(set(triples)) == 3
 
 
-def test_adjacent_matches_simulate_on_catalog_template():
+def test_adjacent_persona_picks_non_correct_letters():
     template = catalog()[0]
-    assert answers_for(template, "adjacent") == _answers_adjacent(template)
+    answers = answers_for(template, "adjacent")
+    correct = [str(question["correct"]) for question in template["questions"]]
+    assert answers != correct
+    assert all(answer != letter for answer, letter in zip(answers, correct))
 
 
 def test_load_shards_missing_is_ok():

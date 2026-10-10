@@ -463,7 +463,7 @@ flowchart TD
 ```text
 category_match <совпало> <всего>
 outcome_match <совпало> <всего>
-template_stable <совпало> <всего>
+form_stable <совпало> <всего>
 relevant_in_top <релевантных в топе> <слотов>
 resume_ok <без падения> <всего>
 grade_separation <разделяющих> <всего пунктов>
@@ -472,11 +472,11 @@ sim_key_leak <попало> <слотов>
 sim_adjacent <попало> <слотов>
 ```
 
-`cases.json` задаёт `top_k` (для прототипа 3), несколько десятков синтетических профилей и около десятка потребностей: по одной или две на специализацию. Кейс — вход `ProfileView` без резюме и дисциплины. Ожидаемый `category_id` и флаг `relevant` записывает человек; `assign_category` и сам прогон эти поля не заполняют. `outcome_match` и `form_stable` считаются на вариантах теста из банка с фиксированным seed: ответы «знает уровни до выше / до своего / только ниже» должны дать `suggest_higher` / `confirm` / `suggest_lower`, а тот же вариант с теми же ответами — тот же итог. CPU-персоны `sim_*` (`product/matching/simulate.py`) проходят тот же тест: знает свой уровень, выучил чужой ключ по позициям, уровень на ступень ниже. Это не целевые проценты.
+`cases.json` задаёт `top_k` (для прототипа 3), несколько десятков синтетических профилей и около десятка потребностей: по одной или две на специализацию. Кейс — вход `ProfileView` без резюме и дисциплины. Ожидаемый `category_id` и флаг `relevant` записывает человек; `assign_category` и сам прогон эти поля не заполняют. `outcome_match` и `form_stable` считаются на вариантах теста из банка с фиксированным seed: ответы «знает уровни до выше / до своего / только ниже» должны дать `suggest_higher` / `confirm` / `suggest_lower`, а тот же вариант с теми же ответами — тот же итог и ту же оценку. CPU-персоны `sim_*` (`product/matching/simulate.py`) проходят тот же тест: знает свой уровень, выучил чужой ключ по позициям, уровень на ступень ниже. Это не целевые проценты.
 
-У каждой потребности человек отмечает релевантные профили. Доля считается по фактической сортировке `NeedFit.sort_key` внутри этой потребности: сколько отмеченных попало в первые `top_k`. В `relevant_in_top` пишутся суммы этого прогона: отмеченные в топе и число просмотренных слотов. Порога, ниже которого прогон «провален по проценту», нет. NDCG нет. Падение теста — это другое: не совпал ожидаемый `category_id` или ожидаемый итог, тот же шаблон с теми же ответами дал другой грейд, либо разбор PDF бросил исключение.
+У каждой потребности человек отмечает релевантные профили. Доля считается по фактической сортировке `NeedFit.sort_key` внутри этой потребности: сколько отмеченных попало в первые `top_k`. В `relevant_in_top` пишутся суммы этого прогона: отмеченные в топе и число просмотренных слотов. Порога, ниже которого прогон «провален по проценту», нет. NDCG нет. Падение теста — это другое: не совпал ожидаемый `category_id` или ожидаемый итог, тот же вариант с теми же ответами дал другой итог или другую оценку, либо разбор PDF бросил исключение.
 
-Дискриминативность заданий в эти пять строк не входит. Процедура считает её по каталогу вопросов, без нового набора и без ответов живых людей. Пункт разделяет грейды, если оба неверных варианта — правдоподобная ошибка соседнего нижнего грейда, а не уход в сторону: цвет, логотип, число лайков, имя дашборда и то же семейство. На `junior` нижнего соседа нет, оба неверных остаются на той же оси, грейд ниже `junior` не вводится. Счёт таких пунктов называется `grade_separation`: разделяющие и всего пунктов. Порога, ниже которого прогон провален по этому счёту, нет. Исторический единый ключ каталога (было до 1.2.12) в этом срезе не трогали, это не текущий факт. Пороги 50 и 80, три вопроса и `rule_version` v1 не меняются, четвёртый шаблон не добавляется, `cases.json` не растёт. Сортировка `NeedFit` и балл грейда от счёта не зависят. Прогон печатает `grade_separation` отдельной строкой рядом с пятью.
+Дискриминативность заданий в эти пять строк не входит. Процедура считает её по каталогу вопросов, без нового набора и без ответов живых людей. Пункт разделяет грейды, если оба неверных варианта — правдоподобная ошибка соседнего нижнего грейда, а не уход в сторону: цвет, логотип, число лайков, имя дашборда и то же семейство. На `junior` нижнего соседа нет, оба неверных остаются на той же оси, грейд ниже `junior` не вводится. Счёт таких пунктов называется `grade_separation`: разделяющие и всего пунктов. Порога, ниже которого прогон провален по этому счёту, нет. Исторический единый ключ каталога (было до 1.2.12) в этом срезе не трогали, это не текущий факт. Пороги 50 и 80, три вопроса и `rule_version` v1 не меняются, четвёртый шаблон не добавляется, `cases.json` не растёт. Сортировка `NeedFit` и балл грейда от счёта не зависят. Прогон печатает `grade_separation` отдельной строкой рядом с пятью. Пороги 50 и 80 и три вопроса в этом абзаце — история среза стемов, не сдача v2 (b93f738); числа абзаца не переписываются.
 
 `stem_axis` уже влит: тексты неверных в стемах v1, не новая строка прогона. Неверный, который уходил в сторону (бренд, цвет, логотип, число лайков, имя дашборда и то же семейство), переписан в правдоподобную ошибку по оси грейда, чтобы `is_drift` его больше не ловил. На `junior` нижнего соседа нет, оба неверных остаются на той же оси, грейд ниже `junior` не вводится. Буква ключа и текст верного варианта в этом срезе не менялись: исторический единый ключ каталога, не текущий факт (было до 1.2.12). Пороги 50 и 80, три вопроса и `rule_version` v1 не менялись, четвёртый шаблон не добавлялся, `cases.json` не рос. Счёт `grade_separation` остаётся прежней строкой, порога провала нет, число разделяющих пунктов этот документ не фиксирует. `is_drift` не подменялся, чтобы счёт вырос без смены текстов. Сортировка `NeedFit`, `relevant_in_top` и балл грейда от правки не зависят.
 
@@ -484,7 +484,7 @@ sim_adjacent <попало> <слотов>
 
 `resumes.json` и несколько синтетических PDF с текстовым слоем добавляет FSP-4 в `product/matching/golden/resumes/`. Пока файла нет, строка `resume_ok` печатает `0/0`. Ожидаемая ошибка пустого текстового слоя считается успешным разбором, не падением: функция вернула `resume_no_text`, процесс жив. Разобранные поля получают `source=resume`. Метки ФСП у этих PDF нет.
 
-Прогон на демо запускается один раз после четырёх шагов сценария. Числа в записку переписываются с этого запуска, не из константы.
+Прогон на демо запускается один раз после пяти шагов сценария. Числа в записку переписываются с этого запуска, не из константы.
 
 ### SYNTH-EVAL
 
@@ -608,21 +608,21 @@ hasher = PasswordHasher(
 | `POST /api/auth/register` | гость | 201, код в теле только здесь | 409 `email_taken`, 422 `email`, `password_length`, `role`, `consent_required` |
 | `POST /api/auth/confirm` | гость | 200 | 400 `code_invalid`, `code_expired`, `code_locked`, 409 `already_verified` |
 | `POST /api/auth/confirm/resend` | гость | 200, новый код на странице и в теле | 400 `email` |
-| `POST /api/auth/login` | гость | 200, ставит cookie | 401 `credentials`, 403 `email_unverified` |
+| `POST /api/auth/login` | гость | 200, ставит cookie | 401 `credentials`, 403 `email_unverified`, 429 `login_locked` (5 неверных паролей подряд, 15 мин, в том числе для неизвестной почты) |
 | `POST /api/auth/logout` | сессия | 204 | 401 |
 | `GET /api/candidate/profile` | соискатель | 200 | 401, 403, 404 если анкеты ещё нет |
 | `PUT /api/candidate/profile` | соискатель | 200, первый раз создаёт профиль и согласие, дальше пишет попытку опроса | 409 `grade_via_test` если грейд уже записан и в теле другой, 422 `closed_list` |
 | `GET /api/candidate/achievements` | соискатель | 200, пустой `results` допустим | 401, 403 |
 | `POST /api/candidate/tests/start` | соискатель | 201, без правильных ответов. Тело пустое — тест записанного грейда; `{"grade": "senior"}` — соседний, если его предложили | 409 `survey_required`, `grade_not_offered`, `grade_interval`, `attempt_open` |
-| `POST /api/candidate/tests/{id}/submit` | соискатель | 200, балл, итог, категория. Соседняя попытка пишет `profiles.grade` только когда сохранённый итог — `confirm`. `confirm` — сырой балл не ниже `confirm_min` и ниже `suggest_higher_min`, либо край `lead`, где балл не ниже `suggest_higher_min` и выше грейда нет: итог хранится как `confirm`, предложенный грейд — `lead`. Пересдача вниз с итогом `suggest_higher` (балл 100 на грейде ниже записанного) `profiles.grade` не меняет и интервал 90 дней не тратит. Балл ниже `confirm_min`, включая повтор на `junior` с итогом `suggest_lower`, грейд не пишет и интервал не тратит | 409 `attempt_closed`; `grade_interval` только у соседнего теста; 422 `answer_unknown`; 404 |
+| `POST /api/candidate/tests/{id}/submit` | соискатель | 200, два вида. Ответов в этих JSON нет: они остаются в `form_json`. Сданная попытка, как `_SUBMITTED` в `product/app/api/tests.py`: `attempt_id`, `status` "submitted", `score`, `outcome` (`confirm`, `suggest_higher` или `suggest_lower`), `proposed_grade`, `category_id`, `grade`, `confidence`, `test_status` («уверенно» или «у границы»), `position`, `n_items`. `score` — round(100 * число верных вопросов / n), строка `_close_stage` в `product/app/services/tests.py`. У границы тот же метод отвечает `status` "extra": поля `_public_attempt` (`attempt_id`, `template_id`, `specialization`, `declared_grade`, `answered`, `total`, `questions` без ключа). Дополнительных блоков не больше трёх, по 6 вопросов (`adaptive.EXTRA_ITEMS` и `MAX_EXTRA_BLOCKS`); их сдают тем же методом. `profiles.grade` пишет только не записанная пара при сохранённом итоге `confirm` (not recorded and outcome == "confirm"). Порогов `confirm_min` и `suggest_higher_min` в живом тесте нет: итог считает IRT, `assessment.decide`. Неудачный тест грейд не пишет и интервал 90 дней не тратит. | 409 `attempt_closed`; `grade_interval` только у соседнего теста; 422 `answer_unknown`; 404 |
 | `GET /api/candidate/tests` | соискатель | 200, история | 401, 403 |
 | `GET /api/candidate/category` | соискатель | 200, в том числе до теста | 404 если опроса не было |
 | `GET /api/candidate/profile.pdf` | соискатель | 200 `application/pdf` | 404 |
 | `POST /api/candidate/resume` | соискатель | 200 | 413 `resume_too_large`, 422 `resume_no_text`, `resume_not_pdf` |
 | `GET /api/employer/company` | работодатель | 200 или 404 `company_missing` | 401, 403 |
 | `PUT /api/employer/company` | работодатель | 200, четыре поля карточки | 422 `closed_list` не применяется; лишнее поле — 422 `extra_forbidden` |
-| `GET /api/employer/candidates` | работодатель | 200, список без почты, в статусе карточки есть отрасль | 422 если нет `category_id` |
-| `POST /api/employer/offers` | работодатель | 201, в теле есть `contact_channel` компании и нет `candidate_email` | 422 `offer_incomplete`, `salary_range`, `currency`, `company_name`, `contact_channel`; 404 `profile_not_in_category`; 409 открытое уже есть |
+| `GET /api/employer/candidates` | работодатель | 200, список без почты, в статусе карточки есть отрасль. Без `category_id` — вся опубликованная база. | 422 `category_id`, если формат не `specialization:grade` или категория спорит с фильтром специализации или грейда; 422 `closed_list` на чужое значение фильтра. Опущенный `category_id` — не 422. |
+| `POST /api/employer/offers` | работодатель | 201, в теле есть `contact_channel` компании и нет `candidate_email` | 422 `offer_incomplete`, `category_id`, `salary_range`, `currency`, `company_name`, `contact_channel`; 404 `profile_not_in_category`; 409 открытое уже есть |
 | `POST /api/candidate/offers/{id}/accept` | соискатель | 200 `accepted` | 404, 409 `offer_closed` |
 | `POST /api/candidate/offers/{id}/decline` | соискатель | 200 `declined` | 404, 409 `offer_closed` |
 | `GET /api/candidate/offers` | соискатель | 200, только свои | 403 |
@@ -632,7 +632,7 @@ hasher = PasswordHasher(
 | `GET /api/employer/offers` | работодатель | 200. `contact_channel` есть всегда, `candidate_email` только у `accepted` | 403 |
 | `GET /validation` | сессия стенда | 200 `text/plain` | 401 |
 
-Список работодателя: обязательный query `category_id`, дальше необязательные `stack` (повторяемый), `team_role`, `work_format`, `has_fsp` (`true` или `false`), `q`. В карточке есть объяснение, `list_reason`, `rank_key`, `grade_status` («не подтверждён» / «подтверждён»), балл, стек, роль, формат, достижения ФСП. Почты нет. Неопубликованный профиль в массив не попадает. Опубликованный без теста попадает со статусом «не подтверждён» и ниже сдавших той же категории при равном качестве потребности.
+Список работодателя: `category_id` необязателен. Пустой или опущенный — поиск по всем опубликованным профилям. Дальше необязательные `specialization`, `grade`, `stack` (повторяемый), `team_role`, `work_format`, `has_fsp` (`true`, `false` или пусто), `q`. Категория вместе с другой специализацией или другим грейдом — 422 `category_id`. Чужое значение закрытого списка — 422 `closed_list`. В карточке есть объяснение, `list_reason`, `rank_key`, `grade_status`, балл, стек, роль, формат, достижения ФСП. `grade_status`: «не подтверждён» (теста нет), «не подтверждён тестом», «подтверждён уверенно», «подтверждён, у границы»; если итог `confirm` или `suggest_higher`, а статуса в `result_json` нет — «подтверждён». Почты нет. Неопубликованный профиль в массив не попадает. Опубликованный без теста попадает со статусом «не подтверждён» и ниже сдавших той же категории при равном качестве потребности. Приглашение и вакансия по-прежнему требуют пару `specialization:grade`.
 
 Пример тела создания приглашения:
 
@@ -662,6 +662,7 @@ hasher = PasswordHasher(
 | Таблица | Ключ и уникальность | Кто пишет |
 |---|---|---|
 | `users` | PK `id`; UNIQUE `email` | backend на регистрации и подтверждении. До первого опроса здесь же оба флага согласия |
+| `login_throttle` | PK `email` | backend на неудачном входе; удачный вход строку удаляет |
 | `companies` | PK `id`; UNIQUE `employer_id` → `users.id` | работодатель, карточка компании |
 | `profiles` | PK `id` (это `profile_id`); UNIQUE `user_id`; UNIQUE `external_id` среди непустых, без FK на мок | соискатель, опрос и разбор резюме |
 | `consents` | PK `id`; UNIQUE `profile_id` | соискатель, галка |
@@ -676,6 +677,8 @@ hasher = PasswordHasher(
 
 `users`: `email`, `password_hash`, `role` (`candidate` или `employer`), `email_verified`, `confirmation_code_hash`, `confirmation_expires_at`, `confirmation_attempts`, `consent_processing`, `consent_publication`, `created_at`. Оба флага согласия равны одной галке. Почта кабинета и `candidate_email` берутся отсюда и второй колонкой в профиле не хранятся. В `offers` почта не копируется.
 
+`login_throttle`: `email` (PK, нормализованная почта, в том числе если учётки нет), `failures` (целое), `locked_until` (текст ISO-8601 UTC или пусто). Пять неудач подряд (`product/app/services/auth.py`, `_LOGIN_ATTEMPTS` = 5) записывают `locked_until` на 15 минут и обнуляют `failures`. Удачный вход строку удаляет. Пока `locked_until` не прошёл, `POST /api/auth/login` отвечает 429 `login_locked` даже с верным паролем.
+
 `companies`: `employer_id`, `name`, `description`, `direction`, `contact`, `updated_at`.
 
 `profiles`: `user_id`, `full_name`, `industry` (`it`, не часть `category_id`), `stack_json`, `specialization`, `grade`, `grade_changed_at`, `team_role`, `work_format`, `experience`, `soft_skills_json`, `external_id`, `field_sources_json`, `created_at`, `updated_at`. В `field_sources_json` только значения `form` и `resume`. Ключ `industry` там допустим. Грейд после первой записи этим словарём не переписывается.
@@ -684,7 +687,7 @@ hasher = PasswordHasher(
 
 `survey_attempts`: снимок полей опроса, включая `industry`, плюс `rule_version` и `created_at`.
 
-`test_attempts`: `profile_id`, `specialization`, `declared_grade`, `template_id`, `rule_version`, `answers_json`, `score`, `outcome`, `proposed_grade`, `status` (`draft` или `submitted`), `created_at`, `submitted_at`.
+`test_attempts`: `profile_id`, `specialization`, `declared_grade`, `template_id`, `rule_version`, `answers_json`, `score`, `outcome`, `proposed_grade`, `status` (`draft` или `submitted`), `created_at`, `submitted_at`, `form_json`, `result_json`. `form_json` — состав попытки: вопросы, порядок вариантов, ключ (только на сервере, в API не уходит) и ответы. `result_json` — уровень, уверенность, статус «уверенно» или «у границы», положение в грейде. Колонки уже есть в `TestAttempt` и на старом томе догоняются `ensure_columns`; этот документ схему не меняет.
 
 `category_assignments`: поля `CategoryAssignment` плюс `test_attempt_id`. `explanation` — текст, собранный функцией, не произвольная правка работодателя.
 
@@ -764,7 +767,7 @@ docker compose -f deploy/fsp/compose.yaml --profile test run --rm tests
 
 Флаги возможностей не вводим. Неготовый срез — это ещё не смерженный код и пустое тело заглушки, а не скрытый рубильник в рантайме.
 
-Записка FSP-6 лежит исходником в `product/docs/zapiska.md` и на сдачу отдаётся файлом doc или pdf. Приложение её не рендерит: второй конвертер HTML в PDF не заводим. Демо-скрипт — `track/lct-fsp-vacancies/demo.md`, четыре шага из требований и один запуск прогона после них. Презентацию до питча не собираем.
+Записка FSP-6 лежит исходником в `product/docs/zapiska.md` и на сдачу отдаётся файлом doc или pdf. Приложение её не рендерит: второй конвертер HTML в PDF не заводим. Демо-скрипт — `track/lct-fsp-vacancies/demo.md`, пять шагов и один запуск прогона после них. Презентацию до питча не собираем.
 
 ## Открытые вопросы
 

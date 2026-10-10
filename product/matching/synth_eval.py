@@ -13,9 +13,8 @@ from functools import lru_cache
 from pathlib import Path
 
 from product.matching.category import assign_category
-from product.matching.golden_run import _fit, _view, grade_separation_counts, summarize
+from product.matching.golden_run import grade_separation_counts, summarize
 from product.matching.grade import load_template, score_attempt, select_template
-from product.matching.rules import rule_version
 from product.matching.simulate import simulation_counts
 from product.matching.stems import catalog
 from product.matching.types import ProfileView
@@ -465,17 +464,21 @@ def as_cases(bundle: dict) -> dict:
     }
 
 
-def fill_relevant_profile_ids(bundle: dict, *, top_k: int = 3) -> dict:
-    version = rule_version()
-    ranked = [(row, assign_category(_view(row), version)) for row in bundle["profiles"]]
+def fill_relevant_profile_ids(bundle: dict) -> dict:
+    order = ("junior", "middle", "senior", "lead")
     for need in bundle["needs"]:
-        fitted = [
-            (pair, _fit(pair[0], pair[1].category_id, pair[1].rank_key, need))
-            for pair in ranked
-        ]
-        pool = [(pair, fit) for pair, fit in fitted if fit.matched]
-        pool.sort(key=lambda item: item[1].sort_key, reverse=True)
-        need["relevant_profile_ids"] = [pair[0]["profile_id"] for pair, _fit_row in pool[:top_k]]
+        spec, need_grade = str(need["category_id"]).split(":", 1)
+        need_rank = order.index(need_grade)
+        ids = []
+        for row in bundle["profiles"]:
+            if row["specialization"] != spec:
+                continue
+            if row["declared_grade"] != need_grade:
+                continue
+            if order.index(row["true_grade"]) < need_rank:
+                continue
+            ids.append(row["profile_id"])
+        need["relevant_profile_ids"] = ids
     return bundle
 
 

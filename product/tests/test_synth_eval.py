@@ -323,16 +323,62 @@ def test_collect_counts_resume_ok_ignores_golden_pdfs(mini_bundle, monkeypatch):
     assert "resume_ok 0 0" in render_synth_report(mini_bundle)
 
 
-def test_fill_relevant_profile_ids_top_k(mini_bundle):
-    import copy
-
-    bundle = copy.deepcopy(mini_bundle)
-    filled = fill_relevant_profile_ids(bundle, top_k=3)
+def test_fill_relevant_stretch_absent_aligned_underclaim_present():
+    profiles = [
+        {
+            "profile_id": 1,
+            "specialization": "backend",
+            "declared_grade": "middle",
+            "true_grade": "middle",
+            "claim_kind": "aligned",
+        },
+        {
+            "profile_id": 2,
+            "specialization": "backend",
+            "declared_grade": "middle",
+            "true_grade": "junior",
+            "claim_kind": "stretch",
+        },
+        {
+            "profile_id": 3,
+            "specialization": "backend",
+            "declared_grade": "middle",
+            "true_grade": "senior",
+            "claim_kind": "underclaim",
+        },
+        {
+            "profile_id": 4,
+            "specialization": "frontend",
+            "declared_grade": "middle",
+            "true_grade": "middle",
+            "claim_kind": "aligned",
+        },
+        {
+            "profile_id": 5,
+            "specialization": "backend",
+            "declared_grade": "middle",
+            "true_grade": "middle",
+            "claim_kind": "aligned",
+        },
+        {
+            "profile_id": 6,
+            "specialization": "backend",
+            "declared_grade": "senior",
+            "true_grade": "senior",
+            "claim_kind": "aligned",
+        },
+    ]
+    needs = [
+        {
+            "id": "backend-middle",
+            "category_id": "backend:middle",
+            "relevant_profile_ids": [],
+        }
+    ]
+    bundle = {"profiles": profiles, "needs": needs}
+    filled = fill_relevant_profile_ids(bundle)
     assert filled is bundle
-    known = {row["profile_id"] for row in bundle["profiles"]}
-    for need in bundle["needs"]:
-        assert len(need["relevant_profile_ids"]) <= 3
-        assert all(pid in known for pid in need["relevant_profile_ids"])
+    assert needs[0]["relevant_profile_ids"] == [1, 3, 5]
 
 
 def test_chart_writes_svg_and_png(tmp_path, mini_bundle):

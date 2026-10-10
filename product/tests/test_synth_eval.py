@@ -272,12 +272,17 @@ def test_as_cases_shape(mini_bundle):
 
 def test_chart_writes_svg_and_png(tmp_path, mini_bundle):
     svg_path, png_path = synth_eval_chart.write_chart(tmp_path, mini_bundle)
-    assert svg_path == tmp_path / "synth_eval.svg"
-    assert png_path == tmp_path / "synth_eval.png"
+    assert svg_path == tmp_path / "synth-eval.svg"
+    assert png_path == tmp_path / "synth-eval.png"
     svg = svg_path.read_text(encoding="utf-8")
     counts = synth_eval_run.collect_counts(mini_bundle)
     for name, (hit, total) in counts.items():
         assert f"{name} {hit} {total}" in svg
+    assert "font-family=\"JetBrains Mono\"" in svg
+    assert "#1B1C21" in svg
+    assert "#402FFF" in svg
+    assert "#EDEDED" in svg
+    assert "#2f6f9f" not in svg
     assert png_path.is_file()
     assert png_path.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
 

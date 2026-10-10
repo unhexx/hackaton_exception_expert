@@ -279,7 +279,7 @@ def _sqlite_pragmas(dbapi_conn, _connection_record):
 ```toml
 [project]
 name = "fsp-vacancies"
-version = "1.2.12"
+version = "1.4.0"
 requires-python = ">=3.12"
 dependencies = [
   "fastapi>=0.115,<1",
@@ -485,6 +485,22 @@ sim_adjacent <попало> <слотов>
 `resumes.json` и несколько синтетических PDF с текстовым слоем добавляет FSP-4 в `product/matching/golden/resumes/`. Пока файла нет, строка `resume_ok` печатает `0/0`. Ожидаемая ошибка пустого текстового слоя считается успешным разбором, не падением: функция вернула `resume_no_text`, процесс жив. Разобранные поля получают `source=resume`. Метки ФСП у этих PDF нет.
 
 Прогон на демо запускается один раз после четырёх шагов сценария. Числа в записку переписываются с этого запуска, не из константы.
+
+### SYNTH-EVAL
+
+Критерий 25% просит процедуру на синтетике с известной разметкой, не только золотые 38. Набор — 1000 живых ФИО в `product/matching/golden/synth_eval/`, слоты и сборщик в `product/matching/synth_eval.py`, прогон `python -m product.matching.synth_eval_run`, график `product/docs/synth-eval.svg` и `synth-eval.png`. `GET /validation` по-прежнему золотой 38. PDF на тысячу не генерируем: `resume_ok 0 0`. Строки `sim_*` и `grade_separation` — каталог (72 шаблона / 216 пунктов), не ответы 1000 людей. Порога и NDCG нет. Числа этого запуска:
+
+```text
+category_match 1000 1000
+outcome_match 1000 1000
+template_stable 24 24
+relevant_in_top 36 36
+resume_ok 0 0
+grade_separation 216 216
+sim_competent 72 72
+sim_key_leak 24 72
+sim_adjacent 0 72
+```
 
 ### Резюме и PDF профиля
 

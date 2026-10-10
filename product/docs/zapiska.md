@@ -86,6 +86,28 @@ resume_ok 4 4
 
 Запуск: `python -m product.validation_sim.run`. Таблицы — `product/validation_sim/out/report.md`, графики — `out/validation_charts.png`, описание и допущения — `product/validation_sim/README.md`.
 
+### SYNTH-EVAL (1000)
+
+Отдельный CPU-прогон 1000 живых ФИО с известным истинным грейдом. Он не подменяет `GET /validation`: золотой блок 38 выше остаётся путём жюри. PDF на тысячу нет, строка `resume_ok` честно `0 0`. В том же образе:
+
+```text
+python -m product.matching.synth_eval_run
+```
+
+Набор в git: 1000 профилей, 4 шарда, 12 потребностей, 24 пары шаблона. Числа этого запуска, не цель. Порога нет. `sim_*` и `grade_separation` считаются по каталогу 72 шаблона / 216 пунктов, не по ответам тысячи людей. График — [`synth-eval.svg`](synth-eval.svg) и [`synth-eval.png`](synth-eval.png).
+
+```text
+category_match 1000 1000
+outcome_match 1000 1000
+template_stable 24 24
+relevant_in_top 36 36
+resume_ok 0 0
+grade_separation 216 216
+sim_competent 72 72
+sim_key_leak 24 72
+sim_adjacent 0 72
+```
+
 ## Будущая интеграция с реестром ФСП
 
 Кабинеты зависят от интерфейса `FspClient`. На стенде это чтение `participants.json`. Боевого коннектора реестра нет. Стенд поднимает локальный реалм Keycloak. Кандидат, уже вошедший по почте, связывает `external_id` из claim `fsp_external_id` или `sub`. Секрета боевой ФСП нет. На схеме локальный Keycloak — сплошной узел стенда, issuer заказчика — пунктир.

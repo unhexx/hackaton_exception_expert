@@ -26,7 +26,6 @@ from product.matching.synth_eval import (
     build_shard,
     collect_counts,
     extras_for_shard,
-    fill_relevant_profile_ids,
     forbidden_name,
     generate_chosen,
     load_shards,
@@ -376,9 +375,10 @@ def test_fill_relevant_stretch_absent_aligned_underclaim_present():
         }
     ]
     bundle = {"profiles": profiles, "needs": needs}
-    filled = fill_relevant_profile_ids(bundle)
-    assert filled is bundle
-    assert needs[0]["relevant_profile_ids"] == [1, 3, 5]
+    filled = synth_eval_run.annotate_relevant(bundle)
+    assert filled is not bundle
+    assert needs[0]["relevant_profile_ids"] == []
+    assert filled["needs"][0]["relevant_profile_ids"] == [1, 3, 5]
 
 
 def test_chart_writes_svg_and_png(tmp_path, mini_bundle):
@@ -427,11 +427,6 @@ def test_chart_main_incomplete_shards(monkeypatch):
         synth_eval_chart.main()
 
 
-def test_fill_relevant_cli_incomplete_shards(monkeypatch):
-    monkeypatch.setattr(
-        synth_eval,
-        "load_shards",
-        lambda root=None: {"shards": [1], "n": 250, "profiles": [], "needs": [], "template_pairs": []},
-    )
-    with pytest.raises(SystemExit, match="shards_incomplete"):
+def test_builder_cli_rejects_fill_relevant():
+    with pytest.raises(SystemExit, match="usage:"):
         synth_eval.main(["--fill-relevant"])

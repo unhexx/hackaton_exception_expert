@@ -62,6 +62,28 @@ resume_ok 4 4
 - `grade_separation` — сколько пунктов разделяют грейды и сколько пунктов в стемах v1. Это не порог. Число зависит от стемов этого запуска и в блок выше не входит;
 - `sim_competent`, `sim_key_leak`, `sim_adjacent` — CPU-персоны того же GET. Порога нет. Числа в записку не копируются.
 
+### SYNTH-EVAL (1000)
+
+Отдельный CPU-прогон 1000 живых ФИО с известным истинным грейдом. Он не подменяет `GET /validation`: золотой блок 38 выше остаётся путём жюри. PDF на тысячу нет, строка `resume_ok` честно `0 0`. В том же образе:
+
+```text
+python -m product.matching.synth_eval_run
+```
+
+Набор в git: 1000 профилей, 4 шарда, 12 потребностей, 24 пары шаблона. Числа этого запуска, не цель. Порога нет. `sim_*` и `grade_separation` считаются по каталогу 72 шаблона / 216 пунктов, не по ответам тысячи людей. График — [`synth-eval.svg`](synth-eval.svg) и [`synth-eval.png`](synth-eval.png).
+
+```text
+category_match 1000 1000
+outcome_match 1000 1000
+template_stable 24 24
+relevant_in_top 36 36
+resume_ok 0 0
+grade_separation 216 216
+sim_competent 72 72
+sim_key_leak 24 72
+sim_adjacent 0 72
+```
+
 ## Будущая интеграция с реестром ФСП
 
 Кабинеты зависят от интерфейса `FspClient`. На стенде это чтение `participants.json`. Позже та же точка может получить HTTP-реализацию реестра. Вход в реестр по этой схеме опирается на Keycloak как будущую основу ФСП ID. На стенде Keycloak не поднимается, пунктир не настроен, секрета боевой ФСП нет. Связь анкеты с участником — необязательный `external_id`.
@@ -82,7 +104,7 @@ flowchart LR
 
 ## Библиотеки
 
-Список снят `pip freeze` внутри образа `fsp-vacancies:local` на Python 3.12 и записан в `product/requirements.lock`. Строка `fsp-vacancies @ file:///srv/product` — так pip называет пакет, поставленный из дерева образа. Версия пакета в `product/pyproject.toml` — 1.2.12.
+Список снят `pip freeze` внутри образа `fsp-vacancies:local` на Python 3.12 и записан в `product/requirements.lock`. Строка `fsp-vacancies @ file:///srv/product` — так pip называет пакет, поставленный из дерева образа. Версия пакета в `product/pyproject.toml` — 1.2.13.
 
 Прямые зависимости образа:
 

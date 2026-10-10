@@ -9,7 +9,7 @@ import pytest
 
 import product
 from product.matching.golden_run import summarize
-from product.matching.synth_eval import SHARD_SIZE, as_cases, build_shard
+from product.matching.synth_eval import SHARD_SIZE, as_cases, build_shard, load_shards
 from product.matching.synth_eval_run import (
     annotate_relevant,
     collect_counts,
@@ -144,6 +144,22 @@ def test_annotate_relevant_stretch_absent_aligned_underclaim_present():
     assert filled is not bundle
     assert needs[0]["relevant_profile_ids"] == []
     assert filled["needs"][0]["relevant_profile_ids"] == [1, 3, 5]
+
+
+def test_full_shards_report_denominators():
+    bundle = load_shards()
+    assert bundle["n"] == 1000
+    assert bundle["shards"] == [1, 2, 3, 4]
+    counts = collect_counts(bundle)
+    assert counts["category_match"] == (1000, 1000)
+    assert counts["outcome_match"] == (1000, 1000)
+    assert counts["template_stable"] == (24, 24)
+    assert counts["relevant_in_top"] == (36, 36)
+    assert counts["resume_ok"] == (0, 0)
+    assert counts["grade_separation"] == (216, 216)
+    assert counts["sim_competent"] == (72, 72)
+    assert counts["sim_key_leak"] == (24, 72)
+    assert counts["sim_adjacent"] == (0, 72)
 
 
 def test_runner_main_incomplete_shards(monkeypatch):

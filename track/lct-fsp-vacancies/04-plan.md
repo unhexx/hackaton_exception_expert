@@ -205,6 +205,17 @@ R6 (свои вакансии) и R7 (задание работодателя) �
 - Файлы: `product/app/web/tests_pages.py`, опционально хелперы в `product/app/services/tests.py` без смены сигнатуры `submit_attempt`, `product/tests/test_test_ux.py`. Шаблоны скорее без смены. Абзац презентации в `05-reshenie.md`, одно предложение в «Механика теста» записки.
 - Не делать в этом окне: новая колонка `models.py`, смена `submit_attempt`/`score_attempt`, JSON API, OpenAPI, `grade.py`, ключи a/b/c в `stems.py`, `cases.json`, расширение golden, порты 8100 и 8110, сдвиг тега `v1.0.0`.
 
+### SYNTH-EVAL
+
+Статус: сделано. CPU-прогон 1000 живых ФИО с известным `true_grade`. Имя изменения — `synth_eval`. `GET /validation`, `grade.py`, `cases.json`, стемы и тег `v1.0.0` не менялись.
+
+Критерий 25% спрашивает процедуру валидации на синтетике с известной разметкой. Золотые 38 профилей этого не закрывают.
+
+- Что: банк 1000 имён, четыре шарда по 250, раннер девяти канонических строк и график в `product/docs/synth-eval.svg` / `.png`. Разметка relevant — правило `true_grade` не ниже грейда потребности на той же паре spec×declared, в памяти, шарды пустые. `resume_ok` честно `0 0`. `sim_*` и `grade_separation` — каталог, не ответы тысячи. Порога нет. Пакет 1.2.13.
+- Зачем: закрыть формулировку записки и трека про процедуру на известной разметке, не подменяя путь жюри GET.
+- Файлы: `product/matching/synth_eval.py`, `synth_eval_run.py`, `synth_eval_chart.py`, `product/matching/golden/synth_eval/`, `product/docs/zapiska.md`, `05-reshenie.md`.
+- Не делать в этом окне: 1000 PDF, новый HTTP-маршрут, F1/NDCG, matplotlib, сдвиг тега `v1.0.0`.
+
 ## Что читать перед срезом
 
 1. `track/lct-fsp-vacancies/01-requirements.md`

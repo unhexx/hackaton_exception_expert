@@ -26,7 +26,7 @@ def create_app() -> FastAPI:
     secret = product_secret()
     application = FastAPI(
         title="Агрегатор ИТ-вакансий ФСП",
-        version="1.2.12",
+        version="1.2.13",
         description="Кабинеты соискателя и работодателя, API и один файл SQLite.",
         docs_url=None,
         redoc_url=None,

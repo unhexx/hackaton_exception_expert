@@ -13,7 +13,10 @@ from functools import lru_cache
 from pathlib import Path
 
 from product.matching.category import assign_category
+from product.matching.golden_run import _fit, _view, grade_separation_counts, summarize
 from product.matching.grade import load_template, score_attempt, select_template
+from product.matching.rules import rule_version
+from product.matching.simulate import simulation_counts
 from product.matching.stems import catalog
 from product.matching.types import ProfileView
 
@@ -127,6 +130,18 @@ _NEEDS_BY_SHARD = {
     3: ("backend-senior", "frontend-senior", "mobile-senior"),
     4: ("data-senior", "security-senior", "devops-senior"),
 }
+
+_REPORT_ORDER = (
+    "category_match",
+    "outcome_match",
+    "template_stable",
+    "relevant_in_top",
+    "resume_ok",
+    "grade_separation",
+    "sim_competent",
+    "sim_key_leak",
+    "sim_adjacent",
+)
 
 
 def _fold(text: str) -> str:
@@ -441,6 +456,55 @@ def load_shards(root: Path | None = None) -> dict:
     }
 
 
+def as_cases(bundle: dict) -> dict:
+    return {
+        "top_k": 3,
+        "profiles": list(bundle["profiles"]),
+        "needs": list(bundle["needs"]),
+        "template_pairs": list(bundle["template_pairs"]),
+    }
+
+
+def fill_relevant_profile_ids(bundle: dict, *, top_k: int = 3) -> dict:
+    version = rule_version()
+    ranked = [(row, assign_category(_view(row), version)) for row in bundle["profiles"]]
+    for need in bundle["needs"]:
+        fitted = [
+            (pair, _fit(pair[0], pair[1].category_id, pair[1].rank_key, need))
+            for pair in ranked
+        ]
+        pool = [(pair, fit) for pair, fit in fitted if fit.matched]
+        pool.sort(key=lambda item: item[1].sort_key, reverse=True)
+        need["relevant_profile_ids"] = [pair[0]["profile_id"] for pair, _fit_row in pool[:top_k]]
+    return bundle
+
+
+def collect_counts(bundle: dict | None = None) -> dict[str, tuple[int, int]]:
+    data = load_shards() if bundle is None else bundle
+    gold = summarize(as_cases(data))
+    separated, total = grade_separation_counts()
+    sim = simulation_counts()
+    values = {**gold, "grade_separation": (separated, total), **sim}
+    return {name: values[name] for name in _REPORT_ORDER}
+
+
+def render_synth_report(bundle: dict | None = None) -> str:
+    counts = collect_counts(bundle)
+    lines = [f"{name} {counts[name][0]} {counts[name][1]}" for name in _REPORT_ORDER]
+    return "\n".join(lines) + "\n"
+
+
+def _rewrite_relevant_ids(bundle: dict, root: Path | None = None) -> None:
+    base = _SYNTH_DIR if root is None else Path(root)
+    by_id = {need["id"]: list(need["relevant_profile_ids"]) for need in bundle["needs"]}
+    for shard in range(1, 5):
+        path = base / f"shard-{shard}.json"
+        data = json.loads(path.read_text(encoding="utf-8"))
+        for need in data["needs"]:
+            need["relevant_profile_ids"] = by_id[need["id"]]
+        path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def write_shard(shard: int, *, root: Path | None = None) -> Path:
     base = _SYNTH_DIR if root is None else Path(root)
     base.mkdir(parents=True, exist_ok=True)
@@ -454,13 +518,20 @@ def write_shard(shard: int, *, root: Path | None = None) -> Path:
 
 def main(argv: list[str] | None = None) -> None:
     args = list(sys.argv[1:] if argv is None else argv)
+    if args == ["--fill-relevant"]:
+        bundle = load_shards()
+        if len(bundle.get("shards") or []) != 4 or bundle.get("n") != 1000:
+            raise SystemExit("shards_incomplete")
+        fill_relevant_profile_ids(bundle)
+        _rewrite_relevant_ids(bundle)
+        return
     if args[:1] == ["--build-shard"] and len(args) == 2:
         shard = int(args[1])
         if shard not in (1, 2, 3, 4):
             raise SystemExit("shard must be 1..4")
         write_shard(shard)
         return
-    raise SystemExit("usage: python -m product.matching.synth_eval --build-shard N")
+    raise SystemExit("usage: python -m product.matching.synth_eval --build-shard N | --fill-relevant")
 
 
 if __name__ == "__main__":

@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import sys
 
-from product.matching.synth_eval import load_shards, render_synth_report
+from product.matching.synth_eval import annotate_relevant, load_shards, render_synth_report
 
 
 def main() -> None:
     bundle = load_shards()
     if len(bundle.get("shards") or []) != 4 or bundle.get("n") != 1000:
         raise SystemExit("shards_incomplete")
-    sys.stdout.write(render_synth_report(bundle))
+    sys.stdout.write(render_synth_report(annotate_relevant(bundle)))
 
 
 if __name__ == "__main__":

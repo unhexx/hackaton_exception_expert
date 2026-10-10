@@ -464,26 +464,31 @@ def as_cases(bundle: dict) -> dict:
     }
 
 
-def fill_relevant_profile_ids(bundle: dict) -> dict:
+def annotate_relevant(bundle: dict) -> dict:
     order = ("junior", "middle", "senior", "lead")
+    out = dict(bundle)
+    needs = []
     for need in bundle["needs"]:
-        spec, need_grade = str(need["category_id"]).split(":", 1)
+        row = dict(need)
+        spec, need_grade = str(row["category_id"]).split(":", 1)
         need_rank = order.index(need_grade)
         ids = []
-        for row in bundle["profiles"]:
-            if row["specialization"] != spec:
+        for profile in bundle["profiles"]:
+            if profile["specialization"] != spec:
                 continue
-            if row["declared_grade"] != need_grade:
+            if profile["declared_grade"] != need_grade:
                 continue
-            if order.index(row["true_grade"]) < need_rank:
+            if order.index(profile["true_grade"]) < need_rank:
                 continue
-            ids.append(row["profile_id"])
-        need["relevant_profile_ids"] = ids
-    return bundle
+            ids.append(profile["profile_id"])
+        row["relevant_profile_ids"] = ids
+        needs.append(row)
+    out["needs"] = needs
+    return out
 
 
 def collect_counts(bundle: dict | None = None) -> dict[str, tuple[int, int]]:
-    data = load_shards() if bundle is None else bundle
+    data = annotate_relevant(load_shards() if bundle is None else bundle)
     gold = summarize(as_cases(data))
     separated, total = grade_separation_counts()
     sim = simulation_counts()
@@ -495,17 +500,6 @@ def render_synth_report(bundle: dict | None = None) -> str:
     counts = collect_counts(bundle)
     lines = [f"{name} {counts[name][0]} {counts[name][1]}" for name in _REPORT_ORDER]
     return "\n".join(lines) + "\n"
-
-
-def _rewrite_relevant_ids(bundle: dict, root: Path | None = None) -> None:
-    base = _SYNTH_DIR if root is None else Path(root)
-    by_id = {need["id"]: list(need["relevant_profile_ids"]) for need in bundle["needs"]}
-    for shard in range(1, 5):
-        path = base / f"shard-{shard}.json"
-        data = json.loads(path.read_text(encoding="utf-8"))
-        for need in data["needs"]:
-            need["relevant_profile_ids"] = by_id[need["id"]]
-        path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def write_shard(shard: int, *, root: Path | None = None) -> Path:
@@ -521,20 +515,13 @@ def write_shard(shard: int, *, root: Path | None = None) -> Path:
 
 def main(argv: list[str] | None = None) -> None:
     args = list(sys.argv[1:] if argv is None else argv)
-    if args == ["--fill-relevant"]:
-        bundle = load_shards()
-        if len(bundle.get("shards") or []) != 4 or bundle.get("n") != 1000:
-            raise SystemExit("shards_incomplete")
-        fill_relevant_profile_ids(bundle)
-        _rewrite_relevant_ids(bundle)
-        return
     if args[:1] == ["--build-shard"] and len(args) == 2:
         shard = int(args[1])
         if shard not in (1, 2, 3, 4):
             raise SystemExit("shard must be 1..4")
         write_shard(shard)
         return
-    raise SystemExit("usage: python -m product.matching.synth_eval --build-shard N | --fill-relevant")
+    raise SystemExit("usage: python -m product.matching.synth_eval --build-shard N")
 
 
 if __name__ == "__main__":

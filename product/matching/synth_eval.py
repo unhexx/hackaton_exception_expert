@@ -484,7 +484,7 @@ def collect_counts(bundle: dict | None = None) -> dict[str, tuple[int, int]]:
     gold = summarize(as_cases(data))
     separated, total = grade_separation_counts()
     sim = simulation_counts()
-    values = {**gold, "grade_separation": (separated, total), **sim}
+    values = {**gold, "resume_ok": (0, 0), "grade_separation": (separated, total), **sim}
     return {name: values[name] for name in _REPORT_ORDER}
 
 

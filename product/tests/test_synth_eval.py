@@ -295,19 +295,32 @@ def test_render_synth_report_nine_canonical_lines(mini_bundle):
     assert [line.split()[0] for line in lines] == list(_REPORT_NAMES)
     gold = summarize(as_cases(mini_bundle))
     for index, name in enumerate(
-        ("category_match", "outcome_match", "template_stable", "relevant_in_top", "resume_ok")
+        ("category_match", "outcome_match", "template_stable", "relevant_in_top")
     ):
         hit, total = gold[name]
         assert lines[index] == f"{name} {hit} {total}"
+    assert lines[4] == "resume_ok 0 0"
     assert render_synth_report(mini_bundle) == text
 
 
 def test_collect_counts_keys_match_report(mini_bundle):
     counts = collect_counts(mini_bundle)
     assert list(counts) == list(_REPORT_NAMES)
+    assert counts["resume_ok"] == (0, 0)
+    assert counts["grade_separation"][1] == 216
+    assert counts["sim_competent"][1] == 72
+    assert counts["sim_key_leak"][1] == 72
+    assert counts["sim_adjacent"][1] == 72
     text = render_synth_report(mini_bundle)
     for name, (hit, total) in counts.items():
         assert f"{name} {hit} {total}" in text
+
+
+def test_collect_counts_resume_ok_ignores_golden_pdfs(mini_bundle, monkeypatch):
+    monkeypatch.setattr("product.matching.golden_run._resume_counts", lambda: (99, 99))
+    counts = collect_counts(mini_bundle)
+    assert counts["resume_ok"] == (0, 0)
+    assert "resume_ok 0 0" in render_synth_report(mini_bundle)
 
 
 def test_fill_relevant_profile_ids_top_k(mini_bundle):

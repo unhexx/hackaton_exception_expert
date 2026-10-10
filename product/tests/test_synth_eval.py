@@ -1,11 +1,15 @@
-"""Контракт SYNTH-EVAL: имена, слоты и сборщик шарда без тел шардов в git."""
+"""Контракт SYNTH-EVAL: имена, слоты, сборщик шарда, раннер и график."""
 
 from __future__ import annotations
 
+import ast
 import json
 from pathlib import Path
 
+import pytest
+
 import product
+from product.matching.golden_run import summarize
 from product.matching.grade import load_template, score_attempt, select_template
 from product.matching.simulate import _answers_adjacent
 from product.matching.stems import catalog
@@ -17,13 +21,30 @@ from product.matching.synth_eval import (
     SHARD_SIZE,
     SURNAMES,
     answers_for,
+    as_cases,
     assign_slot,
     build_shard,
+    collect_counts,
     extras_for_shard,
+    fill_relevant_profile_ids,
     forbidden_name,
     generate_chosen,
     load_shards,
     profile_id_for,
+    render_synth_report,
+)
+from product.matching import synth_eval, synth_eval_chart, synth_eval_run
+
+_REPORT_NAMES = (
+    "category_match",
+    "outcome_match",
+    "template_stable",
+    "relevant_in_top",
+    "resume_ok",
+    "grade_separation",
+    "sim_competent",
+    "sim_key_leak",
+    "sim_adjacent",
 )
 
 _NAMES = Path(product.__file__).resolve().parent / "matching" / "golden" / "synth_eval" / "names.json"
@@ -232,3 +253,126 @@ def test_build_shard_one_in_tmp(tmp_path):
         assert row["expected_category_id"] == f"{row['specialization']}:{row['declared_grade']}"
         assert row["profile_id"] >= 10001
         assert row["profile_id"] % 4 == 1
+
+
+@pytest.fixture(scope="module")
+def mini_bundle() -> dict:
+    chosen = _names()["chosen"]
+    shard = build_shard(1, names=chosen[:SHARD_SIZE])
+    return {
+        "profiles": shard["profiles"][:8],
+        "needs": shard["needs"][:2],
+        "template_pairs": shard["template_pairs"][:1],
+        "n": 8,
+        "seed": shard["seed"],
+        "rule_version": shard["rule_version"],
+    }
+
+
+def test_mini_profiles_are_living(mini_bundle):
+    for row in mini_bundle["profiles"]:
+        assert not forbidden_name(row["display_name"])
+        assert "синтетик" not in row["display_name"].casefold()
+        assert len(row["answers"]) == 3
+        assert set(row["answers"]) <= {"a", "b", "c"}
+
+
+def test_as_cases_shape(mini_bundle):
+    cases = as_cases(mini_bundle)
+    assert set(cases) == {"top_k", "profiles", "needs", "template_pairs"}
+    assert cases["top_k"] == 3
+    assert cases["profiles"] == mini_bundle["profiles"]
+    assert cases["needs"] == mini_bundle["needs"]
+    assert cases["template_pairs"] == mini_bundle["template_pairs"]
+
+
+def test_render_synth_report_nine_canonical_lines(mini_bundle):
+    text = render_synth_report(mini_bundle)
+    assert text.endswith("\n")
+    assert "%" not in text
+    lines = text.splitlines()
+    assert len(lines) == 9
+    assert [line.split()[0] for line in lines] == list(_REPORT_NAMES)
+    gold = summarize(as_cases(mini_bundle))
+    for index, name in enumerate(
+        ("category_match", "outcome_match", "template_stable", "relevant_in_top", "resume_ok")
+    ):
+        hit, total = gold[name]
+        assert lines[index] == f"{name} {hit} {total}"
+    assert render_synth_report(mini_bundle) == text
+
+
+def test_collect_counts_keys_match_report(mini_bundle):
+    counts = collect_counts(mini_bundle)
+    assert list(counts) == list(_REPORT_NAMES)
+    text = render_synth_report(mini_bundle)
+    for name, (hit, total) in counts.items():
+        assert f"{name} {hit} {total}" in text
+
+
+def test_fill_relevant_profile_ids_top_k(mini_bundle):
+    import copy
+
+    bundle = copy.deepcopy(mini_bundle)
+    filled = fill_relevant_profile_ids(bundle, top_k=3)
+    assert filled is bundle
+    known = {row["profile_id"] for row in bundle["profiles"]}
+    for need in bundle["needs"]:
+        assert len(need["relevant_profile_ids"]) <= 3
+        assert all(pid in known for pid in need["relevant_profile_ids"])
+
+
+def test_chart_writes_svg_and_png(tmp_path, mini_bundle):
+    svg_path, png_path = synth_eval_chart.write_chart(tmp_path, mini_bundle)
+    assert svg_path == tmp_path / "synth_eval.svg"
+    assert png_path == tmp_path / "synth_eval.png"
+    svg = svg_path.read_text(encoding="utf-8")
+    counts = collect_counts(mini_bundle)
+    for name, (hit, total) in counts.items():
+        assert f"{name} {hit} {total}" in svg
+    assert png_path.is_file()
+    assert png_path.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
+
+
+def test_matching_does_not_import_matplotlib():
+    root = Path(product.__file__).resolve().parent / "matching"
+    for path in root.rglob("*.py"):
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                names = [alias.name for alias in node.names]
+            elif isinstance(node, ast.ImportFrom):
+                names = [node.module or ""]
+            else:
+                continue
+            assert all(name.split(".")[0] != "matplotlib" for name in names)
+
+
+def test_runner_main_incomplete_shards(monkeypatch):
+    monkeypatch.setattr(
+        synth_eval_run,
+        "load_shards",
+        lambda: {"shards": [], "n": 0, "profiles": [], "needs": [], "template_pairs": []},
+    )
+    with pytest.raises(SystemExit, match="shards_incomplete"):
+        synth_eval_run.main()
+
+
+def test_chart_main_incomplete_shards(monkeypatch):
+    monkeypatch.setattr(
+        synth_eval_chart,
+        "load_shards",
+        lambda: {"shards": [], "n": 0, "profiles": [], "needs": [], "template_pairs": []},
+    )
+    with pytest.raises(SystemExit, match="shards_incomplete"):
+        synth_eval_chart.main()
+
+
+def test_fill_relevant_cli_incomplete_shards(monkeypatch):
+    monkeypatch.setattr(
+        synth_eval,
+        "load_shards",
+        lambda root=None: {"shards": [1], "n": 250, "profiles": [], "needs": [], "template_pairs": []},
+    )
+    with pytest.raises(SystemExit, match="shards_incomplete"):
+        synth_eval.main(["--fill-relevant"])

@@ -24,20 +24,20 @@ services:
       - fsp-sqlite:/data
     restart: unless-stopped
 
+  # Имя сервиса keycloak оставлено: приложение ходит на http://keycloak:8080.
+  # Образ quay.io/keycloak/keycloak не берём. Его слой lib/lib/deployment при
+  # распаковке пишет «no space left on device», и установка падает на любом
+  # хосте, где под этот слой не хватает места. Здесь тот же реалм fsp.
   keycloak:
-    image: quay.io/keycloak/keycloak:26.8.0
-    command: ["start-dev", "--import-realm"]
+    image: fsp-oidc:local
+    build:
+      context: ../..
+      dockerfile: deploy/fsp/oidc.Dockerfile
     environment:
-      KC_BOOTSTRAP_ADMIN_USERNAME: admin
-      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
-      KC_HOSTNAME: http://127.0.0.1:8080
-      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"
-      KC_HEALTH_ENABLED: "true"
+      OIDC_PUBLIC_ISSUER: http://127.0.0.1:8080/realms/fsp
     ports:
       - "127.0.0.1:8080:8080"
-    mem_limit: 1g
-    volumes:
-      - ./fsp-realm.json:/opt/keycloak/data/import/fsp-realm.json:ro
+    mem_limit: 128m
     restart: unless-stopped
 
   tests:

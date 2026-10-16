@@ -737,7 +737,7 @@ PyMuPDF. На PyPI двойная лицензия: GNU AGPL 3.0 или комм
 
 ## Выкладка и откат
 
-Файл запуска — `deploy/fsp/compose.yaml`, его пишет FSP-1. Это не `product/compose.yaml`. Инструкция в `product/README.md` (FSP-6) состоит из одной команды стенда. На хосте заранее стоят только Docker Engine и плагин Compose. Python, pip, uvicorn, SQLite, Node, Pango и Keycloak на хост не ставятся. В образ приложения Keycloak по-прежнему не входит: это контейнер рядом с приложением, не пакет Python и не замена почты.
+Файл запуска — `deploy/fsp/compose.yaml`, его пишет FSP-1. Это не `product/compose.yaml`. Инструкция в `product/README.md` (FSP-6) состоит из одной команды стенда. На хосте заранее стоят только Docker Engine и плагин Compose. Python, pip, uvicorn, SQLite, Node, Pango и Keycloak на хост не ставятся. В образ приложения Keycloak по-прежнему не входит. Рядом с приложением работает локальный issuer реалма `fsp`, не пакет Python внутри кабинетов и не замена почты. Образ `quay.io/keycloak/keycloak` не скачивается: его слой не распаковывается, на диске кончается место.
 
 Копировать `compose.env` перед запуском не нужно. Если `PRODUCT_SECRET` короче 32 символов, точка входа пишет секрет в `/data/product_secret`. Свой секрет можно положить в `deploy/fsp/compose.env` по образцу `compose.env.example`; файл в git не входит.
 
@@ -747,7 +747,7 @@ PyMuPDF. На PyPI двойная лицензия: GNU AGPL 3.0 или комм
 docker compose -f deploy/fsp/compose.yaml up --build
 ```
 
-Она собирает образ `python:3.12-slim` по `deploy/fsp/Dockerfile` и поднимает сервис `app` и контейнер Keycloak рядом с ним. В образ приложения копируется только дерево `product/` и `deploy/fsp/entrypoint.sh`. Keycloak в этот образ не входит. `pip install` пакета `fsp-vacancies` выполняется в `RUN` этого Dockerfile. Entrypoint при необходимости пишет `PRODUCT_SECRET`, делает `python -m product.seed`, затем `exec uvicorn product.app.main:app --host 0.0.0.0 --port 8000 --workers 1`. Повторный seed на уже заполненном томе завершается успехом: занятый уникальный ключ мока или уже существующая почта демо-пользователя uvicorn не отменяют. Клиент, API и хранилище — этот один процесс и том `fsp-sqlite` на `/data`. Порт 8000 опубликован на хост, кабинеты открываются в браузере. Флага `--reload` нет.
+Она собирает образ `python:3.12-slim` по `deploy/fsp/Dockerfile` и образ issuer по `deploy/fsp/oidc.Dockerfile`, затем поднимает сервис `app` и контейнер реалма рядом с ним. В образ приложения копируется только дерево `product/` и `deploy/fsp/entrypoint.sh`. Keycloak в этот образ не входит. `pip install` пакета `fsp-vacancies` выполняется в `RUN` этого Dockerfile. Entrypoint при необходимости пишет `PRODUCT_SECRET`, делает `python -m product.seed`, затем `exec uvicorn product.app.main:app --host 0.0.0.0 --port 8000 --workers 1`. Повторный seed на уже заполненном томе завершается успехом: занятый уникальный ключ мока или уже существующая почта демо-пользователя uvicorn не отменяют. Клиент, API и хранилище — этот один процесс и том `fsp-sqlite` на `/data`. Порт 8000 опубликован на хост, кабинеты открываются в браузере. Флага `--reload` нет.
 
 Сервис `tests` объявлен в том же файле и закрыт профилем `test`, чтобы обычный `up` не гонял набор на каждом старте стенда. Команда проверки:
 

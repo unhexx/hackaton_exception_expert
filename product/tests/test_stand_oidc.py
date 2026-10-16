@@ -166,6 +166,21 @@ def test_foreign_redirect_is_refused(stand: str):
     assert "redirect_uri" in body.decode("utf-8")
 
 
+def test_dockerfiles_do_not_call_docker_hub():
+    root = Path(__file__).resolve().parents[2]
+    dockerfile = root / "deploy" / "fsp" / "Dockerfile"
+    oidc = root / "deploy" / "fsp" / "oidc.Dockerfile"
+    rootfs = root / "deploy" / "fsp" / "python-3.12-slim-rootfs.tar.gz"
+    if not dockerfile.is_file():
+        return
+    for path in (dockerfile, oidc):
+        text = path.read_text(encoding="utf-8")
+        assert "FROM scratch" in text
+        assert "FROM python" not in text
+        assert "docker.io" not in text
+    assert rootfs.is_file()
+
+
 def test_compose_does_not_pull_keycloak_image():
     compose = Path(__file__).resolve().parents[2] / "deploy" / "fsp" / "compose.yaml"
     if not compose.is_file():

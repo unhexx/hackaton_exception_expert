@@ -16,8 +16,8 @@ COPY product /srv/product
 COPY deploy/fsp/entrypoint.sh /srv/entrypoint.sh
 COPY deploy/fsp/wheels /tmp/wheels
 
-# Колёса в deploy/fsp/wheels необязательны. Если каталог пуст, pip берёт индекс.
-# Так сборка жива и без DNS у моста, и на чистой машине с сетью.
+# Колёса лежат в репозитории, чтобы pip не ходил на PyPI при блокировке индекса.
+# Если каталог пуст, остаётся запасной путь через индекс.
 RUN set -eu; \
     if ls /tmp/wheels/*.whl >/dev/null 2>&1; then \
       pip install --no-index --find-links /tmp/wheels setuptools wheel \

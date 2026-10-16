@@ -13,7 +13,6 @@ venv/
 # Стенд
 product/var/
 deploy/fsp/compose.env
-deploy/fsp/wheels/*.whl
 *.sqlite
 *.sqlite-*
 

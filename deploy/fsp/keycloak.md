@@ -2,7 +2,7 @@
 
 Полная команда `docker compose -f deploy/fsp/compose.yaml up --build` поднимает приложение и локальный issuer реалма `fsp`. Реалм нужен жюри для связи ID участника. Боевой коннектор — тот же код, направленный на issuer заказчика. Регистрация по-прежнему только по почте с подтверждением. Связь с ID участника — отдельный шаг уже вошедшего кандидата.
 
-Образ `quay.io/keycloak/keycloak` стенд не скачивает. При распаковке слой `lib/lib/deployment` пишет `no space left on device`, и `up --build` обрывается до кабинетов. Вместо образа поднят короткий процесс на Python из `product/stand_oidc.py`: discovery, форма входа, PKCE S256, обмен кода и подпись RS256. Пользователи и redirect читаются из `deploy/fsp/fsp-realm.json` на сборке образа `fsp-oidc`. Имя сервиса в compose остаётся `keycloak`, чтобы адрес из контейнера приложения не менялся: `http://keycloak:8080`.
+Образ `quay.io/keycloak/keycloak` стенд не скачивает. При распаковке слой `lib/lib/deployment` пишет `no space left on device`, и `up --build` обрывается до кабинетов. Вместо образа поднят короткий процесс на Python из `product/stand_oidc.py`: discovery, форма входа, PKCE S256, обмен кода и подпись RS256. Пользователи и redirect читаются из `deploy/fsp/fsp-realm.json`, файл лежит в том же образе, что и кабинеты. Отдельный образ issuer не собирается: второй слой с Perl при распаковке тоже пишет `no space left on device`. Имя сервиса в compose остаётся `keycloak`, чтобы адрес из контейнера приложения не менялся: `http://keycloak:8080`.
 
 ## Страница реалма
 

@@ -7,3 +7,12 @@ product/var
 deploy/fsp/compose.env
 *.sqlite
 *.sqlite-*
+**/*.pptx
+**/*.pdf
+.agent
+docs
+brandbook-fsp
+generate_deck.py
+inspect_decks.py
+deploy/fsp/wheels
+tz_extracted.txt

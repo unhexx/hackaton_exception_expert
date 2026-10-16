@@ -9,6 +9,7 @@ import base64
 import hashlib
 import http.client
 import json
+import tarfile
 import urllib.parse
 from pathlib import Path
 
@@ -169,16 +170,21 @@ def test_foreign_redirect_is_refused(stand: str):
 def test_dockerfiles_do_not_call_docker_hub():
     root = Path(__file__).resolve().parents[2]
     dockerfile = root / "deploy" / "fsp" / "Dockerfile"
-    oidc = root / "deploy" / "fsp" / "oidc.Dockerfile"
     rootfs = root / "deploy" / "fsp" / "python-3.12-slim-rootfs.tar.gz"
     if not dockerfile.is_file():
         return
-    for path in (dockerfile, oidc):
-        text = path.read_text(encoding="utf-8")
-        assert "FROM scratch" in text
-        assert "FROM python" not in text
-        assert "docker.io" not in text
+    text = dockerfile.read_text(encoding="utf-8")
+    assert "FROM scratch" in text
+    assert "FROM python" not in text
+    assert "docker.io" not in text
+    assert "pip install" not in text
+    assert not (root / "deploy" / "fsp" / "oidc.Dockerfile").exists()
     assert rootfs.is_file()
+    with tarfile.open(rootfs, "r:gz") as archive:
+        names = archive.getnames()
+    assert not any("perl-base" in name or name.endswith("XSLoader.pm") for name in names)
+    assert any(name.endswith("bin/python3.12") for name in names)
+    assert any("site-packages/fastapi/" in name or name.endswith("site-packages/fastapi") for name in names)
 
 
 def test_compose_does_not_pull_keycloak_image():
@@ -187,4 +193,7 @@ def test_compose_does_not_pull_keycloak_image():
         return
     text = compose.read_text(encoding="utf-8")
     assert "image: quay.io/keycloak" not in text
-    assert "oidc.Dockerfile" in text
+    assert "oidc.Dockerfile" not in text
+    assert "pull_policy: never" in text
+    assert "image: fsp-vacancies:local" in text
+    assert "/srv/product/stand_oidc.py" in text

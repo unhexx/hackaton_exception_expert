@@ -25,16 +25,17 @@ services:
     restart: unless-stopped
 
   # Имя сервиса keycloak оставлено: приложение ходит на http://keycloak:8080.
-  # Образ quay.io/keycloak/keycloak не берём. Его слой lib/lib/deployment при
-  # распаковке пишет «no space left on device», и установка падает на любом
-  # хосте, где под этот слой не хватает места. Здесь тот же реалм fsp.
+  # Отдельный образ не собираем. Второй слой с perl-base при распаковке
+  # пишет «no space left on device» на XSLoader.pm, и установка обрывается.
+  # Issuer — тот же локальный образ, что и кабинеты. pull_policy: never,
+  # чтобы Compose не искал этот тег на Docker Hub.
   keycloak:
-    image: fsp-oidc:local
-    build:
-      context: ../..
-      dockerfile: deploy/fsp/oidc.Dockerfile
+    image: fsp-vacancies:local
+    pull_policy: never
+    entrypoint: ["python", "-u", "/srv/product/stand_oidc.py"]
     environment:
       OIDC_PUBLIC_ISSUER: http://127.0.0.1:8080/realms/fsp
+      FSP_REALM_FILE: /srv/fsp-realm.json
     ports:
       - "127.0.0.1:8080:8080"
     mem_limit: 128m

@@ -19,7 +19,15 @@
 
 ## Быстрый старт
 
-На машине заранее стоят только Docker Engine и плагин Compose. Язык, пакеты и база на хост не ставятся. База Python и колёса пакетов лежат в репозитории: Docker Hub и PyPI для сборки не нужны. Полный `up` поднимает кабинеты и локальный issuer реалма `fsp` на порту 8080. Образ Keycloak не скачивается: при распаковке его слоя на диске кончается место, и установка обрывается. Почта остаётся входом, связь ID — кнопка в кабинете. Переключение на issuer заказчика — [`deploy/fsp/keycloak.md`](deploy/fsp/keycloak.md). Копировать `compose.env` не нужно: если `PRODUCT_SECRET` короче 32 символов, точка входа пишет секрет в том `/data/product_secret`.
+На машине заранее стоят только Docker Engine и плагин Compose. Язык, пакеты и база на хост не ставятся. В репозитории лежит урезанный корень Python 3.12 с уже установленными пакетами: Docker Hub и PyPI для сборки не нужны, Perl и полный Debian на диск не распаковываются. Полный `up` поднимает кабинеты и локальный issuer реалма `fsp` на порту 8080 из одного образа. Образ Keycloak не скачивается: при распаковке его слоя на диске кончается место, и установка обрывается. Почта остаётся входом, связь ID — кнопка в кабинете. Переключение на issuer заказчика — [`deploy/fsp/keycloak.md`](deploy/fsp/keycloak.md). Копировать `compose.env` не нужно: если `PRODUCT_SECRET` короче 32 символов, точка входа пишет секрет в том `/data/product_secret`.
+
+Чистая машина, каталога ещё нет — одна команда:
+
+```text
+git clone https://github.com/unhexx/hackaton_exception_expert.git && cd hackaton_exception_expert && docker compose -f deploy/fsp/compose.yaml up --build
+```
+
+Если репозиторий уже лежит локально, из его корня достаточно:
 
 ```text
 docker compose -f deploy/fsp/compose.yaml up --build
